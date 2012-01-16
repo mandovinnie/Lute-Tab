@@ -44,8 +44,62 @@ void set_c(const char *value, struct file_info *f) {  barCount++; }
 void set_CC(const char *value, struct file_info *f) {  
   barCCount++; 
 }
-void set_b(const char *value, struct file_info *f) {  baroque++; }
-void set_d(const char *value, struct file_info *f) {  f->flags |= DEBUG; }
+void set_b(const char *value, struct file_info *f) {  
+  if (thin_renaissance)
+    dbg0(Error, "Args.cc: You can't use both -thin and -b at the same time \n");
+  baroque++; 
+}
+void set_d(const char *value, struct file_info *f) {
+  if (! strncmp(value, "File", 4)) {
+    dbg0(Warning, "Setting debug to File\n");
+    dbg_set(File);
+  }
+  if (! strncmp(value, "Path", 4)) {
+    dbg0(Warning, "Setting debug to Path\n");
+    dbg_set(Path);
+  }
+  else if (! strncmp(value, "TFM", 3)) {
+    dbg0(Warning, "Setting debug to TFM\n");
+    dbg_set(TFM);
+  }
+  else if (! strncmp(value, "Inter", 4)) {
+    dbg0(Warning, "Setting debug to Inter\n");
+    dbg_set(Inter);
+  }
+  else if (! strncmp(value, "Flow", 4)) {
+    dbg0(Warning, "Setting debug to Flow\n");
+    dbg_set(Flow);
+  }
+  else if (! strncmp(value, "Warning", 4)) {
+    dbg0(Warning, "Setting debug to Warning\n");
+    dbg_set(Warning);
+  }
+  else if (! strncmp(value, "Error", 4)) {
+    dbg0(Warning, "Setting debug to Error\n");
+    dbg_set(Error);
+  }
+  else if (! strncmp(value, "Stack", 4)) {
+    dbg0(Warning, "Setting debug to Stack\n");
+    dbg_set(Stack);
+  }
+  else if (! strncmp(value, "Proceedure", 4)) {
+    dbg0(Warning, "Setting debug to Proceedure\n");
+    dbg_set(Proceedure);
+  }
+  else if (! strncmp(value, "Fonts", 4)) {
+    dbg0(Warning, "Setting debug to Font\n");
+    dbg_set(Fonts);
+  }
+  else if (! strncmp(value, "Bug", 3)) {
+    dbg0(Warning, "Setting debug to Bug\n");
+    dbg_set(Bug);
+  }
+  else if (! strncmp(value, "Widths", 4)) {
+    dbg0(Warning, "Setting debug to Widths\n");
+    dbg_set(Widths);
+  }
+  f->flags |= DEBUG; 
+}
 void set_B(const char *value, struct file_info *f) { 
   f->line_flag = BETWEEN_LINE;
   f->flag_flag = BOARD_FLAGS;	
@@ -243,6 +297,10 @@ void set_listfonts(const char *value, struct file_info *f) {
 void set_o(const char *value, struct file_info *f)  {
 #ifndef MAC
   char * ptr;
+  if (!value) {
+    dbg0 (Warning, "-o with no output file specified, using default\n");
+    return;
+  }
   strcpy (f->out_file, value);
   if (ptr = strstr (f->out_file, ".tab")) {
     *ptr = '\0';
@@ -405,6 +463,12 @@ void set_line_thickness(const char *value, struct file_info *f)
   strncpy(staff_height, value, 20);
 }
 
+void set_thin_font(const char *value, struct file_info *f)
+{
+  if (baroque)
+    dbg0(Error, "Args.cc: You can't use both -thin and -b at the same time \n");
+  thin_renaissance=1;     
+}
 void args(int argc, char ** argv, struct file_info *f)
 {
     char *aa=0;
@@ -419,6 +483,7 @@ void args(int argc, char ** argv, struct file_info *f)
       {"b", (void*)set_b},
       {"B", (void*)set_B},
       {"D", (void*)set_D},
+      {"debug", (void*)set_d},
       {"e", (void*)set_e},
       {"E", (void*)set_E},
       {"f", (void*)set_f},
@@ -506,6 +571,7 @@ void args(int argc, char ** argv, struct file_info *f)
       {"midi-patch", (void*)set_amidi_patch},
       {"guitar", (void*)set_guitar},
       {"staff-line-thickness", (void*)set_line_thickness},
+      {"thin", (void*)set_thin_font},
       {0, 0}
     };
 
@@ -526,14 +592,22 @@ void args(int argc, char ** argv, struct file_info *f)
 	    }
 	    else {
 	      aa = argv[0];
-	      dbg1(Warning, "tab: args: unknown flag %c\n", (void*)aa);
+	      dbg1(Warning, "tab: args: unknown flag %s\n", (void*)aa);
 	    }
 
 	    //swallow argument values here
 
 	    switch (argv[0][0]){
 	    case 't':
-	      if ( argv[0][1] != 'u') 
+	      if (strncmp(argv[0], "tuning", 6 )) 
+		break;
+	      else {
+		*argv++;
+		argc--;
+		break;		
+	      }
+	    case 'd':
+	      if ( strncmp(argv[0], "debug", 5 ))
 		break;
 	      else {
 		*argv++;
@@ -541,7 +615,7 @@ void args(int argc, char ** argv, struct file_info *f)
 		break;		
 	      }
 	    case 'f':
-	      if ( argv[0][1] != 'o') 
+	      if ( strncmp(argv[0], "font", 4 ))
 		break;
 	      else {
 		*argv++;

@@ -1,22 +1,88 @@
+%-R7
+-i
+-Q
+-T
 
--G
 
-$scribe="scribe"
-
-$transpose=-3
-
-%-staff-line-thickness "0.9 mm"
+{Sienna f23 recto/ness nr. 5}
 
 b
-0c2
-1 c
+1.  0  5
+2     3
+x  0  2
+x     0
+x    3
+x    1
 b
-#2 c
-x c
-x c
-x b
+x3   0
+x   3
+x   1
+x   0
+x  2  0
+x  0
+x 3
+x 2
 b
+x 0  1
+x    3
+x     0
+x    3
+x 0  1
+x    0
+x   3
+x   1
+b
+x  00
+x   1
+x   3
+x    0
+x   3
+x   1
+x 000
+x  2
+b
+1 20
+x   1
+x 0 0
+x  2
+b
+x3
+x2 0
+x0 
+x 4   0
+b
+x  0  2
+x     5
+v
+% line 2
+2   0
+x     3
+x     2
+x     0
+b
+1   13
+x  2  3
+x   0 2
+x   1 0
+b
+x   3
+x   03
+x 02
+x    2
+b
+x 20 3
+23
+x 0
+x 2
+x 3
+x  0
+x  2
+Q
+b
+
 e
+
+b
 MG
 S3-4
 S3

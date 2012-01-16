@@ -321,10 +321,6 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       }
 
       break;
-    case 'v':     /* line break in original */
-      weight = W_NONE;
-      l->padding = f_a[0]->fnt->get_width(9);
-      goto rest;
     case 'i':     /* insert a space */
       weight = W_NONE;
       l->padding = str_to_inch(min_d_w);
@@ -417,6 +413,11 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	}
       }
       break;
+    case 'v':     /* line break in original */
+      weight = W_NONE;
+      l->padding = f_a[0]->fnt->get_width(9);
+      l->padding = 0;
+      goto done;
     case 'L':
       l->padding =  f_a[0]->fnt->get_width(c);
       weight = W_NONE;

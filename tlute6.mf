@@ -12,9 +12,9 @@ define_corrected_pixels(ptt,wid);
 %
 font_quad:=em#;font_normal_space:=0.8em#;font_normal_stretch:=0.3em#;
 font_normal_shrink:=0.2em#;
-font_identifier:="Lute6-wbc";
+font_identifier:="Thin-Lute6-wbc";
 font_size 6pt#;
 %
 %
-input lute.mf
+input tlute.mf
 do_all;

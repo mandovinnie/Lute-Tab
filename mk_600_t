@@ -1,0 +1,61 @@
+#!/bin/csh
+#
+#  make the lute9 font
+#
+#
+#set FMT = plain
+#set FMT = mf
+#
+# 600 dpi ...
+# ljfour  canonex docutech lexmarku ljfive ljfzzzfr okifte qmsostf qmsoszz ricohsp vtszz
+# 
+# 
+# set MODE=ljfzzzfr
+# set MODE=ljfive
+set MODE=docutech
+# set MODE=cxnew
+#
+# if using precompiled modes set here, otherwise in lute9
+#
+# note - aug 2002 - mode doesn't seem to do much
+# here, overridden in lute9.mf most likely.
+# but it is needed for the command line, don't know why.
+# but it means fixing the mode in lute9.mf for different dpi
+# mag:=1.0 is default, no need to specify
+#
+#
+#
+
+  mf "\mode:=CanonCX; \mag:=1.0; input tlute9; bye;"
+  gftopk ./tlute9.300gf > ./tlute9.300pk
+  rm ./tlute9.300gf
+
+  mf "\mode:=canonex; \mag:=1.0; input tlute9; bye;"
+  gftopk ./tlute9.600gf > ./tlute9.600pk
+  rm ./tlute9.600gf
+
+  mf "\mode:=CanonCX; \mag:=1.0; input tlute8; bye;"
+  gftopk ./tlute8.300gf > ./tlute8.300pk
+  rm ./tlute8.300gf
+  mf "\mode:=$MODE; \mag:=1.0; input tlute8; bye;"
+  gftopk ./tlute8.600gf > ./tlute8.600pk
+  rm ./tlute8.600gf
+
+  mf "\mode:=CanonCX; \mag:=1.0; input tlute7; bye;"
+  gftopk ./tlute7.300gf > ./tlute7.300pk
+  rm ./tlute7.300gf
+  mf "\mode:=$MODE; \mag:=1.0; input tlute7; bye;"
+  gftopk ./tlute7.600gf > ./tlute7.600pk
+  rm ./tlute7.600gf
+
+  mf "\mode:=CanonCX; \mag:=1.0; input tlute6; bye;"
+  gftopk ./tlute6.300gf > ./tlute6.300pk
+  rm ./tlute6.300gf
+  mf "\mode:=$MODE; \mag:=1.0; input tlute6; bye;"
+  gftopk ./tlute6.600gf > ./tlute6.600pk
+  rm ./tlute6.600gf
+
+  rm tlute*log
+
+#
+

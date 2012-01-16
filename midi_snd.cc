@@ -21,7 +21,7 @@ midi_snd::midi_snd()
   buffer = new i_buf();
   midi_head();
   count = 0;
-  sprintf(s, "tab %s copyright 1995-2005 by Wayne Cripps",  VERSION);
+  sprintf(s, "tab %s copyright 1995-2008 by Wayne Cripps",  VERSION);
   text(Copyright, s);
   text(Text, "converted by TAB");
   instmnt = 0;
@@ -36,7 +36,7 @@ midi_snd::midi_snd(const unsigned int instrument)
   buffer = new i_buf();
   midi_head();
   count = 0;
-  sprintf(s, "tab %s copyright 1995-2005 by Wayne Cripps",  VERSION);
+  sprintf(s, "tab %s copyright 1995-2008 by Wayne Cripps",  VERSION);
   text(Copyright, s);
   text(Text, "converted by TAB");
   instmnt = instrument;
@@ -53,7 +53,7 @@ midi_snd::midi_snd(const unsigned int instrument,
   buffer = new i_buf();
   midi_head();
   count = 0;
-  sprintf(s, "tab %s copyright 1995-2005 by Wayne Cripps",  VERSION);
+  sprintf(s, "tab %s copyright 1995-2008 by Wayne Cripps",  VERSION);
   text(Copyright, s);
   text(Text, "converted by TAB");
   instmnt = instrument;
@@ -194,11 +194,11 @@ midi_snd :: midi_tail() {
 
 void midi_track(const int len)
 {
-  //rin printf ("midi track: len %d\n", len);
+  //  fprintf (stderr, "midi track: len %d   %x\n", len, len);
   buffer->PutByte('M');  buffer->PutByte('T');
   buffer->PutByte('r');  buffer->PutByte('k');
   buffer->PutByte(0);    buffer->PutByte(0);
-  //  printf (" len %x %x %x\n", (len&0xff0000), (len&0xff00), (len&0xff));
+  // fprintf (stderr, " len %x %x %x\n", (len&0xff0000), (len&0xff00), (len&0xff));
   buffer->PutByte((char)((len&0xff00)>>8)); 
   buffer->PutByte((char)(len&0xff)); /* data length in bytes */
 }

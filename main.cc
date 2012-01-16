@@ -35,6 +35,7 @@ sound *sp=0;
 extern char staff_height[];
 
 int baroque;
+int thin_renaissance;
 int n_system;
 int bar_count;
 int barCount;
@@ -45,6 +46,7 @@ double red;
 void init(file_info *f)
 {
     baroque = 0;
+    thin_renaissance = 0;
     n_system = 0;
     strncat(staff_height, "0.0057 in", 80);
 
@@ -111,6 +113,8 @@ void tfm_stuff(i_buf *b, file_info *f)
     else {
       if (baroque) 
 	strcat(lutefont, "blute");
+      else if (thin_renaissance)
+	strcat(lutefont, "tlute");
       else
 	strcat(lutefont, "lute");
     }
@@ -358,9 +362,10 @@ main(int argc, char **argv)
     //	dbg_set(Stack);
     //	dbg_set(Flow);
     //	dbg_set(Inter);
+    //  dbg_set(Fonts);
     
     if ( ! (f.m_flags & QUIET) )
-      dbg2(Warning, "tab %s copyright 1995-2006 by Wayne Cripps%c",
+      dbg2(Warning, "tab %s copyright 1995-2008 by Wayne Cripps%c",
 	   (void *)VERSION,
 	   (void *) NEWLINE );
     
@@ -376,6 +381,8 @@ main(int argc, char **argv)
     
     tfm_stuff(&b, &f);
 
+    if (f.scribe) 
+      free (f.scribe);
     free (f.file);
     free (f.out_file);
     return(0);

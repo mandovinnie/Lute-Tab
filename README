@@ -62,6 +62,7 @@ Options:
     -24 prints 2400 dpi
 	be warned that some large glyphs won't print at 1200
 	and PostScript will crash!
+    -300 prints 300 dpi
     -4 prints only four staves
     -5 prints only five staves
     -6 prints 600 dpi
@@ -83,6 +84,9 @@ Options:
 	try to use -pdf your computer may catch on fire and you may be injured.
 	Don't try this!  You have been warned!
     -D sort of like Dowland's style
+    -debug <Mode> print out debugging information about 
+	Fonts Inter TFM Stack Flow Proceedure
+      
     -e rotates the page 90 degrees for landscape music.
     -E prints "DRAFT" on every page along with the date.
     -EPSF sets head so that file can be included in another document.
@@ -179,6 +183,7 @@ Options:
         one line of tablature.
     -T uses dalza style flags
     -t prints the notes on the line and does nothing else
+    -thin uses the older,renaissance font "tlute"
     -v prints the intermediate language to the screen
     -V gives the version and date
     -x notes on the line, thin flags, standard characters
@@ -508,6 +513,7 @@ the following are currently working:
 			\u is breve accent
 			\v is a v above the letter
 			\c e is the cedilla with an e - note the space!
+			\sl is a long s
 			?` - upside down ?
 			!` upside down !
 			(these are just like TeX/LaTeX)

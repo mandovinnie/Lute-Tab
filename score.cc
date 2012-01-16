@@ -94,17 +94,17 @@ int *tuning_str(char *str)
     for (k=1; k<16; k++) s[k]=0;
 
     count=0;
-//    fprintf(stderr, "find note: arg %s %d\n", arg_str, j);
+    //    fprintf(stderr, "find note: arg %s %d\n", arg_str, j);
     while (--j > -1) {
-//	printf ("j is %d %c\n", j, str[j]);
+      //	printf ("j is %d %c\n", j, str[j]);
 	
 	switch (k=tolower(str[j])) {
 	case '+':
 	    sharp++;
 	    break;
 	case '-':
-	    break;
 	    flat++;
+	    break;
 	case '0':
 	case '1':
 	case '2':
@@ -340,10 +340,14 @@ score(print *p, struct list *l, struct file_info *f,
 	  break;		// return if we set the flag
       }  
       
+
+
+    case '[':
     case 'U':			// do nothing
     case 'O':			// do nothing
     case 'A':			// do nothing
     case 'i':			// do nothing
+    case 'j':			// do nothing
     case 'Z':			// do nothing
     case 'd':
 	break;
@@ -544,6 +548,7 @@ void put_note(print *p, int string, unsigned char c, int timeval, struct file_in
     else if (pos == 24 || pos == 26) ledger (p, 1.0);
     if (pos == 25) ledger (p, 1.5);
     if (pos == 26) ledger (p, 2.0);
+    if (pos == 27) {ledger (p, 1.5);ledger (p, 2.5);}
     if (adj) {
 	p->moveh ("-.07 in");
 	if (adj == 1) p->put_a_char('#');

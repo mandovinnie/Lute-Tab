@@ -46,43 +46,45 @@ file_in *f;
 
 tfm_font::tfm_font(const char *font_name, double scale)
 {
-    char font_n[80];
-    char *p = NULL;
+  char font_n[80];
+  char *p = NULL;
 
 
-    dbg1 (TFM, "\nstarting tfm_font %s\n", (void *)font_name);
-    //    printf ("tfm.cc: scale is %f\n", scale);
+  dbg1 (TFM, "\nstarting tfm_font %s\n", (void *)font_name);
+  //    printf ("tfm.cc: scale is %f\n", scale);
 
 
 #ifdef MAC
-    strcpy(font_n, font_name);
+  strcpy(font_n, font_name);
 #else  /* not MAC */
 
-      if (font_path) {
-	//	fprintf (stderr, "tfm.c - setting font path %s from command line\n", font_path);
-	p = font_path;
-      }
-    else 
-	p = getenv("TABFONTS");
-    if (p == NULL ) 
+  if (font_path) {
+    //	fprintf (stderr, "tfm.c - setting font path %s from command line\n", font_path);
+    p = font_path;
+  }
+  else 
+    p = getenv("TABFONTS");
+  if (p == NULL ) 
 
 #ifdef TFM_PATH
-      strcpy(font_n, TFM_PATH);
+    strcpy(font_n, TFM_PATH);
 #else
-      strcpy(font_n, ".");
+  strcpy(font_n, ".");
 #endif /* TFM_PATH */
-    else
-      strcpy(font_n, (const char *)p);
+  else
+    strcpy(font_n, (const char *)p);
     
-    strcat(font_n, "/");
-    strcat(font_n, font_name);
+  strcat(font_n, "/");
+  strcat(font_n, font_name);
 #endif /* MAC */
-    strcat(font_n, ".tfm");
+  strcat(font_n, ".tfm");
+    
+  dbg1(Fonts, "tfm.cc: font name is %s\n", font_n);
 
-    f = new file_in(font_n, "rb");
-    tfm_input(scale);
+  f = new file_in(font_n, "rb");
+  tfm_input(scale);
 
-    delete f;
+  delete f;
 }
 
 tfm_font::~tfm_font()

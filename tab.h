@@ -44,6 +44,7 @@ void dbg_set(const dbg_type type);
 extern char version[];
 extern double red;
 extern int baroque;
+extern int thin_renaissance;
 extern int n_system;
 extern int bar_count;
 extern int barCount;
@@ -240,6 +241,7 @@ struct list {
  #define MILAN                  0x100000
  #define NMIDI                  0x200000
  #define GUIT                   0x400000
+ #define THIN_R                 0x800000
  /* variables defined in sizes.c */
 
 

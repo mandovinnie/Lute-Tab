@@ -15,10 +15,13 @@ define_good_y_pixels(flag_top);
 pickup pencircle scaled 0.5wid;
 tiny_circle := savepen;
 pickup pencircle xscaled 1.2wid yscaled .3 wid rotated 50;
+%pickup pencircle xscaled 0.8wid yscaled .26 wid rotated 50;
 lute_pen := savepen;
 pickup pencircle xscaled 1.4wid yscaled .3 wid rotated 50;
+%pickup pencircle xscaled 1.wid yscaled .26 wid rotated 50;
 bigger_lute_pen := savepen;
 pickup pencircle xscaled 1.5wid yscaled .1 rotated 85;
+%pickup pencircle xscaled 1.16wid yscaled .07 rotated 85;
 flag_pen := savepen;
 pickup pencircle xscaled .3wid yscaled .1 rotated 50;
 stem_pen := savepen;
@@ -1858,7 +1861,7 @@ endchar;enddef;
 %
 def rob_g =
 beginchar (181, em#, 1.0cap#, 0); "robinson g";
- pickup bigger_lute_pen;
+  pickup bigger_lute_pen;
  rt x1= w;top y1=h;
  x2=x1;y2=.3h;
  x3=.5w;bot y3=0h;

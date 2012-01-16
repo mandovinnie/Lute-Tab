@@ -1,3 +1,25 @@
+VERSION "4.3.60"  Mar 7 2008
+changed squiggle "Q" to vector drawn character which makes gs happier
+ Fix for [text interfering with score
+Fix for flat in tuning
+
+VERSION "4.3.59"  Feb 5 2008
+added check for -o with no file specified
+fixed score = j treated like i
+changed v to have no width when used without barline
+
+VERSION "4.3.58"  Dec 2007
+forgotten changes to dvi_f, nmidi, do_nmidi (probably for high notes)
+changed copyright dates to 2008
+
+VERSION "4.3.57   Sept 2007
+
+fixed conversion (-h) for n, m
+
+VERSION "4.3.56"  Feb 10 2007
+
+starting to add thin renaissance font
+
 VERSION "4.3.55"  Feb 8 2007
 
 In dvi_f added check for music only in middle of grids

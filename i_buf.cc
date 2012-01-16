@@ -35,7 +35,7 @@ i_buf::i_buf()
 void i_buf::more_buffer()
 {
     dbg0(Flow, "more_buffer: \n"); 
-    // dbg1(Warning, "more_buffer: size %d", (void *) size); 
+    //    dbg1(Warning, "more_buffer: size %d\n", (void *) size); 
 
     buf_l->next = new link;
     if (buf_l->next  == NULL)
@@ -71,10 +71,10 @@ i_buf::~i_buf()
     ttt = ttt->prev;
     free (ttt->next);
   }
-  
-  //  if (start->bytes)
-  //  free (start->bytes);
-  //delete start;
+  /* the following 3 lines were commented out - on feb 8 08 I uncommented it */
+  if (start->bytes)
+  free (start->bytes);
+  delete start;
 }
 
 void i_buf::PutByte(const char c)
@@ -269,7 +269,8 @@ void i_buf::dump(const char *fname, const mode mode)	// dump to a file
     }
     if (strcmp(fname, "stdout"))
       fclose(fp);
-    else if (mode == Append)fclose(fp);
+    else if (mode == Append)
+      fclose(fp);
 #endif
 }
 

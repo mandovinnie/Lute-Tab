@@ -951,6 +951,9 @@ Mstore(i_buf *ib, int *l_p, unsigned char *staff, struct file_info *f)
       }
       else if ( c == 'k' ) c = '9';
       else if ( c == 'l' ) c = 'x';
+      else if ( c == 'm' ) c = 231; /* wbc sept 07 fix for high notes */
+                                    /* should print XI  N10 */
+      else if ( c == 'n' ) c = 232;
       else if ( c == 'x' ) c = 'l';
       else if ( c == 230 ) c = 'l'; // N10
       else if ( c == 231 ) c = 'm';

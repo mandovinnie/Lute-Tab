@@ -27,7 +27,7 @@
 void read_pk_file(file_in *pk, print *ps);
 
 int format_page(print *d_p, i_buf *i_b, font_list *f_l[], struct file_info *f);
-void bit_char(i_buf *ps, int char_num);
+void bit_char(i_buf *ps, int char_num, int sixh);
 int my_isprint(int c);
 
 int max_b_w=0;                  /* max bitmap width for ps */
@@ -203,7 +203,7 @@ void ps_print::file_head()
     if (p == NULL ) 
 
 #ifdef TFM_PATH
-	strcpy(pk_name, TFM_PATH);
+	strcpy(pk_name, TFM_PATH); 
 #else
     strcpy(pk_name, ".");
 #endif /* TFM_PATH */
@@ -218,6 +218,9 @@ void ps_print::file_head()
     else {
       if (baroque) {
 	strcat (pk_name, "blute");
+      }
+      else if (thin_renaissance) {
+	strcat (pk_name, "tlute");
       }
       else
 	strcat (pk_name, "lute");
@@ -242,9 +245,12 @@ void ps_print::file_head()
     else
 	strcat (pk_name, ".300pk");
 
+    dbg1(Fonts, "ps_print.cc: font name is %s\n", pk_name);
+
+
     file_in pk_in(pk_name, "rb");
 
-    //    fprintf(stderr, "ps_print: pk font is %s\n", pk_name);
+        // fprintf(stderr, "ps_print: pk font is %s %s\n", pk_name, " TFM_PATH ");
 
     read_pk_file(&pk_in, this);
 
@@ -383,7 +389,7 @@ void ps_print::make_ps_font(i_buf *ps_header)
     for (i=0; i < 256; i++) {
 	if (bits[i].bm_w && print_used[i]) {
 //	    printf ( "b_%d", i);
-	    bit_char(ps_header, i);
+	  bit_char(ps_header, i, f_i->flags & DPI600 );
 	} 
     }
     ps_header->PutString("end %% of CharProcs\n");
@@ -1213,7 +1219,7 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     pr_out->PutString("12 scalefont setfont\n");
     pr_out->PutString("0 -690 rmoveto\n");
     pr_out->PutString("( \251 ) show\n");
-    pr_out->PutString("(TAB by Wayne Cripps 2005)show\n");
+    pr_out->PutString("(TAB by Wayne Cripps 2008)show\n");
     pr_out->PutString("grestore \n");
     break;
   case P_S_GRAY:
@@ -1265,7 +1271,7 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
   return;
 }
 
-void bit_char(i_buf *ps, int char_num)
+void bit_char(i_buf *ps, int char_num, int sixh)
 {
     int i;
     PKBit *b;
@@ -1279,20 +1285,49 @@ void bit_char(i_buf *ps, int char_num)
     ps->PutString("/b_");
     ps->Put10(char_num);
     ps->PutString(" {");  // char_name);
-
-    ps->Put10(b->bm_w); ps->Put10(b->bm_h);
-    ps->PutString("true [1 0 0 1 ");
-    ps->Put10(b->bm_h_off);     ps->Put10(b->bm_h - b->bm_v_off );
-    ps->PutString("]\n{<");
-/* bitmap */
-
-    for (i=0; i < byte_w * b->bm_h; i++) {
+ 
+    if (char_num == 81 && sixh ) {    /* vector char */    
+/* at 600 dpi scaled this character seems to be 331 412 */
+/* these dimensions are scaled -R9 */
+/*      ps->Put10(b->bm_w); ps->Put10(b->bm_h); */
+      ps->PutString("\n/P {");
+      ps->PutF(red, 5);
+      ps->PutString(" mul } def\n");
+      ps->PutString("5 P setlinewidth 0 0 moveto\n");
+      ps->PutString("18 P 216 P 30 P 379 P 45 P 405  P curveto stroke\n");
+      ps->PutString("14 P setlinewidth 45 P 405 P moveto\n");
+      ps->PutString("76 P 390 P 70 P 65 P 102 P 60 P curveto stroke\n");
+      // second up
+      ps->PutString("5 P setlinewidth 102 P 60 P moveto\n");
+      ps->PutString("110 P 74  P 112 P 297 P 135 P 334 P curveto stroke\n");
+      ps->PutString("14 P setlinewidth 135 P 334 P moveto\n");
+      ps->PutString("140 P 284 P 144 P 100 P 168 P 110 P curveto stroke\n");
+      // third up
+      ps->PutString("5 P setlinewidth 168 P 110 P moveto\n");
+      ps->PutString("180 P 120 P 182 P 230 P 190 P 266 P curveto stroke\n");
+      ps->PutString("14 P setlinewidth 190 P 266 P moveto\n");
+      ps->PutString("198 P 240 P 200 P 152 P 215 P 142 P curveto stroke\n");
+      // last squiggle
+      ps->PutString("5 P setlinewidth 215 P 140 P moveto\n");
+      ps->PutString("265 P 145 P 290 P 200 P 300 P 290 P curveto stroke\n");
+      ps->PutString("15 P setlinewidth 300 P 290 P moveto\n");
+      ps->PutString("311 P 230 P 312 P 270 P 315 P 270 P curveto stroke\n");
+      // ps->PutString("stroke\n");
+    }
+    else {         /* bitmapped character */
+      ps->Put10(b->bm_w); ps->Put10(b->bm_h);
+      ps->PutString("true [1 0 0 1 ");
+      ps->Put10(b->bm_h_off);     ps->Put10(b->bm_h - b->bm_v_off );
+      ps->PutString("]\n{<");
+      /* bitmapt */
+      
+      for (i=0; i < byte_w * b->bm_h; i++) {
 	ps->Put16(b->bm_bits[i] & 0xff);
 	if (!((i+1) % 40)) ps->PutString("\n");
+      }
+      ps->PutString(">}\n imagemask");
     }
-    ps->PutString(">}\n imagemask } bind def\n");
-
- /* end bitmap */
+    ps->PutString("} bind def\n");
 }
 
 void ps_print::glp(int reg,int h[], int v[])

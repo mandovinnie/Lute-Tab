@@ -290,7 +290,7 @@ void nmidi::do_lute_music()
   for (i=0; i< STRINGS; i++)
     saved[i] = 0;
 
-  sprintf(s, "tab %s copyright 1995-2005 by Wayne Cripps",  VERSION);
+  sprintf(s, "tab %s copyright 1995-2008 by Wayne Cripps",  VERSION);
   ntext(Copyright, s);
   ntext(Text, "converted by TAB");
   ntext(Track, "lute");
@@ -580,6 +580,8 @@ void nmidi::do_file_head()
   switch(maxi) {
   case 2:
     pulses = 4; break;		// 0x06 .. 0x18
+  case 3:
+    pulses = 6; break;		// 
   case 4:
     pulses = 8 ; break;		// 0x0c .. 0x30
   case 5:
@@ -593,7 +595,7 @@ void nmidi::do_file_head()
   case 9:
     pulses = 256; break;	        // 0xc0 .. 0x600
   default:
-    fprintf (stderr, "uncaught time value %d\n", time_r[i]);
+    fprintf (stderr, "uncaught time value %d %d\n", time_r[i], maxi);
   }
   if( npulse ) {
     //    printf("npulse %d\n", npulse);

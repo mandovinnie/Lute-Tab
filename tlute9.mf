@@ -1,19 +1,14 @@
-%
-% define user defined modes here
-%
-% predefined modes are set on command line
-%
-mode_def cxnew =                       %\[ Canon CX, SX, LBP-LX (300dpi)
+mode_def MyLaser =                      % Canon CX, SX, LBP-LX
   mode_param (pixels_per_inch, 600);
-  mode_param (blacker, 0);       % was 0 %then was 1.5
-  mode_param (fillin, .2);       % was .2
-  mode_param (o_correction, .65);  % was .6
+  mode_param (blacker, .065);
+  mode_param (fillin, .3);
+  mode_param (o_correction, .7);
   mode_common_setup_;
 enddef;
 %
 %  a new font 
 %
-%mode:=cxnew;
+%mode:=MyLaser;
 mode_setup;
 %
  em#:=7pt#; cap#:=9pt#;
@@ -26,9 +21,9 @@ define_corrected_pixels(ptt,wid);
 font_quad:=em#;font_normal_space:=0.8em#;
 font_normal_stretch:=0.3em#;
 font_normal_shrink:=0.2em#;
-font_identifier:="Lute9-wbc";
+font_identifier:="Thin-Lute9-wbc";
 font_size 9pt#;
 %
-input lute.mf
+input tlute.mf
 do_all;
 headerbyte 9: 99, 100;

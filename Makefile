@@ -8,7 +8,7 @@
 #  where the lute9.tfm file resides
 #
 # OPTIM = -O2
-OPTIM = -g
+OPTIM = -g -O0
 CC = g++3 -wuninitilized
 LD = g++
 # LD = g++ -m64
@@ -106,9 +106,13 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	mk_font_local mk_test mk_300 mk_600 mk_1200 mk_2400 \
 	sample.tab demo.tab c.tab t.tab AboutTab.txt  mkdep \
 	version.pl makedepend CHANGELOG \
-	midi-docs/midi-dump.c midi-docs/Makefile
+	midi-docs/midi-dump.c midi-docs/Makefile \
+	tlute.mf tlute9.mf tlute8.mf tlute7.mf tlute6.mf mk_600_t \
+	tlute9.300pk tlute8.300pk tlute7.300pk tlute6.300pk \
+	tlute9.600pk tlute8.600pk tlute7.600pk tlute6.600pk \
+ 	simple.tab
 
-DISTFILE = lute_tab4.3.55.tar
+DISTFILE = lute_tab4.3.60.tar
 
 distrib:	 ${DISTFILE}
 

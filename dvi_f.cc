@@ -206,7 +206,7 @@ struct list *l)			/* data */
 	      
 	if ( j == 0 || j == *l_p -1) { // thicken first, last barline
 
-	  //	  p->put_rule (1.3 * staff_h, 4 * m_space + staff_h);
+	  p->put_rule (1.3 * staff_h, 4 * m_space + staff_h);
 
 	  if (f->m_flags & TWOSTAFF ) {
 	    p->movev( -5 * m_space );
@@ -1977,7 +1977,7 @@ void do_time_sig( char ch[], int j, int font,
 
 	if ( j == 0 ) 
 	    p->moveh( -1 * str_to_inch("0.28 in"));
-	if (baroque) {
+	if (baroque) { 
 	  if (f->line_flag == ON_LINE)
 	    p->movev(-.012 + 0.0  * d_i_space );
 	  else
@@ -2004,7 +2004,11 @@ void do_time_sig( char ch[], int j, int font,
 	  p->put_a_char(17); // special O time signature
 	}
 	else {
+	  p->push();
+	  if (f->line_flag == ON_LINE)
+	    p->movev( -.012  - 0.50  * d_i_space );
 	  p->put_a_char(ch[1]);
+	  p->pop();
 	  if (f->flags & NOTES) {
 	    p->push();
 	    p->movev((-7.25 * d_i_space - 
