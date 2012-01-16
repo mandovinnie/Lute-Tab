@@ -1,22 +1,11 @@
--5
--h
--b
--twelvedots
-% {n\sln i\slt  i\sle }
-{A]/A]}
-
-%-7
 
 -l "4.9 in"
--i
--Q
--ts
--T
--C
+%%% $midi-volume=94
 
 b
-.
+1 c
 b
+e
 1abcd
 11234
 So

@@ -27,9 +27,10 @@ midi_snd::midi_snd()
   instmnt = 0;
   program();
   fname[0] = '\0';
+  velocity = 100;
 }
 
-midi_snd::midi_snd(const unsigned int instrument)
+midi_snd::midi_snd(const unsigned int instrument,const unsigned int volume )
 {
   char s[80];
   //  printf("Start midi_snd 1 arg\n");
@@ -43,9 +44,11 @@ midi_snd::midi_snd(const unsigned int instrument)
   program();
   fname[0] = '\0';
   bar = 0;
+  velocity = 100;
 }
 
 midi_snd::midi_snd(const unsigned int instrument,
+		   const unsigned int volume,
 		   const char * filename)
 {
   char s[80];
@@ -59,6 +62,10 @@ midi_snd::midi_snd(const unsigned int instrument,
   instmnt = instrument;
   program();
   strncat (fname, filename, 120);
+  // fprintf(stderr, "midi_snd::midi_snd initial velocity d %d X %X\n", 
+  //  volume, volume );
+
+  velocity = volume;
 }
 
 midi_snd::~midi_snd()
@@ -106,18 +113,24 @@ void
 midi_snd::play(const double time)
 {
   int i;
-  unsigned int velocity = 64;
+  unsigned int t_velocity = velocity;
 
   if (bar) {
     //    printf ("BBAR\n");
     bar = 0;
-    velocity = 80;
+    t_velocity += 16;
+    if (t_velocity > 127) t_velocity = 127;
   }
+
+//  fprintf(stderr, "midi_snd::play_midi velocity d %d  x %X\n", 
+//	  t_velocity,
+//	  t_velocity );
+
   for (i=0; i<tt; i++) {
     writeVarLen(0);	  /* delta time */
     buf[count++] = (char)0x90;  /* note on channel 0*/
     buf[count++] = (char)t[i]; /* the note - 60 = middle c*/
-    buf[count++] = (char)velocity;	  /* velocity */
+    buf[count++] = (char)t_velocity;	  /* velocity */
   }
 
   for (i=0; i<tt; i++) {
@@ -126,7 +139,7 @@ midi_snd::play(const double time)
 
     buf[count++] = (char)0x80;  /* note off channel 0*/
     buf[count++] = (char)t[i]; /* the note - 60 = middle c*/
-    buf[count++] = (char)64;	  /* velocity */
+    buf[count++] = (char)velocity;	  /* velocity */
   }
   tt=0;
   //  printf("midi_snd play count = %d %f\n", count, time);
@@ -144,30 +157,38 @@ midi_snd::rest(const double time)
   
   buf[count++] = (char)0x80;  /* note off channel 0*/
   buf[count++] = (char)60; /* the note - 60 = middle c*/
-  buf[count++] = (char)64;	  /* velocity */
+  buf[count++] = (char)velocity;	  /* velocity */
   
   tt=0;
 }
 
+// write a note on event, a delta time, and a note off ev ent
+
 void midi_snd::play_note(const int note, const double time)
 {
-  unsigned int velocity = 64;
+  unsigned int t_velocity = velocity;
   writeVarLen(0);	  /* delta time */
   buf[count++] = (char)0x90;  /* note on channel 0*/
   buf[count++] = (char)note; /* the note - 60 = middle c*/
+
   if (bar) {
     //    printf("bar\n");
-    velocity =80;
+    t_velocity += 16;
+    if (t_velocity > 127) t_velocity = 127;
     bar = 0;
   }
-  else velocity = 64;
+  else {
+    /* velocity = 64; */
+  }
+  printf("midi_snd::play_note midi_velocity %d\n", t_velocity );
+
   buf[count++] = (char)velocity;	  /* velocity */
   
   writeVarLen((unsigned int) time * 3);	  /* delta time */
   
-  buf[count++] = (char)0x80;  /* note on channel 0*/
+  buf[count++] = (char)0x80;  /* note off channel 0*/
   buf[count++] = (char)note; /* the note - 60 = middle c*/
-  buf[count++] = (char)velocity;	  /* velocity */
+  buf[count++] = (char)t_velocity;	  /* velocity */
 }
 
 void midi_head()
@@ -218,6 +239,9 @@ void midi_snd::text (enum text_type type, const char *words)
 
 void midi_snd::program()
 {
+
+//  fprintf (stderr, "midi_snd Program d %d\n", instmnt);
+
   //      printf("midi program: %d\n", instmnt);
   buf[count++] = ('\0');
   buf[count++] = ('\300');
@@ -259,4 +283,14 @@ void midi_snd::add_bar()
 {
   //  fprintf (stderr, "BAR\n");
   bar = 1;
+}
+
+void midi_snd::set_volume(unsigned int value)
+{
+  velocity = value;
+}
+
+unsigned int midi_snd::get_volume()
+{
+  return (velocity);
 }

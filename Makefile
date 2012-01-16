@@ -101,7 +101,7 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	ptmr.tfm ptmri.tfm psyr.tfm \
 	pncb.tfm    pncbi.tfm   pncr.tfm    pncri.tfm  \
 	ptmb.tfm     ptmbo.tfm    ptmrc.tfm    ptmro.tfm    ptmrrn.tfm \
-	ptmbi.tfm    ptmr.tfm     ptmri.tfm    ptmrre.tfm \
+	ptmbi.tfm    ptmrre.tfm \
 	pzcmi.tfm \
 	mk_font_local mk_test mk_300 mk_600 mk_1200 mk_2400 \
 	sample.tab demo.tab c.tab t.tab AboutTab.txt  mkdep \
@@ -110,16 +110,16 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	tlute.mf tlute9.mf tlute8.mf tlute7.mf tlute6.mf mk_600_t \
 	tlute9.300pk tlute8.300pk tlute7.300pk tlute6.300pk \
 	tlute9.600pk tlute8.600pk tlute7.600pk tlute6.600pk \
- 	simple.tab midi-docs/Makefile midi-docs/midi-dump.c
+	simple.tab 
 
-DISTFILE = lute_tab4.3.75.tar
+DISTFILE = lute_tab4.3.76.tar
 
 distrib:	 ${DISTFILE}
 
 ${DISTFILE}:	 \
 	Makefile \
 	${HEADERS} \
-	${SOURCES} main.cc  ${MISC}
+	${SOURCES} ${MISC}
 	cp Makefile Makefile.bak;\
 	cat Makefile.bak | \
 	sed '/^# DO NOT DELETE/,/# IF YOU PUT ANYTH/d' | \
@@ -127,10 +127,8 @@ ${DISTFILE}:	 \
 	> Makefile; \
 	tar cvf ${DISTFILE} \
 	Makefile \
-	t.tab \
-	c.tab \
 	${HEADERS} \
-	${SOURCES} main.cc ${MISC}
+	${SOURCES} ${MISC}
 
 cmr12.tfm:	
 	cp -p /usr/lib/tex/fonts/tfm/cmr12.tfm .
@@ -180,10 +178,10 @@ Palatino-Bold.tfm:	/usr/lib/tex/fonts/tfm/Palatino-Bold.tfm
 Palatino-BoldItalic.tfm:	/usr/lib/tex/fonts/tfm/Palatino-BoldItalic.tfm
 	cp /usr/lib/tex/fonts/tfm/Palatino-BoldItalic.tfm .
 
-win:	${HEADERS} ${SOURCES} main.cc c.tab sample.tab
+win:	${HEADERS} ${SOURCES} c.tab sample.tab
 	mkdir -p win
 	rm -rf win/*
-	cp ${HEADERS} ${SOURCES} main.cc win
+	cp ${HEADERS} ${SOURCES} win
 	cp c.tab sample.tab README AboutTab.txt win
 
 	for f in win/*.cc ;do \
