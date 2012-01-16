@@ -17,10 +17,16 @@
 #
 #	@(#)mkdep.sh	5.12 (Berkeley) 6/30/88
 #
-PATH=/bin:/usr/bin:/usr/ucb
+PATH=/bin:/usr/bin:/usr/ucb:/usr/local/bin
 export PATH
 
 MAKE=Makefile			# default makefile name is "Makefile"
+
+if test -x /usr/local/bin/g++ ; 
+   then GPP=/usr/local/bin/g++;
+elif test -x /usr/bin/g++ ; 
+   then GPP=/usr/bin/g++;
+fi
 
 while :
 	do case "$1" in
@@ -71,7 +77,9 @@ _EOF_
 # egrep '^#include[ 	]*".*"' /dev/null $* |
 # sed -e 's/:[^"]*"\([^"]*\)".*/: \1/' -e 's/\.c/.o/' |
 
-cc -M $* |
+# wac cc
+
+$GPP -M $* |
 sed "
 	s; \./; ;g
 	$SED" |

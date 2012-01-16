@@ -1,6 +1,6 @@
 #!/bin/csh
 #
-#  make the lute8 font
+#  make the lute9 font
 #
 # xdvi
 #
@@ -27,14 +27,21 @@ rm -f lute6*gf lute6*bdf lute6.log
 #
 # less reduced font
 #
+echo lute8
 virmf \&$FMT "\mode:=CanonCX; \mag:=1.0; input lute8; bye;"
 gftopk ./lute8.300gf > ./lute8.300pk
 #
 rm -f lute8*gf lute8*bdf lute8.log
 #
+echo lute85
+virmf \&$FMT "\mode:=CanonCX; \mag:=1.0; input lute85; bye;"
+gftopk ./lute85.300gf > ./lute85.300pk
+#
+rm -f lute8*gf lute8*bdf lute8.log
 #
 # less less reduced font
 #
+echo lute7
 virmf \&$FMT "\mode:=CanonCX; \mag:=1.0; input lute7; bye;"
 gftopk ./lute7.300gf > ./lute7.300pk
 #

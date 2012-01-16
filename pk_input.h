@@ -14,10 +14,10 @@
 #include "pkfile.h"
 
 int		pk_read_preamble(/* fp, pp */);
-int		pk_next_nybble(/* fp */);
+int		pk_next_nybble(file_in *pk);
 int		pk_prepare_for_bitmap();
 int		pk_packed_number(/* fp, dyn_f, result */);
-int		pk_read_packet_header(/* fp, h */);
-unsigned char *	pk_read_bitmap(/* fp, h */);
+void		pk_read_packet_header(file_in *pk, PKPacketHeader *h);
+unsigned char *	pk_read_bitmap(file_in *pk, PKPacketHeader *h);
 
 #endif /* #ifndef _PK_INPUT_ */

@@ -1,0 +1,319 @@
+% From m.caprace@b.rd.land.saitrh.be Mon Oct 30 03:29:32 1995
+% Received: from tahoe.cs.dartmouth.edu by cs.dartmouth.edu (8.7.1/4.2)
+% 	id DAA15447; Mon, 30 Oct 1995 03:29:31 -0500
+% From: m.caprace@b.rd.land.saitrh.be
+% Received: from sun1.iihe.ac.be by tahoe.cs.dartmouth.edu (8.7.1/4.2)
+% 	id DAA06684; Mon, 30 Oct 1995 03:30:10 -0500 (EST)
+% X400-Received: by mta sun1.iihe.ac.be in /PRMD=IIHE/ADMD=RTT/C=BE/; Relayed;
+%                Mon, 30 Oct 1995 09:28:41 +0000
+% X400-Received: by mta sun.iihe.ac.be in /PRMD=IIHE/ADMD=RTT/C=BE/; Relayed;
+%                Mon, 30 Oct 1995 08:27:11 +0000
+% X400-Received: by mta saitrh.rtt.be in /PRMD=IIHE/ADMD=RTT/C=BE/; Relayed;
+%                Mon, 30 Oct 1995 08:33:02 +0000
+% X400-Received: by /PRMD=saitrh/ADMD=rtt/C=be/; Relayed;
+%                Mon, 30 Oct 1995 08:29:31 +0000
+% Date: Mon, 30 Oct 1995 08:29:31 +0000
+% X400-Originator: m.caprace@b.rd.land.saitrh.be
+% X400-Recipients: non-disclosure:;
+% X400-MTS-Identifier: [/PRMD=saitrh/ADMD=rtt/C=be/;WIN7211-951030082931-4C54]
+% X400-Content-Type: P2-1984 (2)
+% Content-Identifier: RE(2): My?tab?ma
+% Message-ID: <WIN7211-951030082931-4C54*/I=m/S=caprace/OU=b/OU=rd/O=land/PRMD=saitrh/ADMD=rtt/C=be/@MHS>
+% To: wbc@tahoe.cs.dartmouth.edu
+% In-Reply-To: <199510272359.TAA28022@tahoe.cs.dartmouth.edu>
+% Subject: RE(2): My_tab_manual
+% Status: RO
+% 
+% Sorry for the problem you have with my file. I was not aware of that problem. I should have to check the number of characters per line. I donot know what to do with the tab_shifts. I am afraid I cannot do that today.
+% 
+% In the mean time I prepared a tab_demo file you find hereafter in this message. It is just an illustration of many but not all features of tab following 'my_tab_manual'. (I do not know what my mail-processor will have done with the tab_shifts, sorry)
+% By the way i came to two new problems :
+% - the demo file produces the right output but with an error message 'value not found', related to the use of 'Z' time in the last system.
+% - the right hand fingerings are printed above the notes and not below, as I expected ...
+% 
+% Michel
+% >>>>>>>>>>>
+-R9
+-l "190.0 mm"
+%specifying line length 
+-D
+%thin flags, Dowland style 
+-Q
+
+[Music is written as a sequence of chords ...}
+
+b
+S3
+1abd a
+xf
+#2d  c
+xc
+b
+1.ab  d
+2 a
+#2  d
+W!
+W!
+W!
+f
+bb
+B
+Q
+1!
+
+[                                                                               etc}
+
+{Writing music in the stave}
+
+i
+1!      /a
+b
+0    a
+1   b
+x  c
+2 d
+xe
+#2f
+x g
+3 h
+x  i
+3*   k
+x|   l
+x    m
+x     n
+2  o
+x p
+b.b
+L 3 0
+1!
+b
+B1&0780
+b
+W95 7
+W5780
+b
+Rw
+w530
+b.b
+1  0
+x    3
+x     0
+x     2
+x     3
+x      0
+x      2
+x      3
+b
+Y      5
+bbb
+
+{Ornaments  with escape operator }
+
+b
+S4
+i
+1      !+
+x     !.
+x    !#
+x   !x
+b
+x  !<
+x !=
+x!$
+x !;
+b
+x  !_
+x   !'
+x    !`
+x     !^
+b
+A1
+1      !*
+x !@
+x   !~
+x    !-
+.bb
+A2
+1   !/
+x !\
+x   !?
+x
+x   !>
+.bbb
+
+{Ornaments  with the prefix operator }
+
+b
+c
+i
+1      "+a
+x     ".b
+x    "#c
+x   "xd
+b
+x  "<e
+x "=f
+x"$g
+x ";h
+b
+x  "_i
+x   "'k
+x    "`l
+x     "^m
+b
+x      "*n
+x "@a
+x   "~b
+x    "-c
+b
+~   "/d
+~ "\e
+~   "?f
+~
+~   ">f
+y
+b
+
+[ /da capo}
+
+p
+[Ornaments with postfix operator }
+
+b
+C
+i
+1      a&+
+x     b&.
+x    c&#
+x   d&x
+b
+x  e&<
+x f&=
+xg&$
+x h&;
+b
+x  i&_
+x   k&'
+x    l&`
+x     m&^
+b
+x      n&*
+x a&@
+x   b&~
+x    c&-
+b
+x   d&/
+x e&\
+x   f&?
+x
+x   f&>
+D
+1!
+bbb
+
+{Ornaments by single characters}
+
+b
+1      +a
+x     b
+x    #c
+x   xd
+b
+x  <e
+x =f
+x$g
+x ;
+b
+x  _i
+x   'k
+x    `l
+x     ^m
+b
+x      *n
+x @a
+x   b
+x c---c
+b
+x   %d
+x \:e
+x   ?
+x
+x   >
+b
+
+{Fingerings and underlines}
+
+b
+1    |a&{
+x   .b
+x  :c
+x .d  }&(
+b
+x  \1e
+x \2f&{
+x\3g
+x \4"}h)
+b
+x  i
+x k !/
+x    l
+x     m
+b
+x    nU
+x a
+x   b
+x    cX
+b
+x   d  w
+x e
+x   
+x    a u
+x   
+b
+
+{Single line melody }
+
+b
+MG
+c
+1.  deec 	wa.	Flow	Downe	
+% tablature    notes   text line one and two
+2  c	1G0	my	vaine
+M1F0
+% music by itself
+x  de c	wE0	teares	lights
+x  f
+x c
+x   c
+2  aa	Wc0	fall	shine
+3 a
+x  d
+1 a	0b0	from	you
+M0a0	your	no
+x cc e	WG+	springs, 	more,
+x c
+b
+2  deec	wa0	Ex	No
+x c
+xc	wE.	ilde	nights
+x     c
+3a   a
+x d
+x c	0E0	for	are
+x a
+2 cd a	0G0	e-	dark
+x  c	0G0	ver:	e-
+b
+x a  c	wF0	Let	nough
+x  d
+x  ca	wD0	mee	for
+x  a
+x  c e	wE.	morne	those
+x   e
+1   d
+M0b0	where	that
+MZc0
+b
+e
+
+

@@ -1,4 +1,4 @@
-%
+
 %
 %  a new font 
 %
@@ -12,16 +12,16 @@ define_good_x_pixels(v_bar);
 flag_top#:=3em#;
 define_good_y_pixels(flag_top);
 %
-pickup pencircle scaled 0.5ptt;
+pickup pencircle scaled 0.5wid;
 tiny_circle := savepen;
 %
-pickup pencircle xscaled 1.2ptt yscaled .3 ptt rotated 50;
+pickup pencircle xscaled 1.2wid yscaled .3 wid rotated 50;
 lute_pen := savepen;
-pickup pencircle xscaled 1.4ptt yscaled .3 ptt rotated 50;
+pickup pencircle xscaled 1.4wid yscaled .3 wid rotated 50;
 bigger_lute_pen := savepen;
-pickup pencircle xscaled 1.5ptt yscaled .1 rotated 85;
+pickup pencircle xscaled 1.5wid yscaled .1 rotated 85;
 flag_pen := savepen;
-pickup pencircle xscaled .3ptt yscaled .1 rotated 50;
+pickup pencircle xscaled .3wid yscaled .1 rotated 50;
 stem_pen := savepen;
 %
 def do_v_bar = 
@@ -31,7 +31,7 @@ enddef;
 %
 def do_box =
 beginchar (0, em#, 1.0cap#, .3cap#); "em quad";
-  pickup pencircle xscaled .3ptt yscaled .3ptt;
+  pickup pencircle xscaled .3wid yscaled .3wid;
   x1=x4=0w;x2=x3=w;
   y1=y2=0h;y3=y4=h;
   x5=x1;y5=-d;
@@ -40,6 +40,25 @@ beginchar (0, em#, 1.0cap#, .3cap#); "em quad";
   draw z5..z6;
 endchar;enddef;
 %
+def do_v =  
+beginchar(8, .7em#, .5cap#, 0cap#); "a little v thingy";
+  pickup pencircle xscaled .9wid yscaled .3 wid;
+  lft x1=0w;top y1=h;
+  x2=.5w;bot y2=0;
+  rt x3=w;top y3=h;
+  draw z1..z2&z2..z3;
+endchar;enddef;
+%%
+def do_vv =  
+beginchar(9, .7em#, .5cap#, 0cap#); "a little v thingy";
+  pickup pencircle xscaled .9wid yscaled .3 wid;
+  lft x1=0w;bot y1=0;
+  x2=.5w;top y2=h;
+  rt x3=w;top y3=y1;
+  draw z1..z2&z2..z3;
+endchar;enddef;
+%
+%
 def do_a_flag(suffix $)(expr the_top) =
  pickup flag_pen;
  x$1=v_bar;x$2=w;top y$1=the_top;y$2=y$1 - 12/30h;
@@ -47,7 +66,7 @@ def do_a_flag(suffix $)(expr the_top) =
 enddef;
 %
 def do_a_big_flag(suffix $)(expr the_top) =
- pickup pencircle xscaled 1.7 ptt yscaled .3 rotated 85;
+ pickup pencircle xscaled 1.7 wid yscaled .3 rotated 85;
  x$1=v_bar;x$2=w;
  top y$1=the_top;y$2=y$1 - 19/30h;
  x25=1/2[x$1,x$2];
@@ -56,7 +75,7 @@ def do_a_big_flag(suffix $)(expr the_top) =
 enddef;
 %
 def do_a_med_flag(suffix $)(expr the_top) =
- pickup pencircle xscaled 1.7 ptt yscaled .3 rotated 85;
+ pickup pencircle xscaled 1.7 wid yscaled .3 rotated 85;
  x$1=v_bar;x$2=1.0w;
  top y$1=the_top;y$2=y$1 - 15/30h;
  x$5=1/2[x$1,x$2];
@@ -72,7 +91,7 @@ enddef;
 %
 def do_whole =
 beginchar ("W", 1.15em#, 1.0cap#, 0);" whole note";
- pickup pencircle xscaled 1.45 ptt yscaled .3 ptt rotated 5;
+ pickup pencircle xscaled 1.45 wid yscaled .3 wid rotated 5;
  x0=0.13w;x1=.88w;
  y0=0.28h;y1=.358h;
  draw z0..tension 1.13..z1..tension 1.13..cycle;
@@ -80,28 +99,28 @@ endchar;enddef;
 %
 def do_half =
 beginchar ("w", em#, 1.0cap#, 0);" half note";
- pickup pencircle xscaled 1.2 ptt yscaled .5 ptt rotated 7;
+ pickup pencircle xscaled 1.2 wid yscaled .5 wid rotated 7;
  x2=0.14w;x1=.5w;x0=.92w;
  y2=0.3h; y1=.63h;y0=.45h;
 	x3=x1;y3=0.03h;
 	x4=x0;y4=.35h;
 	x5=x0;y5=2.1h;
-	penpos0(.9ptt, 20);
-	penpos1(.8ptt, 90);
-	penpos2(1.3ptt, 180);
-	penpos3(1.1ptt, 210);
-	penpos4(.8ptt, 350);
-	penpos5(.8ptt, 350);
+	penpos0(.9wid, 20);
+	penpos1(.8wid, 90);
+	penpos2(1.3wid, 180);
+	penpos3(1.1wid, 210);
+	penpos4(.8wid, 350);
+	penpos5(.8wid, 350);
 penstroke z0e..tension 1.03..z1e..tension 1.03..z2e..z3e..z4e..tension 6..z5e;
 endchar;enddef;
 %
 def do_long =
 beginchar ("L", 2.4em#, 1.0cap#, -cap#);" a long";
-  pickup pencircle xscaled .2ptt yscaled 1.8ptt;
+  pickup pencircle xscaled .2wid yscaled 1.8wid;
   x0=x2=0w; x1=x3=1w; 
   top y0=top y1=.8h;bot y2=bot y3=0.1h;
   draw z0..z1; draw z2..z3;
-  pickup pencircle xscaled .4ptt yscaled .2ptt;
+  pickup pencircle xscaled .4wid yscaled .2wid;
   x4=x5=0w; x6=x7=w;
   y4=-.1h;y6=d; y5=y7=1h;
   draw z4..z5; draw z6..z7;
@@ -109,11 +128,11 @@ endchar;enddef;
 
 def do_breve =
 beginchar ("J", 1.2em#, 1.0cap#, 0);" a breve";
-  pickup pencircle xscaled .2ptt yscaled 1.8ptt;
+  pickup pencircle xscaled .2wid yscaled 1.8wid;
   x0=x2=0w; x1=x3=1w; 
   top y0=top y1=.8h;bot y2=bot y3=0.1h;
   draw z0..z1; draw z2..z3;
-  pickup pencircle xscaled .4ptt yscaled .2ptt;
+  pickup pencircle xscaled .4wid yscaled .2wid;
   x4=x5=0w; x6=x7=w;
   y4=y6=-.1h; y5=y7=1h;
   draw z4..z5; draw z6..z7;
@@ -124,23 +143,38 @@ endchar;enddef;
 def do_note_body =
    	x1=.95w; y1=.63w;
 	fill (x1,.y1)..(.5w, .8w)..(0.05w,.17 w)..(.5w,0)..cycle; 
-  pickup pencircle scaled .8 ptt;
+  pickup pencircle scaled .8 wid;
   rt x2=w;;y2=h; 
   x3=x2;y3=y1 - .13w;
   draw z3..z2;  % stem
 %  labels(1,2);
 enddef;
 %
+def do_mod_open =
+beginchar (211, 1.0em#, 1.0cap#, 0);" half note body"; 
+ pickup pencircle xscaled 1.2 wid yscaled .2 wid rotated 145;
+ 	lft x2=0w;x1=.7w;rt x0=w;x3=.3w;
+ 	y2=0.2h; top y1=.6h;y0=.4h;
+	y3=0.0h;
+
+%	penpos0(.9wid, 20);
+%	penpos1(.8wid, 90);
+%	penpos2(1.3wid, 180);
+%	penpos3(1.1wid, 210);
+%penstroke z0e..tension 1.03..z1e..tension 1.03..z2e..z3e..cycle;
+	draw z0..z1..tension 1.1..z2..z3..tension 1.1..cycle;
+endchar;enddef;
+%
 def do_open =
 beginchar (212, em#, 1.0cap#, 0);" half note body"; 
- pickup pencircle xscaled 1.2 ptt yscaled .5 ptt rotated 7;
+ pickup pencircle xscaled 1.2 wid yscaled .5 wid rotated 7;
  	x2=0.14w;x1=.5w;x0=.88w;
  	y2=0.3h; y1=.67h;y0=.47h;
 	x3=x1;y3=0.0h;
-	penpos0(.9ptt, 20);
-	penpos1(.8ptt, 90);
-	penpos2(1.3ptt, 180);
-	penpos3(1.1ptt, 210);
+	penpos0(.9wid, 20);
+	penpos1(.8wid, 90);
+	penpos2(1.3wid, 180);
+	penpos3(1.1wid, 210);
 penstroke z0e..tension 1.03..z1e..tension 1.03..z2e..z3e..cycle;
 endchar;enddef;
 %
@@ -255,7 +289,7 @@ beginchar (199, .8em#, 2.1cap#, 0);" five flags";
 endchar;enddef;
 %
 def ii_flag(suffix $)(expr the_top) =
- pickup pencircle xscaled 1.0 ptt yscaled .3ptt rotated 75;
+ pickup pencircle xscaled 1.0 wid yscaled .3wid rotated 75;
  x$1=v_bar;x$2=w;
  top y$1=the_top;
  y$2=y$1 - 4/30h;
@@ -305,12 +339,12 @@ endchar;enddef;
 %	Italian style flags
 %	like old music
 %
-if unknown bodyht : bodyht# = 3ptt#;fi;% actually half
+if unknown bodyht : bodyht# = 3wid#;fi;% actually half
 if unknown bodyw  : bodyw# = .8 * bodyht#;fi;
 define_pixels(bodyht, bodyw);
 %
 def do_open_body =
- pickup pencircle xscaled 1.8 ptt yscaled .5 ptt rotated 50;
+ pickup pencircle xscaled 1.8 wid yscaled .5 wid rotated 50;
  x0=.1w;x2=.9w;x1=.52w;x3=.48w; 
  y0=.195h;y1=0h;y2=.175h;y3=.35h;
 % was y0=.2h;y1=0h;y2=y0;y3=.4h;
@@ -318,7 +352,7 @@ def do_open_body =
 enddef;
 %
 def do_closed_body =
- pickup pencircle scaled .1 ptt;
+ pickup pencircle scaled .1 wid;
  	x0=good.x(.5w - bodyw); 
 	x1= x3=good.x(.5w); 
 	x2=good.x(.5w + bodyw);
@@ -326,8 +360,8 @@ def do_closed_body =
  fill z0--z1--z2--z3--cycle
 enddef;
 %
-if unknown stem: stem# = .9ptt#;fi;
-if unknown flare: flare# = 1.8 ptt#;fi;
+if unknown stem: stem# = .9wid#;fi;
+if unknown flare: flare# = 1.8 wid#;fi;
 define_pixels(stem, flare);
 def do_stem =
 	x5 = x6 = x8 = .505w; x7=.44w;
@@ -351,7 +385,7 @@ def do_r_stem =
 enddef;
 %
 def do_i_flag(suffix $)(expr the_top) =
- pickup pencircle xscaled 1.4 ptt yscaled .5 ptt rotated 30;;
+ pickup pencircle xscaled 1.4 wid yscaled .5 wid rotated 30;;
  x$1=.5w;x$2=.9w;x$3=x$1;
  top y$1=the_top+0.03h;y$2=y$1 - 8/30h;
  y$3=y$1 - .5h;
@@ -360,7 +394,7 @@ enddef;
 %
 %
 def do_ri_flag(suffix $)(expr the_top) =
- pickup pencircle xscaled 1.4 ptt yscaled .5 ptt rotated 30;;
+ pickup pencircle xscaled 1.4 wid yscaled .5 wid rotated 30;;
  x$1=.5w;x$2=.9w;x$3=x$1;
  top y$1=the_top+0.03h;y$2=y$1 + 8/30h;
  y$3=y$1 + .5h;
@@ -368,10 +402,17 @@ def do_ri_flag(suffix $)(expr the_top) =
 enddef;
 %
 def do_is_flag(suffix $)(expr the_top) =
- pickup pencircle xscaled 1.4 ptt yscaled .5 ptt rotated 30;;
+ pickup pencircle xscaled 1.4 wid yscaled .5 wid rotated 30;
  x$1=.5w;x$2=w;
  top y$1=the_top+0.03h;y$2=y$1 - 4/30h;
  draw z$1..tension 1.4..{dir 300}z$2;
+enddef;
+%
+def do_ris_flag(suffix $)(expr the_top) =
+ pickup pencircle xscaled 1.4 wid yscaled .5 wid rotated 150;
+ x$1=.5w;x$2=w;
+ top y$1=the_top-0.03h;y$2=y$1 + 4/30h;
+ draw z$1..tension 1.4..{dir 70}z$2;
 enddef;
 %
 % h used to be 2.1cap#
@@ -416,7 +457,7 @@ endchar; enddef;
 % 
 def do_ri_five =
 beginchar (228, 1.1em#, 2.5cap#, -1.26cap#); "Italian flag";
- do_closed_body; do_r_stem; do_is_flag(10,d); do_is_flag(20,.62d);
+ do_closed_body; do_r_stem; do_ris_flag(10,d); do_ris_flag(20,.62d);
 endchar; enddef;
 % 
 def do_i_six =
@@ -427,7 +468,7 @@ endchar; enddef;
 def do_ri_six =
 beginchar (229, 1.1em#, 2.5cap#, 0); "Italian flag";
  do_closed_body;do_r_stem;
- do_is_flag(10,h);do_is_flag(20,.8h);do_is_flag(30,.6h);
+ do_ris_flag(10,h);do_ris_flag(20,.8h);do_ris_flag(30,.6h);
 endchar; enddef;
 % 
 def do_i_seven =
@@ -453,14 +494,14 @@ endchar;enddef;
 % italian flags with shorter stems
 %
 def do_i_open_body =
- pickup pencircle xscaled 1.6 ptt yscaled .5 ptt rotated 50;
+ pickup pencircle xscaled 1.6 wid yscaled .5 wid rotated 50;
  x0=.1w;x2=.9w;x1=x3=.5w; 
  y0=.2h;y1=0h;y2=y0;y3=.4h;
  draw z0..z1;draw z1..z2; draw z2..z3; draw z3..z0;
 enddef;
 %
 def do_i_closed_body =
- pickup pencircle scaled .1 ptt;
+ pickup pencircle scaled .1 wid;
  x0=.05w; x1= x3=.5w; x2=.95w;
  y0=.2h;y1=0h;y2=y0;y3=.43h;
  fill z0..tension 18..z1..tension 18..z2..tension 18..z3..tension 18..cycle;
@@ -468,7 +509,7 @@ enddef;
 %
 def do_i_stem =
  x5=x6=.5w; y5=.35h;y6=h;
- penpos5(1.5ptt, 50);penpos6(1.8 ptt, 30); penstroke z5e..z6e;
+ penpos5(1.5wid, 50);penpos6(1.8 wid, 30); penstroke z5e..z6e;
 enddef;
 %
 def do_iii_two =
@@ -540,35 +581,35 @@ beginchar ("c", .8em#, 1.0cap#, 0);"letter c";
  x4=.4w;y4=.59h;
  x5=.4w;y5=-.05h;
 % draw z1..tension 1.6..z2..tension 1.6..z3;
- penpos1(.5ptt, 45); penpos2(2.1ptt,50);penpos3(.8ptt,30);
- penpos4(1.8ptt,45);penpos5(.6ptt,30);
+ penpos1(.5wid, 45); penpos2(2.1wid,50);penpos3(.8wid,30);
+ penpos4(1.8wid,45);penpos5(.6wid,30);
  penstroke z1e..z4e..z2e;
  penstroke z2e..tension 2..z3e..{dir 345}z5e;
 endchar;enddef;
 %
 def do_d =
 beginchar ("d", em#, 1.0cap#, 0);"letter d";
- pickup pencircle xscaled 1.2ptt yscaled .3ptt rotated 45;
+ pickup pencircle xscaled 1.2wid yscaled .3wid rotated 45;
  x1=.7w;y1=.45h;
  x2=.4w;y2=0;
  x3=.7w;y3=.1h;
  x4=-.1w;y4=1.4h;
  x5=.75w;y5=.14h;
  draw z1{dir 120}..tension 1.1..z2..tension 1.1..z3;
- penpos1(1.08ptt, 30); penpos2(1.2ptt, 0); penpos4(1.8ptt, 30);
- penpos5(.8ptt, 20);
+ penpos1(1.08wid, 30); penpos2(1.2wid, 0); penpos4(1.8wid, 30);
+ penpos5(.8wid, 20);
  penstroke z4e..z1e..z5e..{dir 180}z2e;
 endchar;enddef;
 %
 def do_D =
 beginchar ("D", em#, 1.0cap#, 0);"letter D bent over";
- pickup pencircle xscaled 1.2ptt yscaled .2ptt rotated 50;;
+ pickup pencircle xscaled 1.2wid yscaled .2wid rotated 50;;
  x1=.7w;y1=.45h;
  x2=.4w;y2=0;
  x3=.5w;y3=.6h;
  x4=-.9w;y4=0.90h;
  draw z1..z2..tension 1.2..z1;
- penpos3(1.2 ptt, 45);penpos4(2.2ptt, 45);
+ penpos3(1.2 wid, 45);penpos4(2.2wid, 45);
  penstroke z3e{dir 175}..z4e;
 % draw z3{dir 175}..tension 1.1..z4;
 endchar;enddef;
@@ -584,7 +625,7 @@ endchar;enddef;
 %
 def do_f =
 beginchar ("f", em#, 1.0cap#, .76cap#);"letter f";
- pickup pencircle xscaled 1.4ptt yscaled .4ptt rotated 30;
+ pickup pencircle xscaled 1.4wid yscaled .4wid rotated 30;
  x1=.1;y1=.15h;
  x2=.8w;y2=.4h;
  x5=-.5w;y3=y5=-.87d;   % -.7h;
@@ -596,7 +637,7 @@ endchar;enddef;
 %
 def do_F =
 beginchar ("F", em#, 1.0cap#, 2cap#);"letter F";
- pickup pencircle xscaled 1.4ptt yscaled.4ptt rotated 40;
+ pickup pencircle xscaled 1.4wid yscaled.4wid rotated 40;
  x1=-.15w;y1=.95h;
  x2=.6w;y2=.68h;
  x3=.4w; y3=.325h;
@@ -604,13 +645,13 @@ beginchar ("F", em#, 1.0cap#, 2cap#);"letter F";
  x4=w;y4=.0h;
  x5=x1;y5=-d;%-2h;
  draw z1..tension 3..z2..z3..tension 3..z6..z4;
- pickup pencircle xscaled .8ptt yscaled .3ptt rotated 30;
+ pickup pencircle xscaled .8wid yscaled .3wid rotated 30;
  draw z1..z5;
 endchar;enddef;
 %
 def do_G =
 beginchar ("G", .9em#, 1.0cap#, 1.0cap#);"letter g";
- pickup pencircle xscaled 1.6 ptt yscaled .3ptt rotated 40;
+ pickup pencircle xscaled 1.6 wid yscaled .3wid rotated 40;
  x1=.9w;y1=.6h;
  x2=.2w;y2=.05h;
  x3=.93w;y3=.6h;
@@ -621,8 +662,8 @@ beginchar ("G", .9em#, 1.0cap#, 1.0cap#);"letter g";
  x6=.2w;y6=y4;
  x7=.3w;y7=-.2d;%-.2h;
  draw z1{dir 200}..tension 1.1..z2..z5..z3;
- penpos3(.4ptt, 40);penpos8(1.2ptt,  30);penpos4(1.2ptt, 45);
- penpos6(1.2ptt, 30);penpos7(1.2ptt, 30);
+ penpos3(.4wid, 40);penpos8(1.2wid,  30);penpos4(1.2wid, 45);
+ penpos6(1.2wid, 30);penpos7(1.2wid, 30);
  draw z9..z8..z4..z6..{dir 45}z7;
 endchar;enddef;
 %
@@ -665,7 +706,7 @@ endchar;enddef;
 %
 def do_i =
 beginchar ("i",.7em#, 1.0cap#, 0);"the letter i";
- pickup pencircle xscaled 1.4 ptt yscaled .4 ptt rotated 30;;
+ pickup pencircle xscaled 1.4 wid yscaled .4 wid rotated 30;;
  x2=.35w;
  x1=x3=x4=.5w;
  y1=.50h;y2=-.05h;
@@ -692,7 +733,7 @@ beginchar ("I",.9em#, 1.0cap#, -cap#);"the letter I or Y";
   x11=.55w;y11=.2d;
   draw z2{dir 290}..z11..tension 1.3..z5..tension 1.0..
   z6..{dir 80}z7;
-  penpos8(1.4ptt, 45);penpos10(1.4 ptt , 45);penpos9(.5 ptt, 75);
+  penpos8(1.4wid, 45);penpos10(1.4 wid , 45);penpos9(.5 wid, 75);
   penstroke z8e{dir 240}..z10e..z9e;
 %  draw z8{dir 240}..z10..z9;
 endchar;enddef;
@@ -726,7 +767,7 @@ endchar;enddef;
 def do_l =
 beginchar ("l", .6em#, 1.0cap#, 0);"the letter l";
 pickup bigger_lute_pen;
-pickup pencircle xscaled 1.4ptt yscaled .3 ptt rotated 55;
+pickup pencircle xscaled 1.4wid yscaled .3 wid rotated 55;
  if unknown l_top# : l_top# = 1.3h;fi;
  lft x1= .4w;y1=.45 l_top#;
  rt  x2= .9w;y2=.76 l_top#;
@@ -742,7 +783,7 @@ endchar;enddef;
 %
 def do_m =
 beginchar ("m", 1.2em#, 1.0cap#, 0);"the letter m";
-pickup pencircle xscaled 1.5ptt yscaled .3 ptt rotated 50;
+pickup pencircle xscaled 1.5wid yscaled .3 wid rotated 50;
  lft x1=0;y1=.62h;
  lft x2=.08w;y2=mid_bar-.05h;
  rt x6=w;y6=y1;
@@ -760,7 +801,7 @@ endchar;enddef;
 %
 def do_n =
 beginchar ("n", .7em#, 1.0cap#, 0);"the letter n";
-pickup pencircle xscaled 1.5ptt yscaled .3 ptt rotated 50;
+pickup pencircle xscaled 1.5wid yscaled .3 wid rotated 50;
  lft x1=0;y1=.62h;
  lft x2=.08w;y2=mid_bar-.05h;
  rt x6=w;y6=y1;
@@ -795,7 +836,7 @@ endchar;enddef;
 %		DOTS
 %
 %
- if unknown dw: dw# = 1.3ptt#;fi;
+ if unknown dw: dw# = 1.5wid#;fi;
  define_blacker_pixels(dw);
  def my_dot(suffix $)(expr wid)(expr hi) = 
  fill fullcircle scaled dw shifted (wid, hi);
@@ -843,14 +884,14 @@ beginchar ("$", em#, 1.0cap#, 0);"three dots";
 %
 def do_thumb =
 beginchar ("|", em#, 1.0cap#, 0);"|";
- pickup pencircle xscaled .6ptt yscaled .6ptt;
+ pickup pencircle xscaled .6wid yscaled .6wid;
  x1=.5w;x2=x1;
  y1=.2h;y2=.7h;
  draw z1..z2;
 endchar;enddef;
 %
 def c_body(expr thick) =
-% pickup pencircle xscaled 1.6 yscaled .4ptt rotated 20;
+% pickup pencircle xscaled 1.6 yscaled .4wid rotated 20;
  x0=1.05w;y0=.73h;
  rt x1=.97w;rt x4=w;
  y1=.62h;
@@ -862,13 +903,13 @@ def c_body(expr thick) =
  lft x7=0; y7=.5h;
 % draw z0{dir 235}..z1;
 % draw z1{dir 110}..z5..z2..z3..z6..{dir 65}z4;
- penpos0(1.ptt, 25);
+ penpos0(1.wid, 25);
  penpos1(thick, 25);
  penpos2(thick, 135);
  penpos3(thick, 225);
  penpos4(thick, 315);
- penpos5(.5ptt, 90);
- penpos6(.6ptt, 270);
+ penpos5(.5wid, 90);
+ penpos6(.6wid, 270);
  
  penstroke z0e{dir 240}..z1e;
  penstroke z1e..z5e..z2e..z3e..z6e..{dir 65}z4e;
@@ -876,18 +917,18 @@ enddef;
 %
 def do_C =
 beginchar ("U", 1.5em#, 2.2cap#, 0);"C";
-  c_body(1.6 ptt);
+  c_body(1.6 wid);
 endchar;enddef;
 %
 def do_big_C =
 beginchar (19, 2.15em#, 3.5cap#, 0);"C";
-  c_body(1.9ptt);
+  c_body(1.9wid);
 endchar;enddef;
 %
 def do_big_cut_C =
 beginchar (20, 2.15em#, 3.5cap#, 0);"Cut time";
- c_body(1.9ptt);
- pickup pencircle xscaled 1.2ptt yscaled .3ptt rotated 45;
+ c_body(1.9wid);
+ pickup pencircle xscaled 1.2wid yscaled .3wid rotated 45;
  x15=x16=.57w;
  bot y15=0h;top y16=h;
  draw z15..z16;
@@ -895,46 +936,53 @@ endchar;enddef;
 %
 def do_cut_C =
 beginchar ("u", 1.5em#, 2.2cap#, 0);"Cut time";
- c_body(1.6ptt);
- pickup pencircle xscaled 1.3ptt yscaled .3ptt rotated 45;
+ c_body(1.6wid);
+ pickup pencircle xscaled 1.3wid yscaled .3wid rotated 45;
  x15=x16=.57w;
  bot y15=0h;top y16=h;
  draw z15..z16;
 endchar;enddef;
 %
-def do_fermata =
-beginchar ("Y", .3in#, .3in#, 0);"a fermata";
- pickup pencircle scaled 2.2 ptt;
+def do_fermata_dot  =
+beginchar (92 , 3em#, 3em#, 0);"a fermata";
+ pickup pencircle scaled 2.2 wid;
  x1=.5w;y1=.5h;
  draw z1;
+endchar;enddef;
+%
+def do_fermata =
+beginchar ("Y", 3em#, 3em#, 0);"a fermata";
+ pickup pencircle scaled 2.2 wid;
+ x1=.5w;y1=.5h;
+% draw z1;
  x2=0w; y2=.5h;
  x3=.5w;y3=h;
  x4=w;y4=y2;
- pickup pencircle xscaled 2.2 ptt yscaled 1.0 ptt rotated 35;
- draw z2..z3..z4;
+pickup pencircle xscaled 2.2 wid yscaled 1.0 wid rotated 35;
+draw z2..z3..z4;
 endchar;enddef;
 %
 def do_b_fermata =
-%beginchar ("y", 1.0cap#, 1.0cap#, 0);"a fermata like M Board made";
-beginchar ("y", .3in#, .3in#, 0);"a fermata like M Board made";
- pickup pencircle scaled 2.2 ptt;
+% beginchar ("y", .3in#, .3in#, 0);"a fermata like M Board made";
+beginchar ("y", 3em#, 3em#, 0);"a fermata like M Board made";
+ pickup pencircle scaled 2.2 wid;
  x1=.5w;y1=.5h;
  draw z1;
  x2=0w; y2=.5h;
  x3=.5w;y3=h;
  x4=w;y4=y2;
  x5=x3;y5=0h;
- pickup pencircle xscaled 2.2 ptt yscaled 1.0 ptt rotated 35;
- penpos5(.5 ptt,45);penpos2(.6 ptt,0);penpos3(2.0 ptt ,300);penpos4(2.9 ptt,230);
+ pickup pencircle xscaled 2.2 wid yscaled 1.0 wid rotated 35;
+ penpos5(.5 wid,45);penpos2(.6 wid,0);penpos3(2.0 wid ,300);penpos4(2.9 wid,230);
  penstroke z5e..z2e..z3e..z4e;
 
 endchar;enddef;
 %
 def do_tail =
-beginchar ("Q", 0.5in#, 5.4cap#, 0);"a tail";
-  pickup pencircle xscaled .7ptt yscaled .3 ptt rotated 20;
+beginchar ("Q", 5.5em#, 5.4cap#, 0);"a tail";
+  pickup pencircle xscaled .7wid yscaled .3 wid rotated 20;
   thin_pen := savepen;
-  pickup pencircle xscaled 1.8ptt yscaled .3 ptt rotated 40;
+  pickup pencircle xscaled 1.8wid yscaled .3 wid rotated 40;
   thick_pen := savepen;
   x1=0;y1=0;
   x2=.15w;y2=h;
@@ -962,7 +1010,7 @@ endchar;enddef;
 %
 def do_another_tail =
 beginchar ("q", 5em#, 5.4cap#, 0);"another tail";
-  pickup pencircle xscaled 1.7ptt yscaled .3ptt rotated 40;
+  pickup pencircle xscaled 1.7wid yscaled .3wid rotated 40;
   x1=0;y1=0;
   x2=.15w;y2=h;
   x3=.3w;y3=.2h;
@@ -971,6 +1019,23 @@ beginchar ("q", 5em#, 5.4cap#, 0);"another tail";
   x6=.7w;y6=.6h;
   draw z1{dir 90}..tension 6..z2..tension 6..z3..tension 6..z4..tension 6..z5..tension 6..z6;
 endchar;enddef;
+%
+%
+def do_yet_another_tail =
+beginchar (191, 4.em#, 5.4cap#, 0);"yet another tail";
+  pickup pencircle xscaled 1.7wid yscaled .3wid rotated 20;
+  x1=0;y1=1.02h;
+  x2=.2w;y2=0;
+  x3=.42w;y3=.98h;
+  x4=.64w;y4=.0h;
+  x5=.8w;y5=.94h;
+  x6=.89w;y6=.06h;
+  rt x7=w;y7=-.07h;
+  x8=.6[x5, x6];y8=.6[y5,y6];
+  draw z1{down}..tension 6..z2..tension 6..z3{left}..tension 6..z4..
+  tension 5.2..z5{left}..tension 5..z8..tension5..z7{left}..z6{up};
+endchar;enddef;
+%
 %
 def do_hold =
 beginchar ("V", 5em#, 5.4cap#, 0);"hold the last note";
@@ -994,7 +1059,7 @@ beginchar ("#", em#, 1.0cap#, 0);"a hash relish";
   draw z5..z6;draw z7..z8;
 endchar;enddef;
 %
-def do_flat =
+def do_flat=
 beginchar ("?", .55em#, 1.0cap#, 0);"a flat char";
   pickup lute_pen;
   lft x0=lft x1=0;
@@ -1002,13 +1067,44 @@ beginchar ("?", .55em#, 1.0cap#, 0);"a flat char";
   draw z0..z1;
   lft x2=x0;y2=.5h;
   rt x3=.9w;y3=.21h;
-  pickup pencircle xscaled 1.3ptt yscaled .5ptt rotated 20;
+  pickup pencircle xscaled 1.3wid yscaled .5wid rotated 20;
   draw z2{dir 45}..z3.. {dir 220}z0;
+endchar;enddef;
+%
+%
+def do_mod_flat =
+beginchar (24, .7em#, 1.0cap#, 0);"a flat char";
+  pickup pencircle xscaled .9 wid yscaled .3wid rotated 50;
+  lft x0=lft x1=0;
+  y0=0h;y1=1.5h;
+  draw z0..z1;
+  lft x2=x0;y2=.6h;
+  rt x3=.9w;y3=.31h;
+  pickup pencircle xscaled 1.3wid yscaled .5wid rotated 20;
+  draw z2{dir 45}..z3..tension 1.1.. {dir 250}z0;
+endchar;enddef;
+%
+def do_natural =
+beginchar (25, .6em#, 1.7cap#, 0);"a natural";
+  pickup pencircle xscaled .7 wid yscaled 1.9wid;
+ 
+  lft x0=0;top y0=h;
+  x1=x0;y1=.66h;
+  x2=x0;y2=.33h;
+ 
+  rt x5=w;y5=y1+.05h;
+  x6=x5;y6=y2+.05h;
+  x7=x5;bot y7=0;
+  draw z0..z2;
+  draw z5..z7;
+  draw z1..z5;draw z2..z6;
+  
+
 endchar;enddef;
 %
 def do_f_flat =
 beginchar (">", .75em#, 1.0cap#, 0);"a wierd flat char";
-  pickup pencircle xscaled 1.1ptt yscaled .3ptt rotated 30;
+  pickup pencircle xscaled 1.1wid yscaled .3wid rotated 30;
   x0=x1=.2w;
   y0=-.1h;y1=2.2h;
   x6=-0.8w;y6=y1;
@@ -1041,21 +1137,58 @@ beginchar ("x", .9em#, 1.0cap#, 0);"an X";
   draw z0..z1;draw z2..z3;
 endchar;enddef;
 %
-def do_comma =
+def do_it_x =
+beginchar (88, em#, 1.0cap#, 0);"a bigger X";
+  pickup pencircle xscaled 1.17 wid yscaled .1wid;
+  x0=0.2w;x2=.8w;
+  x1=x2-.01w;
+  x3=x0+.01w;
+  y0=y2=0.02h;top y1=top y3=.91h;
+  draw z0..z1;draw z2..z3;
+  pickup pencircle xscaled .15 wid yscaled .2 wid;
+  if unknown ksize: ksize = .73wid;fi;
+  if unknown kksize: kksize = .70wid;fi;
+  x10=x0 - kksize;
+  x11=x0 + ksize;
+  y10=y11=y0;
+  draw z10..z11;
+  x12=x2 - ksize;
+  x13=x2 + kksize;
+  y12=y13=y2;
+  draw z12..z13;
+  x14=x3 - kksize;
+  x15=x3 + ksize;
+  y14=y15=y3;
+  draw z14..z15;
+  x16=x1 - kksize;
+  x17=x1 + ksize;
+  y16=y17=y1;
+  draw z16..z17;
+endchar;enddef;
+%
+def do_comma=
 beginchar ("'", .8em#, 1.0cap#, 0);"a comma relish";
-  pickup pencircle scaled 2.0 ptt;
+%  pickup pencircle scaled 2.0 wid;
+%  x1=.5w;
+%  y1=.5h;
+%  draw z1;
+%  pickup lute_pen;
+%  x3=.52w;y3=.545h;
+%  x2=.6w;y2=.2h;
+%  draw z3{dir 330}..z2;
+  pickup pencircle scaled 2.70 wid;
   x1=.5w;
   y1=.5h;
   draw z1;
-  pickup lute_pen;
-  x3=.52w;y3=.545h;
-  x2=.6w;y2=.2h;
+  pickup bigger_lute_pen;
+  x3=.55w;y3=.61h;
+  x2=.6w;y2=-.05h;
   draw z3{dir 330}..z2;
 endchar;enddef;
 %
 def do_waves =
-beginchar ("~", 0.15 in#, 1.0cap#, 0);"a cadenza";
-  pickup pencircle scaled .8 ptt;
+beginchar (55, 0.15 in#, 1.0cap#, 0);"a cadenza";
+  pickup pencircle scaled .8 wid;
   x0=0w;y0=0.5h;
   x1=.25w;y1=h;
   x2=.5w;y2=y0;
@@ -1064,6 +1197,17 @@ beginchar ("~", 0.15 in#, 1.0cap#, 0);"a cadenza";
   draw z0{dir 80}..tension 3..z1..tension 3..z2..tension 3..z3..tension 3..{dir 80}z4;
 endchar;enddef;
 %
+def do_tilde =
+beginchar ("~", em#, 1.0cap#, 0);"a tilde";
+  pickup pencircle scaled .8 wid;
+  x0=-.2w;y0=0.4h;
+  x1=.1w;y1=.56h;
+  x2=.4w;y2=y0;
+  x3=.7w;y3=.24h;
+  x4=w;y4=y0;
+  draw z0{dir 50}..tension 1.0..z1..tension 1.0..z2
+  ..tension 1.0..z3..tension 1.0..{dir 50}z4;
+endchar;enddef;
 %
 def do_slant =
 beginchar (1, 2em#, .8cap#, 0);" a slanted line";
@@ -1093,6 +1237,13 @@ beginchar (4, 1.8em#, .3cap#, 0);" a slightly slanted line";
    draw z0..z1;
 endchar;enddef;
 %
+def do_slant_d =
+beginchar (5, 2em#, 1.0cap#, 0);" a more slanted line";
+   pickup tiny_circle;
+   x0=0;y0=0;x1=w;y1=h;
+   draw z0..z1;
+endchar;enddef;
+
 def do_s_c_ubar =
 beginchar ("[", em#, 1.0cap#, 0);" begin a curved underline";
    pickup tiny_circle;
@@ -1112,7 +1263,7 @@ endchar;enddef;
 %
 def do_slash =
 beginchar ("/", em#, 1.0cap#, 0);"a slash";
-  pickup pencircle xscaled 1.2ptt yscaled .3ptt rotated -15;
+  pickup pencircle xscaled 1.2wid yscaled .3wid rotated -15;
   x1=0w;x2=w;
   y1=-0.1h;y2=.9h;
   draw z1..z2;
@@ -1120,7 +1271,7 @@ endchar;enddef;
 %
 def do_two_slash =
 beginchar ("s", em#, 1.0cap#, 0);"two slashes";
-  pickup pencircle xscaled 1.2ptt yscaled .3ptt rotated -15;
+  pickup pencircle xscaled 1.2wid yscaled .3wid rotated -15;
   x1=0w;x2=w;
   y1=-0.1h;y2=.9h;
   draw z1..z2;
@@ -1131,7 +1282,7 @@ endchar;enddef;
 %
 def do_three_slash =
 beginchar ("t", em#, 1.0cap#, 0);"three slashes";
-  pickup pencircle xscaled 1.2ptt yscaled .3ptt rotated -15;
+  pickup pencircle xscaled 1.2wid yscaled .3wid rotated -15;
   x1=0w;x2=w;
   y1=-0.1h;y2=.9h;
    draw z1..z2;
@@ -1159,7 +1310,7 @@ endchar;enddef;
 %
 def do_hat =
 beginchar ("^", .9em#, 1.0cap#, 0); " a hat";
-   pickup pencircle xscaled 1.2ptt yscaled .6ptt rotated 50;
+   pickup pencircle xscaled 1.2wid yscaled .6wid rotated 50;
    x0=.2w;x1=.5w;x2=.8w;
    y0=.3h;y1=.6h;y2=.3h;
    draw z0..z1;draw z1..z2;
@@ -1167,7 +1318,7 @@ endchar;enddef;
 %
 def do_star =
 beginchar ("@", .7cap#, 1.0cap#, 0); " a star";
-   pickup pencircle scaled .8 ptt;
+   pickup pencircle scaled .8 wid;
    x0=x2=.5w;
    lft x1=0w;rt x3=w;
    y0=.2h;y1=y3=.5h;y2=.8h;
@@ -1179,8 +1330,8 @@ endchar;enddef;%
 %
 %
 def do_smile =
-beginchar ("_", 1.1em#, 1.0cap#, 0); " a smile";
-   pickup pencircle xscaled 1.0 ptt yscaled .5 ptt;
+beginchar ("_", 1.2em#, 1.0cap#, 0); " a smile";
+   pickup pencircle xscaled 1.0 wid yscaled .5 wid;
    x0=0w;x1=.5w;x2=w;
    y0=0h;y1=y0-.4h;y2=y0;
    draw z0..z1..z2;
@@ -1207,25 +1358,25 @@ endchar;enddef;
 %
 def do_zero_p =
  x0=x1=.5w;
- y0=0.04h;y1=0.92h;
+ y0=0.02h;y1=0.92h;
  draw z0..tension 1.7..z1..tension 1.7..cycle;
 enddef;
 def do_zero =
 beginchar (150, .9em#, 1.0cap#, 0);" a 0 bourdon";
- pickup pencircle xscaled 1.0ptt yscaled .3ptt rotated 5;do_zero_p;
+ pickup pencircle xscaled 1.0wid yscaled .3wid rotated 5;do_zero_p;
 endchar;enddef;
 %
 def do_zero_f =
 beginchar (140, .55em#, .7cap#, 0);" a tiny 0 ";
- pickup pencircle xscaled 0.8ptt yscaled .3ptt rotated 5;do_zero_p;
+ pickup pencircle xscaled 0.8wid yscaled .3wid rotated 5;do_zero_p;
 endchar;enddef;
 %
 def do_one_p =
- pickup pencircle xscaled 1.2ptt yscaled .3ptt rotated 25;
+ pickup pencircle xscaled 1.2wid yscaled .3wid rotated 25;
  pickup lute_pen;
  x0=.3w;y0=.7h;
  x1=x2=.5w;
- y1=.95h;y2=.055h;
+ y1=.95h;y2=.045h;
  x3=.3w; x4=.7w;
  y3=-.05h;y4=.15h;
  x5=x1;y5=y2;
@@ -1236,13 +1387,13 @@ enddef;
 %
 def do_one_b =
 beginchar (151, .9em#, 1.0cap#, 0);" a 1 bourdon";
- pickup pencircle xscaled 1.2ptt yscaled .3ptt rotated 25;
+ pickup pencircle xscaled 1.2wid yscaled .3wid rotated 25;
  do_one_p;
 endchar;enddef;
 %
 def do_one_f =
 beginchar (141, .5em#, .7cap#, 0);" a small 1";
- pickup pencircle xscaled .8ptt yscaled .3ptt rotated 25;
+ pickup pencircle xscaled .8wid yscaled .3wid rotated 25;
  do_one_p;
 endchar;enddef;
 %
@@ -1254,27 +1405,27 @@ def do_two_p =
  x5=.5w;y5=.1h;
  x6=.95w;y6=0h;
  draw z1..z2..z3..{dir 250}z4;
-% pickup pencircle xscaled 1.2ptt yscaled .3ptt rotated 40;
+% pickup pencircle xscaled 1.2wid yscaled .3wid rotated 40;
  draw z4..z5..z6;
 enddef;
 %
 def do_bb =
 beginchar (152, .9em#, 1.0cap#, 0);" a 2 bourdon";
- pickup pencircle xscaled 1.2ptt yscaled .3ptt rotated 10;
+ pickup pencircle xscaled 1.2wid yscaled .3wid rotated 10;
  do_two_p;
 endchar;enddef;
 %
 def do_two_f =
 beginchar (142, .55em#, .7cap#, 0);" a small 2";
- pickup pencircle xscaled .8ptt yscaled .3ptt;
+ pickup pencircle xscaled .8wid yscaled .3wid;
  do_two_p;
 endchar;enddef;
 %
 def do_BIG_two =
 beginchar ("R", 1.8em#, 2.0cap#, 0);"a big two";
- pickup pencircle xscaled 2.3ptt yscaled .9ptt;
+ pickup pencircle xscaled 2.3wid yscaled .9wid;
 % beginchar ("R", .9em#, 1.0cap#, 0);"a big two";
-% pickup pencircle xscaled 1.15ptt yscaled .45ptt;
+% pickup pencircle xscaled 1.15wid yscaled .45wid;
  lft x1=0.05w;y1=.68h;
  x2=.5w;top y2=h;
  rt x3=.96w;y3=.72h;
@@ -1286,9 +1437,9 @@ beginchar ("R", 1.8em#, 2.0cap#, 0);"a big two";
  x6=1.01w;y6=y7+0.01h;
  draw z1..z2..z3..{dir 250}z4;
 % draw z4..z5..z6;
-penpos7(1.4ptt,90);
-penpos5(1.7ptt,90);
-penpos6(2.1ptt,66);
+penpos7(1.4wid,90);
+penpos5(1.7wid,90);
+penpos6(2.1wid,66);
 penstroke  z7e..z5e..z6e;
 endchar;enddef;
 %
@@ -1304,19 +1455,19 @@ def do_three_p =
 enddef;
 def do_bbb =
 beginchar (153, .8em#, 1.0cap#, 0);" a 3 bourdon";
- pickup pencircle xscaled 1.0ptt yscaled .5ptt;
+ pickup pencircle xscaled 1.0wid yscaled .5wid;
  do_three_p
 endchar;enddef;
 %
 def do_three_f =
 beginchar (143, .55em#, .7cap#, 0);" a small 3";
- pickup pencircle xscaled .8ptt yscaled .3ptt;
+ pickup pencircle xscaled .8wid yscaled .3wid;
  do_three_p;
 endchar;enddef;
 %
 def do_BIG_three =
 beginchar ("T", 1.8em#, 2.0cap#, 0);"a big three";
- pickup pencircle xscaled 2.3ptt yscaled .8ptt;
+ pickup pencircle xscaled 2.3wid yscaled .8wid;
 
  lft x1=0.07w; lft x4=0;
  y1=y2=.76h;
@@ -1331,7 +1482,7 @@ beginchar ("T", 1.8em#, 2.0cap#, 0);"a big three";
 
 def do_bbb =
 beginchar (153, .8em#, 1.0cap#, 0);" a 3 bourdon";
- pickup pencircle xscaled 1.0ptt yscaled .5ptt;
+ pickup pencircle xscaled 1.0wid yscaled .5wid;
  do_three_p
 endchar;enddef;
 %
@@ -1350,12 +1501,12 @@ endchar;enddef;
 %
 def do_four_f =
 beginchar (144, .55em#, .7cap#, 0);" a small 4";
- pickup pencircle xscaled .6ptt yscaled .3ptt; do_four_p;
+ pickup pencircle xscaled .6wid yscaled .3wid; do_four_p;
 endchar;enddef;
 %
 def do_BIG_four =
 beginchar ("S", 2.0em#, 2.0cap#, 0);"a big four";
- pickup pencircle xscaled 2.5ptt yscaled .8ptt rotated 45;
+ pickup pencircle xscaled 2.5wid yscaled .8wid rotated 45;
   do_four_p;
 endchar;enddef;
 %
@@ -1372,12 +1523,12 @@ endchar;enddef;
 %
 def do_five_f =
 beginchar (145, .55em#, .7cap#, 0);" a small 5";
- pickup pencircle xscaled .8ptt yscaled .3ptt; do_five_p;
+ pickup pencircle xscaled .8wid yscaled .3wid; do_five_p;
 endchar;enddef;
 %
 def do_BIG_five =
 beginchar ("V", 1.20em#, 2.0cap#, 0);" a big 5 here it is!";
- pickup pencircle xscaled 2.0ptt yscaled .9ptt rotated 75;
+ pickup pencircle xscaled 2.0wid yscaled .9wid rotated 75;
 % do_five_p;
  lft x1=.22w;
  rt x2=w; 
@@ -1390,7 +1541,7 @@ beginchar ("V", 1.20em#, 2.0cap#, 0);" a big 5 here it is!";
  x5=.67w; y5=.17h;
  lft x6=0;
   y6=0; 
- penpos3(2.0ptt, 75); penpos4(2.0ptt,30); penpos5(2.0ptt,0);penpos6(.8ptt,330);
+ penpos3(2.0wid, 75); penpos4(2.0wid,30); penpos5(2.0wid,0);penpos6(.8wid,330);
  penstroke z3e..z4e..z5e..z6e;
 endchar;enddef;
 %
@@ -1405,9 +1556,9 @@ enddef;
 %
 def do_BIG_six =
 beginchar ("P", 1.40em#, 2.0cap#, 0);" a big 6 here it is!";
-pickup pencircle xscaled 2.0ptt yscaled .9ptt rotated 5;
+pickup pencircle xscaled 2.0wid yscaled .9wid rotated 5;
 % beginchar ("P", .7em#, 1.0cap#, 0);" a big 6 here it is!";
-% pickup pencircle xscaled 1.0ptt yscaled .45ptt rotated 5;
+% pickup pencircle xscaled 1.0wid yscaled .45wid rotated 5;
  rt x4=1.05w;top y4=1.02h;
  x1=.5w; y1=.83 h;
  lft x6=0w;y6=.5h;
@@ -1426,7 +1577,7 @@ endchar;enddef;
 %
 def do_six_f =
 beginchar (146, .55em#, .7cap#, 0);" a small 6";
- pickup pencircle xscaled .8ptt yscaled .3ptt; do_six_p;
+ pickup pencircle xscaled .8wid yscaled .3wid; do_six_p;
 endchar;enddef;
 %
 def do_seven_p =
@@ -1445,7 +1596,7 @@ endchar;enddef;
 %
 def do_seven_f =
 beginchar (147, .55em#, .57cap#, 0);" a small 7";
- pickup pencircle xscaled .8ptt yscaled .3ptt; do_seven_p;
+ pickup pencircle xscaled .8wid yscaled .3wid; do_seven_p;
 endchar;enddef;
 %
 def do_eight_p =
@@ -1463,7 +1614,7 @@ endchar;enddef;
 %
 def do_eight_f =
 beginchar (148, .55em#, .7cap#, 0);" a small 8";
- pickup pencircle xscaled .8ptt yscaled .3ptt; do_eight_p;
+ pickup pencircle xscaled .8wid yscaled .3wid; do_eight_p;
 endchar;enddef;
 %
 def do_nine_p =
@@ -1477,18 +1628,18 @@ enddef;
 %
 def do_bbbbbbbbb =
 beginchar (159, .8em#, 1.0cap#, 0);" a 9 bourdon";
- pickup pencircle xscaled 1.2 ptt yscaled .3ptt rotated 30;
+ pickup pencircle xscaled 1.2 wid yscaled .3wid rotated 30;
  do_nine_p;
 endchar;enddef;
 %
 def do_nine_f =
 beginchar (149, .55em#, .7cap#, 0);" a small 9";
- pickup pencircle xscaled .8ptt yscaled .3ptt; do_nine_p;
+ pickup pencircle xscaled .8wid yscaled .3wid; do_nine_p;
 endchar;enddef;
 %
 def do_i_u =
 beginchar (248, .8em#, 1.0cap#, 0); " a little u thingy";
- pickup pencircle xscaled .8ptt yscaled .5ptt rotated 30;
+ pickup pencircle xscaled .8wid yscaled .5wid rotated 30;
  x0=0;x1=.5w;x2=w;
  x3=.2w;x4=.8w;
  y0=y2=.3h;y1=.6h;
@@ -1497,13 +1648,20 @@ beginchar (248, .8em#, 1.0cap#, 0); " a little u thingy";
 endchar;enddef;
 %
 def do_i_w =
-beginchar (249, 1.2em#, 1.0cap#, 0); " a little u thingy";
- pickup pencircle xscaled .8ptt yscaled .5ptt rotated 3;
- x0=.1w;x1=0w;x2=.25w;x3=.42w;x4=.75w;x5=w;x6=.9w;x7=.58w;
- y0=y3=y6=y7=.6h;
- y1=y5=.45h;
- y2=y4=0h;
- draw z0..z1..z2..z3;draw z7..z4..z5..z6;
+beginchar (249, .9em#, 1.0cap#, 0); " a little u thingy";
+ pickup pencircle xscaled .8wid yscaled .5wid rotated 3;
+  lft x0=0;y0=y6=.53h;
+  rt x6=w;
+  x3=.5w; bot y3=0;
+  x8=x9=x3;
+  y8=y0+.1h;
+  y9=-.07h;
+  draw z0..z3..z6;draw z8..z9;
+% x0=.1w;x1=0w;x2=.25w;x3=.42w;x4=.75w;x5=w;x6=.9w;x7=.58w;
+% y0=y3=y6=y7=.6h;
+% y1=y5=.45h;
+% y2=y4=0h;
+% draw z0..z1..z2..z3;draw z7..z4..z5..z6;
 endchar;enddef;
 %
 def do_test =
@@ -1596,18 +1754,18 @@ endchar;enddef;
 %
 %
 def rob_a =
-beginchar (175, 0, 1.0cap#, 0); "mace n";
+beginchar (175, 0, 0, 0); "robinson a";
  pickup tiny_circle;
 endchar;enddef;
 %
 def rob_b =
-beginchar (176, .8em#, 1.0cap#, 0); "mace n";
- pickup pencircle xscaled 1.5ptt yscaled .5 ptt rotated 50;
+beginchar (176, .8em#, 1.0cap#, 0); "robinson n";
+ pickup pencircle xscaled 1.5wid yscaled .5 wid rotated 50;
  lft x1=0w;top y1=h;
- x2=.15w;y2=.4h;
- x3=x2; y3=0.08h;
- draw z1..z2..z3;
- pickup pencircle xscaled 1.1ptt yscaled .3 ptt rotated 10;
+ x2=x1;y2=.4h;
+ x3=x2; y3=0.07h;
+ draw z1..z2..z3;   % stem
+ pickup pencircle xscaled 1.1wid yscaled .3 wid rotated 10;
  x4=x2;y4=y2;
  rt x6=w;y6=.25h;
  x7=.5w;bot y7=-0.010h;
@@ -1616,58 +1774,60 @@ beginchar (176, .8em#, 1.0cap#, 0); "mace n";
 endchar;enddef;
 %
 def rob_c =
-beginchar (177, em#, 1.0cap#, 0); "mace c";
+beginchar (177, .8em#, 1.0cap#, 0); "robinson c";
  pickup lute_pen;
- x1=.9w;y1=.67h;
- x4=.6w;y4=.7h;
- x2=.16w;y2=.67h;
- x3=.25w;y3=.12h;
- x5=.35w;y5=.0h;
- x6=.53w;y6=.13h;
- x7=0w;y7=.61h;
- x8=.18w;y8=.54h;
- penpos1(1.4ptt, 45);penpos4(1.2ptt,45);penpos2(1.2ptt,50);
- penpos7(.7ptt,40);
- penpos8(1.2ptt,40);
- penpos3(.8ptt,30);
- penpos5(.6ptt,0);
- penpos6(.6ptt,0);
- penstroke z1e..tension 2.0..z4e..z2e;
- penstroke z7e..z8e..tension 4..z3e..z5e;
- penstroke z5e..z6e;
+ x1=.9w;y1=.536h;
+ x4=.6w;y4=.576h;
+ x2=.129w;y2=.464h;
+ x3=.32w;y3=.096h;
+ x5=.48w;y5=.0h;
+ x6=.62w;y6=.08h;
+ x7=0w;y7=.488h;
+ x8=.18w;y8=.432h;
+ x22=.22w;y22=.5[y8,y3];
+ penpos1(1.1wid, 50);penpos4(1.4wid,50);penpos2(1.5wid,70);
+ penpos7(.7wid,40);
+ penpos8(1.2wid,40);
+ penpos22(1.09wid,40);
+ penpos3(.8wid,30);
+ penpos5(.7wid,0);
+ penpos6(.7wid,10);
+ penstroke z1e..tension 2.0..z4e..z2e; % top
+ penstroke z7e..z8e..tension 2..z22e..z3e..z5e;
+ penstroke z5e{dir 30}..z6e;  % tail
 endchar;enddef;
 %
 def rob_d =
-beginchar (178, .85em#, 1.0cap#, 0); "mace n";
- pickup pencircle xscaled 1.2ptt yscaled .2ptt rotated 50;;
+beginchar (178, .85em#, 1.0cap#, 0); "robinson n";
+ pickup pencircle xscaled 1.2wid yscaled .2wid rotated 50;;
  x3=.55w;y3=.6h;
  x4=-.6w;y4=0.90h;
- penpos3(1. ptt, 45);penpos4(2.0ptt, 45);
+ penpos3(1. wid, 45);penpos4(2.0wid, 45);
  penstroke z3e..z4e;
 
  x1=.8w;y1=.45h;
  x2=.5w;bot y2=-0.030;
  x5=.1w;y5=y1;
- penpos1(1.2ptt,20);
- penpos2(0.8ptt,270);
- penpos5(0.6ptt,180);
+ penpos1(1.2wid,20);
+ penpos2(0.8wid,270);
+ penpos5(0.6wid,180);
  penstroke z3e..z1e..z2e..z5e..z3e;
 % draw z3..z1..z2..z5..z3;
  
 endchar;enddef;
 %
 def rob_e =
-beginchar (179, .8em#, 1.0cap#, 0); "robinson e";
- pickup pencircle xscaled 1.4ptt yscaled .6 ptt rotated 50;
+beginchar (179, .84em#, 1.0cap#, 0); "robinson e";
+ pickup pencircle xscaled 1.4wid yscaled .6 wid rotated 50;
 
- x1=.5w;top y1=.9h;
- x2=.35w;y2=.73h;
- lft x3= 0w;y3=.3h;
+ x1=.5w;top y1=.8h;
+ x2=.35w;y2=.7h;
+ x3= 0.2w;y3=.2h;
  x4=.5w;bot y4=0h;
  rt x5=w;y5=.3h;
   draw z1{dir 200}..z2..tension 1.2..z3..z4..{dir 45}z5;
- x6=.8w;y6=.8h;
- x7=0.5[x2,x3];y7=0.5[y2,y3];
+ x6=.7w;y6=.58h;
+ x7=0.6[x2,x3];y7=0.6[y2,y3];
   draw z6{dir 250}..{dir 180}z7;
 endchar;enddef;
 %
@@ -1675,17 +1835,17 @@ def rob_f =
 beginchar (180, .85em#, 1.0cap#, 0); "robinson f";
   pickup lute_pen;
   x5=.5w;y5=.6h;
-  penpos5(.4ptt, 170);
+  penpos5(.4wid, 170);
   rt x0=.9w;y0=.7h;
-  penpos0(.6ptt, 170);
+  penpos0(.6wid, 170);
   x1=.75w;top y1=h;
-  penpos1(.6ptt, 230);
+  penpos1(.6wid, 230);
   x2=.5w;bot y2=y0;
-  penpos2(1.5ptt, 40);
+  penpos2(1.5wid, 40);
   x3=x2;y3=.3h;
-  penpos3(1.5ptt, 40);
+  penpos3(1.5wid, 40);
   x4=.5w;y4=0h;
-  penpos4(1.5ptt, 40);
+  penpos4(1.5wid, 40);
   x6=.1w;x7=.9w;y6=y7=.45h;
 %  draw z5..tension 3.0..z0..z1..z2..z3..z4;
   penstroke z5e..tension 2.0..z0e..z1e..z2e..z3e..tension 1.0..z4e;
@@ -1694,7 +1854,7 @@ endchar;enddef;
 %
 def rob_g =
 beginchar (181, em#, 1.0cap#, 0); "robinson g";
- pickup lute_pen;
+ pickup bigger_lute_pen;
  rt x1= w;top y1=h;
  x2=x1;y2=.3h;
  x3=.5w;bot y3=0h;
@@ -1707,46 +1867,80 @@ beginchar (181, em#, 1.0cap#, 0); "robinson g";
 endchar;enddef;
 %
 def rob_h =
-beginchar (182, .8em#, 1.0cap#, 0); "robinson h";
- pickup lute_pen;
- x1=.2w;bot y1=0.02h;
+beginchar (182, .85em#, 1.0cap#, 0); "robinson h";
+ pickup bigger_lute_pen;
+ x1=.18w;bot y1=0.0h;
  x5=.22w;y5 =.14h;
- x2 = .22w; y2=.75h;
- x3 = .6w; top y3=h;
+ x2=.20w; y2=.53h;
+ x3=.77w; top y3=.8h;
  x4= 0w;y4=.35h;
- draw z1..z5..tension 1.3..z2..z3..tension 1.7..z4;
- x7 = .9w; y7=.37h;
-  x8= .8w;bot y8 = 0h;
- draw z1..z5..z7..tension 1.3..z8;
+ draw z1..z5..tension 1.2..z2..tension 1.03..z3..tension 2..z4;
+ x7= .9w; y7=.28h;
+ x8= .83w;bot y8 = -.050h;
+ draw z1..z5..z7..tension 1.4..z8;
 endchar;enddef;
 %
 def rob_i =
-beginchar (183, 0, 1.0cap#, 0); "mace n";
- pickup lute_pen;
+beginchar (183, 0, 1.0cap#, 0); "robinson i";
+% pickup lute_pen;
+ pickup pencircle xscaled 1.4 wid yscaled .4 wid rotated 30;;
+ x2=.35w;
+ x1=x3=x4=.5w;
+ y1=.50h;y2=-.05h;
+ x5=x2; y5=y1;
+ x6=.8w;y6=.07h;
+ y3=.85h;y4=.75h;
+ draw z5..tension 2..z1..tension 4..z2..tension 3..{dir 100}z6;
+ draw z3..z4;
 endchar;enddef;
 %
 def rob_j =
-beginchar (184, 0, 1.0cap#, 0); "mace n";
+beginchar (184, 0, 1.0cap#, 0); "robinson j";
  pickup tiny_circle;
 endchar;enddef;
 %
 def rob_k =
-beginchar (185, 0, 1.0cap#, 0); "mace n";
- pickup tiny_circle;
+beginchar (185, .8 em#, 1.0cap#, 0); "robinson k";
+ pickup bigger_lute_pen;
+ x1=.18w;bot y1=0.0h;
+ x5=.22w;y5 =.14h;
+ x2= .18w; y2=.75h;
+ x3= .57w; top y3=.94h;
+ x4= 0w;y4=.52h;
+ draw z1..z5..tension 1.3..z2..z3..tension 1.7..z4;
+ x44=.24w;y44=.42h;
+ x6= .5w;y6=.57h;
+ x7= .47w;y7=.34h;
+ x8= x44;y8=y44;
+ draw z44..tension 2.8..z6..z7..z8;
+	pickup pencircle xscaled 1.2wid yscaled .3wid rotated 30;
+ x12=x8;y12=y8;
+ x9= .5[x8, x10]; y9=.16h;
+ rt x10=w; y10=0h;
+ penpos12(.6wid,20);penpos9(.8wid,20);penpos10(1wid,20);
+ penstroke z12e..z9e..z10e;
 endchar;enddef;
 %
 def rob_l =
-beginchar (186, 0, 1.0cap#, 0); "mace n";
- pickup tiny_circle;
+beginchar (186, .5em#, 1.0cap#, 0); "robinson l";
+ pickup pencircle xscaled 1.4wid yscaled .3 wid rotated 50;
+ x1=.36w;bot y1=0.0h;
+ x5=.42w;y5 =.14h;
+ x2= .36w; y2=.75h;
+ rt x3= w; top y3=.94h;
+ x4= 0w;y4=.4h;
+ x6= .97w;y6=.24h;
+ draw z1..z5..tension 1.3..z2..z3..tension 1.7..z4;
+ draw z1{dir  30}..z6;
 endchar;enddef;
 %
 def rob_m =
-beginchar (187, 0, 1.0cap#, 0); "mace n";
+beginchar (187, 0, 1.0cap#, 0); "robinson n";
  pickup tiny_circle;
 endchar;enddef;
 %
 def rob_n =
-beginchar (188, 0, 1.0cap#, 0); "mace n";
+beginchar (188, 0, 1.0cap#, 0); "robinson n";
  pickup tiny_circle;
 endchar;enddef;
 %
@@ -1754,21 +1948,21 @@ endchar;enddef;
 %
 def rep_one =
 beginchar (254, 2.4em#, 2.2cap#, 0); "a repeat";
- pickup pencircle xscaled .5ptt yscaled .1ptt;
+ pickup pencircle xscaled .5wid yscaled .1wid;
  x11=.576w; y11=.88h;
- penpos10(.3ptt,180); penpos11(.3ptt,0);
+ penpos10(.3wid,180); penpos11(.3wid,0);
  x1=.45w;y1=.97h;
- penpos1(.4ptt,90);
+ penpos1(.4wid,90);
  x2=0.08w;y2=.75h;
- penpos2(1.5ptt,180);
+ penpos2(1.5wid,180);
  x3=x1;y3=.5h;
- penpos3(1.9ptt,270);
+ penpos3(1.9wid,270);
  x4=.92w;y4=.25h;
- penpos4(1.6ptt,180);
+ penpos4(1.6wid,180);
  x5=.55w;y5=0.03h;
- penpos5(.6ptt,90);
+ penpos5(.6wid,90);
  x12=.424w; y12=.12h;
- penpos12(.4ptt,0);
+ penpos12(.4wid,0);
  penstroke z11e..z1e..z2e..tension 1.0..z3e..tension 1.1..z4e..z5e..z12e;
  x20=0w;y20=0h;
  x21=w;y21=h;
@@ -1776,7 +1970,7 @@ beginchar (254, 2.4em#, 2.2cap#, 0); "a repeat";
  % dots
  x22=.4w;y22=.16h;
  x23=x22+.2w;y23=y22;
- pickup pencircle scaled .1ptt;
+ pickup pencircle scaled .1wid;
  fill z22..z23..cycle;
  x24=.6w;y24=.84h;
  x25=x24-.2w;y25=y24;
@@ -1792,7 +1986,7 @@ endchar;enddef;
 %
 def rep_two =
 beginchar (255, 1.8em#, 2.0cap#, 0); "a repeat";
- pickup pencircle xscaled 1.2ptt yscaled .4ptt rotated 30;
+ pickup pencircle xscaled 1.2wid yscaled .4wid rotated 30;
  x1=.5w;top y1=h;
  x2=.5w;y2=.75h;
  x3=.6w;y3=.2h;
@@ -1813,7 +2007,7 @@ endchar;enddef;
 def mb_one =
 beginchar (237, 1.35em#, 2.1cap#, 0 ); "board single flag";
  do_v_bar;
- pickup pencircle xscaled 1.9 ptt yscaled .3 rotated 70;
+ pickup pencircle xscaled 1.9 wid yscaled .3 rotated 70;
  x1=v_bar;x2=w;
  top y1=h;y2=y1 - 19/30h;
  x25=1/2[x1,x2];
@@ -1825,7 +2019,7 @@ def mb_two =
 beginchar (238, 1.2em#, 2.1cap#, 0 ); "board double flag";
    pickup lute_pen;x3 = x4 = v_bar;top y3 = h;top y4 = 0;
    draw z3..z4;
-   pickup pencircle xscaled 1.7 ptt yscaled .3 rotated 70;
+   pickup pencircle xscaled 1.7 wid yscaled .3 rotated 70;
    x5=v_bar; top y5=.95h;
    x6=.7w;   y6=y5-.19h;
    x7= x6-.1w;   y7=y6-.19h;
@@ -1838,7 +2032,7 @@ def mb_three =
 beginchar (239, 1.1em#, 2.1cap#, 0 ); "board triple flag";
    pickup lute_pen;x3 = x4 = v_bar;top y3 = h;top y4 = 0;
    draw z3..z4;
-   pickup pencircle xscaled 1.7 ptt yscaled .3 rotated 70;
+   pickup pencircle xscaled 1.7 wid yscaled .3 rotated 70;
    x5=v_bar; top y5=.95h;
    x6=.59w;y6=y5 -.15h;
    x7= x6-.13w;y7=y6-.11h;
@@ -1852,7 +2046,7 @@ def mb_four =
 beginchar (240, 1.2em#, 2.1cap#, 0 ); "board quad flag";
    pickup lute_pen;x3 = x4 = v_bar;top y3 = h;top y4 = 0;
    draw z3..z4;
-   pickup pencircle xscaled 1.7 ptt yscaled .3 rotated 60;
+   pickup pencircle xscaled 1.7 wid yscaled .3 rotated 60;
    x5=v_bar; top y5=.95h;
    x6=.54w;    y6=y5-.15h;
    x7= x6-.15w;   y7=y6-.12h;
@@ -1869,7 +2063,7 @@ def mb_five =
 beginchar (241, 1.2em#, 2.1cap#, 0 ); "board quint flag";
    pickup lute_pen;x3 = x4 = v_bar;top y3 = h;top y4 = 0;
    draw z3..z4;
-   pickup pencircle xscaled 1.7 ptt yscaled .3 rotated 60;
+   pickup pencircle xscaled 1.7 wid yscaled .3 rotated 60;
    x5=v_bar; top y5=.95h;
    x6=.54w;    y6=y5-.15h;
    x7= x6-.15w;   y7=y6-.12h;
@@ -1886,7 +2080,7 @@ endchar;enddef;
 %
 def do_b_tie =
 beginchar (128, 1.5em#, .6cap#, 0); "large tie for tab and music";
-	pickup pencircle xscaled 1.2ptt yscaled .8ptt;
+	pickup pencircle xscaled 1.2wid yscaled .8wid;
 	x0=0;x1=.5w;x2=w;
 	y0=.0h;y1=h;y2=y0;
 	draw z0..z1..z2;
@@ -1895,7 +2089,7 @@ enddef;
 %
 def do_s_tie =
 beginchar (129, .6em#, 1.0cap#, 0); "small tie for spanish text";
-	pickup pencircle scaled 0.6 ptt;
+	pickup pencircle scaled 0.6 wid;
 	x0=0;x1=.5w;x2=w;
 	y0=.64h;y1=.81h;y2=y0;
 	draw z0..z1..z2;
@@ -1904,7 +2098,7 @@ enddef;
 %
 def do_in_zero =
 beginchar (130, .9em#, .9cap#, 0); "italian zero";
-	pickup pencircle xscaled 1.2ptt yscaled .8ptt;
+	pickup pencircle xscaled 1.2wid yscaled .8wid;
 	x0=x2=.5w;lft x1=0;rt x3=w;
 	top y0=h;bot y2=0;y1=y3=.5h;
 	draw z0..z1..z2..z3..cycle;
@@ -1912,11 +2106,11 @@ endchar;enddef;
 %
 def do_in_one =
 beginchar (131, .4em#, .9cap#, 0); "italian one";
-pickup pencircle xscaled 1. ptt yscaled .2ptt;
+pickup pencircle xscaled 1. wid yscaled .2wid;
 x0=.5w;top y0=h;
 x1=x0;bot y1=0;
 draw z0..z1;
-pickup pencircle xscaled .1ptt yscaled .8ptt;
+pickup pencircle xscaled .1wid yscaled .8wid;
 lft x2= lft x4 = 0;rt x3= rt x5 = w;top y2=top y3=h;
 bot y4=bot y5=0;
 draw z2..z3;draw z4..z5;
@@ -1924,46 +2118,47 @@ endchar;enddef;
 %
 def do_in_two =
 beginchar (132, .7em#, .9cap#, 0); "italian two";
- pickup pencircle xscaled 1.2 ptt yscaled 1 rotated 30;
+ pickup pencircle xscaled 1.2 wid yscaled 1 rotated 30;
  x1=0.09w; y1=.82h;
- x2=.4w;top y2=h-.2ptt;
+ x2=.4w;top y2=h-.2wid;
  rt x3=.92w; y3=.76h;
- x4=0.02w;y4=0.4ptt;
+ x4=0.02w;y4=0.4wid;
  x9=.25[x3,x4];y9=.5[y3,y4];
-	penpos1(.9ptt, 100);
-	penpos2(1.ptt, 90);
-	penpos3(1.4ptt, 30);
-	penpos9(1.2ptt, -45);
-	penpos4(1.1ptt, -100);
+	penpos1(.9wid, 100);
+	penpos2(1.wid, 90);
+	penpos3(1.4wid, 30);
+	penpos9(1.2wid, -45);
+	penpos4(1.1wid, -100);
  penstroke z1e..z2e..z3e..z9e..z4e;
  	x5=0.03w;y5=y4;
- 	x7=w;y7=y5+.3ptt;
-	penpos5(1.1ptt,80);
-	penpos7(1.1ptt,80);
+ 	x7=w;y7=y5+.3wid;
+	penpos5(1.1wid,80);
+	penpos7(1.1wid,80);
  penstroke z5e{dir 20}..{dir 10}z7e;
 
 endchar;enddef;
 %
 def do_in_three =
 beginchar (133, .7em#, .9cap#, 0); "italian three";
-	pickup pencircle xscaled .8ptt yscaled 1.1ptt;
-	x0=.16w;top y0 = .99h;
-	rt x1=w;top y1= h;
+	pickup pencircle xscaled .8wid yscaled 1.1wid;
+%	x0=.16w;top y0 = .99h;
+	x0=-.03w;top y0 = .99h;
+	rt x1=1.003w;top y1= 1.03h;
 	x2=.44w;y2=.67h;
 	x3=.83w;y3=.3h;
-	x4=-.02w;bot y4 = -0.04h;
-	draw z0{dir 15}..{dir 10}z1 & z1..z2;
-	penpos2(1.2 ptt, 90); penpos3(1.25ptt, 0); penpos4(.7ptt,290);
+	x4=-.02w;bot y4 = -0.13h;
+	draw z0{dir 15}..{dir 18}z1 & z1..z2;
+	penpos2(1.2 wid, 90); penpos3(1.38wid, 0); penpos4(1wid,315);
 	penstroke z2e..tension 1.03..z3e
-	..tension 1.1..{dir 180}z4e;
+	..tension 1.1..{dir 194}z4e;
 endchar;enddef;
 %
 def do_in_four =
 beginchar (134, .9em#, .9cap#, 0); "italian four";
-	pickup pencircle xscaled 1.4ptt yscaled .4ptt rotated 40;
+	pickup pencircle xscaled 1.4wid yscaled .4wid rotated 40;
 	x1=x2=x3=.65w; lft x4=0w; lft x5=w; top y1=top y3=h; top y2=0h; y4=y5=.26h;
 	draw z2--z3{(0.1w,0) -z3}...z4--z5;
-	pickup pencircle xscaled 2.0ptt yscaled 1;
+	pickup pencircle xscaled 2.20wid yscaled 1;
 	lft x10=lft x11=1.0w;
 	y10=h;y11=0;
 	erase draw z10..z11;
@@ -1973,9 +2168,9 @@ endchar;enddef;
 %
 def do_in_five =
 beginchar (135, 0.75em#, .9cap#, 0); "italian five";
- pickup pencircle xscaled 1.2ptt yscaled .5ptt rotated 75;
- lft x1=.3w;
- rt x2=w; 
+ pickup pencircle xscaled 1.2wid yscaled .5wid rotated 75;
+ lft x1=.33w;
+ rt x2=1.14w; 
  top y1= top y2=h;
  x7=.65[x1,x2]; top y7=h;
  x3=0.25w; y3=.74h;
@@ -1985,20 +2180,20 @@ beginchar (135, 0.75em#, .9cap#, 0); "italian five";
  x5=.57w; y5=.14h;
  lft x6=0;
  top y6=-0.03; 
- penpos3(1.1ptt, 75); penpos4(1.4ptt,30); penpos5(1.6ptt,0);penpos6(.7ptt,330);
+ penpos3(1.1wid, 75); penpos4(1.5wid,30); penpos5(1.65wid,0);penpos6(.7wid,330);
  penstroke z3e{dir 340 }..z4e..z5e..z6e;
 endchar;enddef;
 %
 def do_in_six =
 beginchar (136, 0.77em#, .9cap#, 0); "italian six";
- pickup pencircle xscaled 1.2ptt yscaled .8ptt;
+ pickup pencircle xscaled 1.2wid yscaled .8wid;
 	x1=w;top y1=h;
 	x5=.5w;y5=.63h;
 	x3=x5;bot y3=0;
 	lft x2 = 0;y2=.5[y5,y3];
 	rt x4=w;y4=y2;
 	draw z1..z2..z3..z4..z5..z2..z3;
-	pickup penrazor xscaled 1.0ptt;
+	pickup penrazor xscaled 1.0wid;
         lft x10=lft x11 = .98w;
 	y10=h;y11=0.6h;
 	erase draw z10..z11;
@@ -2006,20 +2201,20 @@ endchar;enddef;
 %
 def do_in_seven =
 beginchar (137, 0.75em#, .9cap#, 0); "italian seven";
- pickup pencircle xscaled 1.2ptt yscaled .5ptt rotated 75;
+ pickup pencircle xscaled 1.2wid yscaled .5wid rotated 75;
 	lft  x1=0w; top y1=.98h;
 	rt   x2=w; top y2=h;
 	x4=x2 -.01w;y4=y2;
 	x3=.3w; top y3=-0.0h;
 	draw z1{dir 15}..{dir 10}z2;
-	penpos2(.9ptt, 120); penpos3(1.2ptt, 185);
-	penpos4(.9ptt, 120);
+	penpos2(.9wid, 120); penpos3(1.2wid, 185);
+	penpos4(.9wid, 120);
 	penstroke z4e..z3e;
 endchar;enddef;
 %
 def do_in_eight =
 beginchar (138, 0.76em#, .9cap#, 0); "italian eight";
-pickup pencircle xscaled 1.2 ptt yscaled 1.ptt;
+pickup pencircle xscaled 1.2 wid yscaled 1.wid;
 top y1=h; x1=.5w;
 bot y5=0; x5=.5w;
 lft x2=.1w;y2=11/15h;
@@ -2033,7 +2228,7 @@ endchar;enddef;
 %
 def do_in_nine =
 beginchar (139, .7em#, .9cap#, 0); "italian nine";
-pickup pencircle xscaled 1.2 ptt yscaled 1.ptt;
+pickup pencircle xscaled 1.2 wid yscaled 1.wid;
 	x1=0;y1=0;
 	x5=.5w;y5=.4h;
 	x3=x5;top y3=h;
@@ -2043,7 +2238,7 @@ pickup pencircle xscaled 1.2 ptt yscaled 1.ptt;
 	x6=x2;y6=y2;
 	draw z1..z2..z3..z4..{right}z5..{up}z6;
 %	draw z3..z4..{right}z5..{up}z6;
-	pickup penrazor xscaled 1.0ptt;
+	pickup penrazor xscaled 1.0wid;
         rt x10=.0w;
 	x11=x10;
 	y10=.4h;y11=-0.1h;
@@ -2053,7 +2248,7 @@ endchar;enddef;
 
 def do_zap =
 beginchar (251, 1.2em#, 1.0cap#, 0); "the little thing at the end of the line";
-   pickup pencircle xscaled 1.7 ptt yscaled .6ptt rotated 50;
+   pickup pencircle xscaled 1.7 wid yscaled .6wid rotated 50;
    x0=rt 0;bot y0=0;
    x1=.15w;y1=.3h;
    x2=.3w;bot y2=0;
@@ -2061,13 +2256,13 @@ beginchar (251, 1.2em#, 1.0cap#, 0); "the little thing at the end of the line";
    x4=.6w;bot y4=0;
    x5=lft w;top y5=h;
    draw z0..z1;draw z1..z2;draw z2..z3;draw z3..z4;
-	penpos4(1.3 ptt,45);penpos5(2.1 ptt,30);
+	penpos4(1.3 wid,45);penpos5(2.1 wid,30);
    penstroke z4e..z5e;
 endchar;enddef;
 %
 def do_sharp =
-beginchar (22, 1.em#, 1.8cap#, 0); " a sharp";
-	pickup pencircle xscaled 2.2 ptt yscaled .6 ptt rotated 80;
+beginchar (22, .9em#, 1.8cap#, 0); " a sharp";
+	pickup pencircle xscaled 2.2 wid yscaled .6 wid rotated 80;
 	lft x20=0;rt x21=w;
 	y20=0h;y21=2/24h;
 	lft x5=lft x7=0;
@@ -2083,7 +2278,7 @@ endchar;enddef;
 %
 def do_old_sharp =
 beginchar (23, 0.8cap#, 0.8cap#, 0); " a sharp";
-	pickup pencircle scaled .9 ptt;
+	pickup pencircle scaled .9 wid;
 	if unknown space:space=.27h;fi;
 	lft x1=0;top y1=h;
 	rt x2=w-space;bot y2=0;
@@ -2100,13 +2295,82 @@ beginchar (23, 0.8cap#, 0.8cap#, 0); " a sharp";
 %	draw p rotatedaround((.5w, .5w), 270);
 endchar;enddef;
 %
+def do_half_clef =
+beginchar (17, 1.6em#, 1.cap#, 2.4cap#); "old O Clef";
+	pickup pencircle scaled 1.2wid;
+	x2=.5w;top y2=0h;
+	x4=x2;y4=1.h;
+	lft x1=0w;y1=.5[y2,y4];
+	rt x3=w;y3=y1;
+	draw z4..z1..z2..z3..cycle;
+	x20=.5w;y20=y1;
+	x21=1.2w;y21=y1-h;
+	x22=x21;y22=y1+h;
+	erase fill z20..z21&z21..z22&z22..z20..cycle;
+	x10=.2w;y10=1.25h;
+	x11=.59w;y11=y10;
+	x12=.5[x10,x11];y12=y10+.12h;
+	x13=.42w;y13=.3h;
+	x18=.5w;top y18=0h;
+	x14=x11;y14=y11;
+	x15=.55w;y15=-.68d;
+	x16=x15-.014w;y16=-.88d;
+	x17=.27w;bot y17=-d;
+	penpos10(1.6wid,105);
+	penpos12(1.6wid,90);
+	penpos11(1.6wid,75);
+	penpos14(.8wid, 0);
+	penpos4(.8wid,0);
+	penpos13(.8wid,0);
+	penpos18(1.0wid,0);
+	penpos15(1.35wid, 0);
+	penpos16(1.4wid, -20);
+	penpos17(1.6wid, -60);
+	penstroke z10e..z12e..z11e;
+	penstroke z14e..z4e..tension 1.13..z18e..tension 1.8..z16e..z17e;
+
+endchar;enddef;
+%
+%
+def do_round_clef =
+beginchar (18, 1.6em#, 1.cap#, 2.4cap#); "old O Clef";
+	pickup pencircle scaled 1.2wid;
+	x2=.5w;top y2=0h;
+	x4=x2;y4=1.h;
+	lft x1=0w;y1=.5[y2,y4];
+	rt x3=w;y3=y1;
+	draw z1..z2..z3..z4..cycle;
+	x10=.2w;y10=1.25h;
+	x11=.59w;y11=y10;
+	x12=.5[x10,x11];y12=y10+.12h;
+	x13=.42w;y13=.3h;
+	x18=.5w;top y18=0h;
+	x14=x11;y14=y11;
+	x15=.55w;y15=-.68d;
+	x16=x15-.014w;y16=-.88d;
+	x17=.27w;bot y17=-d;
+	penpos10(1.6wid,105);
+	penpos12(1.6wid,90);
+	penpos11(1.6wid,75);
+	penpos14(.8wid, 0);
+	penpos4(.8wid,0);
+	penpos13(.8wid,0);
+	penpos18(1.0wid,0);
+	penpos15(1.35wid, 0);
+	penpos16(1.4wid, -20);
+	penpos17(1.6wid, -60);
+	penstroke z10e..z12e..z11e;
+	penstroke z14e..z4e..tension 1.13..z18e..tension 1.8..z16e..z17e;
+
+endchar;enddef;
+%
 def do_mod_g_clef =
 beginchar (21, 1.8em#, 3.5cap#, 1.0cap#); "G Clef";
 	pickup pencircle scaled 3;
 	x0=.5w;y0=h;
 	x1=x0;y1=0;
 %	draw z0..z1;
-	pickup pencircle xscaled 2.5ptt yscaled .6ptt rotated 100;
+	pickup pencircle xscaled 2.5wid yscaled .6wid rotated 100;
 %	pickup pencircle scaled 7;
 	x2=.45w;y2=2/16h;
 	x3=.35w;
@@ -2128,7 +2392,7 @@ beginchar (21, 1.8em#, 3.5cap#, 1.0cap#); "G Clef";
 	x16=.5[x11,x12];
 	draw z2..z3..z4..z5..z6..z7..tension 1.2..z8..z9..z10
 	& z10..z11---z16;
-	pickup pencircle scaled .6ptt;
+	pickup pencircle scaled .6wid;
 	x15=.5[x13,x14];bot y15 = -d;
 	draw  z16---z12..z15..{up}z13..z14{down}..z13;
 	fill z13..z14..cycle;
@@ -2144,32 +2408,87 @@ beginchar (252, 1.6em#, 2.2cap#, 0); "G Clef";
    x5=x2;y5=y3;
    x6=x4;y6=.4h;
    x7=.48w;y7=.3h;
-   penpos0(2.4 ptt,-50);
-   penpos1(2.4 ptt,-40);
-   penpos2(2.4 ptt,-40); 
-   penpos3(2.4 ptt,0);
-   penpos4(.8 ptt,90);
-   penpos5(1.6 ptt, 180);
-   penpos6(.4ptt, 270);
-   penpos7(.4ptt, 330);
+   penpos0(2.4 wid,-50);
+   penpos1(2.4 wid,-40);
+   penpos2(2.4 wid,-40); 
+   penpos3(2.4 wid,0);
+   penpos4(.8 wid,90);
+   penpos5(1.6 wid, 180);
+   penpos6(.4wid, 270);
+   penpos7(.4wid, 330);
    penstroke z0e{dir 20}..z1e;
    penstroke z1e..z2e;
    penstroke z2e..z3e..z4e..z5e..z6e..z7e;
 endchar;enddef;
 %
+def do_f_clef =
+beginchar ("z", 1.6em#, 2.2cap#, 0); "F Clef";
+% beginchar ("z", .8em#, 1.1cap#, 0); "F Clef";
+lft x0 = lft x4 = 0;
+x3 = .6w;y3=.84h;
+x2 = .6w;y2=.52h;
+bot y0=0;top y4=h;
+penpos4(2. wid,10);
+penpos3(2. wid,10);
+penpos2(2. wid,10);
+penpos0(2. wid,10);
+penstroke z4e{dir 0}..z3e..z2e..z0e;
+pickup pencircle scaled 1.8 wid;
+rt x10=w;y10=.77h;
+x11=x10;y11=.57h;
+draw z10;
+draw z11;
+endchar;enddef;
+%
+%
 def do_a_rest =
-beginchar (253, .7em#, 1.0cap#, 0); "an old rest";
-   pickup pencircle xscaled 1.2 ptt yscaled .5ptt rotated 10;
+beginchar (253, .7em#, 1.0cap#, 0); "an old rest"; %375 octal
+   pickup pencircle xscaled 1.2 wid yscaled .5wid rotated 10;
    lft x0=0; y0=0;
    x1=x0;y1=.84h;
    rt x3=w;y3=.7h;
    draw z0..tension  4.0..z1..tension 1.6..z3;
 endchar;enddef;
+%
+def do_q_rest =
+  beginchar (15, .7em#, 1.8cap#, 0); "an quarter rest";
+    pickup pencircle xscaled 2.5 wid yscaled .3 wid rotated 120;
+    x0=.5w;top y0=h;
+    x12=.75w;y12=.83h;
+    rt x1=w;y1=.8h;
+    lft x4=0;y4=.5h;
+    rt x6=w;y6=.32h;
+    lft x10=0;y10=.2h;
+    x11=0.3w;bot y11=0;
 
+    draw z0..z12..z1&z1..tension 2.3 ..z4..tension 3..z6&z6{dir 160}..z10..z11;
+  endchar;
+enddef;
+%
+def do_e_rest =
+  beginchar (16, .7em#, 1.0cap#, 0); "an eighth rest";
+    pickup pencircle scaled .03 wid;
+    lft x0=0w;bot y0=0h;
+    rt x1=w;top y1=0.92h;
+    
+    x3=.4w;y3=h - .2w;
+    rt x4=.2w;top y4=h;
+    lft x5=0;y5=y3;
+    x6=x4;y6=h-.4w;
+    
+    lft x7=x6+.03w;bot y7=y6+.03h;
+    
+    fill z3..z4..z5..z6..cycle; 
+    pickup pencircle scaled .4 wid;
+    draw z7..z1;
+    pickup pencircle xscaled 1.2 wid yscaled .5wid rotated 10;
+    draw z1..z0;
+  endchar;enddef;
 %
 def do_leaf =
 beginchar (8, 1.0cap#, 1.0cap#, 0); "a leaf";
-   pickup pencircle xscaled .3. ptt yscaled .3ptt rotated 10;
+   pickup pencircle xscaled .3 wid yscaled .3wid rotated 10;
+
  	x0=.2w;y0=.5h;
 	x1=.4w;y1=.1h;
 	x2=.75w;y2=.1h;
@@ -2183,7 +2502,48 @@ beginchar (8, 1.0cap#, 1.0cap#, 0); "a leaf";
 	fill z3{dir 240}..tension 1.2..z9..z8..z7..{dir 250}z6
 	..z5{dir 90}..z0..z1..z2..tension 1.8..cycle;
 endchar;enddef;
-
+%
+%%def do_l_paren =
+%%beginchar ("(", .42em#, 1.0cap#, .2cap#); "left parenthesis";
+%%	pickup pencircle xscaled 1.4wid yscaled .3 wid rotated 10;
+%%	rt x1=w;top y1=h;
+%%	x3=x1;bot y3=-d;
+%%   	lft x2=0w;y2=.5(y1-y3);
+%%	draw z1..z2..z3;
+%%endchar;enddef;
+%%%
+%%def do_r_paren =
+%%beginchar (")", .42em#, 1.0cap#, .2cap#); "left parenthesis";
+%%	pickup pencircle xscaled 1.4wid yscaled .3 wid rotated 10;
+%%	lft x1=0;top y1=h;
+%%	x3=x1;bot y3=-d;
+%%   	rt x2=w;y2=.5(y1-y3);
+%%	draw z1..z2..z3;
+%%endchar;enddef;
+%
+def do_l_paren =
+beginchar ("(", .42em#, 1.0cap#, .2cap#); "left parenthesis";
+        pickup pencircle xscaled 1.0wid yscaled .8 wid rotated 40;
+        rt x1=w;top y1=h;
+        x4=x1;bot y4=-d;
+        lft x2=0;y2=y1;
+        x3=x2;y3=y4;
+        draw z1..z2;
+        draw z2..z3;
+        draw z3..z4;
+endchar;enddef;
+%
+def do_r_paren =
+beginchar (")", .42em#, 1.0cap#, .2cap#); "left parenthesis";
+        pickup pencircle xscaled 1.0wid yscaled .8 wid rotated 40;
+        lft x1=0;top y1=h;
+        x4=x1;bot y4=-d;
+        rt x2=w;y2=y1;
+        x3=x2;y3=y4;
+        draw z1..z2;
+        draw z2..z3;
+        draw z3..z4;
+endchar;enddef;
 %
 %	BUILD EVERYTHING
 %
@@ -2200,11 +2560,12 @@ def do_all =
   do_n;do_o;do_p;
   do_dot;do_c_dot;do_C;do_cut_C;do_big_C;do_big_cut_C;
   do_thumb;do_two_dot;do_three_dot;do_four_dot;
-  do_relish_a;do_relish_b;do_X;do_comma;
-  do_waves; do_hat;do_star;do_smile;do_slant;do_slant_a;do_slant_b;do_slant_c;
-  do_fermata;do_b_fermata;
+  do_relish_a;do_relish_b;do_X;do_it_x;do_comma;
+  do_waves; do_tilde; do_hat;do_star;do_smile;do_slant;do_slant_a;do_slant_b;
+  do_slant_c;do_slant_d;
+  do_fermata;do_fermata_dot;do_b_fermata;
   do_slash;do_two_slash;do_three_slash;
-  do_tail;do_another_tail;do_box;do_minus;do_colon;
+  do_tail;do_another_tail;do_yet_another_tail;do_box;do_minus;do_colon;
 % huge numbers
    do_BIG_two;do_BIG_three;do_BIG_four;do_BIG_five;do_BIG_six;
 % large numbers
@@ -2219,7 +2580,7 @@ def do_all =
   do_i_eight;
   do_iii_two;do_iii_three;do_iii_four;do_iii_five;do_iii_six;do_iii_seven;
 % modern notes
-  do_sol;do_fflag;do_rflag;do_open;
+  do_sol;do_fflag;do_rflag;do_open;do_mod_open;
   do_solid;do_solid_o;do_solid_oo;do_solid_ooo;do_solid_oooo;do_solid_ooooo;
   do_f_flat; do_flat;
   do_e_c_ubar;do_s_c_ubar;
@@ -2231,30 +2592,17 @@ def do_all =
   rob_h;rob_i;rob_j;rob_k;rob_l;rob_m;rob_n;
   rep_one;rep_two;
   mb_one;mb_two;mb_three;mb_four;mb_five;
-  do_zap;do_g_clef;do_a_rest;
-  do_mod_g_clef;
+  do_zap;do_g_clef;do_f_clef;do_a_rest;
+  do_mod_g_clef;do_round_clef; do_half_clef;
   do_in_zero;do_in_one;do_in_two;do_in_three;do_in_four;do_in_five;
   do_in_six;do_in_seven;do_in_eight;do_in_nine;
   do_s_tie;do_b_tie;do_rpt;
-  do_sharp;do_old_sharp;
+  do_sharp;do_old_sharp;do_v;do_vv;
+  do_l_paren;  do_r_paren;do_e_rest;do_q_rest;
+  do_mod_flat;do_natural;
 enddef;
-%screenstrokes;
 %
 %
 %
 
-%do_all;
-%do_solid;
-%do_ri_two;
-%do_i_two;
-%do_in_eight;
-%do_c_dot;
-%do_leaf;
-%do_BIG_five;
-%do_in_five
-%do_flat;
-%do_ri_four
-%do_mod_g_clef;
-%do_BIG_three;
-%do_F;do_H;do_I;do_line;mb_five;
-%
+

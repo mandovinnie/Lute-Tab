@@ -1,0 +1,322 @@
+% $start-system=2
+%-b
+%$pstitlefont=pzcmi
+%$psalttitlefont=ptmr
+%$titlesize=18
+%$flagstyle=thin
+%$charstyle=
+$numstyle=italian
+%$line=o
+%$midi-patch=14
+-highlightred
+%-tuning c4d4e4f+4g4a3d3f+3a2d2f+2
+
+-i
+
+%-highlightparen
+%-R9
+%-c
+
+%-twostaff
+%$sys-skip=0.2
+-l "2.8 in"
+
+
+F2
+
+b
+1 cdc{
+x c  }
+1 cdc{
+x c}
+1 cdc[
+x c  ]
+1 cdc&[
+x c ]
+1 cdcU
+x c  X
+1 cdc&U
+x c X
+b
+
+[ text}
+
+Q
+e
+wQ  2Q32
+v
+0  456
+b
+T-test
+b
+
+b
+x 789
+v
+1  !x
+x  !v
+x  2Q3Q2
+x  232
+bv
+b
+
+-l "6 in"
+
+b
+1a
+v
+1a
+.
+1a
+b
+1a
+b
+.
+b
+1a\2c
+b
+1a&+
+b
+b
+.
+b
+Y0
+b
+b
+
+-l "6.5 in"
+
+b
+1 d
+x b
+x c
+x d
+x e
+x f
+b
+1 a
+x b
+x c
+x d
+x e
+x f
+b
+1 a
+x b
+x c
+x d
+x e
+x f
+b
+1 d
+x b
+x c
+x d
+x e
+x f
+b
+.
+b
+1 a
+x b
+x c
+x d
+x e
+x f
+b
+Y
+b
+1 a
+x b
+x c
+x d
+x e
+x f
+b
+e
+Q
+b
+
+
+b
+1 cdc	WG0	WG0	bottom line	verse 2^top line	verse 2
+b
+e
+
+%-H
+%-x
+%-highlightparen
+%-D 
+%$flagstyle=thin
+%$charstyle=robinson
+
+%{titl\~e flg\~e fsgu\~E  f\sse}
+
+b
+b
+YW0 2 00
+b
+Yw0 2 00
+b
+YL0 2 00
+b
+Y00 2 00
+b
+Y-0 2 00
+b
+e
+
+b
+MF
+kb
+2 N30N32N33	0G0
+2 N29N28N27
+b
+
+b
+MF
+ka
+2 N30N32N33	0G0
+2 N29N28N27
+b
+e
+
+
+b
+2 +a    8
+x-QcQcQcccc
+b
+e
+
+b
+2Tfi\~ee
+b
+
+
+b
+2 12345Tfig\~e
+2 12345Tfg\~e
+2 12345Tflgue\~e
+2 12345Tfigue\~e
+2    Td\ssd\~ee
+b
+e
+
+b
+2 cdcTword
+b
+e
+
+2 c	1Cn
+b
+2	1an
+b
+b
+2 cdc	1cn
+b
+
+B
+2 d
+b
+2 cdec
+b
+.
+.
+B
+2
+b
+2
+B
+
+b
+.
+b
+2 d
+b
+.
+.
+.
+.
+b
+2
+b
+2
+b
+
+[comment}
+b
+2 d
+b
+b
+2
+B
+b
+3
+B
+B
+2
+b
+B
+
+b
+2 d
+b
+.
+b
+.
+b
+.
+b
+2
+b
+2
+b
+b
+b
+B
+
+
+b
+.
+b
+.
+b
+.
+b
+2
+b
+2
+b
+2
+b
+2
+b
+2
+b
+2
+b
+2
+b
+2
+b
+
+{new tune}
+b
+1!	2R0	two
+0  da	1R0	one
+1!	0R0	zero
+1  a	wR0	w
+x d	WR0	W
+0   a	LR0	J
+0   a	LR0	L
+b
+0	2D0
+0	2E0
+0	1F0
+0	1G0
+0	wa0
+0	wb0
+0	Wc0
+0	Wd0
+b
+

@@ -13,8 +13,9 @@ mode_setup;
 %
  em#:=6.222pt#; cap#:=8pt#;
  ptt#:=1.3333pt#;
+ wid#:=1.3333pt#;
 define_pixels(em,cap);
-define_corrected_pixels(ptt);
+define_corrected_pixels(ptt,wid);
 %
 font_quad:=em#;font_normal_space:=0.8em#;font_normal_stretch:=0.3em#;
 font_normal_shrink:=0.2em#;

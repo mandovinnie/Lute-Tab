@@ -1,0 +1,41 @@
+%
+%  a new font 
+%
+mode_def MyLaser =                      % Canon CX, SX, LBP-LX
+  mode_param (pixels_per_inch, 600);
+  mode_param (blacker, 0);
+  mode_param (fillin, .2);
+  mode_param (o_correction, .6);
+  mode_common_setup_;
+enddef;
+%
+%
+mode_def cxnew =                       %\[ Canon CX, SX, LBP-LX (300dpi)
+  mode_param (pixels_per_inch, 600);
+  mode_param (blacker, 1.5);       % was 0
+  mode_param (fillin, .2);       % was .2
+  mode_param (o_correction, .65);  % was .6
+  mode_common_setup_;
+enddef;
+%
+%  a new font
+%
+%mode:=MyLaser;
+mode:=cxnew;
+
+mode_setup;
+%
+ em#:=14/3pt#; cap#:=6pt#;
+ ptt#:=1.0pt#;
+ wid#:=1.3pt#;
+define_pixels(em,cap);
+define_corrected_pixels(ptt,wid);
+%
+font_quad:=em#;font_normal_space:=0.7em#;font_normal_stretch:=0.24em#;
+font_normal_shrink:=0.2em#;
+font_identifier:="BLute6-wbc";
+font_size 6pt#;
+%
+%
+input blute.mf
+do_all;

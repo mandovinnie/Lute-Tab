@@ -1,93 +1,115 @@
-/*
- *   globals and parameters
- *
- */
+
+#ifndef __MWERKS__
+#include <stdio.h>
+#include <stdlib.h>
+#ifdef DOS
+#ifndef WIN32
+/* clude </emx/include/strings.h> */
+#endif /* WIN32 */
+#else /* DOS */
+#include <string.h>
+#endif /* DOS */
+#include <ctype.h>
+#define NEWLINE '\n'
+#else
+#define MAC
+#include "mac.h"
+#define NEWLINE '\r'
+#endif /* __MWERKS__ */
+
+/* extern char *strstr(const char *, const char *); */
+/* extern char *strchr(const char *, int ); */
+
+#ifdef __linux__
+#include <ctype.h>
+#endif /* linux */
 
 #include <setjmp.h>
-#include <stdio.h>
+#include "tfm.h"
 
-#define DVI      		/* commment this out if you don't have dvi */
-				/* preview or formatting faculities */
-#define POSTSCRIPT 
-/* #define X_WIN */
-#define OLD_PRINTER           /* define this if your printer gives an */
-				/* unefined command error on rectfill  */
-				/* or xshow, or if it doesn't print */
-#define LSA
+extern jmp_buf b_env;
+enum dbg_type {File = 1, Path = 2, TFM = 4, Inter = 8, 
+		 Flow=16, Warning=32, Error = 64, Stack=128, 
+		 Proceedure=256, Fonts=512, Bug=1024, Widths=2048, 
+		 z=4098, xx=8192, yy = 16384, Null =32768 };
+extern int debug_flag;
+void dbg0(const int type, const char *fmt);
+void dbg1(const int type, const char *fmt, void *a);
+void dbg2(const int type, const char *fmt, void *a, void *b);
+void dbg3(const int type, const char *fmt, void *a, void *b, void *c);
+void dbg4(const int type, const char *fmt, 
+	  void *a, void *b, void *c, void *d);
+void dbg5(const int type, const char *fmt, 
+	  void *a, void *b, void *c, void *d, void *e);
+void dbg_set(const dbg_type type);
 
-/* #define VAX */		/* uncomment this if you are running VMS */
-				/* actually, you don't need to, as the */
-				/* vax c compiler defines it for you */
-#ifdef VAX
-#define bcopy(s1, s2, len) memcpy(s2, s1, len)
-#define bzero(s, len)      memset(s, 0, len)
-#undef dvi
-#undef DVI
-#define VAXDEBUGR
-#ifndef OLD_PRINTER
-#define OLD_PRINTER
+#ifndef BUFSIZ
+#define BUFSIZ 2048
 #endif
-#endif /* VAX */
 
-#ifdef hpux			/* hack for machines that */
-#define SIG			/* don't like signed char */
-#endif
-#ifdef sun
-#define SIG
-#endif
-#ifdef VAX
-#define SIG
-#endif
-#ifdef SIG
-#define SIGNED_C char
-#else
-#define SIGNED_C signed char
-#endif /* hp */
-
-
-#define LIST 200
 #define STAFF 11
+#define BL 120			/* default file name size */
+#define STAFF_PAGE 9
+#define MAX_PAGE 25
 
-/* extern int l_p; */
-/* extern unsigned char list[]; */
-/* extern char inter[]; */
-extern int inter_p;
-extern FILE *op;
-extern jmp_buf env;
+extern char version[];
+extern double red;
+extern int baroque;
+extern int n_system;
+extern int bar_count;
+extern int barCount;
+extern int barCCount;
+extern int pagenum;
+
+#define FONT_NAMES 8		/* number of font names allowed */
 
 struct file_info {
-    char *file;
-    char *i_file;
-    char *out_file;
-    FILE *i_p;
-    unsigned long flags;	/* general flags */
-    unsigned long line_flag;    /* is the note on or between lines ? */
-    unsigned long flag_flag;    /* what kind of flags ? */
-    unsigned long char_flag;    /* what kind of characters ? */
-    unsigned long num_flag;
-    unsigned long note_flag;	/* for music */
+    char *file;			/* file name */
+    char *out_file;		/* output file name */
+    unsigned int  flags;	/* general flags */
+    unsigned int  m_flags;	/* more general flags */
+    unsigned int  line_flag;    /* is the note on or between lines ? */
+    unsigned int  flag_flag;    /* what kind of flags ? */
+    unsigned int  char_flag;    /* what kind of characters ? */
+    unsigned int  num_flag;
+    unsigned int  note_flag;	/* for music */
+    unsigned int  debug_flag;
     int n_text;			/* how many lines of text ? */
     int note_conv;		/* conversion between tab flags and notes */
     double c_space;		/* additional space for middle c in staff */  
     int page;			/* what page are we on? */
+    int include;		/* are we included from somehwere */
+    int cur_system;		/* what system are we in? */
+    int start_system;           /* system to begin printing mostly for midi */
+    char *(font_names[FONT_NAMES]);
+    double font_sizes[FONT_NAMES];
+    double sys_skip;            /* extra space to skip between systems */
+  unsigned int midi_patch;      /* a midi patch number - 0 is piano*/
 };
 
-struct b {
-	char *ib;			/* tab input buffer */
-	int  ib_p;			/* pointer to current position */
-	long ib_s;			/* size of buffer */
+struct font_list {
+    char *name;
+    int num;
+    tfm_font * fnt;
+    struct font_list *next;
+    char * real_name;
+    double size;
 };
+
+/* this is the basic chord data */
 
 struct list {
     struct list *next;
     struct list *prev;
-    char dat[STAFF];
+    char dat[STAFF+2];
     char filler[1];
     double padding;		/* default padding */
     double space;		/* extra space */
     double weight;
     struct notes *notes;
+    struct notes *notes2;
     struct text *text;
+    struct text *text2;
     char *special;
 };
 
@@ -98,6 +120,8 @@ struct notes {
     char special;		/* for reversing, etc */
     double padding;
     double weight;
+    int staff;	        /* are we on first of second staff */
+    int reversed;		/* is this note stem reversed? */
     struct list *parent;
 };
 
@@ -116,18 +140,20 @@ struct t_words {
     struct t_words *next;
     struct t_words *prev;
     int nospace;		/* run this word into the next */
+    int in_sys;                 /* is it in the staff */
 };
-
-extern struct list *listh;
 
 struct words {
     char let;
     double width;
 };
 
-#define STAFF_PAGE 9		        /*  max staves per page */
-#define MAX_PAGE 30		        /*  max pages tab can handle*/
-#define BL 120			                     /* file name length */
+struct w {
+    char *width;
+    double weight;
+};
+
+enum pass{first, second};
 
 /* return values */
 #define END_MORE    1
@@ -140,7 +166,7 @@ struct words {
 #define  MANUSCRIPT 0X00000001
 #define  DVI_O      0X00000002
 #define  PS         0X00000004
-#define  X          0X00000008
+#define  PDF        0X00000008
 #define  VERBOSE    0X00000010
 #define  FIVE       0X00000020
 #define  MARKS      0X00000040
@@ -154,7 +180,7 @@ struct words {
 #define  X_POSE     0X00004000
 #define  DPI600     0X00008000
 #define  LSA_FORM   0X00010000
-#define  PAPER      0X00020000
+#define  FOUR       0X00020000
 #define  INCLUDE    0X00040000
 #define  SHARP_UP   0X00080000	/* accidentals above the note */
 #define  PAGENUM    0X00100000
@@ -167,14 +193,8 @@ struct words {
 #define  CON_SEV    0X08000000	/*  convert french to ital 7 course */
 #define  DRAFT      0X10000000 	/* print draft notice */
 #define  COPYRIGHT  0X20000000 	/* print copyright notice */
-
-/*
-#define  FLAG_STYLE \
-   ( ITALIAN | FRENCH | I_FLAGS | MOD_FLAGS | O_FLAGS | BOARD | THIN | NOTHING)
-#define CHAR_STYLE \
-   ( ITALIAN | O_FLAGS | MACE | ROBINSON | BOARD )
- */
-
+#define  JAM        0X40000000  /* compress the lines to fit in 7 sys */
+#define  CONV_COR   0X80000000  /* a correction for some conversions */
 /* style  flags */
 
 #define ON_LINE			0X0001
@@ -193,88 +213,35 @@ struct words {
 #define BOARD_CHAR		0X0200
 #define ROB_CHAR		0X0400
 #define MACE_CHAR		0X0800
-#define DOWLAND_CHAR	0X1000
+#define DOWLAND_CHAR	        0X1000
 
 #define STAND_NUM		0X1000
 #define ITAL_NUM		0X2000
+#define ADOBE_NUM		0X3000
 
 #define MOD_NOTES               0X4000
 #define ITAL_NOTES              0X8000
 
-/* flags for misc input */
-#define TITLE 1
-#define ARGS 2
+/* more flags f->m_flags */
+#define NO_AUTO_END             0x0001
+#define DPI1200                 0x0002
+#define QUIET			0x0004
+#define PAREN			0x0008
+#define SOUND                   0x0010
+#define SEVEN                   0x0020
+#define LONGBAR                 0x0040
+#define FCLEF                   0x0080
+#define ALTTITLE                0x0100
+#define A4                      0x0200
+#define NOBOX                   0x0400
+#define TWOSTAFF                0x0800
+#define AUTOKEY                 0x1000
+#define DSUP                    0x2000
+#define DSDOWN                  0x4000
+#define EPSF                   0x08000
+#define RED                    0x10000
+#define DPI2400                0x20000
+/* variables defined in sizes.c */
 
-/* integer toggles */
 
-#define PS_FONT_5 "Palatino-BoldItalic"       /* 10 pt italic text */
-/* #define PS_FONT_4 "Palatino-Bold" */
-#define PS_FONT_4 "Times-Roman"                  /* 12 pt time sig */
-#define PS_FONT_3 "Palatino-Bold"   /* 28 pt big time sig not used */
-/* #define PS_FONT_2 "Palatino-BoldItalic" */
-#define PS_FONT_2 "Times-Roman"               /* 12 pt titles */
-/* #define PS_FONT_1 "Palatino-Bold" */
-#define PS_FONT_1 "Times-Roman"            /* 10 pt words to songs */
 
-#define PS_SCALE_5 1.00           	/* scale tfm to real points  */
-#define PS_SCALE_4 1.20           	/* scale tfm to real points  */
-#define PS_SCALE_3 1.00           	/* scale tfm to real points  */
-#define PS_SCALE_2 1.20           	/* scale tfm to real points  */
-#define PS_SCALE_1 1.00           	/* scale tfm to real points  */
-#define PS_SCALE PS_SCALE_2
-
-extern int baroque;
-extern int n_system;
-extern int bar_count;		
-extern int barCount;
-extern int pagenum;
-
-/* end integer toggles */
-
-extern int pk_checksum[];
-extern double red;
-/* extern double: space; */
-extern double red;
-double get_width(), get_height(), get_depth(), pad(), str_to_inch();
-double dvi_to_pt();
-SIGNED_C get();
-extern SIGNED_C geti();
-extern char version[];
-
-extern int max_b_w;
-extern int max_b_h;
-extern int max_off_w;
-extern int max_off_h;
-
-/* commands for output buffering */
-#define MOVE    0x0001
-#define RMOVE   0x0002
-#define LINE    0x0003
-#define SHOW    0X0004
-#define GLP     0x0005
-#define INIT    0x0006
-#define RULE    0x0007
-#define MOVEH   0x0008
-#define MOVEV   0x0009
-#define MOVEVH  0x000a
-#define CHAR    0X000b
-#define TIMES   0x000c
-#define LUTE    0x000d
-#define BIG     0x000e
-#define SMALL   0x000f
-#define PCHAR   0x0010
-#define MED     0x0011
-#define PS_CLIP 0x0012
-#define ITAL    0x0013
-#define TH_LINE 0x0014
-#define PGRAY   0x0015
-#define PTIE    0x0016
-#define PDRAFT  0x0017
-#define PCOPYRIGHT 0x0018
-#define P_S_GRAY 0x0019
-#define P_U_GRAY 0x0020
-#define OTHER   0x0200
-
-extern unsigned char ps_used[];
-extern int first_1, first_2;
-extern char highlight;
