@@ -27,7 +27,7 @@ int ps_is_used(unsigned char c);
 void print_data(unsigned char *data, PKPacketHeader *h);
 
 #include "pk_input.h"
-void read_pk_file(file_in *pk, print *ps)
+void read_pk_file(file_in *pk, ps_print *ps)
 { 
     unsigned int cmd;
     int length;
@@ -98,7 +98,7 @@ void read_pk_file(file_in *pk, print *ps)
 	    bitmap = pk_read_bitmap(pk, &header);
 	    dbg1( Bug, "bitmap read %d\n", (void *)pk->Tell());
 
-	    if (ps->print_used[header.code]){
+	    if (ps->ps_used[header.code]){
 		save_bitmap(bitmap, &header);
 	    }
 	    free(bitmap);

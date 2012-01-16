@@ -54,11 +54,10 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
     unsigned char finger[STAFF], a_ornament[STAFF], t_ornament[STAFF];
     signed char c;
     char cc, *p, *pp;
-    int i, j=0;
+    int i, j;
     signed char get();
     int gridflag=0;
     int hushbar=0, tie=0, dimline=0;/* for non print bars, and ties */
-    int nocountbar=0;		// for non ocunting bar
     int Key=0;                       //for auto key signature
     int orig=0,Orig=0;
     int skip;
@@ -238,7 +237,6 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    else if (c == 'Q') dimline++;
 	    else if (c == 'v') orig=1;
 	    else if (c == 'V') Orig=1;
-	    else if (c == 'X') nocountbar=1;
 	    else if (c == 'b' || c == '.') {
 		Mstore( ib,l_p, (unsigned char *)"b-         ", f);
 		incr(buf);
@@ -250,7 +248,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    else if ( c != NEWLINE)
 		if (! (f->m_flags & QUIET))dbg3(Warning, 
 		     "Text %c after a barline (b), system %d chord %d\n", 
-		     (void *)((int)c) , (void *)f->cur_system, (void *)cur_chord);
+		     (void *)c , (void *)f->cur_system, (void *)cur_chord);
 	    barline++;
 
 	    if ((cur_chord < 2) && cur_key && (f->m_flags & AUTOKEY)) {
@@ -264,11 +262,6 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		if ((c = buf[1]) == '!') hushbar++;
 		break;
 	    }
-	    else if ( buf[1] == 'X' ) {
-	      BARline++;
-	      nocountbar=1;
-	      break;
-	    } 
 	    else {
 		staff[0] = 'J';
 		staff[1] = '-';
@@ -413,12 +406,12 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    N[1] = buf[i+skip];
 		    staff[i] = atoi(N);
 		    if ( ! isdigit (N[0])) 
-			dbg1(Warning, "bad fret number", (void *)((int)N[0]));
+			dbg1(Warning, "bad fret number", (void *)N[0]);
 		    if ( ! isdigit (N[1])) 
-			dbg1(Warning, "bad fret number", (void *)((int)N[1]));
+			dbg1(Warning, "bad fret number", (void *)N[1]);
 		    if (staff[i] > 34) {
 			dbg1(Warning, "fret number higher than max 34", 
-			     (void *)((int)staff[i]));
+			     (void *)staff[i]);
 			staff[i]=0;
 		    }
 		    staff[i] += 220;
@@ -426,17 +419,6 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		case 'z':
 		    staff[i] = '0';
 		    break;
-		case ']':
-		  staff[i] = ']';
-		  if (buf[i+skip+1] == 'v') {
-		    staff[i] = 133;
-		    skip++;
-		  }
-		  if (buf[i+skip+1] == 'w') {
-		    staff[i] = 134;
-		    skip++;
-		  }
-		  break;
 		case NEWLINE:
 		    line++;
 		    for ( ; i < STAFF; i++)
@@ -474,16 +456,6 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    break;
 		case '"':	/* prefix a non prefix char */
 		    ornament[i] = buf[i + (++skip)];
-		    if (ornament[i] == ']' ) {
-		      if ( buf[i+skip+1] == 'v') {
-			ornament[i] = 133;
-			skip++;
-		      }
-		      if ( buf[i+skip+1] == 'w') { //wavy
-			ornament[i] = 134;
-			skip++;
-		      }
-		    }
 		    skip++;
 		    i--;
 		    break;
@@ -588,7 +560,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 			default:
 			    dbg3(Warning,
   "tab: getsystem: bad finger or \\ character %c at line %d of system %d\n", 
-				 (void *)((int)cc), 
+				 (void *)cc, 
 				 (void*)cur_line,
 				 (void*)f->cur_system);
 			    break;
@@ -704,7 +676,6 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	case 'q':		/* a tail */
 	case 'V':		/* a hold */
 	case 'i':		/* indent as for barline, no barline */
-	case 'v':
 	case 'j':		// small indent
 	case 'f':		/* fine */
 	    staff[0] = c;
@@ -756,14 +727,12 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    ib->PutByte(NEWLINE);
 	}  
 	break;
-	default:	
-	  if ( ! (f->m_flags & QUIET) ) 
+	default:
 	    dbg3(Warning, 
 		 "getsystem: bad flag character %c in system %d chord %d\n", 
-		 (void *)((int)c), 
-		 (void*) f->cur_system, 
+		 (void *)c, (void*) f->cur_system, 
 		 (void *)cur_chord);
-	  break;
+	    break;
 	}
     done:
 	if (barline) {
@@ -777,10 +746,6 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    else if (dimline) {
 		Mstore( ib, l_p, (unsigned char *)"bQ         ", f);
 		dimline = 0;
-	    }
-	    else if (nocountbar) {
-		Mstore( ib, l_p, (unsigned char *)"bX         ", f);
-		nocountbar = 0;
 	    }
 	    else if (orig) {
 		Mstore( ib, l_p, (unsigned char *)"bvabc      ", f);
@@ -807,12 +772,9 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    BARline = 0;
 	    if (hushbar) 
 	        Mstore( ib, l_p, (unsigned char *)"B!         ", f);
-	    else if (nocountbar)
-	      Mstore( ib, l_p, (unsigned char *)"BX         ", f);
 	    else 
 	        Mstore( ib ,l_p, (unsigned char *)"B-         ", f);
 	    hushbar =0;
-	    nocountbar=0;
 
 	}
 	if (Key) {
@@ -913,12 +875,11 @@ Mstore(i_buf *ib, int *l_p, unsigned char *staff, struct file_info *f)
       for ( ; i < STAFF; i++ ) 
 	ib->PutByte (staff[i]);
     }
-
     else   /* not CONVERT */
       for  (i = 0 ; i < STAFF ; i++)
 	ib->PutByte(staff[i]);
     
-    if (staff[0] != '^' && staff[0] != '+' && music[0]) {
+    if (music[0]) {
 	ib->PutByte('M');
 	for (i = 0; i < 3; i++) {
 	    if (i == 0 && music[i] == 'B' ) ib->PutByte('J');
@@ -936,8 +897,7 @@ Mstore(i_buf *ib, int *l_p, unsigned char *staff, struct file_info *f)
 	if (music[7]) ib->PutByte(music[7]);
 	music[4] = music[7] = '\0';
     }
-    if ((staff[0] != '^' && staff[0] != '+') && (text_f || text_s)) {
-      // if ((text_f || text_s)) {
+    if (text_f || text_s) {
 	i = 0;
 	text_f = text_s = 0;
 	ib->PutByte('T');
@@ -1004,9 +964,7 @@ do_music(i_buf *ib, unsigned char staff[], char buf[], int *l_p, int *skip,
 	music[b+2] == NEWLINE ) {
 	dbg4(Warning, 
 	     "tab with incomplete music specification %c%c%c line %d\n",
-	     (void *)(int)music[b], 
-	     (void *)(int)music[b+1], 
-	     (void *)(int)music[b+2], 
+	     (void *)music[b], (void *)music[b+1], (void *)music[b+2], 
 	     (void *)*l_p);
     }
 
@@ -1094,5 +1052,13 @@ do_music(i_buf *ib, unsigned char staff[], char buf[], int *l_p, int *skip,
 	return;
     }
 }
+
+
+
+
+
+
+
+
 
 

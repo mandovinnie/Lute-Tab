@@ -40,8 +40,5 @@
 #define MUSICS  0x0032
 #define PHTIE   0x0033
 #define PHRTIE  0x0034
-#define P_S_RED 0x0035
-#define P_U_RED 0x0036
-#define PWTIE   0x0037
 #define OTHER   0x0200
 

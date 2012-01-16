@@ -15,6 +15,7 @@ extern int n_measures;
 
 
 /* return 0 on completion, 1 if there is more iniput */
+static int ssys=0;
 double hor_offset=0;		/* for two systems on a line */
 extern int title_font;
 extern int text_font;
@@ -51,13 +52,13 @@ int format_page(print *p, i_buf *i_b,
 //    dbg0(Flow, "in format page\n");
 
     if (f->flags & DRAFT && f->flags & PS ) {
-	if (!(f->m_flags & QUIET)) dbg0 (Warning, "Draft\n");
-	p->print_draft();
+	dbg0 (Warning, "Draft\n");
+	p->ps_draft();
     }
 
     if (f->flags & COPYRIGHT && f->flags & PS ) {
 	dbg0 (Warning, "Copyright\n");
-	p->print_copyright();
+	p->ps_copyright();
     }
     if (!sys_count) {
 	if ( red == 1.0 ) {
@@ -173,7 +174,7 @@ int format_page(print *p, i_buf *i_b,
 	    goto leave;
 	}
 
-	dbg1(Flow, "in format page loop %c\n", (void *)((int)c));
+	dbg1(Flow, "in format page loop %c\n", (void *)c);
 
 	if (f->flags & MARKS) p->put_rule("2.0 in", "0.01 in");
 
@@ -351,7 +352,7 @@ int format_page(print *p, i_buf *i_b,
 	    break;
 	case 'V':		/* vertical skip */
 	{
-	    double skip=0.0;
+	    double skip;
 	    char buf[80], *bufp = buf;
 	    *bufp = '\0';
 	    while (( c = i_b->GetByte()) != NEWLINE) {
@@ -377,85 +378,78 @@ int format_page(print *p, i_buf *i_b,
 	default:		/* assume that it must be lines of chords */
 	    tit_last=0;
 	    
-
 	    r = getisystem(i_b, f_a, &l_p[sys_count], f);  /* get line tab */
 
-	    //	    fprintf(stderr, "sys_count %d start system %d\n", 
-	    //   sys_count,f->start_system );
-
-	    if ( sys_count  >= f->start_system ) {
-
-	      if (f->flags & NOTES) {        /* thick vert line at beginning */
+	    if (f->flags & NOTES) {        /* thick vert line at beginning */
 		if (f->m_flags & TWOSTAFF ) {
-		  p->push();
-		  // note 7 * interspace gives room 
-		  // for sharp and flat above staff
-		  p->movev(
-			   10 * m_space + 2 * text_sp * f->n_text +
-			   2 * f->c_space  + 7 * str_to_inch(interspace) 
-			   + flag_h + str_to_inch(flag_to_staff) -.011
-			   - (f->line_flag == ON_LINE ? 
-			      str_to_inch(interspace)/2 : 0.0 ));
-		  p->put_rule(0.01, 
-			      ( 10 * m_space + 2 * text_sp * f->n_text +
-				2 * f->c_space  + 7 * str_to_inch(interspace) 
-				+ flag_h + str_to_inch(flag_to_staff) -.01
-				- (f->line_flag == ON_LINE ? 
-				   str_to_inch(interspace)/2 : 0.0 )));
-		  /* for a double line before the staves 
-		     p->moveh(-0.06);
-		     p->put_rule(0.03, 
-		     ( 10 * m_space + 2 * text_sp * f->n_text +
-		     2 * f->c_space  + 7 * str_to_inch(interspace) 
-		     + flag_h + str_to_inch(flag_to_staff)
-		     - (f->line_flag == ON_LINE ? 
-		     str_to_inch(interspace)/2 : 0.0 )));
-		  */
-		  p->pop();
-		  for (i=0; i< 5; i++ ) {
-		    p->put_rule(staff_len, str_to_inch(staff_height));
-		    p->movev(m_space);
-		  }	
+		    p->push();
+		    // note 7 * interspace gives room 
+		    // for sharp and flat above staff
+		    p->movev(
+			10 * m_space + 2 * text_sp * f->n_text +
+			2 * f->c_space  + 7 * str_to_inch(interspace) 
+			+ flag_h + str_to_inch(flag_to_staff) -.011
+			- (f->line_flag == ON_LINE ? 
+			   str_to_inch(interspace)/2 : 0.0 ));
+		    p->put_rule(0.01, 
+			     ( 10 * m_space + 2 * text_sp * f->n_text +
+			       2 * f->c_space  + 7 * str_to_inch(interspace) 
+			       + flag_h + str_to_inch(flag_to_staff) -.01
+			       - (f->line_flag == ON_LINE ? 
+			   str_to_inch(interspace)/2 : 0.0 )));
+		    /* for a double line before the staves 
+		       p->moveh(-0.06);
+		       p->put_rule(0.03, 
+		       ( 10 * m_space + 2 * text_sp * f->n_text +
+		       2 * f->c_space  + 7 * str_to_inch(interspace) 
+		       + flag_h + str_to_inch(flag_to_staff)
+		       - (f->line_flag == ON_LINE ? 
+			   str_to_inch(interspace)/2 : 0.0 )));
+		    */
+		    p->pop();
+		    for (i=0; i< 5; i++ ) {
+			p->put_rule(staff_len, str_to_inch(staff_height));
+			p->movev(m_space);
+		    }	
 
-		  p->movev( text_sp * f->n_text + f->c_space); 
-		  p->movev( str_to_inch(interspace) );
+		    p->movev( text_sp * f->n_text + f->c_space); 
+		    p->movev( str_to_inch(interspace) );
 		}
 		else {  /* just one line of music, thick vert line */
-		  p->push();
-		  p->movev(
-			   5 * m_space + text_sp * f->n_text +
-			   f->c_space  + 6 * str_to_inch(interspace)
-			   + flag_h + str_to_inch(flag_to_staff) 
-			   -.011 
-			   - (f->line_flag == ON_LINE ? 
-			      str_to_inch(interspace)/2 : 0.0 ));
-		  p->put_rule( 0.03,
-			       5 * m_space + text_sp * f->n_text +
-			       f->c_space  + 6 * str_to_inch(interspace)
-			       + flag_h + str_to_inch(flag_to_staff) -.011
-			       - (f->line_flag == ON_LINE ? 
-				  str_to_inch(interspace)/2 : 0.0 ));
-		  p->pop();
+		    p->push();
+		    p->movev(
+			5 * m_space + text_sp * f->n_text +
+			f->c_space  + 6 * str_to_inch(interspace)
+			+ flag_h + str_to_inch(flag_to_staff) 
+			-.011 
+			- (f->line_flag == ON_LINE ? 
+			   str_to_inch(interspace)/2 : 0.0 ));
+		    p->put_rule( 0.03,
+			5 * m_space + text_sp * f->n_text +
+			f->c_space  + 6 * str_to_inch(interspace)
+			+ flag_h + str_to_inch(flag_to_staff) -.011
+			- (f->line_flag == ON_LINE ? 
+			   str_to_inch(interspace)/2 : 0.0 ));
+		    p->pop();
 		}
 		for (i=0; i< 5; i++ ) {
-		  p->put_rule(staff_len, str_to_inch(staff_height));
-		  p->movev(m_space);
+		    p->put_rule(staff_len, str_to_inch(staff_height));
+		    p->movev(m_space);
 		}	
 		p->movev( st_text);
 		p->movev( text_sp * f->n_text + f->c_space); 
-	      }
-	      else if (f->flags & ROTATE  && baroque) {
+	    }
+	    else if (f->flags & ROTATE  && baroque) {
 		p->movev(flag_h );
 		if (red < .9999) {
-		  p->movev("3 pt");
+		    p->movev("3 pt");
 		}
-	      }
-	      else {		/* compensate for flag height here */
-		p->movev(flag_h + str_to_inch(flag_to_staff));
-	      }
-
-	      printsystem(p, i_b, f_a, &l_p[sys_count], f);
 	    }
+	    else {		/* compensate for flag height here */
+		p->movev(flag_h + str_to_inch(flag_to_staff));
+	    }
+
+	    printsystem(p, i_b, f_a, &l_p[sys_count], f);
 
 	    if ( r == END_OK ) {
 		return_val = END_OK;
@@ -568,7 +562,7 @@ signed char getisystem(i_buf *i_b, font_list *f_a[],
 {
     signed char c;
 
-    dbg0(Flow, "getisystem: \n");
+//    dbg0(Flow, "getisystem: \n");
 
     *l_p = 0;
     while (( c = getiline(i_b, f_a, l_p, f)) != END_SYSTEM && c != END_FILE ) 
@@ -626,7 +620,7 @@ signed char getiline(i_buf *i_b, font_list *f_a[],
 	c = i_b->GetByte();
 
 	if ( i == 0 ) {
-	    dbg1(Flow, "getiline: new line %c\n", (void *)c);
+//	    dbg1(Flow, "getiline: new line %c\n", (void *)c);
 	    switch (c) {
 	    case '-':		/* command options */
 		p = cmdbuf;
@@ -784,7 +778,7 @@ signed char getiline(i_buf *i_b, font_list *f_a[],
 	}
     }
     l->dat[STAFF+1] = '\0';
-    dbg1(Flow, "tab: getiline returns: l->dat %s\n", l->dat);
+//    dbg1(Flow, "tab: getiline returns: l->dat %s\n", l->dat);
     *l_p = *l_p + 1;
 
     return (c);

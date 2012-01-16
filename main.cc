@@ -1,16 +1,10 @@
 
-#include "version.h"
 #include "tab.h"
 #include "i_buf.h"
 #include "file_in.h"
 #include "print.h"
 #include "dviprint.h"
 #include "ps_print.h"
-#include "pdf_print.h"
-
-#include "sound.h"
-#include "midi_snd.h"
-#include "raw_snd.h"
 
 #ifdef __unix__
 #include <signal.h>
@@ -29,7 +23,7 @@ int my_main(int flags);
 #endif /* MAC */
 
 extern jmp_buf b_env;
-sound *sp=0;
+
 
 int baroque;
 int n_system;
@@ -61,7 +55,6 @@ void init(file_info *f)
     f->flags = 0;
     f->m_flags = 0;
     f->flags |=PS;
-    f->flags |= DPI600;
     f->cur_system = 0;
     f->n_text = 0;
     f->font_sizes[0] =  0.0;	// not used
@@ -76,8 +69,6 @@ void init(file_info *f)
     f->sys_skip=0.0;
     f->cur_system = 0;
     f->include = 0;
-    f->midi_patch = 0;
-    f->start_system = 0;
 }
 
 char *
@@ -88,7 +79,6 @@ void tfm_stuff(i_buf *b, file_info *f)
     print **pp;
     dvi_print *pdp = 0;
     ps_print *psp = 0;
-    pdf_print *pdfp = 0;
     struct font_list *f_a[MAXFONTS];
     int i, more=END_MORE;
     char lutefont[80];
@@ -163,43 +153,6 @@ void tfm_stuff(i_buf *b, file_info *f)
 	psp = new ps_print (f_a, f);
 	pp = (print **)&psp;
     }
-    else if (f->flags & PDF ) {
-      fprintf (stderr, "PDF!\n");
-	if (f->font_names[1]) {	// words
-	  f_a[1] = init_font_list(1, f->font_names[1], 1.2 );
-	  f_a[1]->real_name = get_real_name(f->font_names[1], 0);
-	}
-	else 
-	  f_a[1] = init_font_list(1, "pncr", 1.0 );
-	
-	if (f->font_names[2]) {	// title
-	  f_a[2] = init_font_list(2, f->font_names[2], f->font_sizes[2]/10. );
-	  f_a[2]->real_name = get_real_name(f->font_names[2], 0);
-	}
-	else 
-	  f_a[2] = init_font_list(2, "pncr", f->font_sizes[2]/10.);
-	
-	if (f->font_names[3]) {	// italic title
-	  f_a[3] = init_font_list(3, f->font_names[3], 1.2 );
-	  f_a[3]->real_name = get_real_name(f->font_names[3], 0);
-	}
-	else 
-	  f_a[3] = init_font_list(3, "pncri", 1.2 );
-
-	f_a[4] = init_font_list(4, "pncr", 2.4 );
-
-	if (f->font_names[5]) {	// italic text
-	  f_a[5] = init_font_list(5, f->font_names[5], 1.0 );
-	  f_a[5]->real_name = get_real_name(f->font_names[5], 0);
-	}
-	else 
-	  f_a[5] = init_font_list(5, "pncri", 1.0 );
-	f_a[6] = init_font_list(6, "pncr", 1.0 );
-	f_a[7] = init_font_list(7, "pncr", 1.0 / red );
-	
-	pdfp = new pdf_print (f_a, f);
-	pp = (print **)&pdfp;
-    }
     else {			/* dvi */
 
 	if (f->font_names[1])
@@ -230,34 +183,16 @@ void tfm_stuff(i_buf *b, file_info *f)
 	pp = (print **)&pdp;
     }
 
-    if (f->m_flags & SOUND) {
-      if (!sp) {
-	if (f->midi_patch) {
-	  if (!strncmp(f->out_file, "stdout", 6))
-	    sp = new midi_snd(f->midi_patch, "stdout");
-	  else 
-	    sp = new midi_snd(f->midi_patch);
-	}
-	else {			// no midi patch
-	  if (strncmp(f->out_file, "stdout", 6)) 
-	    sp = new midi_snd(34, "stdout");
-	  else 
-	    sp = new midi_snd;
-	}
-      } 
-    }
+//    if (f->m_flags && SOUND) 
+//      ;
+
     while (more == END_MORE) {
 	(*pp)->page_head(); 
 	more = (*pp)->do_page(b, f_a);
 	(*pp)->page_trail();
     }
-    if (sp) {
-      delete sp;
-      sp = 0;
-    }
     if (psp) delete psp;
     if (pdp) delete pdp;
-    if (pdfp) delete pdfp;
     if (f_a[0]) f_a[0] = delete_font_list(f_a[0]);
     if (f_a[1]) f_a[1] = delete_font_list(f_a[1]);
     if (f_a[2]) f_a[2] = delete_font_list(f_a[2]);
@@ -338,10 +273,9 @@ main(int argc, char **argv)
     //	dbg_set(TFM);
     //	dbg_set(Stack);
     //	dbg_set(Flow);
-    //	dbg_set(Inter);
     
     if ( ! (f.m_flags & QUIET) )
-      dbg2(Warning, "tab %s copyright 1995-2003 by Wayne Cripps%c",
+      dbg2(Warning, "tab %s copyright 1997 by Wayne Cripps%c",
 	   (void *)VERSION,
 	   (void *) NEWLINE );
     
@@ -356,9 +290,6 @@ main(int argc, char **argv)
     b.Seek(0, rew);
     
     tfm_stuff(&b, &f);
-
-    free (f.file);
-    free (f.out_file);
     return(0);
 }
 

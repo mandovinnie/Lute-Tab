@@ -1,4 +1,7 @@
 
+
+#define VERSION "4-1i"
+
 #ifndef __MWERKS__
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,10 +22,6 @@
 
 /* extern char *strstr(const char *, const char *); */
 /* extern char *strchr(const char *, int ); */
-
-#ifdef __linux__
-#include <ctype.h>
-#endif /* linux */
 
 #include <setjmp.h>
 #include "tfm.h"
@@ -80,11 +79,9 @@ struct file_info {
     int page;			/* what page are we on? */
     int include;		/* are we included from somehwere */
     int cur_system;		/* what system are we in? */
-    int start_system;           /* system to begin printing mostly for midi */
     char *(font_names[FONT_NAMES]);
     double font_sizes[FONT_NAMES];
     double sys_skip;            /* extra space to skip between systems */
-  unsigned int midi_patch;      /* a midi patch number - 0 is piano*/
 };
 
 struct font_list {
@@ -166,7 +163,7 @@ enum pass{first, second};
 #define  MANUSCRIPT 0X00000001
 #define  DVI_O      0X00000002
 #define  PS         0X00000004
-#define  PDF        0X00000008
+#define  X          0X00000008
 #define  VERBOSE    0X00000010
 #define  FIVE       0X00000020
 #define  MARKS      0X00000040
@@ -238,9 +235,7 @@ enum pass{first, second};
 #define AUTOKEY                 0x1000
 #define DSUP                    0x2000
 #define DSDOWN                  0x4000
-#define EPSF                   0x08000
-#define RED                    0x10000
-#define DPI2400                0x20000
+#define EPSF                    0x8000
 /* variables defined in sizes.c */
 
 

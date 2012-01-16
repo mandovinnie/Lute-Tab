@@ -1,5 +1,4 @@
 
-#include <stdlib.h>
 #include "tab.h"
 #include "i_buf.h"
 int my_min(int a, int b);
@@ -52,22 +51,10 @@ void i_buf::more_buffer()
 
 i_buf::~i_buf()
 {
-  link *t;
-  
-  dbg2(Proceedure, "ending i_buf ptr %d size %d\n", 
-       (void *)read_ptr, (void *)size);
-  t = start;
-  while ( t->next ) 
-    t = t->next;
-  
-  while (t->prev) {
-    free (t->bytes);
-    t = t->prev;
-    free (t->next);
-  }
-  
-  delete start->bytes;
-  delete start;
+    dbg2(Proceedure, "ending i_buf ptr %d size %d\n", 
+	 (void *)read_ptr, (void *)size);
+    //    dbg2(Warning, "ending i_buf ptr %d size %d\n", 
+    //	 (void *)read_ptr, (void *)size);
 }
 
 void i_buf::PutByte(const char c)
@@ -260,8 +247,7 @@ void i_buf::dump(const char *fname, const mode mode)	// dump to a file
 	file_bytes -= n_written;
 	dbg1(Flow, "%u bytes left\n", (void *)file_bytes);
     }
-    if (strcmp(fname, "stdout"))
-      fclose(fp);
+    if (strcmp(fname, "stdout"))  fclose(fp);
     else if (mode == Append)fclose(fp);
 #endif
 }

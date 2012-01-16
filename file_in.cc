@@ -146,10 +146,7 @@ file_in::file_in()
 #endif
 }
 
-unsigned char file_in::GetByte() 
-{
-  return ( buffer::GetByte() );
-}
+unsigned char file_in::GetByte() { return ( buffer::GetByte());}
 
 int file_in::Get2Bytes()
 {
@@ -196,22 +193,5 @@ int file_in::Seek(const long offset, const int how)
 
 char * file_in::GetLine(char *buf, int buflen)
 {
-  int i = buflen;
-  unsigned char *tbuf = (unsigned char *)buffer::GetLine(buf, buflen);
-
-  while (--i) {
-    if (tbuf[i] ==147 || tbuf[i] == 148 )
-      tbuf[i] = '"';
-    else if ( tbuf[i] == 146 || tbuf[i] == 147 ) 
-      tbuf[i] = '\'';
-  }
-  //  return (buffer::GetLine(buf, buflen));
-  
-  //
-  //  if ( c == 147 || c == 148 )
-  //    c = '"';
-  //  else if ( c == 146 )
-  //    c = '\'';
-
-  return ( (char *)tbuf );
+    return (buffer::GetLine(buf, buflen));
 }

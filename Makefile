@@ -9,29 +9,21 @@
 #
 OPTIM = -O3
 # OPTIM = -O2
-OPTIM = -g
-CC = g++3 -wuninitilized
+OPTIM = -g2
+CC = g++
 #LD = /usr/local/bin/g++
 #LD = /usr/local/egcs/bin/g++
-LD = g++ -v 
+LD = g++ -v
 LD = gcc
-#LD = g++3
-#LD = g++ -Wuninitilized
-LD = g++
-#LD = CC -trapuv
+#LD = CC -64
 #LD = g++ -mabi=64 
 #LD = gcc.2723 -v
 #LD = insure++
-LDFLAGS = ${OPTIM} -v 
+LDFLAGS = ${OPTIM} -v
 # CXX = g++ -Wall
 #CXX = /usr/local/egcs/bin/g++
 #CXX = /usr/local/bin/g++
-CXX = gcc 
-CXX = /usr/local/bin/g++
-CXX = g++3
-CXX = g++
-#CXX = g++ -Wuninitialized -O
-#CXX =  CC -trapuv
+CXX = g++ 
 #CXX = CC -64
 #CXX = g++ -mabi=64
 #
@@ -49,10 +41,8 @@ TLOC='"."'
 # or your personal library.
 #
 # TLOC = '"/net/tahoe4/wbc/src/nnt"'
-# TLOC = '"/net/wbc/src/nnt"'
-# TLOC = '"/usr/aeolus1/wbc/src/nnt"'
+# TLOC = '"/net/tahoe4/wbc/src/nnt"'
 # TLOC = '"/home/wbc/nnt"'
-# TLOC = '"/Users/wc/nnt"'
 #
 # CXXFLAGS = -g  -DTFM_PATH=${TLOC} -UX_WIN -Wtraditional -Wshadow  -Wpointer-arith -Wcast-qual  -Wcast-align -Wwrite-strings -Wconversion -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations  -Wnested-externs -Woverloaded-virtual -Winline
 #
@@ -70,22 +60,19 @@ OBJS = args.o buffer.o dbg.o draw.o dvi.o dvi_f.o dviprint.o \
 	file_in.o get_t.o getsys.o i_buf.o incl.o main.o \
 	map.o notes.o pass1.o pass2.o pk_font.o pk_in.o \
 	print.o ps_print.o score.o sizes.o tab_p.o tfm.o \
-	title.o tree.o uline.o sound.o beam.o raw_snd.o midi_snd.o \
-	pdf_print.o
+	title.o tree.o uline.o sound.o beam.o
 
 
 SOURCES = main.cc file_in.cc tfm.cc dvi.cc buffer.cc i_buf.cc \
 	getsys.cc get_t.cc args.cc incl.cc print.cc tab_p.cc sizes.cc \
 	title.cc draw.cc pass1.cc pass2.cc dvi_f.cc map.cc notes.cc \
 	dviprint.cc score.cc uline.cc ps_print.cc \
-	pk_in.cc pk_font.cc dbg.cc tree.cc sound.cc beam.cc raw_snd.cc \
-	midi_snd.cc pdf_print.cc
+	pk_in.cc pk_font.cc dbg.cc tree.cc sound.cc beam.cc
 
 
 HEADERS = buffer.h dbg.h file_in.h print.h system.h tfm.h pkfile.h\
 	dvi.h i_buf.h sizes.h tab.h dviprint.h ps.h pk_bit.h pk_input.h \
-	ps_print.h mac.h tree.h sound.h beam.h version.h raw_snd.h \
-	midi_snd.h pdf_print.h pdf.h 
+	ps_print.h mac.h tree.h sound.h beam.h
 
 all:	tab
 
@@ -103,11 +90,11 @@ clean:
 
 pk_font.o:	pk_input.h pkfile.h
 
-depend:
-	mkdep ${SOURCES}
-
 #depend:
-#	./makedepend ${SOURCES}
+#	mkdep ${SOURCES}
+
+depend:
+	./makedepend ${SOURCES}
 
 veryclean:	clean
 	rm -f tab
@@ -127,16 +114,12 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	pncb.tfm    pncbi.tfm   pncr.tfm    pncri.tfm  \
 	ptmb.tfm     ptmbo.tfm    ptmrc.tfm    ptmro.tfm    ptmrrn.tfm \
 	ptmbi.tfm    ptmr.tfm     ptmri.tfm    ptmrre.tfm \
-	pzcmi.tfm \
-	mk_font_local mk_test mk_600 mk_1200 mk_2400 \
-	sample.tab demo.tab t.tab AboutTab.txt mac.cc mkdep \
-	version.pl makedepend
+	mk_font_local mk_test mk_600 \
+	sample.tab demo.tab c.tab AboutTab.txt mac.cc mkdep
 
-DISTFILE = lute_tab4.3.10.tar
+distrib:	lute_tab4-1i.tar 
 
-distrib:	 ${DISTFILE}
-
-${DISTFILE}:	 \
+lute_tab4-1i.tar:	 \
 	Makefile \
 	${HEADERS} \
 	${SOURCES} main.cc  ${MISC}
@@ -145,7 +128,7 @@ ${DISTFILE}:	 \
 	/bin/sed '/^# DO NOT DELETE/,/# IF YOU PUT ANYTH/d' | \
 	/bin/sed 's/^TLOC = /# TLOC = /' \
 	> Makefile; \
-	tar cvf ${DISTFILE} \
+	tar cvf lute_tab4-1i.tar \
 	Makefile \
 	t.tab \
 	${HEADERS} \
@@ -180,29 +163,29 @@ cmr10.300pk:
 cmr10.tfm:	
 	cp -p /usr/lib/tex/fonts/tfm/cmr10.tfm .
  
-# lute9.tfm:	lute9.mf lute.mf
-#	mk_font_local
-#
-#lute9.300pk:	lute9.mf lute.mf
-#	mk_font_local
-#
-#lute8.300pk:	lute8.mf lute.mf
-#	mk_font_local
-#
-#lute8.tfm:	lute8.mf lute.mf
-#	mk_font_local
-#
-#lute7.300pk:	lute7.mf lute.mf
-#	mk_font_local
-#
-#lute7.tfm:	lute7.mf lute.mf
-#	mk_font_local
-#
-#lute6.tfm:	lute6.mf lute.mf
-#	mk_font_local
-#
-#lute6.300pk:	lute6.mf lute.mf
-#	mk_font_local
+lute9.tfm:	lute9.mf lute.mf
+	mk_font_local
+
+lute9.300pk:	lute9.mf lute.mf
+	mk_font_local
+
+lute8.300pk:	lute8.mf lute.mf
+	mk_font_local
+
+lute8.tfm:	lute8.mf lute.mf
+	mk_font_local
+
+lute7.300pk:	lute7.mf lute.mf
+	mk_font_local
+
+lute7.tfm:	lute7.mf lute.mf
+	mk_font_local
+
+lute6.tfm:	lute6.mf lute.mf
+	mk_font_local
+
+lute6.300pk:	lute6.mf lute.mf
+	mk_font_local
 
 Bookman-Light.tfm:	/usr/lib/tex/fonts/tfm/Bookman-Light.tfm
 	cp /usr/lib/tex/fonts/tfm/Bookman-Light.tfm .
@@ -238,6 +221,5 @@ win:	${HEADERS} ${SOURCES} main.cc c.tab sample.tab
 	cp pncb.tfm pncbi.tfm pncr.tfm pncri.tfm psyr.tfm ptmr.tfm win
 	cp tab.rsrc.bin win
 
-version:
-	./version.pl
+
 

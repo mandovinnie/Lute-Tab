@@ -7,7 +7,7 @@
 #include <windows.h>
 #endif /* WIN32 */
 
-#include "version.h"
+
 #include "tab.h"
 #include "print.h"
 #include "ps_print.h"
@@ -17,7 +17,7 @@
 #include <time.h>
 #include "pk_bit.h"
 
-void read_pk_file(file_in *pk, print *ps);
+void read_pk_file(file_in *pk, ps_print *ps);
 
 int format_page(print *d_p, i_buf *i_b, font_list *f_l[], struct file_info *f);
 void bit_char(i_buf *ps, int char_num);
@@ -50,7 +50,7 @@ ps_print::ps_print(font_list *font_array[], file_info *f)
 	   dvi_to_mm(ps_top_of_page),
 	   ps_top_of_page,
 	   mm_to_dvi(32.42)); */
-    /*     for (int i=0; i< 256; i++) ps_used[i] = 0; */
+    for (int i=0; i< 256; i++) ps_used[i] = 0;
     f_i = f;
     f_a = font_array;
     f_name[0] = '\0';
@@ -60,9 +60,6 @@ ps_print::ps_print(font_list *font_array[], file_info *f)
       strcat(f_name, f->out_file);
     }
     highlight_type=Gray;
-    if (f->m_flags & SOUND)
-      nodump = 1;
-    else nodump = 0;
 }
 
 ps_print::~ps_print()
@@ -70,8 +67,8 @@ ps_print::~ps_print()
     file_head();		// file head dumps header
     file_trail();
     if (f_name[0]) {
-      if (!nodump)
-	pr_out->dump( f_name, Append);
+      //      printf("name %s\n", f_name);
+      pr_out->dump( f_name, Append);
     }
     else
       pr_out->dump( "out.ps", Append);
@@ -92,9 +89,7 @@ void ps_print::file_head()
     HKEY hKey, hSubKey;
     DWORD dwSize, dwType;
 #endif    /* WIN32 */
- 
-    if (nodump) 
-      return;
+
 
     ps_header.PutString("%!PS-Adobe-3.0");
     if (f_i->m_flags & EPSF )
@@ -119,9 +114,9 @@ void ps_print::file_head()
     }
     else /* no rotate, many pages */
 	ps_header.PutString("%%BoundingBox:  50 65 555 740\n");
-    ps_header.PutString("%%Creator: (tab, version ");
+    ps_header.PutString("%%Creator: tab, version ");
     ps_header.PutString(VERSION);
-    ps_header.PutString(", by Wayne Cripps)\n");
+    ps_header.PutString(", by Wayne Cripps\n");
     ps_header.PutString("%%Creation Date: ");
     t = time(0);
     ps_header.PutString( ctime(&t));
@@ -135,9 +130,9 @@ void ps_print::file_head()
     ps_header.PutString("\n");
     ps_header.PutString("%%PageOrder: Ascend\n");
 #ifndef MAC
-    ps_header.PutString("%%Title: (");
+    ps_header.PutString("%%Title: ");
     ps_header.PutString(f_i->file);
-    ps_header.PutString(")\n");
+    ps_header.PutString("\n");
 #endif
     ps_header.PutString("%%EndComments\n");
 
@@ -157,8 +152,6 @@ void ps_print::file_head()
 	ps_header.PutString("%%Feature: *Resolution 600\n");
     else if (f_i->m_flags & DPI1200) 
 	ps_header.PutString("%%Feature: *Resolution 1200\n");
-    else if (f_i->m_flags & DPI2400) 
-	ps_header.PutString("%%Feature: *Resolution 2400\n");
     else ps_header.PutString("%%Feature: *Resolution 300\n");
 
 #ifdef MAC
@@ -219,16 +212,12 @@ void ps_print::file_head()
     
     if (f_i->m_flags & DPI1200)
 	strcat (pk_name, ".1200pk");
-    else if (f_i->m_flags & DPI2400)
-	strcat (pk_name, ".2400pk");
     else if (f_i->flags & DPI600)
 	strcat (pk_name, ".600pk");
     else
 	strcat (pk_name, ".300pk");
 
     file_in pk_in(pk_name, "rb");
-
-    //    printf("ps_print: pk font is %s\n", pk_name);
 
     read_pk_file(&pk_in, this);
 
@@ -258,10 +247,9 @@ void ps_print::define_all_fonts()
 
 void ps_print::page_head()
 {
-  // parens around name string for Rainer Jan 2002 wbc
-    pr_out->PutString("%%Page: (");
+    pr_out->PutString("%%Page: ");
     pr_out->PutString(f_i->file);
-    pr_out->PutString(") ");
+    pr_out->PutString(" ");
     pr_out->Put10( npages + 1 );
     pr_out->PutString("\n");
 
@@ -325,8 +313,7 @@ void ps_print::make_ps_font(i_buf *ps_header)
     extern PKBit bits[];
 
     if (f_i->flags & DPI600) dvi_to_dots /= 2.0;
-    else if (f_i->m_flags & DPI1200) dvi_to_dots /= 4.0;             //adS
-    else if (f_i->m_flags & DPI2400) dvi_to_dots /= 8.0;         
+    if (f_i->m_flags & DPI1200) dvi_to_dots /= 4.0;             //adS
 
     ps_header->PutString("10 dict begin\n");
     ps_header->PutString("/FontType 3 def\n");
@@ -347,7 +334,7 @@ void ps_print::make_ps_font(i_buf *ps_header)
     ps_header->Put10(MYCHARS);
     ps_header->PutString("{Encoding exch /.notdef put} for\n");
     for (i=0; i < 256; i++) {
-	if (bits[i].bm_w && print_used[i]) {
+	if (bits[i].bm_w && ps_used[i]) {
 	    ps_header->PutString("En ");
 	    ps_header->Put10(i);
 	    ps_header->PutString("/b_");
@@ -361,7 +348,7 @@ void ps_print::make_ps_font(i_buf *ps_header)
     ps_header->PutString("CharProcs begin\n");
     ps_header->PutString(" /.notdef { 1 1 add pop } bind def\n");
     for (i=0; i < 256; i++) {
-	if (bits[i].bm_w && print_used[i]) {
+	if (bits[i].bm_w && ps_used[i]) {
 //	    printf ( "b_%d", i);
 	    bit_char(ps_header, i);
 	} 
@@ -373,7 +360,7 @@ void ps_print::make_ps_font(i_buf *ps_header)
     ps_header->PutString("/.notdef [ 0 0 0 0 ] def\n");
     for (i=0; i < 256; i++) {
 	b = &bits[i];
-	if (b->bm_w && print_used[i]) {	/* assume null chars have 0 width */
+	if (b->bm_w && ps_used[i]) {	/* assume null chars have 0 width */
 	    ps_header->PutString("/b_");
 	    ps_header->Put10(i);
 	    ps_header->PutString("[ ");
@@ -440,62 +427,19 @@ void ps_print::make_ps_font(i_buf *ps_header)
     ps_header->PutString("x2 y4 x1 y5 x0 y0 curveto\n");
     ps_header->PutString("fill  grestore } def\n");
 
-/* do a reversed slur, given horizontal length */
+/* do a reversed slur, given length */
     ps_header->PutString("/dorslur { /delta exch def\n");
     ps_header->PutString("gsave 1 setlinecap 0.7 setlinewidth\n");
-    /* height is the height of the slur, delta is the hor distance point to point*/
     ps_header->PutString("/delta delta 3 div def /height -5 def\n");
     ps_header->PutString("currentpoint 2 copy 2 copy 2 copy\n");
     ps_header->PutString("/y0 exch def /x0 exch def\n");
-    ps_header->PutString("/y1 exch def /x1 exch def ");
-    ps_header->PutString("/y2 exch def /x2 exch def\n");
-    ps_header->PutString("/y3 exch def /x3 exch def ");
-    ps_header->PutString("/x1 x1 delta add def\n");
+    ps_header->PutString("/y1 exch def /x1 exch def /y2 exch def /x2 exch def\n");
+    ps_header->PutString("/y3 exch def /x3 exch def /x1 x1 delta add def\n");
     ps_header->PutString("/y1 y1 height add def /x2 x2 delta 2 mul add def\n");
     ps_header->PutString("/y2 y1 def /x3 x3 delta 3 mul add def\n");
     ps_header->PutString("/y4 y2 1.8 sub def ");
     ps_header->PutString("/y5 y1 1.8 sub def ");
     ps_header->PutString("x1 y1 x2 y2 x3 y3 curveto ");
-    ps_header->PutString("x2 y4 x1 y5 x0 y0 curveto\n");
-    ps_header->PutString("fill grestore } def\n");
-
-/* do a wavy slur, given horizontal length */
-    ps_header->PutString("/dowslur { /delta exch def\n");
-    ps_header->PutString("gsave 1 setlinecap 0.7 setlinewidth\n");
-    /* height is the height of the slur, delta is the hor distance point to point*/
-    ps_header->PutString("/delta delta 6 div def /height 3.7 def\n");
-    ps_header->PutString("currentpoint 2 copy 2 copy 2 copy 2 copy 2 copy 2 copy \n");
-    ps_header->PutString(" 2 copy 2 copy 2 copy 2 copy \n");
-    ps_header->PutString("/y0 exch def /x0 exch def\n");
-    ps_header->PutString("/y1 exch def /x1 exch def ");
-    ps_header->PutString("/y2 exch def /x2 exch def\n");
-    ps_header->PutString("/y3 exch def /x3 exch def ");
-    ps_header->PutString("/y5 exch def /x5 exch def\n");
-    ps_header->PutString("/y6 exch def /x6 exch def ");
-    ps_header->PutString("/y7 exch def /x7 exch def\n");
-    ps_header->PutString("/y8 exch def /x8 exch def ");
-    ps_header->PutString("/y9 exch def /x9 exch def\n");
-    ps_header->PutString("/y10 exch def /x10 exch def ");
-    ps_header->PutString("/y11 exch def /x11 exch def\n");
-    ps_header->PutString("/y0 y0 height sub def\n");
-    ps_header->PutString("/y8 y8 height .6  mul add def\n");
-    ps_header->PutString("/x1 x1 delta add def\n");
-    ps_header->PutString("/y1 y1 height add def /x2 x2 delta 2 mul add def\n");
-    ps_header->PutString("/y2 y1 def /x3 x3 delta 3 mul add def\n");
-    ps_header->PutString("/y4 y2 1.8 sub def ");
-    ps_header->PutString("/y5 y1 1.8 sub def ");
-    ps_header->PutString("/y6 y6 height sub def /x6 x6 delta 4 mul add def\n");
-    ps_header->PutString("/y7 y7 height sub def /x7 x7 delta 5 mul add def\n");
-    ps_header->PutString("/y9 y7 1.8 sub def ");
-    ps_header->PutString("/y10 y6 1.8 sub def ");
-    ps_header->PutString("/x9 x7 def /x10 x6 def /x11 x3 def \n");
-    ps_header->PutString("/x8 x8 delta 6 mul add def\n");
-    ps_header->PutString("/y3  y3  .2 sub def\n ");
-    ps_header->PutString("/y11 y11 .2 add def\n ");
-    ps_header->PutString("x0 y0 moveto ");
-    ps_header->PutString("x1 y1 x2 y2 x3 y3 curveto \n");
-    ps_header->PutString("x6 y6 x7 y7 x8 y8 curveto \n");
-    ps_header->PutString("x9 y9 x10 y10 x11 y11 curveto \n");
     ps_header->PutString("x2 y4 x1 y5 x0 y0 curveto\n");
     ps_header->PutString("fill grestore } def\n");
 
@@ -580,14 +524,11 @@ void ps_print::put_a_char (unsigned char c)
 	    ps_command(PCHAR, (int)'(', 0, 0, 0);
 	    moveh (.08);
 	}
-	else if (highlight_type == Red) {
-	  ps_command(P_S_RED, 0, 0, 0, 0);
-	}
 	else
-	  ps_command(P_S_GRAY, 0, 0, 0, 0);
+	    ps_command(P_S_GRAY, 0, 0, 0, 0);
     }
-    if (curfont == 0 && print_used[c] < 4) 
-	print_used[c]++;
+    if (curfont == 0 && ps_used[c] < 4) 
+	ps_used[c]++;
     ps_command(PCHAR, (int)c, 0, 0,0);
     if (highlight==On) { 
 	clear_highlight();  
@@ -595,13 +536,11 @@ void ps_print::put_a_char (unsigned char c)
 	  double www=f_a[curfont]->fnt->get_width(c);
 	    moveh (www);
 	    ps_command(PCHAR, (int)')', 0, 0, 0);
-	    print_used['(']++;	print_used[')']++;
+	    ps_used['(']++;	ps_used[')']++;
 	    moveh (-www);
 	}
-	else if (highlight_type == Red)
-	  ps_command(P_U_RED, 0, 0, 0, 0);
 	else
-	  ps_command(P_U_GRAY, 0, 0, 0, 0);
+	    ps_command(P_U_GRAY, 0, 0, 0, 0);
     }
 }
 void ps_print::set_a_char (unsigned char c) 
@@ -642,8 +581,8 @@ void ps_print::set_a_char (unsigned char c)
 	else if ( c == 0076) c = 0277; // ? inverted
     }
 
-    if (curfont == 0 && print_used[c] < 4) 
-      print_used[c]++;
+    if (curfont == 0 && ps_used[c] < 4) 
+      ps_used[c]++;
     ps_command(CHAR, (int)c, 0, 0,0);
     if (highlight==On) { 
 	clear_highlight();  
@@ -654,7 +593,7 @@ void ps_print::use_font(int fontnum)
 { 
     curfont = fontnum;
     switch (fontnum) {
-    case 7:			/* page number font doesn't shrink 12 pt */
+    case 7:			/* page nnumber font doesn't shrink 12 pt */
 	ps_command( NUMFONT, 0, 0, 0, 0);
 	break;
     case 6:			/* font 6 18 pt text */
@@ -679,7 +618,7 @@ void ps_print::use_font(int fontnum)
 	ps_command( LUTE, 0, 0, 0, 0);
 	break;
     default:
-	dbg1(Warning, "tab: ps_setfont: undefined font number %d, using 2\n", (void *)fontnum);
+	dbg0(Warning, "tab: ps_setfont: undefined font number, using 2\n");
 	ps_command( ROMAN, 0, 0, 0, 0);
 	break;
     }
@@ -705,7 +644,7 @@ void ps_print::do_rtie(int bloc, int eloc)
 { 
     ps_command ( PTIE, (save_h[eloc] - save_h[bloc]), 0, 0, 0);
 }
-void ps_print::print_clipped(char c, int font/* acutally height */)
+void ps_print::ps_clipped(char c, int font/* acutally height */)
 { 
     ps_command ( PS_CLIP, c, font, dvi_h, dvi_v);
      dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width(c));
@@ -732,19 +671,7 @@ void ps_print::put_slash
 void ps_print::put_uline(int bloc, int eloc)
 { 
     saveloc(REGS-1);
-    ps_command ( PRTIE, save_h[eloc] - save_h[bloc], 0, 0, 0); // was PTIE2
-    getloc(REGS-1);
-}
-void ps_print::put_r_uline(int bloc, int eloc)
-{ 
-    saveloc(REGS-1);
-    ps_command ( PTIE, save_h[eloc] - save_h[bloc], 0, 0, 0); // was PTIE2
-    getloc(REGS-1);
-}
-void ps_print::put_w_uline(int bloc, int eloc)
-{ 
-    saveloc(REGS-1);
-    ps_command ( PWTIE, save_h[eloc] - save_h[bloc], 0, 0, 0); // was PTIE2
+    ps_command ( PTIE2, save_h[eloc] - save_h[bloc], 0, 0, 0);
     getloc(REGS-1);
 }
 void ps_print::put_thick_slant(int bloc, int eloc) 
@@ -820,11 +747,11 @@ void ps_print::p_num(int n)
     pop();
 }
 
-void ps_print::print_draft() 
+void ps_print::ps_draft() 
 { 
     ps_command(PDRAFT, 0, 0, 0, 0);
 }
-void ps_print::print_copyright() 
+void ps_print::ps_copyright() 
 { 
     ps_command(PCOPYRIGHT, 0, 0, 0, 0);
 }
@@ -867,373 +794,360 @@ static int last_font=OTHER;
 
 void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
 {
-  static int h, v, hh, vv;
-  static int dvi_oh, dvi_ov;
+    static int h, v, hh, vv;
+    static int dvi_oh, dvi_ov;
 
-  static int ooh, oov, oohh, oovv; // two previous
-  static int dvi_ooh, dvi_oov;
+    static int ooh, oov, oohh, oovv; // two previous
+    static int dvi_ooh, dvi_oov;
 
-  /*    extern double ps_size[]; */
-  time_t timeval;
-  int places=4;			// digits of floating pt numbers
-  double currentgray =0.0;
+    /*    extern double ps_size[]; */
+    time_t timeval;
+    int places=4;			// digits of floating pt numbers
 
-  //    printf("ps_command com %d h %03.2f v %03.2f\n", 
-  //	   com, d_to_p (h_n), d_to_p(v_n));
+//    printf("ps_command com %d h %03.2f v %03.2f\n", 
+//	   com, d_to_p (h_n), d_to_p(v_n));
 
-  //    if (com == MOVE) printf("com - move h_n %d %f\n", h_n, d_to_p(h_n));
-  //#define OPTI
+//    if (com == MOVE) printf("com - move h_n %d %f\n", h_n, d_to_p(h_n));
+    //#define OPTI
 #ifdef OPTI    
-  last_last_com = last_com;
-  last_com = com;
-  h = h_n; v = v_n; 
-  hh = hh_n; vv = vv_n;
-  dvi_oh = dvi_h; dvi_ov = dvi_v;
+    last_last_com = last_com;
+    last_com = com;
+    h = h_n; v = v_n; 
+    hh = hh_n; vv = vv_n;
+    dvi_oh = dvi_h; dvi_ov = dvi_v;
 #endif /* OPTI */
 
 #ifndef OPTI
 
-  if (com == last_com) {
-    switch (com) {
-    case MOVEH:
-      h += h_n;
-      return;
-    case MOVEV:
-      v += v_n;
-      return;
-    case MOVEVH:
-      h += h_n;
-      v += v_n;
-      return;
+    if (com == last_com) {
+	switch (com) {
+	  case MOVEH:
+	    h += h_n;
+	    return;
+	  case MOVEV:
+	    v += v_n;
+	    return;
+	  case MOVEVH:
+	    h += h_n;
+	    v += v_n;
+	    return;
+	}
     }
-  }
 
-  if (com == LUTE && last_font == LUTE) {
-    switch (last_com) {
-    case ROMAN:
-    case BIGIT:
-    case SMALL:
-    case MED:
-    case ITAL:
-      break;
-    default:
-      return;
+    if (com == LUTE && last_font == LUTE) {
+	switch (last_com) {
+	  case ROMAN:
+	  case BIGIT:
+	  case SMALL:
+	  case MED:
+	  case ITAL:
+	    break;
+	  default:
+	    return;
+	}
     }
-  }
  
-  //    if (com == PPOP && last_com == PPUSH ) {
-  //	last_com = last_last_com;
-  //	return;
-  //    }
+    //    if (com == PPOP && last_com == PPUSH ) {
+//	last_com = last_last_com;
+//	return;
+//    }
 
-  if (com == MOVEH && 
-      (last_com == MOVEV || last_com == MOVEVH)) {
-    last_com = MOVEVH;
-    h += h_n;
-    return;
-  }    
-  if (com == MOVEV && 
-      (last_com == MOVEH || last_com == MOVEVH)) {
-    last_com = MOVEVH;
-    v += v_n;
-    return;
-  }
-  if (last_com == MOVE && com == MOVE) {
-    v = v_n;
-    h = h_n;
-    return;
-  }
-  if (last_com == MOVE &&
-      com == MOVEV ) {
-    v += v_n;
-    return;
-  }
-  if (last_com == MOVE &&
-      com == MOVEH ) {
-    h += h_n;
-    return;
-  }
-  if (last_com == MOVE &&
-      com == MOVEVH ) {
-    h += h_n;
-    v += v_n;
-    return;
-  }
+    if (com == MOVEH && 
+	(last_com == MOVEV || last_com == MOVEVH)) {
+	last_com = MOVEVH;
+	h += h_n;
+	return;
+    }    
+    if (com == MOVEV && 
+	(last_com == MOVEH || last_com == MOVEVH)) {
+	last_com = MOVEVH;
+	v += v_n;
+	return;
+    }
+    if (last_com == MOVE && com == MOVE) {
+	v = v_n;
+	h = h_n;
+	return;
+    }
+    if (last_com == MOVE &&
+	com == MOVEV ) {
+	v += v_n;
+	return;
+    }
+    if (last_com == MOVE &&
+	com == MOVEH ) {
+	h += h_n;
+	return;
+    }
+    if (last_com == MOVE &&
+	com == MOVEVH ) {
+	h += h_n;
+	v += v_n;
+	return;
+    }
 #endif /* OPTI */
 
-  switch (last_com) {
-  case MOVE:
-    pr_out->PutF(d_to_p(h), places);
-    pr_out->PutF(d_to_p(-v), places);
-    pr_out->PutString(" MT\n");
-    break;
-  case RULE:		// now takes x, y
-    pr_out->PutF(d_to_p(h), places);
-    pr_out->PutF(d_to_p(v), places); //negate the v ???
-    pr_out->PutString(" Rule\n"); // v, h
-    break;
-  case MOVEH:
-    pr_out->PutF(d_to_p(h), places);
-    pr_out->PutString(" 0 RM\n");
-    break;
-  case MOVEV:
-    pr_out->PutString("0 ");
-    pr_out->PutF(d_to_p(-v), places);
-    pr_out->PutString(" RM\n");
-    break;
-  case MOVEVH:
-    pr_out->PutF(d_to_p(h), places);
-    pr_out->PutF(d_to_p(-v), places);
-    pr_out->PutString(" RM\n");
-    break;
+    switch (last_com) {
+      case MOVE:
+	pr_out->PutF(d_to_p(h), places);
+	pr_out->PutF(d_to_p(-v), places);
+	pr_out->PutString(" MT\n");
+	break;
+      case RULE:		// now takes x, y
+	pr_out->PutF(d_to_p(h), places);
+	pr_out->PutF(d_to_p(v), places); //negate the v ???
+	pr_out->PutString(" Rule%%reg\n"); // v, h
+	break;
+      case MOVEH:
+	pr_out->PutF(d_to_p(h), places);
+	pr_out->PutString(" 0 RM%%MoveH\n");
+	break;
+      case MOVEV:
+	pr_out->PutString("0 ");
+	pr_out->PutF(d_to_p(-v), places);
+	pr_out->PutString(" RM%%MoveV\n");
+	break;
+      case MOVEVH:
+	pr_out->PutF(d_to_p(h), places);
+	pr_out->PutF(d_to_p(-v), places);
+	pr_out->PutString(" RM%%MoveVH\n");
+	break;
 
-  case LINE:
-    pr_out->PutString("0.2 setlinewidth ");
-    pr_out->PutF(d_to_p(h), places);
-    pr_out->PutF(d_to_p(v), places);
-    pr_out->PutString("MT ");
-    pr_out->PutF(d_to_p(hh), places);
-    pr_out->PutF(d_to_p(vv), places);
-    pr_out->PutString("lineto stroke\n");
-    break;
-  case TH_LINE:
-    pr_out->PutF(d_to_p(h), places);
-    pr_out->PutF(d_to_p(v), places);
-    pr_out->PutString(" 1.1 sub moveto 0.0 2.2\n");
-    pr_out->PutString("rlineto ");
-    pr_out->PutF(d_to_p(hh), places);
-    pr_out->PutF(d_to_p(vv), places);
-    pr_out->PutString("1.1 add lineto 0.0 -2.2 rlineto closepath fill\n");
-    break;
-  case MED_LINE:
-    pr_out->PutF(d_to_p(h), places);
-    pr_out->PutF(d_to_p(v), places);
-    pr_out->PutString(" 0.3 sub moveto 0.0 .6\n");
-    pr_out->PutString("rlineto ");
-    pr_out->PutF(d_to_p(hh), places);
-    pr_out->PutF(d_to_p(vv), places);
-    pr_out->PutString("0.3 add lineto 0.0 -.6 rlineto closepath fill\n");
-    break;
+      case LINE:
+	pr_out->PutString("0.2 setlinewidth ");
+	pr_out->PutF(d_to_p(h), places);
+	pr_out->PutF(d_to_p(v), places);
+	pr_out->PutString("MT ");
+	pr_out->PutF(d_to_p(hh), places);
+	pr_out->PutF(d_to_p(vv), places);
+	pr_out->PutString("lineto stroke\n");
+	break;
+      case TH_LINE:
+	pr_out->PutF(d_to_p(h), places);
+	pr_out->PutF(d_to_p(v), places);
+	pr_out->PutString(" 1.1 sub moveto 0.0 2.2\n");
+	pr_out->PutString("rlineto ");
+	pr_out->PutF(d_to_p(hh), places);
+	pr_out->PutF(d_to_p(vv), places);
+	pr_out->PutString("1.1 add lineto 0.0 -2.2 rlineto closepath fill\n");
+	break;
+      case MED_LINE:
+	pr_out->PutF(d_to_p(h), places);
+	pr_out->PutF(d_to_p(v), places);
+	pr_out->PutString(" 0.3 sub moveto 0.0 .6\n");
+	pr_out->PutString("rlineto ");
+	pr_out->PutF(d_to_p(hh), places);
+	pr_out->PutF(d_to_p(vv), places);
+	pr_out->PutString("0.3 add lineto 0.0 -.6 rlineto closepath fill\n");
+	break;
 
-  case CHAR:
-  case PCHAR:
-    if ( h == 050 || h == 051 || h == '\\') {
-      pr_out->PutString("(\\");
-      pr_out->PutChar(h);
-      pr_out->PutString(")");
+      case CHAR:
+      case PCHAR:
+	if ( h == 050 || h == 051 || h == '\\') {
+	    pr_out->PutString("(\\");
+	    pr_out->PutChar(h);
+	    pr_out->PutString(")");
+	}
+	else if (my_isprint(h)) {
+	    pr_out->PutString("(");
+	    pr_out->PutChar(h);
+	    pr_out->PutString(")");
+	}
+	else {
+	    pr_out->PutString("<");
+	    pr_out->Put16(h);
+	    pr_out->PutString(">");
+	}
+	if ( last_com == CHAR) pr_out->PutString("S\n");
+	else pr_out->PutString("X\n");
+	break;
+      case LUTE:
+	if ( last_font != LUTE ) {
+	   pr_out->PutString("/LuteFont FF setfont\n"); 
+	   last_font = LUTE;
+	}
+	break;
+      case SMALL:		/* words to songs, font 1 */
+       	if (f_a[1]->real_name)
+	  pr_out->PutString(f_a[1]->real_name);
+	else {
+       	  pr_out->PutString("/NewCenturySchlbk-Roman");
+	  //pr_out->PutString("/NewCenturySchlbk-Italic");
+	}
+	pr_out->PutString(" FF ");
+	pr_out->PutF(font_sizes[1] * red, places);
+	pr_out->PutString(" SF\n");
+	last_font = SMALL;
+	break;
+      case ROMAN:		/* title, roman, font 2 */
+	if (f_a[2]->real_name)
+	  pr_out->PutString(f_a[2]->real_name);
+	else
+	  pr_out->PutString("/NewCenturySchlbk-Roman");
+	pr_out->PutString(" FF ");
+	pr_out->PutF(font_sizes[2] * red, places);
+	pr_out->PutString("SF\n");
+	last_font = ROMAN;
+	break;
+      case BIGIT:			/* title italic, font 3 */
+	if (f_a[3]->real_name)
+	  pr_out->PutString(f_a[3]->real_name);
+	else
+	  pr_out->PutString("/NewCenturySchlbk-Bold");
+	pr_out->PutString(" FF ");
+	pr_out->PutF(font_sizes[3] * red, places);
+	pr_out->PutString("SF\n");
+	last_font = BIGIT;
+	break;
+      case MED:			/* big time sigs, font 4 */
+	pr_out->PutString("/NewCenturySchlbk-Roman");
+	pr_out->PutString(" FF ");
+	pr_out->PutF(font_sizes[4] * red, places);
+	pr_out->PutString("SF\n");
+	last_font = MED;
+	break;
+      case ITAL:		/* text, italic, font 5 */
+	if (f_a[5]->real_name)
+	  pr_out->PutString(f_a[5]->real_name);
+	else
+	  pr_out->PutString("/NewCenturySchlbk-Italic");
+	pr_out->PutString(" FF ");
+	pr_out->PutF(font_sizes[5] * red, places);
+	pr_out->PutString("SF\n");
+	last_font = ITAL;
+	break;
+      case NUMFONT:		/* font for page numbers */
+	pr_out->PutString("/NewCenturySchlbk-Roman");
+	pr_out->PutString(" FF ");
+	pr_out->PutF(12.0, places);
+	pr_out->PutString("SF\n");
+	last_font = NUMFONT;
+	break;
+      case MUSICS:                /* time signature in music */
+        pr_out->PutString("/NewCenturySchlbk-Roman");
+	pr_out->PutString(" FF ");
+	pr_out->PutF(font_sizes[6] * red, places);
+	pr_out->PutString("SF\n");
+	last_font = MUSICS;
+	break;
+      case PS_CLIP:
+	pr_out->PutString("gsave\n");
+	pr_out->PutString("currentpoint  /yval exch def /xval exch def pstack\n");
+//	printf("ps clip printing %c\n", h);
+	pr_out->PutString("(");
+//	pr_out->Put10(h);
+	pr_out->PutString((char*)&h);
+	pr_out->PutString(") false charpath clip\n"); 
+//#ifdef OLD_PRINTER
+//	pr_out->PutString("newpath\n");
+//	pr_out->PutString("xval %.2f moveto ", d_to_p(vv));      /* x, y */
+//	pr_out->PutString("(%c) stringwidth pop 0 rlineto 0 %f rlineto\n",
+//		 h, d_to_p(v)); /* was .73 but the dvi file changed */
+//	pr_out->PutString("(%c) stringwidth pop neg 0 rlineto\n", h);
+//	pr_out->PutString("closepath fill\n");
+//#else /* OLD_PRINTER */
+	pr_out->PutString("xval ");
+	pr_out->PutF(d_to_p(vv), places);      /* x, y */
+	pr_out->PutString("(");
+	pr_out->PutChar(h);
+	pr_out->PutString(") stringwidth pop ");
+	pr_out->PutF(d_to_p(v), places);
+	pr_out->PutString(" rectfill\n"); 
+//#endif /* OLD_PRINTER */
+	pr_out->PutString("grestore\n");
+	pr_out->PutString(" (");
+	pr_out->PutChar(h);
+	pr_out->PutString(") stringwidth pop 0 rmoveto\n");
+	break;
+      case PTIE:
+      case PHTIE:
+	pr_out->PutF(d_to_p(h), places);
+	pr_out->PutString("doslur\n");
+	break;
+      case PRTIE:
+	pr_out->PutF(d_to_p(h), places);
+	pr_out->PutString("dorslur\n");
+	break;
+      case PHRTIE:
+	pr_out->PutF(d_to_p(h), places);
+	pr_out->PutString("dorhslur\n");
+	break;
+      case PTIE2:
+	pr_out->PutString("-6.0 ");
+	pr_out->PutF(d_to_p(h), places);
+	pr_out->PutString("dotie\n");
+	break;
+    case PDRAFT :
+	pr_out->PutString("gsave\n");
+	pr_out->PutString("/Times-Roman findfont dup 150 scalefont setfont\n");
+ 	pr_out->PutString("0.60 setgray \n"); 
+	pr_out->PutString("25 650 moveto \n");
+	pr_out->PutString("[.7 -.7 .7 .7 0 0] concat\n");
+	pr_out->PutString("(DRAFT) show\n");
+	timeval = time((time_t *)0);
+	pr_out->PutString("25 scalefont setfont -330 425 moveto (");
+	pr_out->PutString(ctime(&timeval));
+	 pr_out->PutString(") show\n");
+	pr_out->PutString("grestore \n");
+	break;
+    case PVCURVE:
+	pr_out->PutF(d_to_p(h), places);
+	pr_out->PutString("dovslur\n");
+	break;
+    case PCOPYRIGHT:
+	pr_out->PutString("gsave\n");
+ 	pr_out->PutString("/Times-Roman findfont \n");
+	pr_out->PutString("dup length dict begin\n");
+	pr_out->PutString("  {1 index /FID ne {def} {pop pop}");
+	pr_out->PutString("ifelse} forall\n");
+	pr_out->PutString("  /Encoding ISOLatin1Encoding def\n");
+	pr_out->PutString("currentdict end\n");
+	pr_out->PutString("/Times-Roman-ISO exch definefont pop\n");
+	pr_out->PutString("/Times-Roman-ISO findfont\n");
+	pr_out->PutString("12 scalefont setfont\n");
+	pr_out->PutString("0 -520 rmoveto\n");
+	pr_out->PutString("( \251 ) show\n");
+	pr_out->PutString("(Copyright Karen Meyers, 1997)show\n");
+	pr_out->PutString("grestore \n");
+      case P_S_GRAY:
+	pr_out->PutString("0.4 setgray\n");
+	break;
+      case P_U_GRAY:
+	pr_out->PutString("0.0 setgray\n");
+	break;
+      case PPUSH:
+//	pr_out->PutString("gsave\n");
+	pr_out->PutString("currentpoint\n");
+	break;
+      case PPOP:
+//	pr_out->PutString("grestore\n");
+	pr_out->PutString("moveto\n");
+	break;
+      case RAW:
+	pr_out->PutString((char *)&h);
+	break;
+      case OTHER:
+	break;
+      default:
+	dbg1(Warning, "tab: ps_command: unknown command %d\n", (void *)last_com);
+	break;
     }
-    else if (my_isprint(h)) {
-      pr_out->PutString("(");
-      pr_out->PutChar(h);
-      pr_out->PutString(")");
-    }
-    else {
-      pr_out->PutString("<");
-      pr_out->Put16(h);
-      pr_out->PutString(">");
-    }
-    if ( last_com == CHAR) pr_out->PutString("S\n");
-    else pr_out->PutString("X\n");
-    break;
-  case LUTE:
-    if ( last_font != LUTE ) {
-      pr_out->PutString("/LuteFont FF setfont\n"); 
-      last_font = LUTE;
-    }
-    break;
-  case SMALL:		/* words to songs, font 1 */
-    if (f_a[1]->real_name)
-      pr_out->PutString(f_a[1]->real_name);
-    else {
-      pr_out->PutString("/NewCenturySchlbk-Roman");
-      //pr_out->PutString("/NewCenturySchlbk-Italic");
-    }
-    pr_out->PutString(" FF ");
-    pr_out->PutF(font_sizes[1] * red, places);
-    pr_out->PutString(" SF\n");
-    last_font = SMALL;
-    break;
-  case ROMAN:		/* title, roman, font 2 */
-    if (f_a[2]->real_name)
-      pr_out->PutString(f_a[2]->real_name);
-    else
-      pr_out->PutString("/NewCenturySchlbk-Roman");
-    pr_out->PutString(" FF ");
-    pr_out->PutF(font_sizes[2] * red, places);
-    pr_out->PutString("SF\n");
-    last_font = ROMAN;
-    break;
-  case BIGIT:			/* title italic, font 3 */
-    if (f_a[3]->real_name)
-      pr_out->PutString(f_a[3]->real_name);
-    else
-      pr_out->PutString("/NewCenturySchlbk-Bold");
-    pr_out->PutString(" FF ");
-    pr_out->PutF(font_sizes[3] * red, places);
-    pr_out->PutString("SF\n");
-    last_font = BIGIT;
-    break;
-  case MED:			/* big time sigs, font 4 */
-    pr_out->PutString("/NewCenturySchlbk-Roman");
-    pr_out->PutString(" FF ");
-    pr_out->PutF(font_sizes[4] * red, places);
-    pr_out->PutString("SF\n");
-    last_font = MED;
-    break;
-  case ITAL:		/* text, italic, font 5 */
-    if (f_a[5]->real_name)
-      pr_out->PutString(f_a[5]->real_name);
-    else
-      pr_out->PutString("/NewCenturySchlbk-Italic");
-    pr_out->PutString(" FF ");
-    pr_out->PutF(font_sizes[5] * red, places);
-    pr_out->PutString("SF\n");
-    last_font = ITAL;
-    break;
-  case NUMFONT:		/* font for page numbers */
-    pr_out->PutString("/NewCenturySchlbk-Roman");
-    pr_out->PutString(" FF ");
-    pr_out->PutF(12.0, places);
-    pr_out->PutString("SF\n");
-    last_font = NUMFONT;
-    break;
-  case MUSICS:                /* time signature in music */
-    pr_out->PutString("/NewCenturySchlbk-Roman");
-    pr_out->PutString(" FF ");
-    pr_out->PutF(font_sizes[6] * red, places);
-    pr_out->PutString("SF\n");
-    last_font = MUSICS;
-    break;
-  case PS_CLIP:
-    pr_out->PutString("gsave\n");
-    pr_out->PutString("currentpoint  /yval exch def /xval exch def pstack\n");
-    //	printf("ps clip printing %c\n", h);
-    pr_out->PutString("(");
-    //	pr_out->Put10(h);
-    pr_out->PutString((char*)&h);
-    pr_out->PutString(") false charpath clip\n"); 
-    //#ifdef OLD_PRINTER
-    //	pr_out->PutString("newpath\n");
-    //	pr_out->PutString("xval %.2f moveto ", d_to_p(vv));      /* x, y */
-    //	pr_out->PutString("(%c) stringwidth pop 0 rlineto 0 %f rlineto\n",
-    //		 h, d_to_p(v)); /* was .73 but the dvi file changed */
-    //	pr_out->PutString("(%c) stringwidth pop neg 0 rlineto\n", h);
-    //	pr_out->PutString("closepath fill\n");
-    //#else /* OLD_PRINTER */
-    pr_out->PutString("xval ");
-    pr_out->PutF(d_to_p(vv), places);      /* x, y */
-    pr_out->PutString("(");
-    pr_out->PutChar(h);
-    pr_out->PutString(") stringwidth pop ");
-    pr_out->PutF(d_to_p(v), places);
-    pr_out->PutString(" rectfill\n"); 
-    //#endif /* OLD_PRINTER */
-    pr_out->PutString("grestore\n");
-    pr_out->PutString(" (");
-    pr_out->PutChar(h);
-    pr_out->PutString(") stringwidth pop 0 rmoveto\n");
-    break;
-  case PTIE:
-  case PHTIE:
-    pr_out->PutF(d_to_p(h), places);
-    pr_out->PutString("doslur\n");
-    break;
-  case PRTIE:
-    pr_out->PutF(d_to_p(h), places);
-    pr_out->PutString("dorslur\n");
-    break;
-  case PHRTIE:
-    pr_out->PutF(d_to_p(h), places);
-    pr_out->PutString("dorhslur\n");
-    break;
-  case PTIE2:
-    pr_out->PutString("-6.0 ");
-    pr_out->PutF(d_to_p(h), places);
-    pr_out->PutString("dotie\n");
-    break;
-  case PWTIE:
-    pr_out->PutF(d_to_p(h), places);
-    pr_out->PutString("dowslur\n");
-    break;
-  case PDRAFT :
-    pr_out->PutString("gsave\n");
-    pr_out->PutString("/Times-Roman findfont dup 150 scalefont setfont\n");
-    pr_out->PutString("0.70 setgray \n"); 
-    pr_out->PutString("25 650 moveto \n");
-    pr_out->PutString("[.7 -.7 .7 .7 0 0] concat\n");
-    pr_out->PutString("(DRAFT) show\n");
-    timeval = time((time_t *)0);
-    pr_out->PutString("25 scalefont setfont -330 425 moveto (");
-    pr_out->PutString(ctime(&timeval));
-    pr_out->PutString(") show\n");
-    pr_out->PutString("grestore \n");
-    break;
-  case PVCURVE:
-    pr_out->PutF(d_to_p(h), places);
-    pr_out->PutString("dovslur\n");
-    break;
-  case PCOPYRIGHT:
-    pr_out->PutString("gsave\n");
-    pr_out->PutString("/Times-Roman findfont \n");
-    pr_out->PutString("dup length dict begin\n");
-    pr_out->PutString("  {1 index /FID ne {def} {pop pop}");
-    pr_out->PutString("ifelse} forall\n");
-    pr_out->PutString("  /Encoding ISOLatin1Encoding def\n");
-    pr_out->PutString("currentdict end\n");
-    pr_out->PutString("/Times-Roman-ISO exch definefont pop\n");
-    pr_out->PutString("/Times-Roman-ISO findfont\n");
-    pr_out->PutString("12 scalefont setfont\n");
-    pr_out->PutString("0 -520 rmoveto\n");
-    pr_out->PutString("( \251 ) show\n");
-    pr_out->PutString("(Copyright Karen Meyers, 1997)show\n");
-    pr_out->PutString("grestore \n");
-  case P_S_GRAY:
-    pr_out->PutString("/mygray currentgray def\n");
-    pr_out->PutString("0.5 setgray\n");
-    break;
-  case P_U_GRAY:
-    pr_out->PutString("mygray setgray\n");
-    break;
-  case P_S_RED:
-    pr_out->PutString("/mygray currentgray def\n");
-    pr_out->PutString("0.0 1.0 1.0 0.0  setcmykcolor\n");
-    break;
-  case P_U_RED:
-    pr_out->PutString("0.0 0.0 0.0 1.0  setcmykcolor\n");
-    break;      
-  case PPUSH:
-    //	pr_out->PutString("gsave\n");
-    pr_out->PutString("currentpoint\n");
-    break;
-  case PPOP:
-    //	pr_out->PutString("grestore\n");
-    pr_out->PutString("moveto\n");
-    break;
-  case RAW:
-    pr_out->PutString((char *)&h);
-    break;
-  case OTHER:
-    break;
-  default:
-    dbg1(Warning, "tab: ps_command: unknown command %d\n", (void *)last_com);
-    break;
-  }
 
 #ifndef OPTI    
-  last_last_com = last_com;
-  last_com = com;
+    last_last_com = last_com;
+    last_com = com;
     
-  ooh = h; oov = v;
-  h = h_n; v = v_n; 
+    ooh = h; oov = v;
+    h = h_n; v = v_n; 
 
-  oohh = hh; oovv = vv;
-  hh = hh_n; vv = vv_n;
+    oohh = hh; oovv = vv;
+    hh = hh_n; vv = vv_n;
 
-  dvi_ooh = dvi_oh; dvi_oov = dvi_ov;
-  dvi_oh = dvi_h; dvi_ov = dvi_v;
+    dvi_ooh = dvi_oh; dvi_oov = dvi_ov;
+    dvi_oh = dvi_h; dvi_ov = dvi_v;
 
 #endif /* OPTI */
-  return;
+    return;
 }
 
 void bit_char(i_buf *ps, int char_num)

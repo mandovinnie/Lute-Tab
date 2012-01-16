@@ -51,21 +51,19 @@ private:
     void do_half_tie(double length);
     void do_half_tie_reversed(double length);
     void do_rtie(int bloc, int eloc);
-    void print_clipped(char c, int font);
+    void ps_clipped(char c, int font);
     void put_slash
       (int bloc, int eloc, int count, struct file_info *f); 
     void put_uline(int bloc, int eloc);
-    void put_r_uline(int bloc, int eloc) { put_uline(bloc, eloc); };
-    void put_w_uline(int bloc, int eloc) { put_uline(bloc, eloc); };
     void put_thick_slant(int bloc, int eloc);
     void put_med_slant(int bloc, int eloc);
     void put_slant(int bloc, int eloc);
     int more();
     void showsave(int reg);	
     void p_num(int n); 
-    void print_draft();
+    void ps_draft();
     void vert_curve(int len);
-    void print_copyright();
+    void ps_copyright();
     int get_page_number() { return (page_number); }
     void push()  { slp(sp, stack_h, stack_v); sp++; }
     void pop()   { sp--; glp(sp, stack_h, stack_v); }

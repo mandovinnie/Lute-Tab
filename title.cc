@@ -563,7 +563,7 @@ double special(char **pp, print *p, i_buf *i_b, font_list *f_a, int print,
 		&& c != '(' && c != ')' && c != ' ') {
 	if (! (f->m_flags & QUIET) )dbg2(Warning, 
 					 "tab: special: unknown character %c %d\n", 
-					 (void *)(int)c, (void *)(int)c );
+					 (void *)c, (void *)c );
       }
       p->pop();
 	    
@@ -582,7 +582,7 @@ double special(char **pp, print *p, i_buf *i_b, font_list *f_a, int print,
 	else if (d == 'j') {
 	  if (f->flags & PS) {
 	    int high = f_a->fnt->p_get_h(d);
-	    p->print_clipped(d, high);
+	    p->ps_clipped(d, high);
 	  }
 	  else p->set_a_char(021); /* dotless j */
 	}

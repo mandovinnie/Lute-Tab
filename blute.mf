@@ -464,22 +464,23 @@ beginchar ("j",.7em#, 1.0cap#, 0);"the letter j";
 endchar;enddef;
 %
 def do_k =
-%  beginchar ("k",1.3em#, 1.3cap#, .35cap#);"the letter k";
-  beginchar ("k",1.1em#, 1.0cap#, .35cap#);"the letter k";
-    pickup lute_pen;
-    x1=0w; bot y1=-d;
-    lft x2=.23w;y2=h;
-    x3=.6[x6,x2];y3=.42h;
-    rt x4=.95w;top y4=h;
-    rt x5=w;bot y5=-d;
-    x6= x2/3;y6=.1h;
-    draw z1..z6..tension 4..z3..tension 4..z2;
-    draw z4..{dir 205}z3&z3{right} ..{right}z5;
-  endchar;enddef;
+beginchar ("k",1.3em#, 1.3cap#, .35cap#);"the letter k";
+ pickup lute_pen;
+ x1=0w; bot y1=-d;
+ lft x2=0w;y2=h;
+ x3=x2;y3=.42h;
+ rt x4=.95w;top y4=h;
+ rt x5=w;bot y5=-d;
+ x6= x2;y6=.1h;
+ draw z1..z6..tension 4..z3..tension 4..z2;
+ draw z4..{dir 205}z3&z3{right} ..{right}z5;
+endchar;enddef;
 %
 def do_l =
 beginchar ("l", em#, 1.0cap#, 0);"the letter l";
+% beginchar ("l", .5em#, .5cap#, 0);"the letter l";
   pickup lute_pen;
+%  pickup lute_test;
   lft x1=0;bot y1=0;
   x2=.55w;y2=.4h;
   x3=w;y3=1.8h;
@@ -489,22 +490,6 @@ beginchar ("l", em#, 1.0cap#, 0);"the letter l";
   rt x5=w; y5=y1;
   draw z1{dir 10}..z2..z8..z3&z3..z7..z2..{dir 350}z5..z9;
 endchar;enddef;
-%
-%  here is a proposed new l, more centered, shorter
-%def do_l =
-%beginchar ("l", 1.0em#, 1.0cap#, 0);"the letter l";
-%  pickup lute_pen;
-%  x1=-.18w;bot y1=0;
-%  x2=.19w;y2=.32h;
-%  x3=.51w;y3=1.54h;
-%  z4=.5[z2,z3];
-%  x7=0.12w ;y7=.4y3;
-%  x8=.59w;y8=y7;
-%  rt x9=w;y9=y5+.2h;
-%  rt x5=.91w; y5=y1;
-%  draw z1{dir 10}..z2..tension .92..z3&z3..z7..z2..z5..z9;
-%  draw z0..tension2..z1{dir 10}..z2..z8..z3&z3..z7..z2..{dir 350}z5..z9;
-%endchar;enddef;
 %
 def do_m =
 beginchar ("m", 1.2em#, 1.0cap#, 0);"the letter m";

@@ -6,19 +6,10 @@ mode_def MyLaser =                      % Canon CX, SX, LBP-LX
   mode_common_setup_;
 enddef;
 %
-mode_def cxnew =                       %\[ Canon CX, SX, LBP-LX (300dpi)
-  mode_param (pixels_per_inch, 600);
-  mode_param (blacker, 1.5);       % was 0
-  mode_param (fillin, .2);       % was .2
-  mode_param (o_correction, .65);  % was .6
-  mode_common_setup_;
-enddef;
 %  a new font 
 %
 %mode:=MyLaser;
-mode:=cxnew;
 mode_setup;
-
 %
  em#:=7pt#; cap#:=9pt#;
  ptt#:=1.5pt#;
