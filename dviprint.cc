@@ -324,12 +324,12 @@ void dvi_print::put_slant(int bloc, int eloc)
     
     if ( c_h == 0 || c_v == 0 ) 
       dbg1 (Error, "tab: slant: font width compatibility problem %d\n",
-	    (void *)cc);
+	    (void *)(int)(cc));
     
     if (c_h == 0 || c_v == 0) {
 	dbg1(Warning,
 	     "tab: put_slant: bad font char width or height %d\n", 
-	     (void *)cc);
+	     (void *)((int)cc));
 	return;
     }
     if (height < 0) c_v = - c_v;

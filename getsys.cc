@@ -248,7 +248,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    else if ( c != NEWLINE)
 		if (! (f->m_flags & QUIET))dbg3(Warning, 
 		     "Text %c after a barline (b), system %d chord %d\n", 
-		     (void *)c , (void *)f->cur_system, (void *)cur_chord);
+		     (void *)((int)c) , (void *)f->cur_system, (void *)cur_chord);
 	    barline++;
 
 	    if ((cur_chord < 2) && cur_key && (f->m_flags & AUTOKEY)) {
@@ -406,12 +406,12 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    N[1] = buf[i+skip];
 		    staff[i] = atoi(N);
 		    if ( ! isdigit (N[0])) 
-			dbg1(Warning, "bad fret number", (void *)N[0]);
+			dbg1(Warning, "bad fret number", (void *)((int)N[0]));
 		    if ( ! isdigit (N[1])) 
-			dbg1(Warning, "bad fret number", (void *)N[1]);
+			dbg1(Warning, "bad fret number", (void *)((int)N[1]));
 		    if (staff[i] > 34) {
 			dbg1(Warning, "fret number higher than max 34", 
-			     (void *)staff[i]);
+			     (void *)((int)staff[i]));
 			staff[i]=0;
 		    }
 		    staff[i] += 220;
@@ -560,7 +560,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 			default:
 			    dbg3(Warning,
   "tab: getsystem: bad finger or \\ character %c at line %d of system %d\n", 
-				 (void *)cc, 
+				 (void *)((int)cc), 
 				 (void*)cur_line,
 				 (void*)f->cur_system);
 			    break;
@@ -730,7 +730,8 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	default:
 	    dbg3(Warning, 
 		 "getsystem: bad flag character %c in system %d chord %d\n", 
-		 (void *)c, (void*) f->cur_system, 
+		 (void *)((int)c), 
+		 (void*) f->cur_system, 
 		 (void *)cur_chord);
 	    break;
 	}
@@ -964,7 +965,9 @@ do_music(i_buf *ib, unsigned char staff[], char buf[], int *l_p, int *skip,
 	music[b+2] == NEWLINE ) {
 	dbg4(Warning, 
 	     "tab with incomplete music specification %c%c%c line %d\n",
-	     (void *)music[b], (void *)music[b+1], (void *)music[b+2], 
+	     (void *)(int)music[b], 
+	     (void *)(int)music[b+1], 
+	     (void *)(int)music[b+2], 
 	     (void *)*l_p);
     }
 

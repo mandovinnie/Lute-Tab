@@ -387,7 +387,8 @@ void set_alt_titlefont(const char *value, struct file_info *f)
 {
     f->font_names[3] = (char *)malloc (strlen (value));
     strcpy (f->font_names[3], value);
-    dbg1 (Warning, "tab: set_alt_titlefont: %s\n", (void *)value);
+    if ( ! (f->m_flags & QUIET))
+      dbg1 (Warning, "tab: set_alt_titlefont: %s\n", (void *)value);
 }
 void set_dvititlefont(const char *value, struct file_info *f)
 {
@@ -415,7 +416,8 @@ void set_psalttitlefont(const char *value, struct file_info *f)
     if (f->flags & PS) {
 	f->font_names[3] = (char *)malloc (strlen (value));
 	strcpy (f->font_names[3], value);
-	dbg1 (Warning, "tab: set_psalttitlefont: %s\n", (void *)value);
+	if ( ! (f->m_flags & QUIET))
+	  dbg1 (Warning, "tab: set_psalttitlefont: %s\n", (void *)value);
     }
 }
 void set_titlesize(const char *value, struct file_info *f)
@@ -428,7 +430,8 @@ void set_titlesize(const char *value, struct file_info *f)
 
 void set_alttitlesize(const char *value, struct file_info *f)
 {
-    dbg1 (Warning, "set_alttitlesize %s\n", (void *)value);
+    if ( ! (f->m_flags & QUIET))
+      dbg1 (Warning, "set_alttitlesize %s\n", (void *)value);
     if (f->flags & PS) {
 	f->font_sizes[3] = atof(value); 
     }
@@ -436,12 +439,14 @@ void set_alttitlesize(const char *value, struct file_info *f)
 
 void set_val(const char *value, struct file_info *f)
 {
-    dbg1 (Warning, "set_val %s\n", (void *)value);
+    if ( ! (f->m_flags & QUIET))
+      dbg1 (Warning, "set_val %s\n", (void *)value);
 }
 
 void set_description(const char *value, struct file_info *f)
 {
-    dbg0 (Warning, "set_description\n");
+    if ( ! (f->m_flags & QUIET))
+      dbg0 (Warning, "set_description\n");
 }
 void set_tempo(const char *value, struct file_info *f)
 {
@@ -454,11 +459,12 @@ void set_tempo(const char *value, struct file_info *f)
 void set_noteconv(const char *value, struct file_info *f)
 {
         f->note_conv = *value-'0'; 
-	if (f->note_conv < 0 || f->note_conv > 3 ) {
+	if (f->note_conv < 0 || f->note_conv > 12 ) {
 	  dbg1(Warning, "strange note-conversion value %c ",
-	       (void *) *value);
+	       (void *)(int) *value);
 	  dbg0(Warning, "should be between 0 and 3\n");
 	}
+	//	printf ("tree conv %f\n", f->note_conv);
 }
 
 
@@ -467,49 +473,53 @@ void set_sys_skip(const char *value, struct file_info *f)
   f->sys_skip = atof(value);
 }
 
-void setit(void(*r)(const char *, struct file_info *f ), 
-	   const char *flag, 
-	   struct file_info *f)
+void set_midi_patch(const char *value, struct file_info *f)
+{
+  f->midi_patch = atoi(value);
+}
+/*
+void setit(void *r, const char *flag, struct file_info *f)
 {
   if ( !r )
     return;
-  (*r)(flag, f);
+  r(flag, f);// was *r wbc oct 2001
 }
-
+*/
 
 int
 set_string(const char *arg, const char *val, struct file_info *f, pass pass) 
 {
   void ** res();
-  void (*r)(const char *, struct file_info *f);
+  void (*r)(const char *, struct file_info *);
 
   struct tuple data[] = {
-    {"lutefont",   set_lutefont},
-    {"charstyle",  set_charstyle},
-    {"numstyle",   set_numstyle},
-    {"flagstyle",  set_flagname},
-    {"textfont",   set_textfont},
-    {"textsize",   set_textsize},
-    {"titlefont",  set_titlefont},
-    {"titlesize",  set_titlesize},
-    {"alttitlefont",    set_alt_titlefont},
-    {"alttextfont",     set_alt_textfont},
-    {"alttextsize",     set_alttextsize},
-    {"alttitlesize",    set_alttitlesize},
-    {"pstextfont",      set_pstextfont  },
-    {"dvitextfont",     set_dvitextfont},
-    {"psalttextfont",   set_psalttextfont},
-    {"dvialttextfont",  set_dvialttextfont},
-    {"pstitlefont",     set_pstitlefont  },
-    {"dvititlefont",    set_dvititlefont},
-    {"psalttitlefont",  set_psalttitlefont},
-    {"dvialttitlefont", set_dvialttitlefont},
-    {"val", set_val},
-    {"description", set_description},
-    {"line",       set_line},
-    {"tempo",      set_tempo},
-    {"note-conversion", set_noteconv},
-    {"sys-skip",   set_sys_skip},
+    {"lutefont",   (void *)set_lutefont},
+    {"charstyle",  (void *)set_charstyle},
+    {"numstyle",   (void *)set_numstyle},
+    {"flagstyle",  (void *)set_flagname},
+    {"textfont",   (void *)set_textfont},
+    {"textsize",   (void *)set_textsize},
+    {"titlefont",  (void *)set_titlefont},
+    {"titlesize",  (void *)set_titlesize},
+    {"alttitlefont",    (void *)set_alt_titlefont},
+    {"alttextfont",     (void *)set_alt_textfont},
+    {"alttextsize",     (void *)set_alttextsize},
+    {"alttitlesize",    (void *)set_alttitlesize},
+    {"pstextfont",      (void *)set_pstextfont  },
+    {"dvitextfont",     (void *)set_dvitextfont},
+    {"psalttextfont",   (void *)set_psalttextfont},
+    {"dvialttextfont",  (void *)set_dvialttextfont},
+    {"pstitlefont",     (void *)set_pstitlefont  },
+    {"dvititlefont",    (void *)set_dvititlefont},
+    {"psalttitlefont",  (void *)set_psalttitlefont},
+    {"dvialttitlefont", (void *)set_dvialttitlefont},
+    {"val", (void *)set_val},
+    {"description", (void *)set_description},
+    {"line",       (void *)set_line},
+    {"tempo",      (void *)set_tempo},
+    {"note-conversion", (void *)set_noteconv},
+    {"sys-skip",   (void *)set_sys_skip},
+    {"midi-patch",   (void *)set_midi_patch},
     {0,0}
   };
 
@@ -536,20 +546,22 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {"tempo",      (void *)first},
     {"note-conversion", (void *)first},
     {"sys-skip",   (void *)first},
+    {"midi-patch",   (void *)first},
     {0,0}
   };
   
   static tree pt(passnum);
   static tree tt(data);
 
-  r = (void (*)(const char *, file_info *))tt.get(arg);
+  r = (void(*)(const char*, file_info*))tt.get(arg);
   if ((void *)pass == pt.get(arg)) {
     if ( !r ) {
       dbg1(Warning, "tab: set_string: bad $ flag, %s ignored\n", (void *)arg);
     }
     else {
       //      if ( ! (f->m_flags & QUIET))
-      setit(r, val, f);
+      //setit(r, val, f);
+      (*r)(val, f);
     }
     return (1);
   }

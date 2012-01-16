@@ -162,8 +162,8 @@ void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
 	  ib->PutByte('K'); ib->PutByte(NEWLINE);
 	    break;   
 	default:		/* assume that it must be lines of chords */
-	    f->cur_system =1;
 	    r = getsystem(fi, ib, f, buf);	/* get line tab */
+	    f->cur_system++;
 	    if (!r) {
 		return;
 	    }

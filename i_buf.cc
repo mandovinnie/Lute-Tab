@@ -247,7 +247,8 @@ void i_buf::dump(const char *fname, const mode mode)	// dump to a file
 	file_bytes -= n_written;
 	dbg1(Flow, "%u bytes left\n", (void *)file_bytes);
     }
-    if (strcmp(fname, "stdout"))  fclose(fp);
+    if (strcmp(fname, "stdout"))
+      fclose(fp);
     else if (mode == Append)fclose(fp);
 #endif
 }

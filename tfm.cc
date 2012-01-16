@@ -142,10 +142,10 @@ tfm_font::tfm_input(double scale) // read current file to current struct
     f_lh = get_short();	/* header len */
 
     dbg2 (TFM, "\ntab: tfm_input: length %d, header_len %d, ",
-	    (void *)f_l, (void *)f_lh);
+	    (void *)(int)f_l, (void *)(int)f_lh);
 
     dbg2 (Widths, "\ntab: tfm_input: length %d, header_len %d\n ",
-	    (void *)f_l, (void *)f_lh);
+	    (void *)(int)f_l, (void *)(int)f_lh);
 
     f_bc = get_short();	/* begin char */
     f_ec = get_short();	/* end char */
@@ -174,10 +174,10 @@ tfm_font::tfm_input(double scale) // read current file to current struct
     f_extproglen = get_short();
     f_params = get_short();
 
-    dbg2 (TFM,  " %d widths, %d heights\n", (void *)f_nw, (void *)f_nh);
-    dbg1 (TFM,  "program length is %d, ", (void *)f_ligproglen);
-    dbg2 (TFM,  "%d italics, %d kerns, ", (void *)f_ics, (void *)f_n_kerns);
-    dbg1 (TFM,  "%d parameters\n",(void *) f_params);
+    dbg2 (TFM,  " %d widths, %d heights\n", (void *)(int)f_nw, (void *)(int)f_nh);
+    dbg1 (TFM,  "program length is %d, ", (void *)(int)f_ligproglen);
+    dbg2 (TFM,  "%d italics, %d kerns, ", (void *)(int)f_ics, (void *)(int)f_n_kerns);
+    dbg1 (TFM,  "%d parameters\n",(void *) (int)f_params);
 
     for (k=1;k <= f_lh; k++) { /* check sum and design size */
 	if ( k == 1 ) {
@@ -379,13 +379,13 @@ double tfm_font::get_width(unsigned char c)
     if (c > f_ec - f_bc) {
 	dbg1 (Warning,
 	      "tab: get_width: character %d greater than maximum\n", 
-	      (void *)c);
+	      (void *)(int)c);
 	return (0.0);
     } 
     else if ( c < f_bc ) {
 	dbg2 (Warning,
 	      "tab: get_width: character %d less than than minimum %d\n", 
-	      (void *)c, (void *)f_bc);
+	      (void *)(int)c, (void *)(int)f_bc);
 	return (0.0);
     }
     cc = c - f_bc;
@@ -408,7 +408,7 @@ int tfm_font::p_get_w(unsigned char c)
     
     if ( c < f_bc ) {
 	dbg1 (Warning, "tab: p_get_w: character below minimum %d\n",
-		(void *)c);
+		(void *)(int)c);
 	return (0);
     }
     if ( c > f_ec ) {
@@ -421,7 +421,7 @@ int tfm_font::p_get_w(unsigned char c)
 	else {
 	    dbg3 (Warning, 
 		  "tab: p_get_w: character above maximum char %d max %d %s\n",
-		  (void *)c, (void *)f_ec, (void *)names);
+		  (void *)(int)c, (void *)f_ec, (void *)names);
 	    return (0);
 	}
     }

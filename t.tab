@@ -1,15 +1,54 @@
+%-b
+%$pstitlefont=pzcmi
+%$psalttitlefont=ptmr
+%$titlesize=18
+%$flagstyle=thin
+%$charstyle=robinson
+%$numstyle=italian
+%$line=o
+%$midi-patch=14
 
-$pstitlefont=pzcmi
-$psalttitlefont=ptmr
-$titlesize=18
-$flagstyle=thin
-$charstyle=robinson
-$numstyle=italian
-$line=o
+%-tuning c4d4e4f+4g4a3d3f+3a2d2f+2
+%-i
 
--highlightparen
--R9
--c
+%-highlightparen
+%-R9
+%-c
+
+%-twostaff
+%$sys-skip=0.2
+
+b
+Y0
+b
+e
+
+x b
+x c
+x d
+x e
+x f
+b
+1 a
+x b
+x c
+x d
+x e
+x f
+b
+1 a
+x b
+x c
+x d
+x e
+x f
+b
+e
+
+b
+1 cdc	WG0	WG0	bottom line	verse 2^top line	verse 2
+b
+e
 
 %-H
 %-x

@@ -37,7 +37,10 @@ Environment variables:
 
 	Tab looks in the directory pointed to by the
 	TABFONTS environment variable, if it is set.
+	The font directory can be compiled in with the TLOC definition
+	in the Makefile if you  are compiling this yourself.
 	Otherwise it looks in the current directory.
+
 Options:
     These can be used on the command line, as in tab -P -6
     or in the tab source file.
@@ -50,8 +53,10 @@ Options:
     -alttitle-off use regular title font
     -a4 adjust for a4 paper size
     -autoKey ssets key signature on all linesas on first line
+    -2 prints 1200 dpi
     -4 prints only four staves
     -5 prints only five staves
+    -6 printe 1200 dpi
     -7 prints seven staves
     -0 prints six staves (I know this should be -6 but I used
 	that already!)
@@ -100,6 +105,7 @@ Options:
 	long name that must be on your printer.
     -longbar with music draws bar lines between tablature and staff
     -m print out the piano version of the tablature. This is kind of basic!
+    -midi writes a midi file called data.mid
     -modernNotes  use modern, rahter then renaissance notation for music
     -M print marks on the page to show where the character positions are.
     -N uses fonts like Robinson
@@ -129,8 +135,10 @@ Options:
     -sharpUp places the sharp or flat above the staff,
     -sharpNorm places the sharp or flat in the regular place.
     -sItalNotes uses small Italian style noteds for music
-    -sound creates a sound file, 8000 integer 8 bit unsigned, 
-       called "data".
+    -sound creates a midi sound file called data.mid, or if 
+	recompiled the right way can create a raw sound file
+	with a 8000 integer 8 bit unsigned format  
+        called "data".
     -tuning 
 	-tuning C4D4E4F4G4c3f3a2d2g2	renaissance
 	-tuning e4a3d3f+3b2e2		for guitar
@@ -295,11 +303,18 @@ $		- used to set these values. This flag must be
 		  $numstyle=italian
 		  
 		  $tempo=8			tempo for music, larger=faster
-		  $note-conversion=0 		[0-3] how many more flags 
+						default is 2.  Ussed for
+						playing music, writing
+						piano version
+		  $note-conversion=0 		[0-12] how many more flags 
 						does an equivalent music 
 						note have to a tab note
+						The default is 2, 4 doubles 
+						the tempo. does not work
 		  $sys-skip=1.2			extra space to skip between
 						systems, in inches, only
+		  $midi-patch			a number, 0 to 127, which
+						selects a midi "instrument"
 
 the following characters have special significance as the
 second letter on a line - in most cases, if not needed
@@ -472,22 +487,19 @@ input file and formats it into an internal document.  Any errors that are
 detected in this pass are reported with a line number and character position
 in the file.
 
-The second pass processes the internal document into a dvi format file.  
-because tab sometimes maps a single line of input, or even a single
-"chord" to two or more chords it is not possible to report the line number
-and character position in the input file corresponding to the error,
-but you can use the -i option to print the internal format document
-and look for the error there, and try and match it up with your input 
-file.  Internal document errors are reported with system number, and 
+The second pass processes the internal document into a dvi or 
+PostScript format file. 
+
+running tab with the -v option outputs the "chords" as they are
+read, and also as they are processed in the second pass.  Reading the
+output may help you find errors, though there is a lot of output.
+Internal document errors are reported with system number, and 
 "chord" number in that ystem.  In the internal format ornaments, graces,
 barlines, etc are each given a seperate chord.
  
 Fonts:
 
-makelutefont is template of a shell script for building the lute fonts 
-necessary for the previewer and printer.  You will have to edit it for 
-your own site.  You shouldn't have to build fonts, though, as fonts
-are in the distribution.  mk_font_local is a script which builds fonts
+mk_font_local is a script which builds fonts
 in your current directory.
 
 
@@ -498,6 +510,8 @@ this runs on
 	dec alphas running OSF
         silicon graphics iris IRIX 3.3.2 -> 5.2
 	HP 700 running HP-UX 8.05 and 9.01
+	Linux, though certain versions of the c compiler
+		have troubles.
 
 
 If you like it ...

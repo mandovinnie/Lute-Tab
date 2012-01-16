@@ -27,6 +27,7 @@ class ps_print : public print {
     int ps_top_of_page;
     char f_name[120];		// this should be in ps_print.h 
     double font_sizes[FONT_NAMES];				    
+    int nodump;
   public:
     char ps_used[256];
 

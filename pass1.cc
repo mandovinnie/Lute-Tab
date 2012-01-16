@@ -168,9 +168,9 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       for (i=0; i<STAFF; i++) {
 	dd = d[i];
 	if (dd >= 'a' && dd <= 'p') 
-	  dbg1 ( Inter, "  %1c", (void *)dd); 
+	  dbg1 ( Inter, "  %1c", (void *)(int)dd); 
 	else if (dd == 'D'|| dd == 'Q' || dd == 'E' || dd == 'R') 
-	  dbg1 ( Inter, "  %1c", (void *)dd); 
+	  dbg1 ( Inter, "  %1c", (void *)((int)dd)); 
 	else if (dd == 'G') 
 	  dbg0 ( Inter, "  G"); 
 	else if (dd == 'U') 
@@ -196,7 +196,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	else if (dd == ' ') 
 	  dbg1 ( Inter, "  %1c", (void *)'X'); 
 	else if (dd >= 040 && dd <= 0100 )
-	  dbg1 ( Inter, "  %1c", (void *)dd); 
+	  dbg1 ( Inter, "  %1c", (void *)((int)dd)); 
 	else if (dd >= 0202 && dd <= 0213)
 	  dbg1 ( Inter, "  %1c", (void *)(dd - 0202)); 
 	else if (dd >= 0214 && dd <= 0225)
@@ -204,9 +204,9 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	else if (dd >= 0226 && dd <= 0237)
 	  dbg1 ( Inter, "  %1c", (void *)(dd - 0226)); 
 	else if ((dd == 70 || dd == 120) && i == 0)
-	  dbg1 ( Inter, "  %1c", (void *)dd);
+	  dbg1 ( Inter, "  %1c", (void *)((int)dd));
 	else 
-	  dbg1 ( Inter, "%03d",  (void *)dd); 
+	  dbg1 ( Inter, "%03d",  (void *)((int)dd)); 
       }
       dbg0 ( Inter, "\n"); 
     }
@@ -480,8 +480,10 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	weight = old_weight;
 	break;
       default:
-	if ( ! (f->m_flags & QUIET ))dbg3(Warning, "x with no previous flag system %d chord %d after %c\n",
-	     (void *)n_system, (void *)(j+1), (void *)old_flag);
+	if ( ! (f->m_flags & QUIET ))
+	  dbg3(Warning, "x with no previous flag system %d chord %d after %c\n",
+	       (void *)((int)n_system), 
+	       (void *)(int)(j+1), (void *)(int)old_flag);
 	break;
       }
       break;
@@ -651,7 +653,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       break;
     default:
       dbg2(Warning, "tab: pass1: unknown flag %d %s\n", 
-	   (void *)c, (void *)l->dat );
+	   (void *)(int)c, (void *)l->dat );
       dbg2(Warning, 
 	   "pass1: unknown flag value in inter file %d %d",
 	   (void *)n_system, (void *)(j+1));
@@ -1020,7 +1022,7 @@ find_val(
     if (!*found && val != 'x') {
 	dbg3 (Warning,
 		"tab: find_val: value not found %s time %c offset %d\n",
-		(void *)ll->dat, (void *)val, (void *)offset);
+		(void *)(int)ll->dat, (void *)(int)val, (void *)(int)offset);
     }
 }
 

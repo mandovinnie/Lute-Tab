@@ -563,7 +563,7 @@ double special(char **pp, print *p, i_buf *i_b, font_list *f_a, int print,
 		&& c != '(' && c != ')' && c != ' ') {
 	if (! (f->m_flags & QUIET) )dbg2(Warning, 
 					 "tab: special: unknown character %c %d\n", 
-					 (void *)c, (void *)c );
+					 (void *)(int)c, (void *)(int)c );
       }
       p->pop();
 	    

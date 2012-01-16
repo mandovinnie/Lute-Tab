@@ -60,6 +60,9 @@ ps_print::ps_print(font_list *font_array[], file_info *f)
       strcat(f_name, f->out_file);
     }
     highlight_type=Gray;
+    if (f->m_flags & SOUND)
+      nodump = 1;
+    else nodump = 0;
 }
 
 ps_print::~ps_print()
@@ -67,8 +70,8 @@ ps_print::~ps_print()
     file_head();		// file head dumps header
     file_trail();
     if (f_name[0]) {
-      //      printf("name %s\n", f_name);
-      pr_out->dump( f_name, Append);
+      if (!nodump)
+	pr_out->dump( f_name, Append);
     }
     else
       pr_out->dump( "out.ps", Append);
@@ -89,7 +92,9 @@ void ps_print::file_head()
     HKEY hKey, hSubKey;
     DWORD dwSize, dwType;
 #endif    /* WIN32 */
-
+ 
+    if (nodump) 
+      return;
 
     ps_header.PutString("%!PS-Adobe-3.0");
     if (f_i->m_flags & EPSF )

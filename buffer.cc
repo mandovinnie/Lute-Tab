@@ -7,6 +7,7 @@
  
 
 #include <stdio.h>
+#include <string.h>
 #include "buffer.h"
 #include "dbg.h"
 #define NEWLINE '\n'
@@ -141,12 +142,18 @@ void buffer::dump(const char *fname, const mode mode)	// dump to a file
     FILE *fp;
 
     Seek(rew, 0);
-    fp = fopen(fname, "wb");
-    if (fp == NULL) {
+    if (strcmp(fname, "stdout")) {
+      fp = fopen(fname, "wb");
+      if (fp == NULL) {
 	dbg1(Error, "tab: dump: can't open %s for output\n", (void *)fname);
+      }
+      fwrite(bytes, num_bytes, 1, fp);
+      fclose(fp);
     }
-    fwrite(bytes, num_bytes, 1, fp);
-    fclose(fp);
+    else {             /* really is stdout */
+      fwrite(bytes, num_bytes, 1, stdout);
+      fclose(fp);
+    }
 #endif
 }
 

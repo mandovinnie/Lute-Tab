@@ -1,6 +1,8 @@
+
 /*
    This program is copyright 1991 by Wayne Cripps,
    P.O. Box 677 Hanover N.H. 03755.
+ 
    All rights reserved.  It is supplied "as is" 
    without express or implied warranty.
 
@@ -25,6 +27,8 @@
 #include "sizes.h"
 #include "system.h"
 #include "sound.h"
+#include "raw_snd.h"
+#include "midi_snd.h"
 
 extern char interspace[];
 extern char staff_height[];
@@ -178,7 +182,7 @@ int find_note(
 
 int dot=0;
 int o_timeval=0;
-sound *sp=0;
+extern sound *sp;
 double conv=2;
 
 void
@@ -194,11 +198,7 @@ score(print *p, struct list *l, struct file_info *f,
     int timeval;
     char cc = *ch;
 
-    if (f->m_flags && SOUND) {
-      if (!sp)
-	sp = new(sound);
-    }
-
+    //    printf("conv %f\n", conv);
     p->clear_highlight();
     
     p->push();
@@ -283,6 +283,8 @@ score(print *p, struct list *l, struct file_info *f,
 	    l->text = NULL;
 	}
 	break;
+    case 'U':			// do nothing
+    case 'A':			// do nothing
     case 'i':			// do nothing
 	break;
     case 'f':
@@ -306,13 +308,15 @@ score(print *p, struct list *l, struct file_info *f,
 	p->pop();
 	break;
      default:
-	dbg1(Warning, "score: time value %c not defined\n", (void *)cc);
+	dbg1(Warning, "score: time value %c not defined\n", 
+	     (void *)((int)cc));
     rest:
 	o_timeval = timeval;
 	if (ch[1] == '.') dot++;
 	if (!strchr ((const char *)"+^i", (int)cc)) {
 	  for (i=2; i< STAFF; i++ ) {
 	    if ((c = tolower(ch[i])) != ' ') {
+	      if (c > 'm') continue;
 	      if ( prev && prev[0] == '+' && prev[i] == 'Q') {
 		p->set_highlight();
 	      }
@@ -349,7 +353,7 @@ score(print *p, struct list *l, struct file_info *f,
 	      p->clear_highlight();
 	    }
 	  }
-	  if (f->m_flags && SOUND) {
+	  if (f->m_flags & SOUND) {
 	    // timeval is from -2 to 5 - 128 to 
 	    double t_val;
 	    switch (timeval) {
@@ -428,7 +432,7 @@ void put_note(print *p, int string, char c, int timeval, struct file_info *f)
 	else p->put_a_char('?');
     }
     p->pop();
-    if (f->m_flags && SOUND) 
+    if (f->m_flags & SOUND) 
       sp->add(note);
       
 }

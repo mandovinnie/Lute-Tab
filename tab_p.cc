@@ -174,7 +174,7 @@ int format_page(print *p, i_buf *i_b,
 	    goto leave;
 	}
 
-	dbg1(Flow, "in format page loop %c\n", (void *)c);
+	dbg1(Flow, "in format page loop %c\n", (void *)((int)c));
 
 	if (f->flags & MARKS) p->put_rule("2.0 in", "0.01 in");
 

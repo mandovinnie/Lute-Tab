@@ -44,4 +44,4 @@ public:
   char * getkey(node *n);
 };
 
-
+void setit(void *r(), const char *flag, struct file_info *f);

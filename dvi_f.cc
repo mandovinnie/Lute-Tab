@@ -222,7 +222,7 @@ struct list *l)			/* data */
 	    }
 	if (ch[1] > '0' && ch[1] <= '9' ) {
 	    dbg1(Warning, 
-		 "tab: dvi_f -number after barline %c\n", (void *)ch[1]);
+		 "tab: dvi_f -number after barline %c\n", (void *)((int)ch[1]));
 	    p->push();
 	    p->movev(-.1);
 /*	    p->put_a_char(140 + ch[1] - '0');*/
@@ -749,12 +749,13 @@ struct list *l)			/* data */
 		p->movev(flag_to_staff); 
 		p->put_a_char(c);
 		// now we must draw the dot... feb 2001
-		if (ch[1] == '-')
+		if (ch[1] == '-') {
 		  p->put_a_char(92);
+		}
  		p->pop();
 		p->moveh(0.5 * (f_a[0]->fnt->get_width(c)));
-		if (ch[1] == '0') {
-		    p->put_a_char(194);
+		if (ch[1] == '0') { // the 0 flag
+		  p->put_a_char(194);
 		}
 		else if (ch[1] == 'b') {             /* draw BARLINE */
 		    int spaces = 
@@ -1576,7 +1577,7 @@ void do_key_s( char ch[], print *p, font_list *f_a[], struct file_info *f)
       break;
     default:
 	dbg1 (Warning, "tab: dvi_format: unsupported key signature %c\n",
-	      (void *)ch[1]);
+	      (void *)((int)ch[1]));
 	break;
     }
 fin:
@@ -1698,7 +1699,7 @@ void do_time_sig( char ch[], int j, int font,
 		cc = '\0';
 		dbg1 (Warning,
 		      "tab: dvi_format: no character for large number %c\n",
-		      (void *)ch[1]);
+		      (void *)((int)ch[1]));
 		break;
 	    }
 	    p->push();

@@ -79,6 +79,7 @@ struct file_info {
     char *(font_names[FONT_NAMES]);
     double font_sizes[FONT_NAMES];
     double sys_skip;            /* extra space to skip between systems */
+  unsigned int midi_patch;      /* a midi patch number - 0 is piano*/
 };
 
 struct font_list {

@@ -1,5 +1,3 @@
-
-
 /*
    This program is copyright 1991 by Wayne Cripps,
    P.O. Box 677 Hanover N.H. 03755.
@@ -35,10 +33,8 @@ void ps_text_tfm(struct file_info *f, int fontnum);
 extern char flag_to_staff[];
 extern jmp_buf m_env;
 extern int title_font, text_font;
-void setit(void(*r)(const char *, struct file_info *f ), 
-	   const char *flag, 
-	   struct file_info *f);
 char *get_real_name(const char *short_name, int dump);
+int setflag(file_info *f, char * string, pass pass);
 
 void set_font_flag(const char *value, struct file_info *f) 
 {
@@ -276,6 +272,9 @@ void set_sound(const char *value, struct file_info *f)
 {
 	f->m_flags |= SOUND;
 	f->flags |= MANUSCRIPT;
+#ifndef NO_STDOUT
+	strcat (f->out_file, "/dev/null");
+#endif
 }
 
 void set_alttitle(const char *value, struct file_info *f)
@@ -345,90 +344,93 @@ void set_EPSF(const char *value, struct file_info *f)
 void args(int argc, char ** argv, struct file_info *f)
 {
     char *aa=0;
-    void (*r) (const char *, struct file_info *f);
-    //    void * r;
+    //    void (*r) (const char *, struct file_info *f);
+    void (*r)(const char *, struct file_info *);
 
-    struct tuple args[] = {
-      {"af", set_font_flag},
-      {"C", set_C},
-      {"c", set_c},
-      {"CC", set_CC},
-      {"b", set_b},
-      {"B", set_B},
-      {"D", set_D},
-      {"e", set_e},
-      {"E", set_E},
-      {"f", set_f},
-      {"fc", set_fc},
-      {"ff", set_ff},
-      {"F", set_F},
-      {"G", set_G},
-      {"H", set_H},
-      {"h", set_h},
-      {"i", set_i},
-      {"I", set_I},
-      {"K", set_K},
-      {"x", set_x},
-      {"O", set_O},
-      {"s", set_s},
-      {"T", set_T},
-      {"w", set_w},
-      {"Z", set_Z},
-      {"j", set_j},
-      {"l", set_l},
-      {"m", set_m},
-      {"M", set_M},     //not used
-      {"0", set_0},
-      {"2", set_2},
-      {"4", set_4},
-      {"5", set_5},
-      {"6", set_6},
-      {"7", set_7},
-      {"N", set_N},
-      {"P", set_P},
-      {"Q", set_Q},
-      {"R7", set_R7},
-      {"R8", set_R8},
-      {"R9", set_R9},
-      {"R95", set_R95},
-      {"S", set_S},
-      {"V", set_V},
-      {"W", set_W},
-      {"X", set_X},
-      {"Y", set_Y},
-      {"listfonts", set_listfonts},
-      {"n", set_n},
-      {"o", set_o},
-      {"p", set_p},
-      {"q", set_q},
-      {"r", set_r},
-      {"t", set_t},
-      {"v", set_v},
-      {"y", set_y},
-      {"z", set_z},
-      {"tuning", set_tuning},
-      {"sharpUp",    set_sharp_up},
-      {"sharpNorm",    set_sharp_normal},
-      {"highlightparen", set_highlight_paren},
-      {"sound", set_sound},
-      {"alttitle", set_alttitle},
-      {"alttitle-off", set_alttitle_off},
-      {"a4", set_a4},
-      {"nobox", set_nobox},
-      {"sItalNotes", set_sItalNotes},
-      {"italFlags", set_italFlags},
-      {"twostaff", set_twostaff},
-      {"longbar", set_longbar},
-      {"compressStaff", set_comp_staff},
-      {"autoKey", set_autoKey},
-      {"allDsup", set_allDsup},
-      {"allDsdown", set_allDsdown},
-      {"modernNotes", set_ModNotes},
-      {"EPSF", set_EPSF},
+    struct tuple onearg={"af", (void*)set_font_flag};
+
+    struct tuple arglist[] = {
+      {"af", (void*)set_font_flag},
+      {"C", (void*)set_C},
+      {"c", (void*)set_c},
+      {"CC", (void*)set_CC},
+      {"b", (void*)set_b},
+      {"B", (void*)set_B},
+      {"D", (void*)set_D},
+      {"e", (void*)set_e},
+      {"E", (void*)set_E},
+      {"f", (void*)set_f},
+      {"fc", (void*)set_fc},
+      {"ff", (void*)set_ff},
+      {"F", (void*)set_F},
+      {"G", (void*)set_G},
+      {"H", (void*)set_H},
+      {"h", (void*)set_h},
+      {"i", (void*)set_i},
+      {"I", (void*)set_I},
+      {"K", (void*)set_K},
+      {"x", (void*)set_x},
+      {"O", (void*)set_O},
+      {"s", (void*)set_s},
+      {"T", (void*)set_T},
+      {"w", (void*)set_w},
+      {"Z", (void*)set_Z},
+      {"j", (void*)set_j},
+      {"l", (void*)set_l},
+      {"m", (void*)set_m},
+      {"M", (void*)set_M},     //not used
+      {"0", (void*)set_0},
+      {"2", (void*)set_2},
+      {"4", (void*)set_4},
+      {"5", (void*)set_5},
+      {"6", (void*)set_6},
+      {"7", (void*)set_7},
+      {"N", (void*)set_N},
+      {"P", (void*)set_P},
+      {"Q", (void*)set_Q},
+      {"R7", (void*)set_R7},
+      {"R8", (void*)set_R8},
+      {"R9", (void*)set_R9},
+      {"R95", (void*)set_R95},
+      {"S", (void*)set_S},
+      {"V", (void*)set_V},
+      {"W", (void*)set_W},
+      {"X", (void*)set_X},
+      {"Y", (void*)set_Y},
+      {"listfonts", (void*)set_listfonts},
+      {"n", (void*)set_n},
+      {"o", (void*)set_o},
+      {"p", (void*)set_p},
+      {"q", (void*)set_q},
+      {"r", (void*)set_r},
+      {"t", (void*)set_t},
+      {"v", (void*)set_v},
+      {"y", (void*)set_y},
+      {"z", (void*)set_z},
+      {"tuning", (void*)set_tuning},
+      {"sharpUp",    (void*)set_sharp_up},
+      {"sharpNorm",    (void*)set_sharp_normal},
+      {"highlightparen", (void*)set_highlight_paren},
+      {"sound", (void*)set_sound},
+      {"midi", (void*)set_sound},
+      {"alttitle", (void*)set_alttitle},
+      {"alttitle-off", (void*)set_alttitle_off},
+      {"a4", (void*)set_a4},
+      {"nobox", (void*)set_nobox},
+      {"sItalNotes", (void*)set_sItalNotes},
+      {"italFlags", (void*)set_italFlags},
+      {"twostaff", (void*)set_twostaff},
+      {"longbar", (void*)set_longbar},
+      {"compressStaff", (void*)set_comp_staff},
+      {"autoKey", (void*)set_autoKey},
+      {"allDsup", (void*)set_allDsup},
+      {"allDsdown", (void*)set_allDsdown},
+      {"modernNotes", (void*)set_ModNotes},
+      {"EPSF", (void*)set_EPSF},
       {0, 0}
     };
 
-    static tree at(args);
+    static tree at(arglist);
 
 /* check for blank after flag */
 
@@ -437,12 +439,13 @@ void args(int argc, char ** argv, struct file_info *f)
 	if (**argv == '-') {
 	    (*argv)++;
 	    //r = (void *)at.get(*argv);
-	    r = (void (*)(const char *, file_info *))at.get(*argv);
+	    //	    r = (void (*)(const char *, file_info *))at.get(*argv);
+	    r = (void(*)(const char*, file_info*))at.get(*argv);
 	    
 	    if (r) {
 	      aa = argv[1];
-	      //     (*r)(aa, f);
-	      setit(r, aa, f);
+	           (*r)(aa, f);
+	      //   setit(r, aa, f);
 	    }
 	    else {
 	      aa = argv[0];
@@ -466,6 +469,13 @@ void args(int argc, char ** argv, struct file_info *f)
 	    *argv++;
 	    argc--;
 	}
+	else if (**argv == '$') {
+	  (*argv)++;
+	  (void)setflag(f, *argv, first);
+	  //	  dbg1(Warning, "tab: $ parameters not allowed on command line: %s\n", 
+	  //       *argv);
+	  *argv++;
+	  argc--;	}
 	/* assume what is left is filename */
 	else {			/* not - */
 	    strcpy (f->file, *argv);

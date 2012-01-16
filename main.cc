@@ -7,6 +7,10 @@
 #include "dviprint.h"
 #include "ps_print.h"
 
+#include "sound.h"
+#include "midi_snd.h"
+#include "raw_snd.h"
+
 #ifdef __unix__
 #include <signal.h>
 #include <unistd.h>
@@ -24,7 +28,7 @@ int my_main(int flags);
 #endif /* MAC */
 
 extern jmp_buf b_env;
-
+sound *sp=0;
 
 int baroque;
 int n_system;
@@ -70,6 +74,7 @@ void init(file_info *f)
     f->sys_skip=0.0;
     f->cur_system = 0;
     f->include = 0;
+    f->midi_patch = 0;
 }
 
 char *
@@ -184,13 +189,30 @@ void tfm_stuff(i_buf *b, file_info *f)
 	pp = (print **)&pdp;
     }
 
-//    if (f->m_flags && SOUND) 
-//      ;
-
+    if (f->m_flags & SOUND) {
+      if (!sp) {
+	if (f->midi_patch) {
+	  if (!strncmp(f->out_file, "stdout", 6))
+	    sp = new midi_snd(f->midi_patch, "stdout");
+	  else 
+	    sp = new midi_snd(f->midi_patch);
+	}
+	else {			// no midi patch
+	  if (strncmp(f->out_file, "stdout", 6)) 
+	    sp = new midi_snd(34, "stdout");
+	  else 
+	    sp = new midi_snd;
+	}
+      } 
+    }
     while (more == END_MORE) {
 	(*pp)->page_head(); 
 	more = (*pp)->do_page(b, f_a);
 	(*pp)->page_trail();
+    }
+    if (sp) {
+      delete sp;
+      sp = 0;
     }
     if (psp) delete psp;
     if (pdp) delete pdp;
@@ -276,7 +298,7 @@ main(int argc, char **argv)
     //	dbg_set(Flow);
     
     if ( ! (f.m_flags & QUIET) )
-      dbg2(Warning, "tab %s copyright 1997 by Wayne Cripps%c",
+      dbg2(Warning, "tab %s copyright 1995-2001 by Wayne Cripps%c",
 	   (void *)VERSION,
 	   (void *) NEWLINE );
     
