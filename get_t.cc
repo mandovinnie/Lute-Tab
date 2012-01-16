@@ -36,7 +36,7 @@ int badchar(unsigned char p) {
     return (1);
   else if ( p == '\n' )
     return (0);
-  else if (strchr("{%PLJWw0123456xYyQqeMSkbBiIp8vV .-\n\r*$[F#CcRA", p)) 
+  else if (strchr("{%PLJWw0123456xYyQqeMSkbBiIp8vV .-\n\r*$[F#CcRA!", p)) 
     return(0);
   return(1);
 }
@@ -90,6 +90,7 @@ void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
 	break;
       case 't':
 	if (!strncmp(&buf[1], "twostaff", 8) ||
+	    !strncmp(&buf[1], "twelvedots", 10) ||
 	    !strncmp(&buf[1], "tuning", 6) ||
 	    !strncmp(&buf[1], "thin", 4)) {
 	  goto end;

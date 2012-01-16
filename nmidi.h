@@ -38,13 +38,16 @@ class nmidi {
   int npulse;
   int format;
   int ntracks;
+  int pulse_time;
 
   void nmidi_head(unsigned short int pulses);
   void ntext(enum text_type, const char *words);
   void TimeSig(int num, int denom, int clocks, int bb);
   void stop_stop(chord *c, int index);
+  void stop_string(int string, int *chord, struct chord *mp);
   enum direction {Up, Down, Up2, Down2};
   void check_adjacent(const int string, direction d, int saved[]);
+  int get_chord(chord * c);
  public:
   void set_nmidi_title(char * title);
   void set_patch(int patch);

@@ -110,9 +110,9 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	tlute.mf tlute9.mf tlute8.mf tlute7.mf tlute6.mf mk_600_t \
 	tlute9.300pk tlute8.300pk tlute7.300pk tlute6.300pk \
 	tlute9.600pk tlute8.600pk tlute7.600pk tlute6.600pk \
- 	simple.tab
+ 	simple.tab midi-docs/Makefile midi-docs/midi-dump.c
 
-DISTFILE = lute_tab4.3.60.tar
+DISTFILE = lute_tab4.3.65.tar
 
 distrib:	 ${DISTFILE}
 

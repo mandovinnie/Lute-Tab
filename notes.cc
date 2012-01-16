@@ -445,20 +445,20 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
     breaksys = 0;
 
     if (nn->staff == 1 ) {
-      if (nl->dat[0] == 'b') {
+      if (nl && nl->dat[0] == 'b') {
 	if ( ! nl->next) {
 	  //	  printf("set breaksys\n");
 	  breaksys=1;
 	}
       }
-      while (nl->next 
+      while (nl && nl->next 
 	     && ((! nl->notes )  || nl->notes->note == '0' )) {
 	tspace += ( nl->space + nl->padding);
 	nl = nl->next;
       }
     }
     else if (nn->staff == 2 ) {
-      while (nl->next 
+      while (nl && nl->next 
 	     && ! nl->notes2 ) {
 	tspace += ( nl->space + nl->padding);
 	nl = nl->next;

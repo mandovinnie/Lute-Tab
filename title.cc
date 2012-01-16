@@ -176,9 +176,10 @@ format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
 	    }
 	    *l_bp = '\0';
 
-	    //		printf("title staff_len %f total %f cur %f\n",
+	    //	printf("title staff_len %f total %f cur %f\n",
 	    //		       staff_len, total,  cur);
 	    //		printf("title: %s\n", lbuf);
+
 	    if (centerline) {
 	      p->moveh ( (staff_len - total - cur)/2.0);
 	      centerline = 0;
@@ -223,12 +224,16 @@ format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
 	  break;
 	case '}':
 	  goto done;
-	case ']':		/* word tie */
+	case ']':		/* word tie - this swallows the next chracter */
 	  p->use_font(0);
 	  p->set_a_char(0201);
 	  cur += f_a[0]->fnt->get_width(0201);
 	  p->use_font(font);
-	  p->set_a_char(cc=i_b->GetByte());
+	  cc=i_b->GetByte();
+	  if (cc == '}' || cc == '/')
+	    i_b->unGet(cc);
+	  else
+	    p->set_a_char(cc);
 	  cur += f_a[font]->fnt->get_width(cc);
 	  break;
 	case '?':		/* replace with upside down ?? */
@@ -602,12 +607,20 @@ double special(char **pp, print *p, i_buf *i_b, font_list *f_a, int print,
 	  }
 	  else p->set_a_char(021); /* dotless j */
 	}
+	else if (d == 0246 ) {	// long s
+	  if (f->flags & PS ) { 
+	    p->moveh(f_a->fnt->get_kern(d));
+	    p->set_a_char(0246);
+	  }
+	  /* dvi unhandled */
+	}
 	else p->set_a_char(d);
       }
       else dontset = 0;
     }
-    if (d == 0246) 
-      return (f_a->fnt->get_width(d));
+    if (d == 0246) {  // long s
+      return (f_a->fnt->get_width(d) + 2 * f_a->fnt->get_kern(d));
+    }
     else if ( c == 'c' || c == ']') {
       return /* (f_a->fnt->get_width(c)) */  (0.0);
     }

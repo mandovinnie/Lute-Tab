@@ -181,7 +181,7 @@ void ps_print::file_head()
 	p = getenv("TABFONTS");
     
     if (p == NULL ) {
-      char *font_file = "fonthome";
+      char *font_file = (char*)"fonthome";
       struct stat buf;
       int ffd;
       int nr;
@@ -388,7 +388,7 @@ void ps_print::make_ps_font(i_buf *ps_header)
     ps_header->PutString(" /.notdef { 1 1 add pop } bind def\n");
     for (i=0; i < 256; i++) {
 	if (bits[i].bm_w && print_used[i]) {
-//	    printf ( "b_%d", i);
+	  /*	    printf ( "ps_print: 391: b_%d\n", i); */
 	  bit_char(ps_header, i, f_i->flags & DPI600 );
 	} 
     }
@@ -399,7 +399,7 @@ void ps_print::make_ps_font(i_buf *ps_header)
     ps_header->PutString("/.notdef [ 0 0 0 0 ] def\n");
     for (i=0; i < 256; i++) {
 	b = &bits[i];
-	if (b->bm_w && print_used[i]) {	/* assume null chars have 0 width */
+	if (b->bm_w && print_used[i] ) {	/* assume null chars have 0 width */
 	    ps_header->PutString("/b_");
 	    ps_header->Put10(i);
 	    ps_header->PutString("[ ");
@@ -1286,10 +1286,11 @@ void bit_char(i_buf *ps, int char_num, int sixh)
     ps->Put10(char_num);
     ps->PutString(" {");  // char_name);
  
-    if (char_num == 81 && sixh ) {    /* vector char */    
+    if (char_num == 81 && sixh ) {    /* vector char 0121 */    
 /* at 600 dpi scaled this character seems to be 331 412 */
 /* these dimensions are scaled -R9 */
 /*      ps->Put10(b->bm_w); ps->Put10(b->bm_h); */
+      ps->PutString("%% Hand drawn by Wayne \n");
       ps->PutString("\n/P {");
       ps->PutF(red, 5);
       ps->PutString(" mul } def\n");
@@ -1314,6 +1315,14 @@ void bit_char(i_buf *ps, int char_num, int sixh)
       ps->PutString("311 P 230 P 312 P 270 P 315 P 270 P curveto stroke\n");
       // ps->PutString("stroke\n");
     }
+    else if (char_num == 033 && 0 ) {  /* 27  Perfect circle */
+      fprintf(stderr, "HERE\n");
+      ps->PutString("\n/P {");
+      ps->PutF(red, 5);
+      ps->PutString(" mul } def\n");
+      ps->PutString("5 P setlinewidth 0 0 moveto\n");
+      ps->PutString("25 P 25 P moveto stroke");
+    }
     else {         /* bitmapped character */
       ps->Put10(b->bm_w); ps->Put10(b->bm_h);
       ps->PutString("true [1 0 0 1 ");
@@ -1329,6 +1338,7 @@ void bit_char(i_buf *ps, int char_num, int sixh)
     }
     ps->PutString("} bind def\n");
 }
+
 
 void ps_print::glp(int reg,int h[], int v[])
 {

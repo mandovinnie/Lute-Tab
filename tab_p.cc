@@ -322,8 +322,9 @@ int format_page(print *p, i_buf *i_b,
 	    break;
 	case '-':
 	    i=0;
-	    while (( c = i_b->GetByte()) != NEWLINE) 
+	    while (( c = i_b->GetByte()) != NEWLINE) {
 		cmdbuf[i++] = c;
+	    }
 	    cmdbuf[i++] = '\0';
 	    cmdbuf[i++] = '\0';
 	    dbg1(Inter, "tab_p: argument: %s\n", (void *)cmdbuf);

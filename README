@@ -176,11 +176,16 @@ Options:
     -tuning 
 	-tuning C4D4E4F4G4c3f3a2d2g2	renaissance
 	-tuning e4a3d3f+3b2e2		for guitar
-	-tuning c4d4e4f4g4a3d3f3a2d2f2 	is d minor
+	-tuning a4b-4c4d4e4f4g4a3d3f3a2d2f2 	is d minor
 	-tuning c4d4e4f+4g4a3d3g3b2d2f+2 is sharp
 	-tuning c4d4e-4f4g4a3d3g3a+2d2f2 is flat
+        Note that the lowest note tab knows about is a4, and
+        each octave starts at a, as in a4-g4a3-g3a2-g2
     -twostaff allows you two insert two lines of music along with
         one line of tablature.
+    -twelvedots - in Italian notation, use an X with two dots 
+        above it instead for N12.  This also changes N10 to X
+	and N11 to an X iwth a dot above it
     -T uses dalza style flags
     -t prints the notes on the line and does nothing else
     -thin uses the older,renaissance font "tlute"
@@ -309,6 +314,7 @@ S		- a time signature - ie S3-4 or SC
 		  S2| or S3| draws a line throught the number
 		  a single digit followed by Q is highlighted
 		  SO and So do Narvaez style time sig
+		  S0  (that is a zero) gives  the O for perfect time
 T		- text to go on system lines  (a tab gives a second line)
 t 		- first note of a triplet, followed by the
 		  followed by the number of lines there would be
@@ -506,7 +512,7 @@ the following are currently working:
 			letter takes a's place - \'letter
 			\^ is a circumflex
 			\` is a backslash
-			\" is two dots - uumlat
+			\" is two dots - umlaut
 			\~ is the wiggle
 			\= is a flat horizontal bar
 			\. is a dot above the letter

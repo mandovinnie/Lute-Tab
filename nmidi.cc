@@ -18,8 +18,14 @@ i_buf *nbuffer;
 //void nmidi_track(const int len);
 //void nmidi_tail();
 #define N_TIME 12
-int time_r[N_TIME]={0,0,0,0,0,0};
+int time_r[N_TIME]={0,0,0,0,0,0,0,0,0,0,0,0};
 int verbose=0;
+
+void dpt() {
+  fprintf(stderr, "string %0x %0x %0x %0x %0x %0x\n",
+	  midi_p->dat[0], midi_p->dat[1], midi_p->dat[2],
+	  midi_p->dat[3], midi_p->dat[4], midi_p->dat[5] );
+}
 
 nmidi::nmidi(){
   int i;
@@ -275,14 +281,48 @@ nmidi::set_pulse(double c)
   npulse = (int)c;
 }
 
+int dis[STRINGS];
+
+int dissonant(int string, int step, int *chord) {
+  int i;
+  int str_p=0;
+  int *c = chord;
+  int d=0;
+  
+  //  fprintf(stderr, "string %02d, %02d %02d %02d %02d %02d %02d\n", string,
+  //  chord[0], chord[1], chord[2], chord[3],chord[4],chord[5]);
+
+  for (i=0; i< STRINGS; i++) { dis[i] = 0;}
+  
+  for (i=0; i< STRINGS; i++) {
+    if (string == chord[i] - step)
+      d = chord[i];
+    else if (string == chord[i] + step)
+      d = chord[i];
+    if (d) {
+      //      fprintf(stderr, "got %d\n", i);
+      return (i);
+    }
+  }
+  return (int)0;
+}
+
+void nmidi::stop_string(int string, int *chord, struct chord *mp) {
+  mp->stop[string] = chord [string];
+  on[mp->stop[string]] = 0;
+  chord [string] = 0;
+  if (mp->start[string] == 0 )
+    stop_stop(mp, string);
+}
+
 void nmidi::do_lute_music()
 {
   int i;
   char s[80];
   int old_time, last_time, first;
   int saved[STRINGS];
-
-
+  int dbg=0;			// a testing flag to print info
+  int cc;                       // for chords, fornow
 
   for (i=0; i<100; i++)
     on[i] = 0;
@@ -297,16 +337,15 @@ void nmidi::do_lute_music()
   program();
 
   // FIRST PASS
+  // turn on notes, turn off when same string is used again
 
   midi_p = midi_root->next;
   while(midi_p) {
+
     for (i=0; i< STRINGS; i++) {
       midi_p->start[i] = midi_p->dat[i];
 
       on[midi_p->start[i]] = 1;
-      //      if (midi_p->start[i] == 0) {
-      //	printf ("HERE  i is %d\n", i);
-      //      }
 
       if ((old_strings[i] != 0) && (midi_p->dat[i] != 0)) {
 	midi_p->stop[i] = old_strings[i];
@@ -321,109 +360,88 @@ void nmidi::do_lute_music()
   // SECOND PASS
 
   midi_p = midi_root->next;
-  while(midi_p) {
-    for (i=0; i< STRINGS; i++) {
-      if (midi_p->prev->dat[i] != 0) {
-	saved[i] = midi_p->prev->dat[i];
-      }
-    }
-    
-    // stop 6th string if something on 5th
-    check_adjacent(0, Up, saved);
-
-    // stop 6th string if something on 4th
-    check_adjacent(0, Up2,saved);
-
-    // stop 5th string if something on 6th
-    check_adjacent(1, Down, saved);
-
-    // stop 5th string if something on 4th string
-    check_adjacent(1, Up, saved);
-
-    // stop 4th string if something on 5th string
-    check_adjacent(2, Down, saved);
-    
-    // stop a minor seventh below
-    for (i=1; i< STRINGS-2; i++) {
-      if((midi_p->start[i] + 10) == saved[i+2] ) {
-	midi_p->stop[i+2] = saved[i+2];
-	saved[i+2] = 0;
-	if (midi_p->start[i+2] == 0) {
-	  stop_stop(midi_p, i+2);
+  if (1) 
+    while(midi_p) {
+      for (i=0; i< STRINGS; i++) {
+	if (midi_p->prev->dat[i] != 0) {
+	  saved[i] = midi_p->prev->dat[i];
 	}
       }
-    }
-    
-    // stop a major seventh below
-    for (i=1; i< STRINGS-2; i++) {
-      if((midi_p->start[i] + 11) == saved[i+2] ) {
-	midi_p->stop[i+2] = saved[i+2];
-	saved[i+2] = 0;
-	if (midi_p->start[i+2] == 0) {
-	  stop_stop(midi_p, i+2);
-	}
-      }
-    }
-    
-    
-    // stop an augmented eighth below
-    for (i=3; i< STRINGS; i++) {
-      if((midi_p->start[i] - 13) == saved[i+2] ) {
-	midi_p->stop[i+2] = saved[i+2];
-	saved[i+2] = 0;
-	if (midi_p->start[i+2] == 0) {
-	  stop_stop(midi_p, i+2);
-	}
-      }
-    }
+      
+      cc = get_chord(midi_p);
 
-    // stop an augmented eighth  above
-    for (i=0; i< STRINGS-2; i++) {
-      if((midi_p->start[i] + 13) == saved[i+2] ) {
-	midi_p->stop[i+2] = saved[i+2];
-	saved[i+2] = 0;
-	if (midi_p->start[i+2] == 0) {
-	  stop_stop(midi_p, i+2);
-	}
-      }
-    }
+      if (dbg) dpt();
+      // stop 6th string if something on 5th
 
-    for (i=1; i< STRINGS; i++) {
-      if (saved [i-1] != 0) {
-	int t = saved [i-1] - midi_p->start[i];
-	if (t > -3 && t < 3) {
-	  midi_p->stop[i-1] = saved [i-1];
-	  on[midi_p->stop[i-1]] = 0;
-	  saved [i-1] = 0;
-	  if (midi_p->start[i-1] == 0 )
-	    stop_stop(midi_p, i-1);
+      if (1)
+	check_adjacent(0, Up, saved);
+      
+      // stop 6th string if something on 4th
+      
+      if (1)
+	check_adjacent(0, Up2,saved);
+      
+      // stop 5th string if something on 6th
+      if (1)
+	check_adjacent(1, Down, saved);
+      
+      // stop 5th string if something on 4th string
+      if (1)
+	check_adjacent(1, Up, saved);
+      
+      // stop 4th string if something on 5th string
+      if (1)
+	check_adjacent(2, Down, saved);
+      
+      // stop a minor seventh above or below (10)
+      if (0)
+	for (i=0; i< STRINGS; i++) {
+	  int diss=0;
+	  if (diss=dissonant(midi_p->dat[i], 10, saved)) 
+	    stop_string(diss, saved, midi_p);
 	}
-      }
-    }
-
-    for (i=0; i< STRINGS-1; i++) {
-      if (saved [i+1] != 0) {
-	int t = saved [i+1] - midi_p->start[i];
-	if (t > -3 && t < 3) {
-	  midi_p->stop[i+1] = saved [i+1];
-	  on[midi_p->stop[i+1]] = 0;
-	  saved [i+1] = 0;
-      	  if (midi_p->start[i+1] == 0 )
-	    stop_stop(midi_p, i+1);
+      
+      // stop a major seventh above or below (11)
+      if (1)
+	for (i=0; i< STRINGS; i++) {
+	  int diss=0;
+	  if (diss=dissonant(midi_p->dat[i], 11, saved)) 
+	    stop_string(diss, saved, midi_p);
 	}
-      }
-    }
-
-    if (! midi_p->next) {
-      for (i=0; i< STRINGS; i++) 
-	if (saved[i] != 0 ) {
-	  midi_p->stop[i] = saved[i];
-	  saved[i] = 0;
+      
+      // stop an augmented eighth above (13) or below (-13)
+      if (1)
+	for (i=0; i< STRINGS; i++) {
+	  int diss=0;
+	  if (diss=dissonant(midi_p->dat[i], 13, saved)) 
+	    stop_string(diss, saved, midi_p);
 	}
+      
+      // call dissonant to check (major minor seconds)
+      if (1)
+	for (i=0; i< STRINGS; i++) {
+	  int diss=0;
+	  if (diss=dissonant(midi_p->dat[i], 1, saved)) 
+	    stop_string(diss, saved, midi_p);
+	}
+	for (i=0; i< STRINGS; i++) {
+	  int diss=0;
+	  if (diss=dissonant(midi_p->dat[i], 2, saved)) 
+	    stop_string(diss, saved, midi_p);
+	}
+      
+      // stop left over strings at end of piece (next to last chord)
+      if (1)
+	if (! midi_p->next) {
+	  for (i=0; i< STRINGS; i++) 
+	    if (saved[i] != 0 ) {
+	      midi_p->stop[i] = saved[i];
+	      saved[i] = 0;
+	    }
+	}
+      midi_p = midi_p->next;
     }
-    midi_p = midi_p->next;
-  }
-
+  
 
   // LAST (PRINTING) PASS
 
@@ -577,6 +595,7 @@ void nmidi::do_file_head()
  if ((time_r[maxi+1]) * 3 > time_r[maxi]) 
       maxi++;
 
+ // fprintf(stderr, "maxi %d\n", maxi);
   switch(maxi) {
   case 2:
     pulses = 4; break;		// 0x06 .. 0x18
@@ -597,10 +616,93 @@ void nmidi::do_file_head()
   default:
     fprintf (stderr, "uncaught time value %d %d\n", time_r[i], maxi);
   }
+  pulse_time = maxi;
   if( npulse ) {
     //    printf("npulse %d\n", npulse);
     nmidi_head((int)( 8 * npulse ));
   }
   else
     nmidi_head(pulses);
+}
+
+ static char nt[2];
+
+char *numtonote(int n) {
+  char c;
+
+  nt[0] = 0;
+
+  if (n == 0) {
+    strcat(nt, "0 ");
+    return(nt);
+  }
+  n -=43;
+
+  switch (n%12) {
+  case 0:
+    strcpy(nt, "G ");
+    break;
+  case 1:
+    strcpy(nt, "A-");
+    break;
+  case 2:
+    strcpy(nt, "A ");
+    break;
+  case 3:
+    strcpy(nt, "B-");
+    break;
+  case 4:
+    strcpy(nt, "B ");
+    break;
+  case 5:
+    strcpy(nt, "C ");
+    break;
+  case 6:
+    strcpy(nt, "C+");
+    break;
+  case 7:
+    strcpy(nt, "D ");
+    break;
+  case 8:
+    strcpy(nt, "E-");
+    break;
+  case 9:
+    strcpy(nt, "E ");
+    break;
+  case 10:
+    strcpy(nt, "F ");
+    break;
+  case 11:
+    strcpy(nt, "F+");
+    break;
+  default:
+    strcpy(nt, "X ");
+    break;
+  }
+  return (nt);
+}
+
+int nmidi::get_chord(chord * c) {
+  int i;
+  int found=0;
+  int dat[STRINGS] = {0, 0, 0, 0, 0, 0};
+
+  for (i=0; i<STRINGS; i++) {
+    if (c->dat[i]) {
+      dat[found] = (int)c->dat[i];
+      found++;
+    }
+  }
+  for ( ; i<STRINGS; i++) 
+    dat[i] = 0;
+
+  /*
+  fprintf(stderr, "get_chord %2d %2d %2d %2d %2d %2d  ",
+	  dat[0], dat[1], dat[2], dat[3], dat[4], dat[5]);
+  fprintf(stderr, "%s  ", numtonote(dat[0]));
+  fprintf(stderr, "%s  ", numtonote(dat[1]));
+  fprintf(stderr, "%s  ", numtonote(dat[2]));
+  fprintf(stderr, "%s\n", numtonote(dat[3]));
+  */
+  return (0);
 }

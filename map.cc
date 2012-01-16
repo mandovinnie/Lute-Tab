@@ -216,7 +216,25 @@ void mapchar(print *p, font_list *f_a[], unsigned char c, struct file_info *f)
 	    c -= 220;
 	    //	    dbg1 (Warning, "map: number over 9 is %d  \n", (void *)c);
 	    //  this should work from 10 to 34, 230 to 254
-	    if (f->num_flag == ITAL_NUM) {
+	    if (f->m_flags & TWELVEDOTS && c > 9 && c < 13) {
+	      //	      printf("map.cc: TWELVE HERE\n");
+	      p->push();
+	      p->put_a_char(0130);
+	      if ( c == 11 ) {
+		p->movev(-0.083);
+		p->moveh(0.0122);
+		p->put_a_char(056);
+	      }
+	      if ( c == 12 ) {
+		p->movev(-0.083);
+		p->moveh(-0.02);
+		p->put_a_char(056);
+		p->moveh(0.064);
+		p->put_a_char(056);
+	      }
+	      p->pop();
+	    }
+	    else if (f->num_flag == ITAL_NUM) {
 	      if (c == 10 )
 		p->moveh(-0.021);
 	      if (c == 11 ) 

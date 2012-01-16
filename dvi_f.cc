@@ -1895,27 +1895,30 @@ void do_time_sig( char ch[], int j, int font,
 	    font = 0;
 	    p->use_font(font);
 	    switch (ch[1]) {
+	    case '0':
+	      cc = 033;
+	      break;
 	    case '2':
-		cc = 'R';
-		break;
+	      cc = 'R';
+	      break;
 	    case '3':
-		cc = 'T';
-		break;
+	      cc = 'T';
+	      break;
 	    case '4':
-		cc = 'S';
-		break;
+	      cc = 'S';
+	      break;
 	    case '5':
-		cc = 'V';
-		break;
+	      cc = 'V';
+	      break;
 	    case '6':
-		cc = 'P';
-		break;
+	      cc = 'P';
+	      break;
 	    default:
-		cc = '\0';
-		dbg1 (Warning,
-		      "tab: dvi_format: no character for large number %c\n",
-		      (void *)((int)ch[1]));
-		break;
+	      cc = '\0';
+	      dbg1 (Warning,
+		    "tab: dvi_format: no character for large number %c\n",
+		    (void *)((int)ch[1]));
+	      break;
 	    }
 	    p->push();
 	    if (f->line_flag == ON_LINE) p->movev(3.0 * d_i_space);
@@ -1926,25 +1929,26 @@ void do_time_sig( char ch[], int j, int font,
 	    p->movev( 0.5 * f_a[font]->fnt->get_height(cc));
 
 	    if (ch[2] && ch[2] == 'Q' ) {
-		p->set_highlight();
-		if (f->m_flags & PAREN ) 
-		  p->paren_highlight();
-		else if (f->m_flags & RED ) 
-		  p->red_highlight();
-		else
-		  p->gray_highlight();
-		p->put_a_char(cc);
-		p->clear_highlight();
+	      p->set_highlight();
+	      if (f->m_flags & PAREN ) 
+		p->paren_highlight();
+	      else if (f->m_flags & RED ) 
+		p->red_highlight();
+	      else
+		p->gray_highlight();
+	      p->put_a_char(cc);
+	      p->clear_highlight();
 	    }
 	    else {   		// no highlight
-		if (ch[2] && ch[2] == '|' ) {
-		    p->push();
-		    p->moveh( 0.47 * f_a[font]->fnt->get_width(cc));
-		    p->movev( 0.4 * f_a[font]->fnt->get_height(cc));
-		    p->put_rule(0.008, 1.86 * f_a[font]->fnt->get_height(cc));
-		    p->pop();
-		}
-		p->put_a_char(cc);
+	      if (ch[2] && ch[2] == '|' ) {
+		p->push();
+		p->moveh( 0.47 * f_a[font]->fnt->get_width(cc));
+		p->movev( 0.4 * f_a[font]->fnt->get_height(cc));
+		p->put_rule(0.008, 1.86 * f_a[font]->fnt->get_height(cc));
+		p->pop();
+	      }
+	      //	      if (cc == 27 ) fprintf(stderr, "HGERE\n");
+	      p->put_a_char(cc);
 	    }
 		
 	    p->pop();
@@ -1993,14 +1997,19 @@ void do_time_sig( char ch[], int j, int font,
 	  if (f->flags & FOUR || f->flags & FIVE) {
 	    if (f->line_flag == ON_LINE)  
 	      p->movev(-.5 * d_i_space);
-	    p->movev(-.62 * d_i_space);
+	    p->movev(-.62 * d_i_space);  
 	  }
 	  else
-	    p->movev(-3.12 * d_i_space);
+	    p->movev(-1.85 * d_i_space);
+
+	  if (f->line_flag == BETWEEN_LINE)  
+	    p->movev(.5 * d_i_space);
 	  p->put_a_char(18); // special O time signature
 	}
 	else if  (ch[1] == 'o' ) { 
 	  p->movev(-1.85 * d_i_space);
+	  if (f->line_flag == BETWEEN_LINE)  
+	    p->movev(.5 * d_i_space);
 	  p->put_a_char(17); // special O time signature
 	}
 	else {

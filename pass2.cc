@@ -51,6 +51,7 @@ pass2(print *p, i_buf *i_b, font_list *f_a[], int *l_p, struct file_info *f, dou
 	}
 	else if (f->m_flags & NMIDI ) {
 	  do_nmidi(l, f, i_b);
+	  dvi_format(p, i_b, f_a, l_p, j, f, l);
 	}
 	else 
 	  dvi_format(p, i_b, f_a, l_p, j, f, l);

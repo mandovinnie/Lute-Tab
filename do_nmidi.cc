@@ -50,6 +50,7 @@ void do_nmidi(struct list *l, struct file_info *f, i_buf *i_b)
   case 'W':
     time=128;break;
   case 'Y':
+  case 'J':
     time=256;break;
   case 'L':
     time=512;break;
@@ -80,6 +81,8 @@ void do_nmidi(struct list *l, struct file_info *f, i_buf *i_b)
     time_r[8]++; break; //  W
   case 256:
     time_r[9]++; break;
+  case 512:
+    time_r[10]++; break;
   }
 
   if (ch[1] == '.') 
@@ -96,6 +99,7 @@ void do_nmidi(struct list *l, struct file_info *f, i_buf *i_b)
   case 'w':
   case 'W':
   case 'Y':
+  case 'J':
   case 'L':
     if (f->flags & VERBOSE)
       fprintf(stderr, "%s\n", l->dat);
@@ -138,15 +142,6 @@ void do_nmidi(struct list *l, struct file_info *f, i_buf *i_b)
     old_time=time;
     break;
   case 'b':
-    /*
-    printf ("Barline\n");
-    midi_p->next = (chord *)malloc(sizeof (struct chord));
-    midi_p->next->prev = midi_p; 
-    midi_p = midi_p->next;
-    midi_p->next = 0;
-    for (i=0; i<STRINGS; i++) {
-      midi_p->dat[i] = 'B'-'A';
-      }  */
     barline = 1;
     break;
   }

@@ -242,6 +242,7 @@ struct list {
  #define NMIDI                  0x200000
  #define GUIT                   0x400000
  #define THIN_R                 0x800000
+ #define TWELVEDOTS             0x1000000
  /* variables defined in sizes.c */
 
 

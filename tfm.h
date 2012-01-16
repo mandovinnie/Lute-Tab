@@ -42,7 +42,9 @@ class tfm_font {
     int   f_tags[MAXWIDTHS];    /* tags table, whatever that is */
     int   f_remain[MAXWIDTHS];  /* remainder fields */
     int   f_ligkerns[MAXWIDTHS]; /* ligature - kerning index */
+    double f_ligkern[MAXWIDTHS]; /* ligature - kerning index */
     int   f_kerns[MAXWIDTHS];	/* kerning index */
+    double f_kern[MAXWIDTHS];	/* kerning index */
     double f_ps_red;		/* PostScript scaling factor */
 
     void tfm_input(double scale);
@@ -58,6 +60,8 @@ class tfm_font {
     double get_width (unsigned char c);
     double get_height(unsigned char c);
     double get_depth (unsigned char c);
+    double get_ligkern  (unsigned char c);
+    double get_kern  (unsigned char c);
     int is_defined(unsigned char c) {return (f_width[f_widths[c]] == 0.0 ? 0 : 1); }
     int p_get_h(unsigned char c);
     int get_design_size() { return (f_design_size); }

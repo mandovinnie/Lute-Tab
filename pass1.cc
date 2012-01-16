@@ -45,9 +45,9 @@ char min_O_w[] = "0.09 in   ";	/* ornament was 0.09 */
 char min_F_w[] = "0.07 in   ";	/* a fingering number */
 
 struct w chart[10] = {
-    {"0.26   in", 6.0},		/* B (J) */
-    {"0.23   in", 5.0},		/* W */
-    {"0.23   in", 5.0},		/* w */
+    {(char*)"0.26   in", 6.0},		/* B (J) */
+    {(char*)"0.23   in", 5.0},		/* W */
+    {(char*)"0.23   in", 5.0},		/* w */
     {min_0_w, W_FOUR},		/* 0 */
     {min_1_w, W_THREE},		/* 1 */
     {min_2_w, W_TWO},		/* 2 */
@@ -65,8 +65,8 @@ struct w big_chart[10] = {
     {min_4_w, W_QUART},		/* 2 */
     {min_4_w, W_QUART},		/* 3 */
     {min_4_w, W_QUART},		/* 4 */
-    {"0.05 in", W_QUART},	/* 5 */
-    {"0.05 in", W_QUART}	/* 6 */
+    {(char*)"0.05 in", W_QUART},	/* 5 */
+    {(char*)"0.05 in", W_QUART}	/* 6 */
 };
 
 char vals[] = "JWw0123456";
@@ -323,7 +323,10 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       break;
     case 'i':     /* insert a space */
       weight = W_NONE;
-      l->padding = str_to_inch(min_d_w);
+      if (l->next && strchr("G", l->next->dat[0]) && strchr("0", l->next->dat[1])) 
+	l->padding = 0;
+      else
+	l->padding = str_to_inch(min_d_w);
       goto rest;
     case 'j':     /* insert a space */
       weight = W_NONE;
@@ -666,6 +669,9 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	}
 	else {
 	  switch (l->dat[1]) {
+	  case '0':
+	    cc = 27;
+	    break;
 	  case '2':
 	    cc = 'R';
 	    break;

@@ -290,7 +290,7 @@ score(print *p, struct list *l, struct file_info *f,
 	else timeval = -1;
 	goto rest;
     case 'J':			// breve
-      timeval = -4;
+      timeval = -2;
       goto rest;
     case 'L':
       timeval = -3;

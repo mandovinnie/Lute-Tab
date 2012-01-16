@@ -127,6 +127,8 @@ tfm_font::tfm_input(double scale) // read current file to current struct
     tfm_conv = 1.0 / 8.0;
     /* (25400000 / NUM ) * ( resolution DENOM / DENOM) / 16.0 */
 
+    /* reead the File Header */
+
     f_l  = get_short();	/* length */
     f_lh = get_short();	/* header len */
 
@@ -156,12 +158,14 @@ tfm_font::tfm_input(double scale) // read current file to current struct
     }
     f_nw = get_short();	/* number of widths */
     f_nh = get_short();	/* number of heights */
-    f_nd = get_short();
+    f_nd = get_short(); /* number of depths */
     f_ics = get_short();
     f_ligproglen = get_short();
     f_n_kerns = get_short();
     f_extproglen = get_short();
     f_params = get_short();
+
+    /* we get the Headea (after the File Header)r */
 
     dbg2 (TFM,  " %d widths, %d heights\n", (void *)(int)f_nw, (void *)(int)f_nh);
     dbg1 (TFM,  "program length is %d, ", (void *)(int)f_ligproglen);
@@ -237,6 +241,9 @@ tfm_font::tfm_input(double scale) // read current file to current struct
 	}
 	else (void) get_long();
     }
+
+    /* now we get Char Info for each character */
+
     /* store char width indices at end of width table */
     for (k=0; k < n_widths; k++){
 	read_tfm_word(&b0, &b1, &b2, &b3);
@@ -248,7 +255,7 @@ tfm_font::tfm_input(double scale) // read current file to current struct
 	f_depths[k]  = (unsigned)(b1 & 0xf);
 	f_italics[k] = (unsigned)(b2>>2 & 0x3f);
 	f_tags[k]    = (unsigned)(b2 & 0x3);
-	f_remain[k]  = (unsigned)(b3 & 0xff);
+	f_remain[k]  = (unsigned)(b3 & 0xffff);
     }
 
     for (k = n_widths; k < 255; k++ ) 
@@ -310,14 +317,6 @@ tfm_font::tfm_input(double scale) // read current file to current struct
     /* read and convert lig_kern values 0 -> f_ligproglen -1  
        lig_kern_command */ 
 
-    if (f_ligproglen) {
-      /*	
-       *f_ligkerns = (int)malloc((int)f_ligproglen);
-	if (!f_ligkerns) {
-	    dbg0(Warning, "tab: ligkern error\n");
-	}
-	*/
-    }
     for (k=0; k < f_ligproglen; k++) {
 	x = (int)get_long();
 	f_ligkerns[k] = x;
@@ -326,6 +325,9 @@ tfm_font::tfm_input(double scale) // read current file to current struct
        extensible_recepie */ 
     for (k=0; k < f_n_kerns; k++) {
 	x = (int)get_long();
+        f_kerns[k] = x;
+	f_kern[k] = tfm_dvi_to_inch(x)
+                * f_design_size * scale / 1048576.0;
     }
     /* read and convert param values    0 -> f_params -1  fix_word*/
     for (k=0; k < f_params; k++) {
@@ -386,10 +388,20 @@ double tfm_font::get_height(unsigned char c)
     return(f_height[f_heights[(int)c - f_bc]]);
 }
 
+double tfm_font::get_kern(unsigned char c)
+{
+    return(f_kern[f_kerns[(int)c - f_bc]]);
+}
+
 double
 tfm_font::get_depth(unsigned char c)
 {
     return(f_depth[f_depths[(int)c - f_bc]]);
+}
+
+double tfm_font::get_ligkern(unsigned char c)
+{
+    return(f_ligkern[f_ligkerns[(int)c - f_bc]]);
 }
 
 int tfm_font::p_get_w(unsigned char c)

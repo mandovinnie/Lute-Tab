@@ -2366,10 +2366,19 @@ beginchar (18, 1.6em#, 1.cap#, 2.4cap#); "old O Clef";
 	penstroke z10e..z12e..z11e;
 	penstroke z14e..z4e..tension 1.13..z18e..tension 1.8..z16e..z17e;
 
-endchar;enddef;
+      endchar;enddef;
 %
-def do_mod_g_clef =
-beginchar (21, 1.8em#, 3.5cap#, 1.0cap#); "G Clef";
+    def do_round_clef =
+      beginchar (27, 3.1em#, 2.1cap#, 0cap#); "old perfect O";
+	pickup pencircle scaled 1.2wid;
+	x1=x5=0.5w;
+	y1=0;
+	y5=h;
+	draw z1..z5..z1;
+      endchar;enddef;
+%
+    def do_mod_g_clef =
+      beginchar (21, 1.8em#, 3.5cap#, 1.0cap#); "G Clef";
 	pickup pencircle scaled 3;
 	x0=.5w;y0=h;
 	x1=x0;y1=0;

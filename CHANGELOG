@@ -1,3 +1,20 @@
+#define VERSION "4.3.65"  Oct 17 2010
+added a fix when a ] is followed by } or / in a title
+
+VERSION "4.3.64"  April 2009
+fixed offset of SO and So time signatures
+Added S0
+added -twelvedot
+July 09 check for null pointer pass1.cc 
+July 09 added a few checks for null pointers in notes.cc
+
+VERSION "4.3.63" Sept 2008
+fixed spacing on long s
+
+fixed nmidi "Breve"
+working in improving "sustain" function
+
+
 VERSION "4.3.60"  Mar 7 2008
 changed squiggle "Q" to vector drawn character which makes gs happier
  Fix for [text interfering with score
