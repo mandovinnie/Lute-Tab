@@ -930,7 +930,7 @@ int get_text(struct list *l, struct text **textt,
 		case '\\': /* do nothing */
 		    tmp_text += 
 			get_special_width(&p, i_b, 
-					  f_a[font], f);
+					  f_a, font, f);
 		    //p++;p++;
 		    n++;n++;
 		    break;

@@ -1,10 +1,11 @@
-
+-5
+-h
 -b
 -twelvedots
 % {n\sln i\slt  i\sle }
 {A]/A]}
 
--7
+%-7
 
 -l "4.9 in"
 -i
@@ -16,6 +17,8 @@
 b
 .
 b
+1abcd
+11234
 So
 b
 S0

@@ -185,7 +185,7 @@ Options:
         one line of tablature.
     -twelvedots - in Italian notation, use an X with two dots 
         above it instead for N12.  This also changes N10 to X
-	and N11 to an X iwth a dot above it
+	and N11 to an X with a dot above it
     -T uses dalza style flags
     -t prints the notes on the line and does nothing else
     -thin uses the older,renaissance font "tlute"
@@ -508,26 +508,33 @@ of tablature, as the second to tenth character.
 			A ^ puts the following text on the top line when 
 			there are two lines of music and text.
 the following are currently working:
+			\`a is a backslash over the letter a
+			   letter takes a's place - \`letter
 			\'a puts a slash / over the letter a ( or whatever 
-			letter takes a's place - \'letter
-			\^ is a circumflex
-			\` is a backslash
-			\" is two dots - umlaut
-			\~ is the wiggle
-			\= is a flat horizontal bar
-			\. is a dot above the letter
-			\u is breve accent
-			\v is a v above the letter
-			\c e is the cedilla with an e - note the space!
+			\^a is a circumflex over the letter a
+			\"a is two dots - umlaut over the letter a
+			\~a is the wiggle over the letter a
+			\=a is a flat horizontal bar over the letter a
+			\.a is a dot above the letter a
+			\ua is breve accent
+			\va is a v above the letter
+			\ce is the cedilla with an e - note the space that i
+			   used to be neededais no longer needed !
 			\sl is a long s
-			?` - upside down ?
-			!` upside down !
+			\{ is {, \} is } \) is ), \( is (
+			\[ is [, \] is [
+			\! and \? are turned upside down
+			\ss = German ss \ae = ae \AE = AE \oe = oe \OE = OE 
+			\oo = o with line through it, \OO the same
+			\wt is a tie between letters 
+
+			\C centers the title
+			?` - upside down ? but \? is preferred
+			!` upside down !   but \! is prefrred
 			(these are just like TeX/LaTeX)
-			\[ is [, \] is ]
-			\{ is {, \} is }
-			] is a tie between letters
-			\wt is a tie between letters (May not work now)
-			@ is a ~ with dots for repeat
+			] is a tie between letters (unless followed 
+			   by }, /, or a space)
+			@ is a ~ with dots for repeat in song lyrics
 			| as the last letter buts the word against 
 			  the next word
 			you can not use < and > in text!

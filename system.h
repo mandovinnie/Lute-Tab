@@ -67,9 +67,9 @@ void
 do_thick_uline(print *p, int *skip_spaces, int s1, int s2, int line);
 
 double get_special_width(char **pp, class /* struct */ i_buf *i_b, 
-			 font_list *f_a, struct file_info *f);
+			 font_list *f_a[], int font, struct file_info *f);
 double print_special_char(char **pp, print *p, i_buf *i_b, 
-			  font_list *f_a, struct file_info *f, int italic );
+			  font_list *f_a[], int font,  struct file_info *f, int italic );
 struct font_list *add_font(char *name, double scale);
 char * ps_map(char * name);
 

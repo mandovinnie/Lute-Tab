@@ -595,7 +595,7 @@ void nmidi::do_file_head()
  if ((time_r[maxi+1]) * 3 > time_r[maxi]) 
       maxi++;
 
- // fprintf(stderr, "maxi %d\n", maxi);
+ //  fprintf(stderr, "maxi %d\n", maxi);
   switch(maxi) {
   case 2:
     pulses = 4; break;		// 0x06 .. 0x18
@@ -685,7 +685,7 @@ char *numtonote(int n) {
 int nmidi::get_chord(chord * c) {
   int i;
   int found=0;
-  int dat[STRINGS] = {0, 0, 0, 0, 0, 0};
+  int dat[STRINGS] = {0, 0, 0, 0, 0, 0, 0};
 
   for (i=0; i<STRINGS; i++) {
     if (c->dat[i]) {
@@ -693,16 +693,17 @@ int nmidi::get_chord(chord * c) {
       found++;
     }
   }
-  for ( ; i<STRINGS; i++) 
-    dat[i] = 0;
-
   /*
-  fprintf(stderr, "get_chord %2d %2d %2d %2d %2d %2d  ",
-	  dat[0], dat[1], dat[2], dat[3], dat[4], dat[5]);
+  fprintf(stderr, "get_chord %2d %2d %2d %2d %2d %2d %2d   ",
+	  dat[0], dat[1], dat[2], dat[3], dat[4], dat[5], dat[6]);
   fprintf(stderr, "%s  ", numtonote(dat[0]));
   fprintf(stderr, "%s  ", numtonote(dat[1]));
   fprintf(stderr, "%s  ", numtonote(dat[2]));
   fprintf(stderr, "%s\n", numtonote(dat[3]));
-  */
+  /* */
+
+  for ( ; i<STRINGS; i++) 
+    dat[i] = 0;
+
   return (0);
 }

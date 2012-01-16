@@ -8,7 +8,7 @@
 #  where the lute9.tfm file resides
 #
 # OPTIM = -O2
-OPTIM = -g -O0
+OPTIM = -g -O0 
 CC = g++3 -wuninitilized
 LD = g++
 # LD = g++ -m64
@@ -69,7 +69,7 @@ tt:	tree.o tt.o dbg.o
 	$(LD)  $(LDFLAGS) -o tt tree.o tt.o dbg.o
 
 tab:	${OBJS} 
-	$(LD)  $(LDFLAGS) -o tab ${OBJS} -lm 
+	$(LD)  $(LDFLAGS) -o tab ${OBJS} -lm
 
 clean:
 	rm -f *~ *.dvi *.ps *.log
@@ -112,7 +112,7 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	tlute9.600pk tlute8.600pk tlute7.600pk tlute6.600pk \
  	simple.tab midi-docs/Makefile midi-docs/midi-dump.c
 
-DISTFILE = lute_tab4.3.70.tar
+DISTFILE = lute_tab4.3.75.tar
 
 distrib:	 ${DISTFILE}
 

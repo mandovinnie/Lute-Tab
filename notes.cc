@@ -681,7 +681,7 @@ do_text(print *p, i_buf *i_b, font_list *f_a[],
 	break;
       case '\\':	/* escape the next character */
 	text_used += 
-	  print_special_char(&pp, p, i_b, f_a[font], f, 0);
+	  print_special_char(&pp, p, i_b, f_a, font, f, 0);
 	i++;
 	i++;
 	break;

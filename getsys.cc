@@ -927,8 +927,13 @@ Mstore(i_buf *ib, int *l_p, unsigned char *staff, struct file_info *f)
        && staff[1] != 'R' 
        && staff[0] != '='
        && strchr( "LWw012345xYy", staff[0]) ) {
-    int n_lines = /* 8 */ 8;
-    if ( f->flags & CON_SEV ) n_lines = 9;
+    int n_lines = 8;
+    if ( f->flags & CON_SEV ) 
+      n_lines = 9;
+    if (f->flags & FIVE) 
+      n_lines = 7;
+    if (f->flags & FOUR) 
+      n_lines = 6;
     ib->PutByte (staff[0]);
     ib->PutByte (staff[1]);
 #ifndef __linux__
@@ -983,7 +988,7 @@ Mstore(i_buf *ib, int *l_p, unsigned char *staff, struct file_info *f)
       ib->PutByte (staff[i]);
   }
   else if ( f->flags & CONVERT && staff[0] == '+' ) {
-    int n_lines = /* 8 */ 8;
+    int n_lines = 8;
     if ( f->flags & CON_SEV ) n_lines = 9;
     ib->PutByte (staff[0]);
     ib->PutByte (staff[1]);
