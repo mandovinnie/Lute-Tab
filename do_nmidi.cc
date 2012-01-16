@@ -12,7 +12,7 @@ static int barline=0;
 
 // int i_nmidi_strings[] = {55,60,65,69,74,79}; // italian
 // 0 x2b 0x30 0x35 0x39 0x3e 0x43
-int i_nmidi_strings[] = {43,48,53,57,62,67}; // italian
+int i_nmidi_strings[] = {41,43,48,53,57,62,67}; // italian
 
 extern struct chord *midi_p;	// in nmidi.cc
 extern int verbose;		// in nmidi.cc
@@ -114,6 +114,12 @@ void do_nmidi(struct list *l, struct file_info *f, i_buf *i_b)
     midi_p->next->prev = midi_p; 
     midi_p = midi_p->next;
     midi_p->next = 0;
+    for ( i=0; i< STRINGS; i++) {
+      midi_p->dat[i] = 0;
+      midi_p->stop[i] = 0;
+      midi_p->start[i] = 0;
+      midi_p->start[i] = 0;
+    }
     if (barline) {
       midi_p->bar = 1;
       barline = 0;
@@ -123,23 +129,37 @@ void do_nmidi(struct list *l, struct file_info *f, i_buf *i_b)
 
     for (i=0; i<STRINGS; i++) {
       l->dat[i+2] = tolower(l->dat[i+2]);
-      if ((l->dat[i+2] >= '0') && (l->dat[i+2] <= '9')) {
-	midi_p->dat[i] = i_nmidi_strings[i] + (l->dat[i+2] -'0');
+    }
+    for (i=0; i<STRINGS; i++) {
+      if ((i == 0) && (l->dat[8-i] == '4')) {
+	midi_p->dat[i] = 0x22;
+      }
+      else if ((l->dat[i+2] >= '0') && (l->dat[i+2] <= '9')) {
+	midi_p->dat[i+1] = i_nmidi_strings[i+1] + (l->dat[i+2] -'0');
       }
       else if (l->dat[i+2] == 'x') {
-	midi_p->dat[i] = i_nmidi_strings[i] + 10;
+	midi_p->dat[i+1] = i_nmidi_strings[i+1] + 10;
       }
-      else if ((l->dat[7-i] >= 'a') && (l->dat[7-i] <= 'i')) {
-        midi_p->dat[i] = i_nmidi_strings[i] + (l->dat[7-i] -'a');
-      } 
-      else if (l->dat[7-i] == 'j' || l->dat[7-i] == 'k' || l->dat[7-i] == 'l') {
-        midi_p->dat[i] = i_nmidi_strings[i] + (l->dat[7-i] -'a' - 1);
-      } 
-      else 
-	midi_p->dat[i] = 0;
+      else if ((l->dat[8-i] >= 'a') && (l->dat[8-i] <= 'i')) {
+        midi_p->dat[i] = i_nmidi_strings[i] + (l->dat[8-i] -'a');
 
-      midi_p->start[i] = 0;
-      midi_p->stop[i] = 0;
+	if ((i == 0 && l->dat[8] == 'a') && (l->prev->dat[8] == '/')) {
+	  midi_p->dat[i] -= 2;
+	}
+	else if ((i == 0 && l->dat[8] == 'a') && (l->prev->dat[8] == 's')) {
+	  midi_p->dat[i] -= 3;
+	}      
+	else if ((i == 0 && l->dat[8] == 'a') && (l->prev->dat[8] == 't')) {
+	  midi_p->dat[i] -= 5;
+	}      
+      } 
+      else if (l->dat[8-i] == 'j' || l->dat[8-i] == 'k' || 
+	       l->dat[8-i] == 'l') {
+        midi_p->dat[i] = i_nmidi_strings[i] + (l->dat[8-i] -'a' - 1);
+      } 
+      else {
+	;
+      }
     }
     midi_p->time = time;
     old_time=time;
@@ -148,6 +168,12 @@ void do_nmidi(struct list *l, struct file_info *f, i_buf *i_b)
     barline = 1;
     break;
   }
-
+/*
+  printf("do_nmidi: %s\n", l->dat);
+  printf("do_nmidi: %2x %2x %2x %2x %2x %2x %2x \n", 
+	 midi_p->dat[0], midi_p->dat[1], midi_p->dat[2],
+	 midi_p->dat[3], midi_p->dat[4], midi_p->dat[5],
+	 midi_p->dat[6]);
+ */
 }
 

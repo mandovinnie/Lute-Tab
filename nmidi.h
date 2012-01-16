@@ -9,7 +9,8 @@
 
 #include "i_buf.h"
 
-#define STRINGS 6		/* 7 for notes 3 for flags */
+#define STRINGS 7		/* 7 for notes 3 for flags */
+                                /* this used to be 6 wbc feb 2011 */
 
 struct chord {
   struct chord *next;

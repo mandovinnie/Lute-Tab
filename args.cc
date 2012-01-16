@@ -273,7 +273,8 @@ void set_X(const char *value, struct file_info *f) { f->flags |= NO_EXPAND;}
 void set_Y(const char *value, struct file_info *f) { f->flags |= NO_WORD;}
 void set_y(const char *value, struct file_info *f) {}
 void set_z(const char *value, struct file_info *f) {}
-void set_4(const char *value, struct file_info *f) { f->flags |= FOUR;}
+void set_4(const char *value, struct file_info *f) { 
+    f->flags |= FOUR;}
 void set_5(const char *value, struct file_info *f) { f->flags |= FIVE;}
 void set_0(const char *value, struct file_info *f) { 
   f->flags &= ~FOUR;
@@ -447,6 +448,7 @@ void set_milan(const char *value, struct file_info *f)
 void set_nmidi(const char *value, struct file_info *f)
 {
         f->m_flags |= NMIDI;
+	f->m_flags |= QUIET;
 }
 void set_amidi_patch(const char *value, struct file_info *f)
 {

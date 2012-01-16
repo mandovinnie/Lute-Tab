@@ -1,3 +1,21 @@
+VERSION "4.3.75"  May 29 2011
+fix thick bar for four and five bar staves
+make 4 and 5 staff lines work with -h ital to french conversion
+(makes them work for whole file)
+
+VERSION "4.3.74"  April 11 2011
+fix cewnterline, broken in last title.cc fix
+
+VERSION "4.3.73"  Feb 21 2011
+adding seventh course to nmidi
+
+VERSION "4.3.72"  Feb 21 2011
+added a fix to title.cc for nmidi with lots of titles
+Just take the first one
+
+VERSION "4.3.71"  Feb 10 2011
+Big rewriting of title.cc
+
 VERSION "4.3.70" Nov 29 2010
 fix time signatures for seven lines
 

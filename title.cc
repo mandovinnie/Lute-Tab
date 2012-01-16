@@ -27,6 +27,7 @@ extern int line;
 static int centerline;
 int title_font = 2;
 int text_font = 1;
+double gap=0.0;
 
 /* used in get_misc */
 #define TITLE 1
@@ -37,8 +38,11 @@ int text_font = 1;
 void get_misc(int flag, dvi_print *p, i_buf *i_b);
 void format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f);
 
+double special(char **pp, print *p, i_buf *i_b, font_list *f_a[], int font, int print,
+	       struct file_info *f, int italic);
+
 #define EN 'I'
-#define LLINE 256
+#define LLINE 512
 
 void
 format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
@@ -50,12 +54,13 @@ format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
     char * l_bp=NULL;
     //    int i;
     char bbuf[LLINE];
-    //    double b_total=0.0;
     char *b_bp=&bbuf[0];
     int italic = 1;		/* for wallace titles */
     static char *tp;			// title pointer
+    static char title_done=0;		// this seems to be for midi titles
 
     centerline = 0;
+    bzero(bbuf, LLINE);
 
     if (f->m_flags & ALTTITLE) {
       //      printf("using alternate font\n");
@@ -67,10 +72,11 @@ format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
     p->push();
 
     while ((*b_bp = i_b->GetByte()) != (char)EOF) { /* get the text */
-      if (f->m_flags & NMIDI) {
+      if (f->m_flags & NMIDI & ! title_done) {
 	if (*b_bp == '}') {
 	  p->pop();
 	  *tp++ = 0;
+	  title_done = 1;
 	  return;
 	}
 	if (! f->title) {
@@ -81,9 +87,11 @@ format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
 	//	printf("%c", *b_bp);
       }
       else {
-	/*  printf ("title: %c %2d\n", *b_bp, *b_bp); */
+	//  printf ("title: %c %2d\n", *b_bp, *b_bp); 
 	//	if (f_a[0]->fnt->is_defined(*b_bp))
 	//		printf(" char %d is defined\n", *b_bp);
+
+	//	printf ("--first pass character %c\n", *b_bp);
 	switch (c=*b_bp) {
 	case '^':
 	  {
@@ -95,125 +103,8 @@ format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
 	    p->use_font(font);
 	  }
 	  break;
-	case 0:
-	  goto done;
-	  //	    break;
 	case ' ':
-	  p->moveh(en);
 	  cur += en;
-	  break;
-	case '/':		/* lots of hfill */
-	  *b_bp = '\0';	/* we are at the end of the first half */
-
-	  if ((c = i_b->GetByte()) != '/' && c != (char)EOF) {
-	    char lbuf[LLINE];
-	    double total=0.0;
-	    l_bp = &lbuf[0];
-	    int i = 0;
-
-	    *l_bp = c;
-
-	    while ( *l_bp != (char)EOF && i++ < sizeof(lbuf) ) {
-	      if (*l_bp == '}') break;
-	      switch (*l_bp) {
-	      case ' ':
-	      case '\t':
-		total += en;
-		*l_bp = ' ';
-		break;
-	      case ']':
-		total += f_a[0]->fnt->get_width(0201);
-		break;
-	      case '|':
-		total += 0;
-		break;
-	      case '?': /* replace with upside down ?? */
-		{
-		  total += 
-		    f_a[font]->fnt->get_width(*l_bp);
-		  char c = i_b->GetByte();
-		  if ( c == '`') *l_bp = 0076;
-		  else i_b->unGet(c);
-		}
-		break;
-	      case '!': /* replace with upside down ?? */
-		{
-		  total += 
-		    f_a[font]->fnt->get_width(*l_bp);
-		  char c = i_b->GetByte();
-		  if ( c == '`') *l_bp = 0074;
-		  else i_b->unGet(c);
-		}
-		break;
-	      case 'f': /* replace with ff with ff */
-		{
-		  char c = i_b->GetByte();
-		  if (f->flags & DVI_O ) {
-		    if ( c == 'f') *l_bp = 0013;
-		    else if ( c == 'i') *l_bp = 0014;
-		    else if ( c == 'l') *l_bp = 0015;
-		    else i_b->unGet(c);
-		  }
-		  else if (f->flags & PS ){
-		    if ( c == 'i') *l_bp = (char)0256;
-		    else if ( c == 'l') *l_bp = (char)0257;
-		    else i_b->unGet(c);
-		  }
-		  total += 
-		    f_a[font]->fnt->get_width(*l_bp);
-		}
-		break;
-	      case '\\':
-		total += 
-		  get_special_width(&l_bp, i_b, f_a[font], f);
-		break;
-	      default:
-		total += f_a[font]->fnt->get_width(*l_bp);
-		break;
-	      }
-	      l_bp++;
-	      *l_bp = i_b->GetByte();
-	    }
-	    *l_bp = '\0';
-
-	    //	printf("title staff_len %f total %f cur %f\n",
-	    //		       staff_len, total,  cur);
-	    //		printf("title: %s\n", lbuf);
-
-	    if (centerline) {
-	      p->moveh ( (staff_len - total - cur)/2.0);
-	      centerline = 0;
-	    }
-	    else 
-	      p->moveh (staff_len - total - cur);
-
-	    l_bp = &lbuf[0];
-
-	    while (*l_bp) {
-	      switch (*l_bp) {
-	      case ' ':
-		p->moveh(en);
-		break;
-	      case ']':	/* and this one */
-		p->use_font(0);
-		p->set_a_char(0201);
-		p->use_font(font);
-		break;
-	      case '}':	// end of text
-		break;
-	      case '\\':
-		print_special_char(&l_bp, p, i_b, 
-				   f_a[font], f, italic);
-		break;
-	      default:
-		p->set_a_char(*l_bp);
-		break;
-	      }
-	      l_bp++;
-	    }
-	    goto done;
-	  }
-	  else p->set_a_char ('/');
 	  break;
 	case NEWLINE :
 	  //	    printf("title: newline\n");
@@ -224,38 +115,22 @@ format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
 	  break;
 	case '}':
 	  goto done;
-	case ']':		/* word tie - this swallows the next chracter */
-	  p->use_font(0);
-	  p->set_a_char(0201);
-	  cur += f_a[0]->fnt->get_width(0201);
-	  p->use_font(font);
-	  cc=i_b->GetByte();
-	  if (cc == '}' || cc == '/')
-	    i_b->unGet(cc);
-	  else
-	    p->set_a_char(cc);
-	  cur += f_a[font]->fnt->get_width(cc);
-	  break;
+	case 0:
+	  goto done;
 	case '?':		/* replace with upside down ?? */
 	  {
-	    cur += 
-	      f_a[font]->fnt->get_width(*b_bp);
 	    char cc = i_b->GetByte();
-	    if ( cc == '`') *b_bp = 0076;
-	    else i_b->unGet(cc);
-	    p->set_a_char(*b_bp);
+	    cur += f_a[font]->fnt->get_width(*b_bp);
+	    if ( cc == '`') *b_bp = 0076; //0277 is upside down question 	    
+	    else { i_b->unGet(cc);}
 	  }
 	  break;
 	case '!':		/* replace with upside down !! */
 	  {
-	    cur += 
-	      f_a[font]->fnt->get_width(*b_bp);
-	    char c = i_b->GetByte();
-	    if ( c == '`') {
-	      *b_bp = 0074;
-	    }
-	    else i_b->unGet(c);
-	    p->set_a_char(*b_bp);
+	    char cc = i_b->GetByte();
+	    cur += f_a[font]->fnt->get_width(*b_bp);
+	    if ( cc == '`') *b_bp = 0074; //  0241 is exclaimation
+	    else { i_b->unGet(cc); }
 	  }
 	  break;
 	case 'f':		/* replace with ff with ff */
@@ -274,36 +149,100 @@ format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
 	    }
 	    else 
 	      i_b->unGet(cf);
-
 	    cur += 
 	      f_a[font]->fnt->get_width(*b_bp);
-	    p->set_a_char(*b_bp);
 	  }
 	  break;
-	case '\\':
-	  cur += get_special_width(&b_bp, i_b, f_a[font], f);
-	  b_bp--;
-	  b_bp--;
-	  print_special_char(&b_bp, p, i_b, f_a[font], 
-			     f, italic);
-	  break;	
+	case '\\':		// special escape
+	  {
+	    char *tl;
+	    double temp;
+	    temp = get_special_width(&b_bp, i_b, f_a, font,  f);
+	    //	    printf("temp is %f\n", temp);
+	    // printf("case 2 %c  %s\n", *b_bp, bbuf);
+	    cur += temp;
+	    //	    b_bp--;
+	    // p->put_a_char ('.');
+	  }
+	  break;
+	case ']':		/* word tie - this swallows the next chracter */
+	  cc=i_b->GetByte();	  
+	  if (cc == '}' || cc == '/' || cc == ' ') {
+	    cur += f_a[font]->fnt->get_width(c);
+	    i_b->unGet(cc);
+	  }
+	  else {
+	    cur += f_a[0]->fnt->get_width(0201);
+	    cur += 0.005;	// this is sheer voodo!!
+	    i_b->unGet(cc);
+	  }
+	  break;
+	case '/':		/* lots of hfill */
+
+	  // 	printf("title staff_len %f  cur %f\n",
+	  //  		       staff_len,  cur);
+	  if (centerline) {
+	    dbg0(Warning, "centerline and split in the same title line\n");
+	  }
+	  break;
 	default:
-	  p->set_a_char(*b_bp);
-	  cur += f_a[font]->fnt->get_width(*b_bp); 
-	  //	    printf ("cur %f\n", cur);
-	  b_bp++;
+	  cur += f_a[font]->fnt->get_width(c);
 	  break;
 	}
+	b_bp++;
       }
+      //      printf("title cur %f\n", cur);
     }
-    *b_bp = '\0';
   done:
-				/* print the first half */
-    if (*b_bp != (char)EOF) {
-	while ((*b_bp = i_b->GetByte()) != (char)NEWLINE &&
-	      *b_bp != (char)EOF ) /* swallow line */
-	  ;
+    b_bp++;
+    *b_bp = '\0';
+    gap = staff_len - cur;
+
+    //    printf("first pass done ->%s\n", bbuf);
+
+    if (centerline) {
+      //      printf("first pass done ->%s gap is %f\n", bbuf, gap);
+      p->moveh(gap/2.0);
+      centerline = 0;
     }
+
+    b_bp=&bbuf[0];
+    while (*b_bp != 0) {
+      //      printf ("--second pass character %c\n", *b_bp);
+      switch (*b_bp) {
+      case ' ':
+	p->moveh(en);
+	break;
+      case '}':
+	goto end;
+	break;
+      case 'f':
+	p->set_a_char(*b_bp);
+	break;
+      case ']':			// word tie
+	if (*(b_bp+1) == '}' || *(b_bp+1) == '/' || *(b_bp+1) == ' ' ) {
+	  p->set_a_char(*b_bp);
+	}
+	else {
+	  p->use_font(0);
+	  p->set_a_char(0201); /* 0201 is the word tie - half circle 129 decimal */
+	  p->use_font(font);
+	}
+	break;
+      case '\\':
+	print_special_char(&b_bp, p, i_b, f_a, font, 
+			   f, italic);
+	break;
+      case '/':
+	p->moveh(gap);
+	break;
+      default:
+	p->set_a_char(*b_bp);
+	break;
+      }
+      b_bp++;
+    }
+ end:
     p->pop();
     //    exit;
     return;
@@ -336,15 +275,36 @@ void do_sp(unsigned char c, int font, print *p /* , struct file_info *f */)
     }
 }
 
-double special(char **pp, print *p, i_buf *i_b, font_list *f_a, int print,
-	       struct file_info *f, int italic);
-double special(char **pp, print *p, i_buf *i_b, font_list *f_a, int print,
+
+double get_special_width(char **pp, i_buf *i_b, font_list *f_a[],
+			 int font, struct file_info *f)
+{
+  print *p=NULL; 
+  return (special(pp, p, i_b, f_a, font, 0, f, 0));
+}
+double print_special_char(char **pp, print *p, i_buf *i_b, 
+			  font_list *f_a[], int font, struct file_info *f, int italic)
+{ 
+  return (special(pp, p, i_b, f_a, font, 1, f, 0)); 
+}
+
+double special(char **pp, /* buffer of title */ 
+	       print *p,  /* do we print or return spacing */
+	       i_buf *i_b, /* inout stream */
+	       font_list *f_a_in[], /* all the fonts */
+	       int font, /* the main font used */
+	       int print,
 	       struct file_info *f, int italic)
 {
   unsigned char c, d;
   int dontset=0;
-
-  if (**pp == '\\') {		/* slash, special, character */
+  font_list *f_a = f_a_in[font];
+  
+  if (**pp != '\\')  {
+    dbg0(Error, "tab: special: called without backslash\n");
+    return (0.0);
+  }
+  else {
     *++*pp;
     if (print) {
       c = (unsigned char)**pp;		/* special */
@@ -358,10 +318,10 @@ double special(char **pp, print *p, i_buf *i_b, font_list *f_a, int print,
       **pp = (char)i_b->GetByte();
       d = (unsigned char)**pp;		/* character */
     }
+
     if (c == 's' && d == 'l' ) {/* long s */
       if (f->flags & PS) d = 0246; 
       else d = 's';
-//	    printf("long s %f\n", f_a->fnt->get_width(d));
     }
     else if (c == 's' && d == 's') d = 0031; /* fs */
     else if (c == 'a' && d == 'e') d = 0032; /* ae */
@@ -370,26 +330,52 @@ double special(char **pp, print *p, i_buf *i_b, font_list *f_a, int print,
     else if (c == 'O' && d == 'E') d = 0036; /* OE */
     else if (c == 'o' && d == 'o') d = 0034; /* orsted */
     else if (c == 'O' && d == 'O') d = 0037; /* Orsted */
+    else if (c == 'w' && d == 't') d = 0201; /* word tie */
+
     else if (c == ')') {	/* backwards compatibility */
-      if (print) *--*pp;
-      else i_b->unGet(d);
+      if (!print) i_b->unGet(d);
       d = c;
     }
     else if (c == '(') {
-      if (print) *--*pp;
-      else i_b->unGet(d);
+      if (!print) i_b->unGet(d);
       d = c;
     }
     else if (c == ']' || c == '[') {
-      if (print) *--*pp;
-      else i_b->unGet(d);
+      if (!print) i_b->unGet(d);
       d = c;
     }
     else if (c == '}' || c == '{') {
-      if (print) *--*pp;
-      else i_b->unGet(d);
+      if (!print) i_b->unGet(d);
       d = c;
     }
+    else if (c == '!' || c == '?') {
+      if (!print) i_b->unGet(d);
+      d = c;
+    }
+    else if ( c == 'C') {        /* center line in title */
+      if (print) {
+	if (d == 'L') {
+	  *++*pp;
+	}
+      }
+      else {
+	if (d == 'L') {
+	  *++*pp;
+	  **pp = (char)i_b->GetByte();  // swallow / from \CL/ if necessary
+	  if (**pp != '/')
+	    dbg0(Warning, "incorrcte Centerline specification\n");
+	  *--*pp; *--*pp;
+	}
+      }
+      centerline = 1;
+    }
+    else if (c != '`' && c != '\'' && c != '^' && c != '"' && c != '~' && c != '.'
+	     && c != 'u' && c != 'v' && c != 'H' && c != 'c' && c != 'w' &&
+	     c != 'C' && c != '=' ) {
+      if (!print) i_b->unGet(d);
+       d = c;
+    }
+
 
     if (print) {
       p->push();
@@ -430,7 +416,10 @@ double special(char **pp, print *p, i_buf *i_b, font_list *f_a, int print,
 	if (f->flags & PS) {
 	  p->moveh ((f_a->fnt->get_width(d)
 		     - f_a->fnt->get_width(0136))/2.5);
+	  p->push();
+	  p->moveh (0.002);
 	  p->put_a_char(0303);
+	  p->pop();
 	}
 	else {
 	  p->moveh ((f_a->fnt->get_width(d)
@@ -439,7 +428,6 @@ double special(char **pp, print *p, i_buf *i_b, font_list *f_a, int print,
 	}
       }
       else if (c == '"' ) {
-	//		printf("here\n");
 	if (isupper(d))
 	  p->movev(f_a->fnt->get_height('e') 
 		   - f_a->fnt->get_height('E'));
@@ -546,9 +534,12 @@ double special(char **pp, print *p, i_buf *i_b, font_list *f_a, int print,
       }
       else if (c == 'c' ) {    	/* cedilla */
 	if (f->flags & PS) {
-	  p->moveh ((f_a->fnt->get_width('c')
-		     /* - f_a->fnt->get_width(0030) */ )/4.1 /* 2.0 */);
+	  p->push();
+	  p->moveh ((f_a->fnt->get_width(d))/4.1);
 	  p->put_a_char(0313);
+	  p->pop();
+	  p->put_a_char(d);
+	  c = d; /* this fixes the width, which is set below */
 	}
 	else {
 	  p->moveh ((f_a->fnt->get_width(d)
@@ -557,13 +548,14 @@ double special(char **pp, print *p, i_buf *i_b, font_list *f_a, int print,
 	}
 	dontset++;
       }
-      else if ( c == 'C') {        /* center line in title */
-	centerline = 1;
+      else if ( c == 'w') {
+	p->use_font(0);
+	p->put_a_char(0201); /* 0201 is the word tie - half circle 129 decimal */
+	p->use_font(font);
 	dontset++;
       }
       else if (c == ']') {
 	p->set_a_char(']');
-	//		p->moveh (f_a->fnt->get_width('{'));
 	dontset++;
       }
       else if (c == '[') {
@@ -572,25 +564,45 @@ double special(char **pp, print *p, i_buf *i_b, font_list *f_a, int print,
       }
       else if (c == '{') {
 	p->set_a_char('{');
-	//		p->moveh (f_a->fnt->get_width('{'));
 	dontset++;
       }
       else if (c == '}') {
 	p->set_a_char('}');
 	dontset++;
       }
+      else if (c == '!') {
+	p->set_a_char(0074);
+	dontset++;
+      }
+      else if (c == '?') {
+	p->set_a_char(0076);
+	dontset++;
+      }
+      else if (c == 'C') {	// do nothing
+	//	printf("d is %c\n", d);
+	if ( d == 'L' ) {
+	  dontset++;
+	}
+      }
       else if ( c != 'a' && c != 'A' && c != 'e' && c != 'E'
 		&& c != 's' && c != 'o' && c != 'O' 
-		&& c != '(' && c != ')' && c != ' ') {
+		&& c != '(' && c != ')' && c != ' '
+		&& c != '!' && c != '?' && c != 'w' ) {
 	if (! (f->m_flags & QUIET) )dbg2(Warning, 
-					 "tab: special: unknown character %c %d\n", 
+					 "tab: special: unknown character %c %3d, printing it anyways\n", 
 					 (void *)(int)c, (void *)(int)c );
+	p->set_a_char(c);
+	dontset++;
       }
       p->pop();
-	    
-      /* the tex to ps char substitution is now in set_a_char */
+      //      if (c == ']' || c == '[' || c == '{' || c == '}')
+      if (dontset) { /* single code characters */
+	if ( d == 0201) p->moveh (f_a_in[0]->fnt->get_width(0201));
+	else p->moveh (f_a->fnt->get_width(c));
 
-      if (! dontset) { /* print */
+      }
+      /* the tex to ps char substitution is now in set_a_char */
+      if (! dontset ) { /* print */
 	if (d == 'i') {
 	  if (f->flags & PS) {
 	    /*			int high = f_a->fnt->p_get_h(d);
@@ -610,6 +622,7 @@ double special(char **pp, print *p, i_buf *i_b, font_list *f_a, int print,
 	else if (d == 0246 ) {	// long s
 	  if (f->flags & PS ) { 
 	    p->moveh(f_a->fnt->get_kern(d));
+	    //	    printf("title - long s kern %f\n", f_a->fnt->get_kern(d));
 	    p->set_a_char(0246);
 	  }
 	  /* dvi unhandled */
@@ -617,31 +630,27 @@ double special(char **pp, print *p, i_buf *i_b, font_list *f_a, int print,
 	else p->set_a_char(d);
       }
       else dontset = 0;
-    }
+    }   /* end if print */
+
     if (d == 0246) {  // long s
-      return (f_a->fnt->get_width(d) + 2 * f_a->fnt->get_kern(d));
+      return (f_a->fnt->get_width(d) +  f_a->fnt->get_kern(d));
     }
-    else if ( c == 'c' || c == ']') {
-      return /* (f_a->fnt->get_width(c)) */  (0.0);
+    else if (  d == 0201 ) {
+      return (f_a_in[0]->fnt->get_width(d));
+    }
+    else if ( c == 'c' ) {	// cedilla
+      return (f_a->fnt->get_width(d));
+    } 
+    else if (  c == ']') {
+      return (f_a->fnt->get_width(c));
+    }
+    else if (  c == '[') {
+      return (f_a->fnt->get_width(c));
+    }
+    else if ( c == 'C' && d == 'L' ) {
+      return (0);
     }
     else 
       return (f_a->fnt->get_width(d));
   }
-  /* else not a '\\' */
-  else {
-    dbg0(Error, "tab: special: called without backslash\n");
-    return (0.0);
-  }
-}
-
-double get_special_width(char **pp, i_buf *i_b, font_list *f_a,
-struct file_info *f)
-{
-  print *p=NULL; 
-  return (special(pp, p, i_b, f_a, 0, f, 0));
-}
-double print_special_char(char **pp, print *p, i_buf *i_b, 
-   font_list *f_a,struct file_info *f, int italic)
-{ 
-  return (special(pp, p, i_b, f_a, 1, f, 0)); 
 }

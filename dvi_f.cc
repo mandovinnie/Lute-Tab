@@ -282,17 +282,17 @@ struct list *l)			/* data */
 	p->put_rule(str_to_inch(thick_bar), v_bar - d_i_space);
       }
       else if (f->flags & FOUR) {
-	p->put_rule(str_to_inch(thick_bar), v_bar - 2 * d_i_space);
+	p->put_rule(str_to_inch(thick_bar), v_bar - (2 * d_i_space));
       }
       else
 	p->put_rule(str_to_inch(thick_bar), v_bar);
     }
     else {
       if (f->flags & FIVE) {
-        p->put_rule(str_to_inch(thick_bar), val * d_i_space + staff_h - d_i_space);
+        p->put_rule(str_to_inch(thick_bar), val * d_i_space + staff_h);
       }
       else if (f->flags & FOUR) {
-        p->put_rule(str_to_inch(thick_bar), val * d_i_space + staff_h  - 2 * d_i_space);
+        p->put_rule(str_to_inch(thick_bar), val * d_i_space + staff_h);
       }
       else
 	p->put_rule (str_to_inch(thick_bar),
