@@ -88,7 +88,7 @@ int *tuning_str(char *str)
     int j=strlen(arg_str);
     int k, count;
     int sharp, flat;
-    int val;
+    int val=0;
 
     s[0]=sharp=flat=0;
     for (k=1; k<16; k++) s[k]=0;
@@ -147,7 +147,7 @@ int find_note(
      struct file_info *f)
 {
     int fret;
-    int note;
+    int note=0;
     int *str;
 
 //    printf("find note: string %d char %c\n", string, c);
@@ -195,7 +195,7 @@ score(print *p, struct list *l, struct file_info *f,
     char *prev=l->prev ? l->prev->dat: 0;
     int i;
     char c;
-    int timeval;
+    int timeval=0;
     char cc = *ch;
 
     //    printf("conv %f\n", conv);
@@ -356,7 +356,7 @@ score(print *p, struct list *l, struct file_info *f,
 	  }
 	  if (f->m_flags & SOUND) {
 	    // timeval is from -2 to 5 - 128 to 
-	    double t_val;
+	    double t_val=0.0;
 	    switch (timeval) {
 	    case -2:
 	      t_val = 512;

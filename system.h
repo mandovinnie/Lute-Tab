@@ -53,8 +53,16 @@ void score(print *p, struct list *l,
 
 void
 my_underline(print *p, font_list *f_a[],int *skip_spaces, int s1, int line);
+
 void 
 do_uline(print *p, int *skip_spaces, int s1, int s2, int line);
+
+void 
+do_r_uline(print *p, int *skip_spaces, int s1, int s2, int line);
+
+void 
+do_w_uline(print *p, int *skip_spaces, int s1, int s2, int line);
+
 void
 do_thick_uline(print *p, int *skip_spaces, int s1, int s2, int line);
 

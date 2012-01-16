@@ -77,6 +77,7 @@ void init(file_info *f)
     f->cur_system = 0;
     f->include = 0;
     f->midi_patch = 0;
+    f->start_system = 0;
 }
 
 char *
@@ -337,9 +338,10 @@ main(int argc, char **argv)
     //	dbg_set(TFM);
     //	dbg_set(Stack);
     //	dbg_set(Flow);
+    //	dbg_set(Inter);
     
     if ( ! (f.m_flags & QUIET) )
-      dbg2(Warning, "tab %s copyright 1995-2001 by Wayne Cripps%c",
+      dbg2(Warning, "tab %s copyright 1995-2003 by Wayne Cripps%c",
 	   (void *)VERSION,
 	   (void *) NEWLINE );
     
@@ -354,6 +356,9 @@ main(int argc, char **argv)
     b.Seek(0, rew);
     
     tfm_stuff(&b, &f);
+
+    free (f.file);
+    free (f.out_file);
     return(0);
 }
 

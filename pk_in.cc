@@ -173,7 +173,7 @@ register int n, m;
 int pk_get_code_and_skip_packet(file_in *pk)
 {
 unsigned int flag;
-int code;
+int code=0;
 long bitmap_length;
     flag = pk->GetByte();
     switch (pk_packet_type(flag)) {

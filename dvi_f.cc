@@ -77,7 +77,7 @@ struct list *l)			/* data */
     double EM = str_to_inch(em);
     int last_line_in_grid = 0;
     char *ch;			/* in this case, the chord to print */
-    char *nxt;			/* the next chord */
+    char *nxt=0;		/* the next chord */
     struct list *pp;
     static int double_grid=0;
     extern char flag_indent[];
@@ -147,7 +147,11 @@ struct list *l)			/* data */
 			     + staff_h);
 	    }
 	}
-	check_bar(p, j, l_p, l); 
+	if (ch[1] == 'X' )
+	  ;
+	else check_bar(p, j, l_p, l); 
+
+//	printf ("dvi_f: measures %d ch %s\n", n_measures, ch);
 
 	if (ch[1] == 'T') {
 	    p->push();
@@ -173,7 +177,7 @@ struct list *l)			/* data */
 	p->pop();
 
 	if (f->flags & NOTES )	/* print a barline in the music */
-	    if (! (f->flags & NO_MUSIC_B)
+	  if (! (f->flags & NO_MUSIC_B)
 		|| j == 0 
 		|| ( j== 1 && l->prev->dat[0] == '8')
 		|| j == *l_p - 1
@@ -266,7 +270,9 @@ struct list *l)			/* data */
 	    p->put_rule (str_to_inch(thick_bar),
 			 val * d_i_space + staff_h);
 	}
-	check_bar(p, j, l_p, l);     
+	if (ch[1] == 'X' )
+	  ;
+	else check_bar(p, j, l_p, l);     
 	p->pop();
 	if (f->flags & NOTES) {
 	    p->push();
@@ -580,6 +586,8 @@ struct list *l)			/* data */
 	if (f->flags & NOTES){
 	  p->push();
 	  p->movev(-0.940);
+	  //	  printf("text ps %f n_text %d\n", text_sp, f->n_text);
+	  p->movev ( -text_sp * f->n_text );
 	  p->set_a_char(ch[1]);
 	  p->set_a_char('.');
 	  p->pop();
@@ -602,7 +610,7 @@ struct list *l)			/* data */
 	    if (f->flags & NOTES){
 	      //	      p->movev(-0.940);
 	      p->put_rule (staff_h,
-			 (val + 4) * d_i_space + staff_h + 0.940);
+			 (val + 4) * d_i_space + staff_h + 0.940 + (text_sp * f->n_text));
 	      //	      p->put_rule(0.05, 0.05);
 	    }
 	    else {
@@ -613,8 +621,9 @@ struct list *l)			/* data */
 	      check_bar(p, j, l_p, l);         
 	    if (f->flags & NOTES){
 	      	      p->movev(-0.940);
+		      p->movev(-text_sp * f->n_text);
 	    }
-	    p->movev  (-1 * (val + 4) * d_i_space + staff_h);
+	    p->movev  (-1 * (val + 4) * d_i_space + staff_h );
 	    p->put_rule(str_to_inch("0.60 in"), staff_h);
 	}
 	break;
@@ -632,7 +641,6 @@ struct list *l)			/* data */
 	p->moveh(-1.0 * last_move);
 	p->moveh(0.75 * EM);
 	if (baroque && l->prev && l->prev->dat[0] != '2' ) p->moveh(.05);
-/*	if (f->line_flag == ON_LINE) p->movev (-0.5 * d_i_space);  */
 	if (f->flags & MARKS) p->put_rule(0.01, 0.17);  
 	/* fall through */
     default:                  /* GRIDS and FLAGS HERE*/
@@ -679,7 +687,7 @@ struct list *l)			/* data */
 	if ((cc = ch[1]) == '#' || grid_flag /* GRIDS here */
 	    || cc == '*' || cc == '|' ) { 
 	    int nn;
-	    int grids;
+	    static int grids=0;
 
 	    if (! grid_flag ) {	/* first one */
 		grid_flag = atoi((char *)&*ch);
@@ -731,7 +739,7 @@ struct list *l)			/* data */
 		    p->move_n_v("0.19 in");
 		    p->movev  ( grids * str_to_inch ("0.05 in"));
 
-		    if (l->next->dat[1] != '|') { 
+		    if (l->next && l->next->dat[1] != '|') { 
 			if (!double_grid ) {    /* must be following dot */
 			    p->moveh  ( -1.0 * 
 					(l->space + l->padding)/ 2.2
@@ -1042,14 +1050,14 @@ struct list *l)			/* data */
 		do_uline(p, &skip_spaces, 5, 6, i);
 		break;
 	    case '{':		/* slanting lines */
-		my_underline(p, f_a, &skip_spaces, 11, i);
-		break;
+	      my_underline(p, f_a, &skip_spaces, 11, i);
+	      break;
 	    case '}':
-		if (baroque) 
-		    do_thick_uline(p, &skip_spaces, 11, 12, i);
-		else
-		    do_uline(p, &skip_spaces, 11, 12, i);
-		break;
+	      if (baroque) 
+		do_thick_uline(p, &skip_spaces, 11, 12, i);
+	      else
+		do_uline(p, &skip_spaces, 11, 12, i);
+	      break;
 	    case '(':		/* more slanting lines */
 		my_underline(p, f_a, &skip_spaces, 9, i);
 		break;
@@ -1079,12 +1087,30 @@ struct list *l)			/* data */
 		    p->p_movev(skip_spaces * i_space);
 		    skip_spaces = 0;
 		}
-		if (f->flags & PS) {
-		}
-		else {
-		    p->put_a_char(cc);
+		if (f->flags & DVI_O) {
+		  p->put_a_char(cc);
 		}
 		do_uline(p, &skip_spaces, 7, 8, i);
+		break;
+	    case 133: // upside down underline
+		if (skip_spaces) {
+		    p->p_movev(skip_spaces * i_space);
+		    skip_spaces = 0;
+		}
+		if (f->flags & DVI_O) {
+		  p->put_a_char(cc);
+		}
+		do_r_uline(p, &skip_spaces, 7, 8, i);
+		break;
+	    case 134: // double wiggle underline
+		if (skip_spaces) {
+		    p->p_movev(skip_spaces * i_space);
+		    skip_spaces = 0;
+		}
+		if (f->flags & DVI_O) {
+		  p->put_a_char(cc);
+		}
+		do_w_uline(p, &skip_spaces, 7, 8, i);
 		break;
 	    default:
 		if (skip_spaces) {
@@ -1302,10 +1328,20 @@ struct list *l)			/* data */
 		  p->use_font(0);
 		  p->pop();
 		}
+		else if ( (c == '+' || c == '&') && cc == 'x' ) {
+		  // this is for ornaments as opposed to ital ten (X)
+		  p->push();
+		  if (f->line_flag == ON_LINE) /* wbc Dec 16 2002 */
+		    p->movev (str_to_inch(italian_offset));
+		  p->moveh("0.03 in");
+		  p->put_a_char(cc);
+		  //		  fprintf(stderr, "print x ornament here\n");
+		  p->pop();
+		}
 		else {
-		    p->push();
-		    mapchar(p, f_a, cc, f);
-		    p->pop();
+		  p->push();
+		  mapchar(p, f_a, cc, f);
+		  p->pop();
 		}
 		p->p_movev(i_space);
 		break;
@@ -1485,6 +1521,7 @@ int rev_bdot(struct list* l)
   return(1);
 }
 
+// print the bar count if appropriate and increment n_measures
 // -C bar_count means number every 5th bar, 
 // -c barCount means number every first bar on every line
 //
@@ -1492,7 +1529,7 @@ int rev_bdot(struct list* l)
 void check_bar(print * p, int j, int *l_p, struct list* l)
 {
     if (bar_count || barCount || barCCount) {
-	char *ch, *nxt=0;
+	char *ch=0, *nxt=0;
 
 	if (l) ch = l->dat;
 	if (l->next) nxt = l->next->dat;
@@ -1508,10 +1545,9 @@ void check_bar(print * p, int j, int *l_p, struct list* l)
 	    if (bar_count && ! (n_measures % 5))  
 	      p->p_num(n_measures);
 	    else if (barCCount) {
-	      int i;
 	      if (j > 4 )
 		p->p_num(n_measures);
-	      else if ( i=rev_bdot(l) )
+	      else if ( rev_bdot(l) )
 		p->p_num(n_measures);
 	      else 
 		;
@@ -1774,8 +1810,10 @@ void do_time_sig( char ch[], int j, int font,
 	p->use_font(0);
     }
     else {			/* a character, not a digit */
-	if (f->flags & FOUR)  p->movev(-1 *  d_i_space);
-	else if (f->flags & FIVE)  p->movev(d_i_space/ -2);
+	if (f->flags & FOUR)  
+	  p->movev(-1 *  d_i_space);
+	else if (f->flags & FIVE)  
+	  p->movev(d_i_space/ -2);
 
 	if ( j == 0 ) 
 	    p->moveh( -1 * str_to_inch("0.28 in"));
@@ -1784,12 +1822,18 @@ void do_time_sig( char ch[], int j, int font,
 	p->movev((8.25 * d_i_space 
 		   + f_a[0]->fnt->get_height('G')) / 2.0 );
 	if (ch[1] == 'O' ) { 
+	  if (f->flags & FOUR || f->flags & FIVE) {
+	    if (f->line_flag == ON_LINE)  
+	      p->movev(-.5 * d_i_space);
+	    p->movev(-.62 * d_i_space);
+	  }
+	  else
 	    p->movev(-3.12 * d_i_space);
-	    p->put_a_char(18); // special O time signature
+	  p->put_a_char(18); // special O time signature
 	}
 	else if  (ch[1] == 'o' ) { 
-	    p->movev(-1.85 * d_i_space);
-	    p->put_a_char(17); // special O time signature
+	  p->movev(-1.85 * d_i_space);
+	  p->put_a_char(17); // special O time signature
 	}
 	else {
 	  p->put_a_char(ch[1]);

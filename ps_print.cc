@@ -228,6 +228,8 @@ void ps_print::file_head()
 
     file_in pk_in(pk_name, "rb");
 
+    //    printf("ps_print: pk font is %s\n", pk_name);
+
     read_pk_file(&pk_in, this);
 
     make_ps_font(&ps_header);
@@ -438,19 +440,62 @@ void ps_print::make_ps_font(i_buf *ps_header)
     ps_header->PutString("x2 y4 x1 y5 x0 y0 curveto\n");
     ps_header->PutString("fill  grestore } def\n");
 
-/* do a reversed slur, given length */
+/* do a reversed slur, given horizontal length */
     ps_header->PutString("/dorslur { /delta exch def\n");
     ps_header->PutString("gsave 1 setlinecap 0.7 setlinewidth\n");
+    /* height is the height of the slur, delta is the hor distance point to point*/
     ps_header->PutString("/delta delta 3 div def /height -5 def\n");
     ps_header->PutString("currentpoint 2 copy 2 copy 2 copy\n");
     ps_header->PutString("/y0 exch def /x0 exch def\n");
-    ps_header->PutString("/y1 exch def /x1 exch def /y2 exch def /x2 exch def\n");
-    ps_header->PutString("/y3 exch def /x3 exch def /x1 x1 delta add def\n");
+    ps_header->PutString("/y1 exch def /x1 exch def ");
+    ps_header->PutString("/y2 exch def /x2 exch def\n");
+    ps_header->PutString("/y3 exch def /x3 exch def ");
+    ps_header->PutString("/x1 x1 delta add def\n");
     ps_header->PutString("/y1 y1 height add def /x2 x2 delta 2 mul add def\n");
     ps_header->PutString("/y2 y1 def /x3 x3 delta 3 mul add def\n");
     ps_header->PutString("/y4 y2 1.8 sub def ");
     ps_header->PutString("/y5 y1 1.8 sub def ");
     ps_header->PutString("x1 y1 x2 y2 x3 y3 curveto ");
+    ps_header->PutString("x2 y4 x1 y5 x0 y0 curveto\n");
+    ps_header->PutString("fill grestore } def\n");
+
+/* do a wavy slur, given horizontal length */
+    ps_header->PutString("/dowslur { /delta exch def\n");
+    ps_header->PutString("gsave 1 setlinecap 0.7 setlinewidth\n");
+    /* height is the height of the slur, delta is the hor distance point to point*/
+    ps_header->PutString("/delta delta 6 div def /height 3.7 def\n");
+    ps_header->PutString("currentpoint 2 copy 2 copy 2 copy 2 copy 2 copy 2 copy \n");
+    ps_header->PutString(" 2 copy 2 copy 2 copy 2 copy \n");
+    ps_header->PutString("/y0 exch def /x0 exch def\n");
+    ps_header->PutString("/y1 exch def /x1 exch def ");
+    ps_header->PutString("/y2 exch def /x2 exch def\n");
+    ps_header->PutString("/y3 exch def /x3 exch def ");
+    ps_header->PutString("/y5 exch def /x5 exch def\n");
+    ps_header->PutString("/y6 exch def /x6 exch def ");
+    ps_header->PutString("/y7 exch def /x7 exch def\n");
+    ps_header->PutString("/y8 exch def /x8 exch def ");
+    ps_header->PutString("/y9 exch def /x9 exch def\n");
+    ps_header->PutString("/y10 exch def /x10 exch def ");
+    ps_header->PutString("/y11 exch def /x11 exch def\n");
+    ps_header->PutString("/y0 y0 height sub def\n");
+    ps_header->PutString("/y8 y8 height .6  mul add def\n");
+    ps_header->PutString("/x1 x1 delta add def\n");
+    ps_header->PutString("/y1 y1 height add def /x2 x2 delta 2 mul add def\n");
+    ps_header->PutString("/y2 y1 def /x3 x3 delta 3 mul add def\n");
+    ps_header->PutString("/y4 y2 1.8 sub def ");
+    ps_header->PutString("/y5 y1 1.8 sub def ");
+    ps_header->PutString("/y6 y6 height sub def /x6 x6 delta 4 mul add def\n");
+    ps_header->PutString("/y7 y7 height sub def /x7 x7 delta 5 mul add def\n");
+    ps_header->PutString("/y9 y7 1.8 sub def ");
+    ps_header->PutString("/y10 y6 1.8 sub def ");
+    ps_header->PutString("/x9 x7 def /x10 x6 def /x11 x3 def \n");
+    ps_header->PutString("/x8 x8 delta 6 mul add def\n");
+    ps_header->PutString("/y3  y3  .2 sub def\n ");
+    ps_header->PutString("/y11 y11 .2 add def\n ");
+    ps_header->PutString("x0 y0 moveto ");
+    ps_header->PutString("x1 y1 x2 y2 x3 y3 curveto \n");
+    ps_header->PutString("x6 y6 x7 y7 x8 y8 curveto \n");
+    ps_header->PutString("x9 y9 x10 y10 x11 y11 curveto \n");
     ps_header->PutString("x2 y4 x1 y5 x0 y0 curveto\n");
     ps_header->PutString("fill grestore } def\n");
 
@@ -609,7 +654,7 @@ void ps_print::use_font(int fontnum)
 { 
     curfont = fontnum;
     switch (fontnum) {
-    case 7:			/* page nnumber font doesn't shrink 12 pt */
+    case 7:			/* page number font doesn't shrink 12 pt */
 	ps_command( NUMFONT, 0, 0, 0, 0);
 	break;
     case 6:			/* font 6 18 pt text */
@@ -634,7 +679,7 @@ void ps_print::use_font(int fontnum)
 	ps_command( LUTE, 0, 0, 0, 0);
 	break;
     default:
-	dbg0(Warning, "tab: ps_setfont: undefined font number, using 2\n");
+	dbg1(Warning, "tab: ps_setfont: undefined font number %d, using 2\n", (void *)fontnum);
 	ps_command( ROMAN, 0, 0, 0, 0);
 	break;
     }
@@ -687,7 +732,19 @@ void ps_print::put_slash
 void ps_print::put_uline(int bloc, int eloc)
 { 
     saveloc(REGS-1);
-    ps_command ( PTIE2, save_h[eloc] - save_h[bloc], 0, 0, 0);
+    ps_command ( PRTIE, save_h[eloc] - save_h[bloc], 0, 0, 0); // was PTIE2
+    getloc(REGS-1);
+}
+void ps_print::put_r_uline(int bloc, int eloc)
+{ 
+    saveloc(REGS-1);
+    ps_command ( PTIE, save_h[eloc] - save_h[bloc], 0, 0, 0); // was PTIE2
+    getloc(REGS-1);
+}
+void ps_print::put_w_uline(int bloc, int eloc)
+{ 
+    saveloc(REGS-1);
+    ps_command ( PWTIE, save_h[eloc] - save_h[bloc], 0, 0, 0); // was PTIE2
     getloc(REGS-1);
 }
 void ps_print::put_thick_slant(int bloc, int eloc) 
@@ -913,21 +970,21 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
   case RULE:		// now takes x, y
     pr_out->PutF(d_to_p(h), places);
     pr_out->PutF(d_to_p(v), places); //negate the v ???
-    pr_out->PutString(" Rule%%reg\n"); // v, h
+    pr_out->PutString(" Rule\n"); // v, h
     break;
   case MOVEH:
     pr_out->PutF(d_to_p(h), places);
-    pr_out->PutString(" 0 RM%%MoveH\n");
+    pr_out->PutString(" 0 RM\n");
     break;
   case MOVEV:
     pr_out->PutString("0 ");
     pr_out->PutF(d_to_p(-v), places);
-    pr_out->PutString(" RM%%MoveV\n");
+    pr_out->PutString(" RM\n");
     break;
   case MOVEVH:
     pr_out->PutF(d_to_p(h), places);
     pr_out->PutF(d_to_p(-v), places);
-    pr_out->PutString(" RM%%MoveVH\n");
+    pr_out->PutString(" RM\n");
     break;
 
   case LINE:
@@ -1093,6 +1150,10 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     pr_out->PutString("-6.0 ");
     pr_out->PutF(d_to_p(h), places);
     pr_out->PutString("dotie\n");
+    break;
+  case PWTIE:
+    pr_out->PutF(d_to_p(h), places);
+    pr_out->PutString("dowslur\n");
     break;
   case PDRAFT :
     pr_out->PutString("gsave\n");
