@@ -477,6 +477,11 @@ void set_midi_patch(const char *value, struct file_info *f)
 {
   f->midi_patch = atoi(value);
 }
+void set_start_system(const char *value, struct file_info *f)
+{
+  int i = atoi(value);
+  f->start_system = i;
+}
 /*
 void setit(void *r, const char *flag, struct file_info *f)
 {
@@ -520,6 +525,7 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {"note-conversion", (void *)set_noteconv},
     {"sys-skip",   (void *)set_sys_skip},
     {"midi-patch",   (void *)set_midi_patch},
+    {"start-system", (void *)set_start_system},
     {0,0}
   };
 
@@ -547,6 +553,7 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {"note-conversion", (void *)first},
     {"sys-skip",   (void *)first},
     {"midi-patch",   (void *)first},
+    {"start-system",   (void *)first},
     {0,0}
   };
   

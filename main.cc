@@ -60,6 +60,7 @@ void init(file_info *f)
     f->flags = 0;
     f->m_flags = 0;
     f->flags |=PS;
+    f->flags |= DPI600;
     f->cur_system = 0;
     f->n_text = 0;
     f->font_sizes[0] =  0.0;	// not used

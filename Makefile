@@ -49,6 +49,7 @@ TLOC='"."'
 # TLOC = '"/net/wbc/src/nnt"'
 # TLOC = '"/usr/aeolus1/wbc/src/nnt"'
 # TLOC = '"/home/wbc/nnt"'
+# TLOC = '"/Users/wc/nnt"'
 #
 # CXXFLAGS = -g  -DTFM_PATH=${TLOC} -UX_WIN -Wtraditional -Wshadow  -Wpointer-arith -Wcast-qual  -Wcast-align -Wwrite-strings -Wconversion -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations  -Wnested-externs -Woverloaded-virtual -Winline
 #
@@ -123,11 +124,11 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	ptmb.tfm     ptmbo.tfm    ptmrc.tfm    ptmro.tfm    ptmrrn.tfm \
 	ptmbi.tfm    ptmr.tfm     ptmri.tfm    ptmrre.tfm \
 	pzcmi.tfm \
-	mk_font_local mk_test mk_600 \
+	mk_font_local mk_test mk_600 mk_1200 mk_2400 \
 	sample.tab demo.tab t.tab AboutTab.txt mac.cc mkdep \
 	version.pl makedepend
 
-DISTFILE = lute_tab4.2.10.tar
+DISTFILE = lute_tab4.2.12.tar
 
 distrib:	 ${DISTFILE}
 
@@ -175,29 +176,29 @@ cmr10.300pk:
 cmr10.tfm:	
 	cp -p /usr/lib/tex/fonts/tfm/cmr10.tfm .
  
-lute9.tfm:	lute9.mf lute.mf
-	mk_font_local
-
-lute9.300pk:	lute9.mf lute.mf
-	mk_font_local
-
-lute8.300pk:	lute8.mf lute.mf
-	mk_font_local
-
-lute8.tfm:	lute8.mf lute.mf
-	mk_font_local
-
-lute7.300pk:	lute7.mf lute.mf
-	mk_font_local
-
-lute7.tfm:	lute7.mf lute.mf
-	mk_font_local
-
-lute6.tfm:	lute6.mf lute.mf
-	mk_font_local
-
-lute6.300pk:	lute6.mf lute.mf
-	mk_font_local
+# lute9.tfm:	lute9.mf lute.mf
+#	mk_font_local
+#
+#lute9.300pk:	lute9.mf lute.mf
+#	mk_font_local
+#
+#lute8.300pk:	lute8.mf lute.mf
+#	mk_font_local
+#
+#lute8.tfm:	lute8.mf lute.mf
+#	mk_font_local
+#
+#lute7.300pk:	lute7.mf lute.mf
+#	mk_font_local
+#
+#lute7.tfm:	lute7.mf lute.mf
+#	mk_font_local
+#
+#lute6.tfm:	lute6.mf lute.mf
+#	mk_font_local
+#
+#lute6.300pk:	lute6.mf lute.mf
+#	mk_font_local
 
 Bookman-Light.tfm:	/usr/lib/tex/fonts/tfm/Bookman-Light.tfm
 	cp /usr/lib/tex/fonts/tfm/Bookman-Light.tfm .

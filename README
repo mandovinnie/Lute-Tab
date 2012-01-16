@@ -52,11 +52,16 @@ Options:
     -alttitle	use alternate title font
     -alttitle-off use regular title font
     -a4 adjust for a4 paper size
-    -autoKey ssets key signature on all linesas on first line
+    -autoKey sets key signature on all lines as on first line
     -2 prints 1200 dpi
+    -1200 does the same
+    -24 prints 2400 dpi
+	be warned that some large glyphs won't print at 1200
+	and PostScript will crash!
     -4 prints only four staves
     -5 prints only five staves
-    -6 printe 1200 dpi
+    -6 prints 600 dpi
+    -600 does the same
     -7 prints seven staves
     -0 prints six staves (I know this should be -6 but I used
 	that already!)
@@ -67,6 +72,7 @@ Options:
     -C prints every fifth measure number below the staff.
     -CC prints every measure number below the staff.
     -c prints measure numbers only at the start of a line
+    -dvi output in dvi format to out.dvi
     -D sort of like Dowland's style
     -e rotates the page 90 degrees for landscape music.
     -E prints "DRAFT" on every page along with the date.
@@ -107,8 +113,8 @@ Options:
 	long name that must be on your printer.
     -longbar with music draws bar lines between tablature and staff
     -m print out the piano version of the tablature. This is kind of basic!
-    -midi writes a midi file called data.mid
-    -modernNotes  use modern, rahter then renaissance notation for music
+    -midi sends a midi file to standard output.
+    -modernNotes  use modern, rather then renaissance notation for music
     -M print marks on the page to show where the character positions are.
     -N uses fonts like Robinson
         these fonts use the default characters for any 
@@ -137,7 +143,7 @@ Options:
     -sharpUp places the sharp or flat above the staff,
     -sharpNorm places the sharp or flat in the regular place.
     -sItalNotes uses small Italian style noteds for music
-    -sound creates a midi sound file called data.mid, or if 
+    -sound sends a midi sound file to standard output, or if 
 	recompiled the right way can create a raw sound file
 	with a 8000 integer 8 bit unsigned format  
         called "data".
@@ -317,6 +323,12 @@ $		- used to set these values. This flag must be
 						systems, in inches, only
 		  $midi-patch			a number, 0 to 127, which
 						selects a midi "instrument"
+		  $start-system=n		which system to start "printing"
+						This is intended to be used with 
+						the midi option to skip the 
+						beginning of a piece.  It also 
+						works for the printout, but does
+						not look good.
 
 the following characters have special significance as the
 second letter on a line - in most cases, if not needed

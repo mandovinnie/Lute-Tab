@@ -166,12 +166,21 @@ void set_p(const char *value, struct file_info *f) { f->flags |= PAGENUM;}
 void set_P(const char *value, struct file_info *f) {
   f->flags |= PS;
   f->flags &= ~DVI_O;}
+void set_dvi(const char *value, struct file_info *f) {
+  f->flags |= DVI_O;
+  f->flags &= ~PS;}
 void set_2(const char *value, struct file_info *f) {
   f->m_flags |= DPI1200;
   red = 1.0;}
 void set_6(const char *value, struct file_info *f) {
   f->flags |= DPI600;
 }
+void set_300(const char *value, struct file_info *f) {
+  f->flags &= ~DPI600;
+}
+void set_24(const char *value, struct file_info *f) {
+  f->m_flags |= DPI2400;
+  red = 1.0;}
 void set_7(const char *value, struct file_info *f) {
   f->m_flags |= SEVEN;
 }
@@ -277,6 +286,7 @@ void set_sound(const char *value, struct file_info *f)
 {
 	f->m_flags |= SOUND;
 	f->flags |= MANUSCRIPT;
+	f->m_flags |= QUIET;
 #ifndef NO_STDOUT
 	strcat (f->out_file, "/dev/null");
 #endif
@@ -386,12 +396,17 @@ void args(int argc, char ** argv, struct file_info *f)
       {"M", (void*)set_M},     //not used
       {"0", (void*)set_0},
       {"2", (void*)set_2},
+      {"1200", (void*)set_2},
+      {"2400", (void*)set_24},
+      {"300", (void*)set_300},
       {"4", (void*)set_4},
       {"5", (void*)set_5},
       {"6", (void*)set_6},
+      {"600", (void*)set_6},
       {"7", (void*)set_7},
       {"N", (void*)set_N},
       {"P", (void*)set_P},
+      {"dvi", (void*)set_dvi},
       {"Q", (void*)set_Q},
       {"R7", (void*)set_R7},
       {"R8", (void*)set_R8},

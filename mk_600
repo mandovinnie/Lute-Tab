@@ -1,21 +1,26 @@
 #!/bin/csh
 #
-#  make the lute8 font
-#
+#  make the lute9 font
 #
 #
 set FMT = plain
 #
+# 600 dpi ...
+# ljfour  canonex docutech lexmarku ljfive ljfzzzfr okifte qmsostf qmsoszz ricohsp vtszz
+# 
+# 
+set MODE=cxnew
 #
-# laserwriter
+# if using precompiled modes set here, otherwise in lute9
 #
+# note - aug 2002 - mode doesn't seem to do much
+# here, overridden in lute9.mf most likely.
+# but it is needed for the command line, don't know why.
+# but it means fixing the mode in lute9.mf for different dpi
+# mag:=1.0 is default, no need to specify
 #
-# virmf \&$FMT "\mode:=IBMFourZeroTwoNine; \mag:=1.0; input blute9; bye;"
-#
-# was IBMFourZeroTwoNine;laserjetIV;
-set MODE=ljfour
-#
-virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input lute9; bye;"
+# virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input lute9; bye;"
+virmf \&$FMT  "\mode:=$MODE; input lute9; bye;"
 gftopk ./lute9.600gf > ./lute9.600pk
 #
 #rm -f lute9*gf lute9*bdf lute9.log

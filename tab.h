@@ -80,6 +80,7 @@ struct file_info {
     int page;			/* what page are we on? */
     int include;		/* are we included from somehwere */
     int cur_system;		/* what system are we in? */
+    int start_system;           /* system to begin printing mostly for midi */
     char *(font_names[FONT_NAMES]);
     double font_sizes[FONT_NAMES];
     double sys_skip;            /* extra space to skip between systems */
@@ -237,8 +238,9 @@ enum pass{first, second};
 #define AUTOKEY                 0x1000
 #define DSUP                    0x2000
 #define DSDOWN                  0x4000
-#define EPSF                    0x8000
+#define EPSF                   0x08000
 #define RED                    0x10000
+#define DPI2400                0x20000
 /* variables defined in sizes.c */
 
 

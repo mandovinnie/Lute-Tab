@@ -28,9 +28,13 @@ void args_from_string(char *buf, struct file_info *f);
 void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f);
 
 int badchar(unsigned char p) {
-  if ((int)p > 127) 
-    return 1;
-  if (strchr("{%LJWw0123456xYyQqeMSkbBiIp8vV .-\n\r*$[", p)) 
+  if ( p = 255 )
+    return (0);
+  else if ((int)p > 127) 
+    return (1);
+  else if ( p == '\n' )
+    return (0);
+  else if (strchr("{%LJWw0123456xYyQqeMSkbBiIp8vV .-\n\r*$[", p)) 
     return(0);
   return(1);
 }

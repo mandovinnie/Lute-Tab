@@ -378,78 +378,85 @@ int format_page(print *p, i_buf *i_b,
 	default:		/* assume that it must be lines of chords */
 	    tit_last=0;
 	    
+
 	    r = getisystem(i_b, f_a, &l_p[sys_count], f);  /* get line tab */
 
-	    if (f->flags & NOTES) {        /* thick vert line at beginning */
-		if (f->m_flags & TWOSTAFF ) {
-		    p->push();
-		    // note 7 * interspace gives room 
-		    // for sharp and flat above staff
-		    p->movev(
-			10 * m_space + 2 * text_sp * f->n_text +
-			2 * f->c_space  + 7 * str_to_inch(interspace) 
-			+ flag_h + str_to_inch(flag_to_staff) -.011
-			- (f->line_flag == ON_LINE ? 
-			   str_to_inch(interspace)/2 : 0.0 ));
-		    p->put_rule(0.01, 
-			     ( 10 * m_space + 2 * text_sp * f->n_text +
-			       2 * f->c_space  + 7 * str_to_inch(interspace) 
-			       + flag_h + str_to_inch(flag_to_staff) -.01
-			       - (f->line_flag == ON_LINE ? 
-			   str_to_inch(interspace)/2 : 0.0 )));
-		    /* for a double line before the staves 
-		       p->moveh(-0.06);
-		       p->put_rule(0.03, 
-		       ( 10 * m_space + 2 * text_sp * f->n_text +
-		       2 * f->c_space  + 7 * str_to_inch(interspace) 
-		       + flag_h + str_to_inch(flag_to_staff)
-		       - (f->line_flag == ON_LINE ? 
-			   str_to_inch(interspace)/2 : 0.0 )));
-		    */
-		    p->pop();
-		    for (i=0; i< 5; i++ ) {
-			p->put_rule(staff_len, str_to_inch(staff_height));
-			p->movev(m_space);
-		    }	
+	    //	    fprintf(stderr, "sys_count %d start system %d\n", 
+	    //   sys_count,f->start_system );
 
-		    p->movev( text_sp * f->n_text + f->c_space); 
-		    p->movev( str_to_inch(interspace) );
-		}
-		else {  /* just one line of music, thick vert line */
-		    p->push();
-		    p->movev(
-			5 * m_space + text_sp * f->n_text +
-			f->c_space  + 6 * str_to_inch(interspace)
-			+ flag_h + str_to_inch(flag_to_staff) 
-			-.011 
-			- (f->line_flag == ON_LINE ? 
-			   str_to_inch(interspace)/2 : 0.0 ));
-		    p->put_rule( 0.03,
-			5 * m_space + text_sp * f->n_text +
-			f->c_space  + 6 * str_to_inch(interspace)
-			+ flag_h + str_to_inch(flag_to_staff) -.011
-			- (f->line_flag == ON_LINE ? 
-			   str_to_inch(interspace)/2 : 0.0 ));
-		    p->pop();
-		}
-		for (i=0; i< 5; i++ ) {
+	    if ( sys_count  >= f->start_system ) {
+
+	      if (f->flags & NOTES) {        /* thick vert line at beginning */
+		if (f->m_flags & TWOSTAFF ) {
+		  p->push();
+		  // note 7 * interspace gives room 
+		  // for sharp and flat above staff
+		  p->movev(
+			   10 * m_space + 2 * text_sp * f->n_text +
+			   2 * f->c_space  + 7 * str_to_inch(interspace) 
+			   + flag_h + str_to_inch(flag_to_staff) -.011
+			   - (f->line_flag == ON_LINE ? 
+			      str_to_inch(interspace)/2 : 0.0 ));
+		  p->put_rule(0.01, 
+			      ( 10 * m_space + 2 * text_sp * f->n_text +
+				2 * f->c_space  + 7 * str_to_inch(interspace) 
+				+ flag_h + str_to_inch(flag_to_staff) -.01
+				- (f->line_flag == ON_LINE ? 
+				   str_to_inch(interspace)/2 : 0.0 )));
+		  /* for a double line before the staves 
+		     p->moveh(-0.06);
+		     p->put_rule(0.03, 
+		     ( 10 * m_space + 2 * text_sp * f->n_text +
+		     2 * f->c_space  + 7 * str_to_inch(interspace) 
+		     + flag_h + str_to_inch(flag_to_staff)
+		     - (f->line_flag == ON_LINE ? 
+		     str_to_inch(interspace)/2 : 0.0 )));
+		  */
+		  p->pop();
+		  for (i=0; i< 5; i++ ) {
 		    p->put_rule(staff_len, str_to_inch(staff_height));
 		    p->movev(m_space);
+		  }	
+
+		  p->movev( text_sp * f->n_text + f->c_space); 
+		  p->movev( str_to_inch(interspace) );
+		}
+		else {  /* just one line of music, thick vert line */
+		  p->push();
+		  p->movev(
+			   5 * m_space + text_sp * f->n_text +
+			   f->c_space  + 6 * str_to_inch(interspace)
+			   + flag_h + str_to_inch(flag_to_staff) 
+			   -.011 
+			   - (f->line_flag == ON_LINE ? 
+			      str_to_inch(interspace)/2 : 0.0 ));
+		  p->put_rule( 0.03,
+			       5 * m_space + text_sp * f->n_text +
+			       f->c_space  + 6 * str_to_inch(interspace)
+			       + flag_h + str_to_inch(flag_to_staff) -.011
+			       - (f->line_flag == ON_LINE ? 
+				  str_to_inch(interspace)/2 : 0.0 ));
+		  p->pop();
+		}
+		for (i=0; i< 5; i++ ) {
+		  p->put_rule(staff_len, str_to_inch(staff_height));
+		  p->movev(m_space);
 		}	
 		p->movev( st_text);
 		p->movev( text_sp * f->n_text + f->c_space); 
-	    }
-	    else if (f->flags & ROTATE  && baroque) {
+	      }
+	      else if (f->flags & ROTATE  && baroque) {
 		p->movev(flag_h );
 		if (red < .9999) {
-		    p->movev("3 pt");
+		  p->movev("3 pt");
 		}
-	    }
-	    else {		/* compensate for flag height here */
+	      }
+	      else {		/* compensate for flag height here */
 		p->movev(flag_h + str_to_inch(flag_to_staff));
-	    }
+	      }
 
-	    printsystem(p, i_b, f_a, &l_p[sys_count], f);
+	      printsystem(p, i_b, f_a, &l_p[sys_count], f);
+	    }
 
 	    if ( r == END_OK ) {
 		return_val = END_OK;

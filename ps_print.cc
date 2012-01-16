@@ -157,6 +157,8 @@ void ps_print::file_head()
 	ps_header.PutString("%%Feature: *Resolution 600\n");
     else if (f_i->m_flags & DPI1200) 
 	ps_header.PutString("%%Feature: *Resolution 1200\n");
+    else if (f_i->m_flags & DPI2400) 
+	ps_header.PutString("%%Feature: *Resolution 2400\n");
     else ps_header.PutString("%%Feature: *Resolution 300\n");
 
 #ifdef MAC
@@ -217,6 +219,8 @@ void ps_print::file_head()
     
     if (f_i->m_flags & DPI1200)
 	strcat (pk_name, ".1200pk");
+    else if (f_i->m_flags & DPI2400)
+	strcat (pk_name, ".2400pk");
     else if (f_i->flags & DPI600)
 	strcat (pk_name, ".600pk");
     else
@@ -319,7 +323,8 @@ void ps_print::make_ps_font(i_buf *ps_header)
     extern PKBit bits[];
 
     if (f_i->flags & DPI600) dvi_to_dots /= 2.0;
-    if (f_i->m_flags & DPI1200) dvi_to_dots /= 4.0;             //adS
+    else if (f_i->m_flags & DPI1200) dvi_to_dots /= 4.0;             //adS
+    else if (f_i->m_flags & DPI2400) dvi_to_dots /= 8.0;         
 
     ps_header->PutString("10 dict begin\n");
     ps_header->PutString("/FontType 3 def\n");

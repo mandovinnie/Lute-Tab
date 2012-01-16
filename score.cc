@@ -264,6 +264,7 @@ score(print *p, struct list *l, struct file_info *f,
     case '&':
     case '*':
     case ':':
+    case 'v':
     case 'u':			// cut time sign
 	break;
     case 'x':
