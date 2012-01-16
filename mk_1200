@@ -10,7 +10,6 @@ set FMT = plain
 # laserwriter
 #
 #
-# virmf \&$FMT "\mode:=CompugraphicNineSixZeroZero; \mag:=1.0; input lute9; bye;"
 virmf \&$FMT "\mode:=VarityperFourThreeZeroZeroLo; \mag:=1.0; input lute9; bye;"
 gftopk ./lute9.1200gf > ./lute9.1200pk
 #
@@ -21,12 +20,12 @@ gftopk ./lute9.1200gf > ./lute9.1200pk
 #
 if ($#argv > 0 ) then
 	echo foo
-  virmf \&$FMT "\mode:=CanonCX; \mag:=1.0; input blute85; bye;"
-  gftopk ./blute85.300gf > ./blute85.300pk
-  virmf \&$FMT "\mode:=CanonCX; \mag:=1.0; input blute8; bye;"
-  gftopk ./blute8.300gf > ./blute8.300pk
-  virmf \&$FMT "\mode:=CanonCX; \mag:=1.0; input blute7; bye;"
-  gftopk ./blute7.300gf > ./blute7.300pk
-  virmf \&$FMT "\mode:=CanonCX; \mag:=1.0; input blute6; bye;"
-  gftopk ./blute6.300gf > ./blute6.300pk
+  virmf \&$FMT "\mode:=VarityperFourThreeZeroZeroLo; \mag:=1.0; input blute85; bye;"
+  gftopk ./blute85.1200gf > ./blute85.1200pk
+  virmf \&$FMT "\mode:=VarityperFourThreeZeroZeroLo; \mag:=1.0; input blute8; bye;"
+  gftopk ./blute8.1200gf > ./blute8.1200pk
+  virmf \&$FMT "\mode:=VarityperFourThreeZeroZeroLo; \mag:=1.0; input blute7; bye;"
+  gftopk ./blute7.1200gf > ./blute7.1200pk
+  virmf \&$FMT "\mode:=VarityperFourThreeZeroZeroLo; \mag:=1.0; input blute6; bye;"
+  gftopk ./blute6.1200gf > ./blute6.1200pk
 endif

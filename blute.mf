@@ -376,14 +376,17 @@ beginchar ("F", em#, 1.0cap#, 2cap#);"letter F";
 endchar;enddef;
 %
 def do_G =
-beginchar ("G", .9em#, 1.0cap#, 1.0cap#);"letter g";
+beginchar ("G", .9em#, 1.0cap#, 1.0cap#);"letter G slanted";
  pickup lute_pen;
- x1=.1w;bot y1=0;
- lft x2=0w;y2=.4h;
- x3=.5w;top y3=h;
-
- draw z1..z2..z3;
-
+ x0=.7w;bot y0=.03h;
+ x1=.19w;bot y1=y0;
+ lft x2=0w;y2=.33h;
+ x3=.4w;top y3=.76h;
+ x4=w;y4=.67h;
+ x6=.5w;y6=-.2d;
+ x7=-1.1w;y7=-.5d;
+ x8=-.8w;y8=-.6d;
+ draw z0..z1..z2..tension 1.2..z3..z4&z4..tension 1.1..z6..z8..z7;
 endchar;enddef;
 
 %
@@ -1469,17 +1472,38 @@ beginchar (132, .7em#, .9cap#, 0); "italian two";
 endchar;enddef;
 %
 def do_in_three =
-beginchar (133, .7em#, .9cap#, 0); "italian three";
-	pickup pencircle xscaled .8wid yscaled 1.1wid;
-	x0=.16w;top y0 = .99h;
-	rt x1=w;top y1= h;
-	x2=.44w;y2=.67h;
-	x3=.83w;y3=.3h;
-	x4=-.02w;bot y4 = -0.04h;
-	draw z0{dir 15}..{dir 10}z1 & z1..z2;
-	penpos2(1.2 wid, 90); penpos3(1.25wid, 0); penpos4(.7wid,290);
-	penstroke z2e..tension 1.03..z3e
-	..tension 1.1..{dir 180}z4e;
+  beginchar (133, .9em#, .9cap#, .9em#); "baroque three for triplet";
+      pickup pencircle xscaled .8wid yscaled 1.1wid;
+      x0=0;y0=.35h;
+      x11=x0-.05w;y11=y0+.17h;
+      x1=.4w;top y1=h;
+      x2=.5w;y2=.5h;
+      x4=x2-.07w;y4=y2+.04h;
+      rt x3=w;y3=.3h;
+      x5=.83w;y5=0;
+      lft x7=lft x2-.1w;y7=-.4h;
+      
+      penpos0(wid, 180);
+      penpos11(wid, 185);
+      penpos1(1.8wid, 90);
+      penpos2(1.2wid, 30);
+      penstroke z0e..z11e{dir 80}..tension.8..z1e..{dir 270}z2e;
+      penpos4(1.2wid,70);
+      penpos3(1.9wid,40);
+      penpos5(2.1wid,30);
+      penpos7(1.7wid,20);
+      penstroke z4e..tension 1.5..z3e..tension 1.5..z5e..z7e;
+%beginchar (133, .7em#, .9cap#, 0); "italian three";
+%	pickup pencircle xscaled .8wid yscaled 1.1wid;
+%	x0=.16w;top y0 = .99h;
+%	rt x1=w;top y1= h;
+%	x2=.44w;y2=.67h;
+%	x3=.83w;y3=.3h;
+%	x4=-.02w;bot y4 = -0.04h;
+%	draw z0{dir 15}..{dir 10}z1 & z1..z2;
+%	penpos2(1.2 wid, 90); penpos3(1.25wid, 0); penpos4(.7wid,290);
+%	penstroke z2e..tension 1.03..z3e
+%	..tension 1.1..{dir 180}z4e;
 endchar;enddef;
 %
 def do_in_four =

@@ -56,7 +56,8 @@ int format_page(print *p, i_buf *i_b,
     }
 
     if (f->flags & COPYRIGHT && f->flags & PS ) {
-	dbg0 (Warning, "Copyright\n");
+	if (!(f->m_flags & QUIET)) 
+	    dbg0 (Warning, "Copyright\n");
 	p->print_copyright();
     }
     if (!sys_count) {
@@ -123,11 +124,7 @@ int format_page(print *p, i_buf *i_b,
     }
     if (f->flags & PAGENUM) {
 	char num[6];
-#ifdef MAC
-	my_sprintf(num, "%d", p->get_page_number());
-#else
 	sprintf(num, "%d", p->get_page_number());
-#endif
 	format_pagenum (p, f_a, num, f);
     }
 

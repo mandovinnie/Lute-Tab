@@ -204,7 +204,8 @@ start of line:
 		  you can use $alttitlesize to change the point size of ^03
 		  you can use $textfont to change the fonts, too
 [ words }	- text, positioned closely above a system, for 
-		  Da capo, etc
+		  Da capo, etc.  Maximum of 10 characters when in the middle 
+		- of a system.
 {words/words}	- words left and right justified, with a space in the 
 		  middle
 	there must be exactly one blank line between text and staff
@@ -358,7 +359,7 @@ the following characters have special significance as the
 second letter on a line - in most cases, if not needed
 they can be ignored:
 
- - 	a place marker, techincally should be the default second character
+ - 	a place marker, techicnally should be the default second character
 	but usually can be left out - it helps when you want to use a
 	*, # or - ornament on the character on the top line.
  .	a dotted flag
@@ -366,8 +367,8 @@ they can be ignored:
 	you must say 2-#aa, not 2#aa!
  *	a dotted note within a grid
  | 	a flag with an extra bar within a grid.
- t	a tie to the next note
- W	a tie and a dot
+ t	a tie to the next note	(this doesn't look like it works)
+ W	a tie and a dot		(this doesn't look like it works either!)
  !	after a number - don't print flag but use its spacing
  !	after a b - don't print barline, but count it.
  Q	highlight this flag
@@ -388,7 +389,8 @@ of tablature, as the second to tenth character.
 	\\		- one backslash in note position
 	. 		- one dot below tab
 	:		- two dots below tab
-	|		- stroke - for thumb 
+	|		- stroke - for thumb
+                          two in a row give two side by side strokes 
 	-		- vertical bar - play similtaneously
 	+ * # x $ < 	- an ornament before the next note
 		'	- a comma above the line
@@ -419,7 +421,7 @@ of tablature, as the second to tenth character.
 			  as 1 "-c"-d"-da
         \:a or \:b	- two dots above the a (or b or whatever)
 	\.a		- one dot above the a
-	Nxx		- print number xx -as in 10 through 24 for
+	Nxx		- print number xx -as in 10 through 30 for
 			- high frets in Italian tab or modern guitar tab.
 	R		- a rest
 	R!		- a rest, with no flag

@@ -48,11 +48,11 @@ TLOC='"."'
 # use this line if the fonts are in the TeX library
 # or your personal library.
 #
-# TLOC = '"/net/tahoe4/wbc/src/nnt"'
+# TLOC = '"/Users/wbc/nnt"'
 # TLOC = '"/net/wbc/src/nnt"'
+# TLOC = '"/net/tahoe4/wbc/src/nnt"'
 # TLOC = '"/usr/aeolus1/wbc/src/nnt"'
 # TLOC = '"/home/wbc/nnt"'
-# TLOC = '"/Users/wbc/nnt"'
 #
 # CXXFLAGS = -g  -DTFM_PATH=${TLOC} -UX_WIN -Wtraditional -Wshadow  -Wpointer-arith -Wcast-qual  -Wcast-align -Wwrite-strings -Wconversion -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations  -Wnested-externs -Woverloaded-virtual -Winline
 #
@@ -132,7 +132,7 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	sample.tab demo.tab t.tab AboutTab.txt mac.cc mkdep \
 	version.pl makedepend
 
-DISTFILE = lute_tab4.3.20.tar
+DISTFILE = lute_tab4.3.30.tar
 
 distrib:	 ${DISTFILE}
 
@@ -141,9 +141,9 @@ ${DISTFILE}:	 \
 	${HEADERS} \
 	${SOURCES} main.cc  ${MISC}
 	cp Makefile Makefile.bak;\
-	/bin/cat Makefile.bak | \
-	/bin/sed '/^# DO NOT DELETE/,/# IF YOU PUT ANYTH/d' | \
-	/bin/sed 's/^TLOC = /# TLOC = /' \
+	cat Makefile.bak | \
+	sed '/^# DO NOT DELETE/,/# IF YOU PUT ANYTH/d' | \
+	sed 's/^TLOC = /# TLOC = /' \
 	> Makefile; \
 	tar cvf ${DISTFILE} \
 	Makefile \

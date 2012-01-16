@@ -180,8 +180,16 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    else {
 	  
 		staff[1] = buf[1];
-		if (staff[1] == 'C') staff[1] = 'U'; /* a C signature */
-		if (staff[1] == 'c') staff[1] = 'u';
+		if (staff[1] == 'C')
+		  if (baroque) 
+		    staff[1] = 19; /* a C signature */
+		  else
+		    staff[1] = 'U'; /* a C signature */
+		else if (staff[1] == 'c')
+		  if (baroque)
+		    staff[1] = 20;
+		  else
+		    staff[1] = 'u';
 		staff[2] = buf[2];
 		if (staff[2] == NEWLINE || staff[2] == '\0') {
 		    staff[2] = ' ';
@@ -406,9 +414,19 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    staff[i] = 'z';
 		  }
 		  break;
+		case 'g':
+		  if (baroque 
+		      && buf[i+1+skip] != '\n'
+		      && buf[i+1+skip] != ' '
+		      && buf[i+1+skip] != '.') {
+		    staff[i] = 'G';
+		  } 
+		  break;
 		case '0':	/* reversed 0 and space for internal lang */
 		    break;
 		case 'N':	/* number 10 -> 19 */
+		  // seems to work from 00 to 30 plus 32 33
+		  // but should only work from 10 to 30
 		    skip++;
 		    N[0] = buf[i+skip];
 		    skip++;
@@ -418,8 +436,13 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 			dbg1(Warning, "bad fret number", (void *)((int)N[0]));
 		    if ( ! isdigit (N[1])) 
 			dbg1(Warning, "bad fret number", (void *)((int)N[1]));
-		    if (staff[i] > 34) {
-			dbg1(Warning, "fret number higher than max 34", 
+		    if (staff[i] > 30) {
+			dbg1(Warning, "fret number %d higher than max 34\n", 
+			     (void *)((int)staff[i]));
+			staff[i]=0;
+		    }
+		    if (staff[i] < 10) {
+			dbg1(Warning, "fret number %d lower than min 10\n", 
 			     (void *)((int)staff[i]));
 			staff[i]=0;
 		    }
@@ -553,6 +576,15 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    else i=2;
 		    for(; i < STAFF; i++ ) staff[i] = ' ';
 		    break;
+		case '|':
+		  staff[i] = '|';
+		  //		  if (baroque) {
+		    if (buf[i+skip + 1] == '|') {
+		      skip++;
+		      staff[i] = 229;
+		    }
+		    //		  }
+		  break;
 		case '\\':	/* finger number */
 		    cc = buf[i + (++skip)]; /* we expect a number 1-4 */
 		    if (cc >='1' && cc <='4' ) {
@@ -741,7 +773,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    for (i = 2 ;i < STAFF; i++) staff[i] = ' ';
 	    Mstore( ib, l_p, staff, f);
 	    break;
-	case '*':
+	case '*':  // insert a letter here
 	    staff[0] = c;
 	    staff[1] = buf[1];
 	    for (i = 2 ;i < STAFF; i++) staff[i] = ' ';
@@ -750,14 +782,14 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	case EOF:
 	    return(0);
 	case '$':
-	{
+	  {
 	    int i, j=0;
 	    char buffer[80];
 	    char *bp;
 	    bp = &buffer[0];
 	    for (i=1; (c = buf[i]) != NEWLINE; i++) {
-		*bp=c; 
-		bp++;
+	      *bp=c; 
+	      bp++;
 	    }
 	    
 	    buffer[--i] = 0;
@@ -765,11 +797,27 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	      break;		// return if we set the flag
 	    ib->PutByte('$');
 	    while (j < i && buffer[j] != '\0') {
-		ib->PutByte(buffer[j++]);
+	      ib->PutByte(buffer[j++]);
 	    }
 	    ib->PutByte(NEWLINE);
-	}  
-	break;
+	  }  
+	  break;
+	case '[':
+	  staff[0] = c;
+	  //	  if ( ! (f->m_flags & QUIET) ) 
+	  //	    dbg0(Warning, "text in system not implemented\n");
+	  for (i = 1 ;i < STAFF; i++) { 
+	    if (buf[i] == '\n' ) {
+	      staff[i] = ' ';
+	    }
+	    else if (buf[i] == '\0' ) {
+	      staff[i] = ' ';
+	    }
+	    else staff[i] = buf[i];
+	  }
+	  //	  staff[STAFF-1] = '\n';
+	  Mstore( ib, l_p, staff, f);
+	  break;
 	default:	
 	  if ( ! (f->m_flags & QUIET) ) 
 	    dbg3(Warning, 

@@ -222,6 +222,9 @@ score(print *p, struct list *l, struct file_info *f,
 	p->put_rule (str_to_inch(staff_height),
 		     10.0 * str_to_inch(mus_space) 
 		     + str_to_inch (staff_height));
+	if (f->m_flags & SOUND) {
+	  sp->add_bar();
+	}
 	break;
     case '.':
 	p->movev(3.0 * str_to_inch(mus_space));
@@ -253,12 +256,14 @@ score(print *p, struct list *l, struct file_info *f,
     case '3':
     case '4':
     case '5':
-	if (baroque || f->flag_flag == CONTEMP_FLAGS) timeval = cc - '0' + 1;
-	else timeval = cc - '0';
-	goto rest;
-	//    case 'B':
-	//	timeval = -2;
-	//	goto rest;
+      if (ch[1] == 'M')
+	break;
+      else if (baroque || f->flag_flag == CONTEMP_FLAGS) timeval = cc - '0' + 1;
+      else timeval = cc - '0';
+      goto rest;
+      //    case 'B':
+      //	timeval = -2;
+      //	goto rest;
     case 'W':
 	if (baroque || f->flag_flag == CONTEMP_FLAGS) timeval = -1;
 	else timeval = -2;
@@ -267,6 +272,9 @@ score(print *p, struct list *l, struct file_info *f,
 	if (baroque || f->flag_flag == CONTEMP_FLAGS) timeval = 0;
 	else timeval = -1;
 	goto rest;
+    case 'J':			// breve
+      timeval = -4;
+      goto rest;
     case 'L':
       timeval = -3;
       goto rest;
@@ -277,6 +285,8 @@ score(print *p, struct list *l, struct file_info *f,
     case ':':
     case 'v':
     case 'u':			// cut time sign
+    case 'k':			// key sign
+    case '8':
 	break;
     case 'x':
 	timeval = o_timeval;
@@ -315,6 +325,7 @@ score(print *p, struct list *l, struct file_info *f,
     case 'U':			// do nothing
     case 'A':			// do nothing
     case 'i':			// do nothing
+    case 'Z':			// do nothing
     case 'd':
 	break;
     case 'f':

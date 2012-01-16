@@ -17,11 +17,11 @@ void midi_tail();
 midi_snd::midi_snd()
 {
   char s[80];
-  //  printf("Start midi_snd\n");
+  //  printf("Start midi_snd 0 args\n");
   buffer = new i_buf();
   midi_head();
   count = 0;
-  sprintf(s, "tab %s copyright 1995-2003 by Wayne Cripps",  VERSION);
+  sprintf(s, "tab %s copyright 1995-2005 by Wayne Cripps",  VERSION);
   text(Copyright, s);
   text(Text, "converted by TAB");
   instmnt = 0;
@@ -32,27 +32,28 @@ midi_snd::midi_snd()
 midi_snd::midi_snd(const unsigned int instrument)
 {
   char s[80];
-  //  printf("Start midi_snd\n");
+  //  printf("Start midi_snd 1 arg\n");
   buffer = new i_buf();
   midi_head();
   count = 0;
-  sprintf(s, "tab %s copyright 1995-2003 by Wayne Cripps",  VERSION);
+  sprintf(s, "tab %s copyright 1995-2005 by Wayne Cripps",  VERSION);
   text(Copyright, s);
   text(Text, "converted by TAB");
   instmnt = instrument;
   program();
   fname[0] = '\0';
+  bar = 0;
 }
 
 midi_snd::midi_snd(const unsigned int instrument,
 		   const char * filename)
 {
   char s[80];
-  //  printf("Start midi_snd\n");
+  //  printf("Start midi_snd 2 args\n");
   buffer = new i_buf();
   midi_head();
   count = 0;
-  sprintf(s, "tab %s copyright 1995-2003 by Wayne Cripps",  VERSION);
+  sprintf(s, "tab %s copyright 1995-2005 by Wayne Cripps",  VERSION);
   text(Copyright, s);
   text(Text, "converted by TAB");
   instmnt = instrument;
@@ -75,8 +76,13 @@ midi_snd::~midi_snd()
 
   if ( ! strcmp (fname, "stdout")) 
     buffer->dump ("stdout", Creat);
-  else
-    buffer->dump ("data.mid", Creat);
+  else {
+    /*    buffer->dump ("data.mid", Creat); */
+    if (strlen (fname)) 
+      buffer->dump ( fname, Creat);
+    else 
+      buffer->dump ("data.mid", Creat);
+  }
   delete(buffer);
 }
 
@@ -100,20 +106,25 @@ void
 midi_snd::play(const double time)
 {
   int i;
+  unsigned int velocity = 64;
 
-
+  if (bar) {
+    //    printf ("BBAR\n");
+    bar = 0;
+    velocity = 80;
+  }
   for (i=0; i<tt; i++) {
     writeVarLen(0);	  /* delta time */
     buf[count++] = (char)0x90;  /* note on channel 0*/
     buf[count++] = (char)t[i]; /* the note - 60 = middle c*/
-    buf[count++] = (char)64;	  /* velocity */
+    buf[count++] = (char)velocity;	  /* velocity */
   }
 
   for (i=0; i<tt; i++) {
     if (i==0) writeVarLen((unsigned int) time * 3);	  /* delta time */
     else writeVarLen(0);
 
-    buf[count++] = (char)0x80;  /* note on channel 0*/
+    buf[count++] = (char)0x80;  /* note off channel 0*/
     buf[count++] = (char)t[i]; /* the note - 60 = middle c*/
     buf[count++] = (char)64;	  /* velocity */
   }
@@ -131,7 +142,7 @@ midi_snd::rest(const double time)
   
   writeVarLen((unsigned int) time * 3);	  /* delta time */
   
-  buf[count++] = (char)0x80;  /* note on channel 0*/
+  buf[count++] = (char)0x80;  /* note off channel 0*/
   buf[count++] = (char)60; /* the note - 60 = middle c*/
   buf[count++] = (char)64;	  /* velocity */
   
@@ -140,16 +151,23 @@ midi_snd::rest(const double time)
 
 void midi_snd::play_note(const int note, const double time)
 {
-   writeVarLen(0);	  /* delta time */
+  unsigned int velocity = 64;
+  writeVarLen(0);	  /* delta time */
   buf[count++] = (char)0x90;  /* note on channel 0*/
   buf[count++] = (char)note; /* the note - 60 = middle c*/
-  buf[count++] = (char)64;	  /* velocity */
+  if (bar) {
+    //    printf("bar\n");
+    velocity =80;
+    bar = 0;
+  }
+  else velocity = 64;
+  buf[count++] = (char)velocity;	  /* velocity */
   
   writeVarLen((unsigned int) time * 3);	  /* delta time */
   
   buf[count++] = (char)0x80;  /* note on channel 0*/
   buf[count++] = (char)note; /* the note - 60 = middle c*/
-  buf[count++] = (char)64;	  /* velocity */
+  buf[count++] = (char)velocity;	  /* velocity */
 }
 
 void midi_head()
@@ -159,7 +177,8 @@ void midi_head()
   buffer->PutByte('\0'); buffer->PutByte('\0'); 
   buffer->PutByte('\0'); buffer->PutByte('\6');
 
-  buffer->PutByte(0); buffer->PutByte(1); // midi type 0-single track 
+  buffer->PutByte(0); buffer->PutByte(0); // midi type 0-single track 
+                                          // was 1
 				          // 1-mult track, or 2 
   buffer->PutByte(0); buffer->PutByte(1); /* how many tracks */
   buffer->PutByte(0); buffer->PutByte(0x60);  /* pulses per quarter note */
@@ -233,4 +252,10 @@ void midi_snd::writeVarLen(unsigned long value)
     else
       break;
   }
+}
+
+void midi_snd::add_bar()
+{
+  //  fprintf (stderr, "BAR\n");
+  bar = 1;
 }

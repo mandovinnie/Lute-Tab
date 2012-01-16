@@ -640,8 +640,8 @@ void ps_print::set_a_char (unsigned char c)
 	else if ( c == 0031) c = 0373; // fs
 	else if ( c == 0032) c = 0361; // ae
 	else if ( c == 0035) c = 0341; // AE
-	else if ( c == 0033) c = 0352; // oe
-	else if ( c == 0036) c = 0372; // OE
+	else if ( c == 0033) c = 0372; // oe
+	else if ( c == 0036) c = 0352; // OE
 	else if ( c == 0034) c = 0371; // oo
 	else if ( c == 0037) c = 0351; // OO
 	else if ( c == 0074) c = 0241; // ! inverted
@@ -1189,10 +1189,11 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     pr_out->PutString("/Times-Roman-ISO exch definefont pop\n");
     pr_out->PutString("/Times-Roman-ISO findfont\n");
     pr_out->PutString("12 scalefont setfont\n");
-    pr_out->PutString("0 -520 rmoveto\n");
+    pr_out->PutString("0 -690 rmoveto\n");
     pr_out->PutString("( \251 ) show\n");
-    pr_out->PutString("(Copyright Karen Meyers, 1997)show\n");
+    pr_out->PutString("(TAB by Wayne Cripps 2005)show\n");
     pr_out->PutString("grestore \n");
+    break;
   case P_S_GRAY:
     pr_out->PutString("/mygray currentgray def\n");
     pr_out->PutString("0.5 setgray\n");

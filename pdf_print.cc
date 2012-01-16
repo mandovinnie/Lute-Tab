@@ -74,11 +74,12 @@ pdf_print::pdf_print(font_list *font_array[], file_info *f)
     if (f->m_flags & SOUND)
       nodump = 1;
     else nodump = 0;
+
+    file_head();		// file head dumps header
 }
 
 pdf_print::~pdf_print()
 {
-    file_head();		// file head dumps header
     file_trail();
     if (f_name[0]) {
       if (!nodump)
@@ -110,96 +111,24 @@ void pdf_print::file_head()
     byte_count =  pdf_header.PutStringC("%PDF-1.4\n");
     byte_count += pdf_header.PutStringC("%’");
     byte_count += pdf_header.PutStringC("\n");
+    fprintf(stderr, "file_head: byte count is %d\n", byte_count);
+    byte_count += do_catalog();
+    fprintf(stderr, "file_head: byte count is %d\n", byte_count);
+    byte_count += do_page_tree();
+    fprintf(stderr, "file_head: byte count is %d\n", byte_count);
+    //    byte_count += do_page_leaf();
+    //    byte_count += do_page_content();
+    //    byte_count += do_page_resource();
 
-    new_xref_entry(byte_count);
 
-
-    //    if (!(f_i->flags & ROTATE) && npages < 2) {
-    //	int val;
-    //	if ( ! (f_i->m_flags & NOBOX) ) {
-    //	  pdf_header.PutString("%%BoundingBox: 55 ");
-    //	  val = (int)((dvi_to_inch(dvi_v) - 2.75 ) * 72.27 * red);
-    //	  pdf_header.Put10(val);
-    //	  pdf_header.PutString(" 555 735\n"); 
-    //	}
-    //   }
-    //   else if (ROTATE) {	// yes, rotate
-    //	if ( ! (f_i->m_flags & NOBOX) ) {
-    //	  pdf_header.PutString("%%BoundingBox:  45 68 "); // 45 725
-    //	  pdf_header.PutString("620");
-    //	  pdf_header.PutLine(" 725\n"); // full line
-    //	}
-    //    }
-    //    else /* no rotate, many pages */
-    //	pdf_header.PutString("%%BoundingBox:  50 65 555 740\n");
-    //pdf_header.PutString("%%Creator: (tab, version "); 
-    //pdf_header.PutString(VERSION);
-    //pdf_header.PutString(", by Wayne Cripps)\n");
-    //pdf_header.PutString("%%Creation Date: ");
-    //t = time(0);
-    //pdf_header.PutString( ctime(&t));
-    //pdf_header.PutString("%%Orientation: ");
-    //if (!(f_i->flags & ROTATE)) 
-    //	pdf_header.PutString("Portrait\n");
-    //   else
-    //	pdf_header.PutString("Landscape\n");
-    //pdf_header.PutString("%%Pages: ");
-    //pdf_header.Put10(npages);
-    //pdf_header.PutString("\n");
-    //pdf_header.PutString("%%PageOrder: Ascend\n");
-    //#ifndef MAC
-    //pdf_header.PutString("%%Title: (");
-    //pdf_header.PutString(f_i->file);
-    //pdf_header.PutString(")\n");
-    //#endif
-    //pdf_header.PutString("%%EndComments\n");
-
-    //pdf_header.PutString("%%BeginDefaults\n");
-//    pdf_header.PutString("%%PageBoundingBox: 50 65 555 740\n");
-    //pdf_header.PutString("%%PageOrientation: ");
-    //if (!(f_i->flags & ROTATE)) 
-    //	pdf_header.PutString("Portrait\n");
-    //else
-    //	pdf_header.PutString("Landscape\n");
-    //pdf_header.PutString("%%EndDefaults\n");
- 
-    //pdf_header.PutString("%%BeginProlog\n");
-    //pdf_header.PutString("%%EndProlog\n");
-    //pdf_header.PutString("%%BeginSetup\n");
-    //if (f_i->flags & DPI600) 
-    //	pdf_header.PutString("%%Feature: *Resolution 600\n");
-    //else if (f_i->m_flags & DPI1200) 
-    //	pdf_header.PutString("%%Feature: *Resolution 1200\n");
-    //else if (f_i->m_flags & DPI2400) 
-    //	pdf_header.PutString("%%Feature: *Resolution 2400\n");
-    //else pdf_header.PutString("%%Feature: *Resolution 300\n");
-
-#ifdef MAC
-    strcpy(pk_name, "");
-#else
-#ifdef WIN32
-    RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Software", 0 ,KEY_READ, &hKey);
-    RegOpenKeyEx(hKey, "Wayne Cripps", 0 ,KEY_READ, &hSubKey);
-    RegCloseKey(hKey);
-    hKey = hSubKey;
-    RegOpenKeyEx(hKey, "tab", 0 ,KEY_READ, &hSubKey);
-    RegCloseKey(hKey);
-    hKey = hSubKey;
-    RegOpenKeyEx(hKey, VERSION, 0 ,KEY_READ, &hSubKey);
-    RegCloseKey(hKey);
-    hKey = hSubKey;
-    RegQueryValueEx(hKey,"pkDir",NULL,&dwType,NULL,&dwSize);
-    p=(LPBYTE)malloc(dwSize);
-    if(RegQueryValueEx(hKey,"pkDir",NULL,&dwType,p,&dwSize) != ERROR_SUCCESS)
-#else /* not MAC or WIN32 */
-      if (font_path) {
-	//        fprintf (stderr, "tfm.c - setting font path %s from command line\n", font_path);
-        p = font_path;
-      }
-      else
-	p = getenv("TABFONTS");
+    if (font_path) {
+      //fprintf (stderr, "pdf_print - setting font path %s from command line\n", 
+      //font_path);
+      p = font_path;
+    }
+    else
+      p = getenv("TABFONTS");
     if (p == NULL ) 
-#endif /* WIN32 */
 #ifdef TFM_PATH
 	strcpy(pk_name, TFM_PATH);
 #else
@@ -213,7 +142,7 @@ void pdf_print::file_head()
 #endif  /* WIN32 */
 
     strcat (pk_name, "/");
-#endif /* MAC */
+
     if (f_i->font_names[0]) {
       strcat (pk_name, f_i->font_names[0]);
     }
@@ -274,34 +203,9 @@ void pdf_print::define_all_fonts()
 
 void pdf_print::page_head()
 {
-  return;
-  // parens around name string for Rainer Jan 2002 wbc
-    pr_out->PutString("%%Page: (");
-    pr_out->PutString(f_i->file);
-    pr_out->PutString(") ");
-    pr_out->Put10( npages + 1 );
-    pr_out->PutString("\n");
+  byte_count += do_page_leaf();
 
-    pr_out->PutString("%%PageOrientation: ");
-    if (!(f_i->flags & ROTATE)) 
-	pr_out->PutString("Portrait\n");
-    else
-	pr_out->PutString("Landscape\n");
-
-    pr_out->PutString("%%BeginPageSetup\n");
-    pr_out->PutString("/pgsave save def\n");
-    pr_out->PutString("%%EndPageSetup\n");
-    if (f_i->flags & LSA_FORM )
-	pr_out->PutString("72 -42 translate\n"); 
-    else if (f_i->flags & ROTATE)
-	/* for fun try [ 0 1 1 0 -250 72 ] concat */
-	pr_out->PutString("[0 1 -1 0  818 72 ] concat\n"); 
-    else
-	pr_out->PutString("72 -35 translate\n");
-    pr_out->PutString("/LuteFont FF setfont\n"); 
-/*    in case there is no default font */
-    
-    init_hv();
+  init_hv();
 }
 
 void pdf_print::file_trail()		// write_postamble
@@ -314,7 +218,7 @@ void pdf_print::file_trail()		// write_postamble
   pr_out->PutString("trailer\n");
   sprintf (buf, "<< /Size %d\n", xref_count );
   pr_out->PutString(buf);
-  pr_out->PutString("<< /Root 2 0 R\n");
+  pr_out->PutString("   /Root 1 0 R\n");
   pr_out->PutString(">>\n");
 
   pr_out->PutString("startxref\n");
@@ -325,17 +229,18 @@ void pdf_print::file_trail()		// write_postamble
 
 void pdf_print::page_trail()
 {
+  //  byte_count += do_page_content();
+  byte_count += do_page_resource();
 // why? 	reset_dvi_vh();
 //    flush();
-//    pr_out->PutString("pgsave restore\n");
-//    pr_out->PutString("showpage\n");
 }
 
 int pdf_print::do_page(i_buf *i_b,  struct font_list *f_a[])
 {
-    npages++;
-    return (0);
-    return (format_page(this, i_b, f_a, f_i));
+  npages++;
+  byte_count += do_page_content(i_b, f_a);
+  //  format_page(this, i_b, f_a, f_i);
+  return (page_retval);
 }
 
 void pdf_print::init_hv()
@@ -1285,7 +1190,7 @@ void new_xref_entry(const int offset)
 {
   xref_entry *t, *u;
 
-  fprintf(stderr, "adding xref entry\n");
+  fprintf(stderr, "adding xref entry offset %u\n", offset);
 
   t = (xref_entry *) malloc (sizeof (xref_entry));
   
@@ -1298,13 +1203,15 @@ void new_xref_entry(const int offset)
   
   u = xref_root;
   while (u->next) {
-    fprintf(stderr, "increment\n");
+    //    fprintf(stderr, "increment xref list\n");
     u = u->next;
   }
   u->next = t;
 
 }
 
+// print out xref information
+//
 void pdf_print::file_xref()
 {
   xref_entry *u;
@@ -1320,25 +1227,104 @@ void pdf_print::file_xref()
   }
 
   while (u) {
-    sprintf (tstring, "%010d %05d n \n", u->byte_offset, 0);
+    sprintf (tstring, "%010d %05d %c \n", u->byte_offset, u->generation, u->use);
     pr_out->PutString(tstring);
     u = u->next;
     // free nodes here
   }
 }
 
-void pdf_print::do_catalog()
+// do catalog, return byte counts in catalog
+//
+unsigned int pdf_print::do_catalog()
 {
-  char buf[80];
-  pr_out->PutString("<< /Type /Catalog");
-  sprintf (buf, "/Pages /Kids [\n");
-  pr_out->PutString( buf );
-  sprintf (buf, "] /Count %d \n", 1);
-  pr_out->PutString( buf );
-  pr_out->PutString(">>\nendobj\n"); 
+  unsigned int bytes = 0;
+
+  fprintf (stderr, "Catalog\n");
+  /* save byte position of first byte */
+  new_xref_entry( byte_count /* offset */);
+  bytes += pr_out->PutStringC("1 0 obj\n");
+  bytes += pr_out->PutStringC("  << /Type /Catalog\n");
+  bytes += pr_out->PutStringC("     /Pages 2 0 R\n");
+  bytes += pr_out->PutStringC("  >>\nendobj\n"); 
+  return (bytes);
 }
 
-void pdf_print::do_page_tree() 
+unsigned int pdf_print::do_page_tree() 
 {
- pr_out->PutString("<< /Type /Pages");
+  unsigned int bytes = 0;
+
+  fprintf (stderr, "Page Tree\n");
+  new_xref_entry( byte_count /* offset */);
+  bytes += pr_out->PutStringC("2 0 obj\n");
+  bytes += pr_out->PutStringC("  << /Type /Pages\n");
+  bytes += pr_out->PutStringC("     /Kids [3 0 R]\n");
+  bytes += pr_out->PutStringC("     /Count 1\n");
+  bytes += pr_out->PutStringC("  >>\nendobj\n"); 
+  return (bytes);
 }
+
+unsigned int pdf_print::do_page_leaf() 
+{
+  unsigned int bytes = 0;
+
+  fprintf (stderr, "Page Leaf\n");
+  new_xref_entry( byte_count /* offset */);
+  bytes += pr_out->PutStringC("3 0 obj\n");
+  bytes += pr_out->PutStringC("  << /Type /Page\n");
+  bytes += pr_out->PutStringC("     /Parent 2 0 R\n");
+  bytes += pr_out->PutStringC("     /MediaBox [0 0 621 792]\n");
+  bytes += pr_out->PutStringC("     /Contents 4 0 R\n");
+  bytes += pr_out->PutStringC("     /ProcSet 5 0 R\n");
+  bytes += pr_out->PutStringC("  >>\nendobj\n"); 
+  return (bytes);
+}
+unsigned int pdf_print::do_page_content(i_buf *i_b,  struct font_list *f_a[])
+{
+  unsigned int bytes = 0;
+  char b[80];
+  unsigned int scount ;
+  
+  fprintf (stderr, "Page Content\n");
+  new_xref_entry( byte_count /* offset */);
+  bytes += pr_out->PutStringC("4 0 obj\n");
+  scount = do_stream(i_b,  f_a);
+
+  //  scount = 22;
+  //  sprintf (b, "  << /Length %u >>\n", scount);
+  //  bytes += pr_out->PutStringC(b);
+
+  bytes += scount;
+  bytes += pr_out->PutStringC("stream\n");
+  bytes += pr_out->PutStringC("100 100 m 100 200 l S \n");
+  print_stream();
+  // we go byte count in scount above
+  bytes += pr_out->PutStringC("endstream\n");
+  bytes += pr_out->PutStringC("endobj\n");   
+  return(bytes);
+}
+
+unsigned int pdf_print::do_page_resource() 
+{
+  unsigned int bytes = 0;
+
+  fprintf (stderr, "Page Resource\n");
+  new_xref_entry( byte_count /* offset */);
+  bytes += pr_out->PutStringC("5 0 obj\n");
+  bytes += pr_out->PutStringC("[/PDF]\nendobj\n");   
+  return(bytes);
+}
+
+unsigned int pdf_print::do_stream(i_buf *i_b,  struct font_list *f_a[]) {
+  unsigned int bytes = 0;
+  //  pdf_print *page_buf;
+
+  //  page_buf = new pdf_print();
+  // "this" must be a new temporary output buffer that I can count when done
+  //  page_retval = (format_page(page_buf, i_b, f_a, f_i));
+  return (bytes);
+}
+
+void pdf_print::print_stream() {
+}
+

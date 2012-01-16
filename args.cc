@@ -251,8 +251,14 @@ void set_o(const char *value, struct file_info *f)  {
   if (ptr = strstr (f->out_file, ".ps")) {
     *ptr = '\0';
   }
+  if (ptr = strstr (f->out_file, ".mid")) {
+    *ptr = '\0';
+  }
 #ifndef NO_STDOUT
-  if (f->flags & PS ) { 
+  if (f->m_flags & SOUND ) {
+    strcat (f->out_file, ".mid");
+  }
+  else if (f->flags & PS ) { 
     if ( strcmp (f->out_file, "stdout")) {
       strcat (f->out_file, ".ps");
     }
@@ -298,7 +304,7 @@ void set_sound(const char *value, struct file_info *f)
 	f->flags |= MANUSCRIPT;
 	f->m_flags |= QUIET;
 #ifndef NO_STDOUT
-	strcat (f->out_file, "/dev/null");
+	strcat (f->out_file, "stdout");	//  was /dev/null
 #endif
 }
 
@@ -431,8 +437,10 @@ void args(int argc, char ** argv, struct file_info *f)
       {"Q", (void*)set_Q},
       {"R7", (void*)set_R7},
       {"R8", (void*)set_R8},
+      {"R8.5", (void*)set_R8},
       {"R9", (void*)set_R9},
       {"R95", (void*)set_R95},
+      {"R9.5", (void*)set_R95},
       {"S", (void*)set_S},
       {"V", (void*)set_V},
       {"W", (void*)set_W},

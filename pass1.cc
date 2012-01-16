@@ -622,7 +622,15 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  weight = W_NONE;
 	}
 	else if (strchr(l->dat, '-')) {
-	  l->padding = .2;	// was .25
+	  l->padding = .23;	// was .25
+	  for (i=2; i<7; i++) {
+	    if (l->next->dat[i] == 'd')
+	      l->padding = .35;
+	    if (l->next->dat[i] == 'G')
+	      l->padding = .35;
+	    else if (l->next->dat[i] == 'g')
+              l->padding = .3;
+	  }
 	  weight = W_TWO;
 	}
 	else {
@@ -686,6 +694,11 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       //    case '-':
       //      fprintf(stderr,"pass1: here\n");
       //break;
+    case '[':
+      //      dbg0(Warning, " [pass1: not implemented\n");
+      l->padding = 0;
+	weight = 0;
+      break;
     default:
       dbg2(Warning, "tab: pass1: unknown flag %d %s\n", 
 	   (void *)(int)c, (void *)l->dat );

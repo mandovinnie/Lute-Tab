@@ -13,6 +13,7 @@ private:
   enum text_type {Text=1,Copyright=2,Instrument=3};
   void text(enum text_type, const char *words);
   void program();
+  int bar;
 public:
   midi_snd();
   midi_snd(const unsigned int instrument);
@@ -22,4 +23,5 @@ public:
   void play(const double time);
   void rest(const double time);
   void play_note(const int note, const double time);
+  void add_bar();
 };

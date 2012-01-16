@@ -215,6 +215,7 @@ void mapchar(print *p, font_list *f_a[], unsigned char c, struct file_info *f)
 	else {
 	    c -= 220;
 	    //	    dbg1 (Warning, "map: number over 9 is %d  \n", (void *)c);
+	    //  this should work from 10 to 34, 230 to 254
 	    if (f->num_flag == ITAL_NUM) {
 		p->set_a_char( c/10 + 0202 );
 		p->moveh(0.011);

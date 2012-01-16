@@ -32,6 +32,8 @@ class pdf_print : public print {
     unsigned int byte_count;
     unsigned int xref_offset;
     unsigned int generation;
+
+    int page_retval;
     
   public:
     char pdf_used[256];
@@ -46,9 +48,14 @@ class pdf_print : public print {
     void file_trail();
     void page_head();
     void page_trail();
-    int do_page(i_buf *b, font_list *f_l[]);
-    void do_catalog();
-    void do_page_tree();
+    int  do_page(i_buf *b, font_list *f_l[]);
+    unsigned int  do_catalog();
+    unsigned int  do_page_tree();
+    unsigned int  do_page_leaf();
+    unsigned int  do_page_content(i_buf *i_b,  struct font_list *f_a[]);
+    unsigned int  do_page_resource();
+    unsigned int  do_stream(i_buf *i_b,  struct font_list *f_a[]);
+    void print_stream();
     void put_rule(char *w, char *h);
     void p_moveh(const int hor);
     void p_movev(const int ver);

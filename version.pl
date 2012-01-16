@@ -15,7 +15,7 @@ close VERS;
 close NEW;
 rename "versnew.h","version.h";
 
-open MAKE, "Makefile";
+open MAKE, "<Makefile";
 open MNEW, ">Makefile.new";
 
 while (<MAKE>) {
@@ -24,6 +24,7 @@ while (<MAKE>) {
 }
 close MAKE;
 close MNEW;
+rename "Makefile", "Makefile.bak";
 rename "Makefile.new", "Makefile";
 exit;
 

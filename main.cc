@@ -242,8 +242,10 @@ void tfm_stuff(i_buf *b, file_info *f)
 	    sp = new midi_snd(f->midi_patch);
 	}
 	else {			// no midi patch
-	  if (strncmp(f->out_file, "stdout", 6)) 
+	  if (!strncmp(f->out_file, "stdout", 6)) 
 	    sp = new midi_snd(34, "stdout");
+	  else if ( strlen(f->out_file)) 
+	    sp = new midi_snd(34, f->out_file);
 	  else 
 	    sp = new midi_snd;
 	}
@@ -349,7 +351,7 @@ main(int argc, char **argv)
     //	dbg_set(Inter);
     
     if ( ! (f.m_flags & QUIET) )
-      dbg2(Warning, "tab %s copyright 1995-2003 by Wayne Cripps%c",
+      dbg2(Warning, "tab %s copyright 1995-2005 by Wayne Cripps%c",
 	   (void *)VERSION,
 	   (void *) NEWLINE );
     

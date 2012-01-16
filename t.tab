@@ -23,7 +23,19 @@
 %$sys-skip=0.2
 -l "6.1 in"
 
-%V ".5 in"
+
+b
+1 c
+x c
+x c
+x c
+b
+x c
+x c
+x c
+x b
+b
+e
 
 b
 2 \:!x
@@ -34,7 +46,7 @@ b
 2 8
 %2 \:!x
 b
-e
+
 
 b
 2 m
@@ -42,7 +54,8 @@ b
 2 o
 2 p
 b
-e
+ 
+b
 W.abcdefg
 w.abcdefg
 0.abcdefg
@@ -73,7 +86,7 @@ xabcdefg
 x
 bv
 b
-e
+
 
 
 
@@ -85,7 +98,8 @@ b
 1-*/a
 1- /a
 b
-e
+
+b
 1-a&x
 1-a&,
 1-a&_

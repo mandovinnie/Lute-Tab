@@ -179,6 +179,7 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
 
   switch (nn->time){
   case 'Z':			/* a squiggle */
+    // the famous Zap or zap character!
     p->movev(0.02);
     p->put_a_char( 251 );	/* a squiggle */
     break;
