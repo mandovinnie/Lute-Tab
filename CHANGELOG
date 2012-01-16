@@ -1,3 +1,19 @@
+VERSION "4.3.45"  July 11 2006
+
+Added inverted italian 3 flag note
+
+VERSION "4.3.44"  June 14 2006
+
+Made cosmetic fixes to SC, C especially when combined with S3
+
+VERSION "4.3.42"  Amrch 7 2006
+
+Midi file format 1, with a "tempo track"
+
+VERSION "4.3.41"  March 6 2006
+
+fixed bug in setting number of tracks
+
 VERSION "4.3.40"  Feb 16 06
 
 fixed o_staff_len default  so there is a begginging length for includes

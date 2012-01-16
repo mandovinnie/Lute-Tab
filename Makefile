@@ -12,11 +12,11 @@ OPTIM = -g
 CC = g++3 -wuninitilized
 LD = g++
 # LD = g++ -m64
-LD = g++ -m32
+# LD = g++ -m32
 LDFLAGS = ${OPTIM}  
 CXX = g++
 # CXX = g++ -m64
-CXX = g++ -m32
+# CXX = g++ -m32
 #
 #
 LIBS =
@@ -30,6 +30,7 @@ TLOC='"."'
 #
 # TLOC = '"/Users/wbc/nnt"'
 # TLOC = '"/net/wbc/src/nnt"'
+# TLOC = '"/net/wbc/src/old-nnt"'
 # TLOC = '"/net/tahoe4/wbc/src/nnt"'
 # TLOC = '"/usr/aeolus1/wbc/src/nnt"'
 # TLOC = '"/home/wbc/nnt"'
@@ -107,7 +108,7 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	version.pl makedepend CHANGELOG \
 	midi-docs/midi-dump.c midi-docs/Makefile
 
-DISTFILE = lute_tab4.3.40.tar
+DISTFILE = lute_tab4.3.45.tar
 
 distrib:	 ${DISTFILE}
 

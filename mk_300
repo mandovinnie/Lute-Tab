@@ -25,31 +25,31 @@ mode=cx
 #
 #
 if ($#argv == 0  ) then
-  virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input lute9; bye;"
+  mf "\mode:=$MODE; \mag:=1.0; input lute9; bye;"
   gftopk ./lute9.300gf > ./lute9.300pk
   rm ./lute9.300gf
-  virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input lute8; bye;"
+  mf "\mode:=$MODE; \mag:=1.0; input lute8; bye;"
   gftopk ./lute8.300gf > ./lute8.300pk
   rm ./lute8.300gf
-  virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input lute7; bye;"
+  mf "\mode:=$MODE; \mag:=1.0; input lute7; bye;"
   gftopk ./lute7.300gf > ./lute7.300pk
   rm ./lute7.300gf
-  virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input lute6; bye;"
+  mf "\mode:=$MODE; \mag:=1.0; input lute6; bye;"
   gftopk ./lute6.300gf > ./lute6.300pk
   rm ./lute6.300gf
   rm lute*log lute*300gf
 else  
   if ( $1 == 'b' ) then
     echo baroque font
-    virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input blute9; bye;"
+    mf "\mode:=$MODE; \mag:=1.0; input blute9; bye;"
     gftopk ./blute9.300gf > ./blute9.300pk
-    virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input blute85; bye;"
+    mf "\mode:=$MODE; \mag:=1.0; input blute85; bye;"
     gftopk ./blute85.300gf > ./blute85.300pk
-    virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input blute8; bye;"
+    mf "\mode:=$MODE; \mag:=1.0; input blute8; bye;"
     gftopk ./blute8.300gf > ./blute8.300pk
-    virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input blute7; bye;"
+    mf "\mode:=$MODE; \mag:=1.0; input blute7; bye;"
     gftopk ./blute7.300gf > ./blute7.300pk
-    virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input blute6; bye;"
+    mf "\mode:=$MODE; \mag:=1.0; input blute6; bye;"
     gftopk ./blute6.300gf > ./blute6.300pk
     rm blute*log blute*300gf
   else

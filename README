@@ -277,13 +277,15 @@ m		- Mesangeau's flourish!
 M		- a note of music with no tab M#n+ where # equals 
 		  number of flags.
 		  You may place one tab after the M to line up the music.
-		  n is the note value A-Ga-g, 
+		  n is the note value A-Ga-g (with 1 2 3 4 giving you high  a - d, 
 		  and + is for sharp, . for dotted note
  		    - for flat, n for natural, or 0 for neither
 		    v for dot and flat, ^ for sharp and dot
 		    N for dot and natural
 		  MG gives a G cleff in the music.  MF gives
 		  an F cleff in the music
+		  appending an 8b places an 8 below the G and MGa places
+                  an 8 above the G clef.
 O		- this chord is an ornament, as in Capirola book - 
 		  it has no width
 p		- force end of page.
@@ -357,7 +359,7 @@ $		- used to set these values. This flag must be
 						the tempo. does not work
 		  $sys-skip=1.2			extra space to skip between
 						systems, in inches, only
-		  $midi-patch			a number, 0 to 127, which
+		  $midi-patch=n			a number, 0 to 127, which
 						selects a midi "instrument"
 		  $start-system=n		which system to start "printing"
 						This is intended to be used with 

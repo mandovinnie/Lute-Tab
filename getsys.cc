@@ -1070,14 +1070,22 @@ do_music(i_buf *ib, unsigned char staff[], char buf[], int *l_p, int *skip,
     */
 
     if (music[b] == 'G' || music[b] == 'F') {
+      strcpy (buff, "GM");
+      if (music[b+1] == '8') {
+	strcat (buff, "8");
+	if (music[b+2] == 'a')
+	  strcat (buff, "a");
+	if (music[b+2] == 'b')
+	  strcat (buff, "b");
+      }
+      else
 	music[b+1] = music[b+2] = ' ';
-	strcpy (buff, "GM");
-	for (i=2 ; i< STAFF; i++) buff[i] = ' '; // print g cleff on second line
-	  if (f->m_flags & TWOSTAFF) {
-	  music[4] = music[b];
-	  music[5] = music[6] = ' ';
-	  strcat ( buff, "MG");
-	}
+      for (i=2 ; i< STAFF; i++) buff[i] = ' '; // print g cleff on second line
+      if (f->m_flags & TWOSTAFF) {
+	music[4] = music[b];
+	music[5] = music[6] = ' ';
+	strcat ( buff, "MG");
+      }
     }
     
     if (music[b] == NEWLINE ||

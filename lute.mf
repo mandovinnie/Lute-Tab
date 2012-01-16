@@ -14,8 +14,7 @@ define_good_y_pixels(flag_top);
 %
 pickup pencircle scaled 0.5wid;
 tiny_circle := savepen;
-%
-pickup pencircle xscaled 1.2wid yscaled .3 wid rotated 50;
+%pickup pencircle xscaled 1.2wid yscaled .3 wid rotated 50;
 lute_pen := savepen;
 pickup pencircle xscaled 1.4wid yscaled .3 wid rotated 50;
 bigger_lute_pen := savepen;
@@ -456,7 +455,7 @@ beginchar (220, 1.1em#, 2.5cap#, 0); "Italian flag";
 endchar; enddef;
 % 
 def do_ri_five =
-beginchar (228, 1.1em#, 2.5cap#, -1.26cap#); "Italian flag";
+beginchar (228, 1.1em#, 2.5cap#, -1.26cap#); "Italian note reversed 2 flags";
  do_closed_body; do_r_stem; do_ris_flag(10,d); do_ris_flag(20,.62d);
 endchar; enddef;
 % 
@@ -466,9 +465,9 @@ beginchar (221, 1.1em#, 2.5cap#, 0); "Italian flag";
 endchar; enddef;
 % 
 def do_ri_six =
-beginchar (229, 1.1em#, 2.5cap#, 0); "Italian flag";
+beginchar (229, 1.1em#, 2.5cap#, -1.26cap#); "Italian note reversed 3 flags";
  do_closed_body;do_r_stem;
- do_ris_flag(10,h);do_ris_flag(20,.8h);do_ris_flag(30,.6h);
+ do_ris_flag(10,d);do_ris_flag(20,.62d);do_ris_flag(30,0.27d);
 endchar; enddef;
 % 
 def do_i_seven =
@@ -1617,6 +1616,11 @@ beginchar (148, .55em#, .7cap#, 0);" a small 8";
  pickup pencircle xscaled .8wid yscaled .3wid; do_eight_p;
 endchar;enddef;
 %
+def do_octave =
+beginchar  (26, .42em#, .62cap#,0);"a tiny 8 for octaves";
+    pickup pencircle xscaled .73wid yscaled .14wid; do_eight_p;
+endchar;enddef;
+%
 def do_nine_p =
  x4=.1w;y4=.1h;
  x1=.2w;y1=-0.070h;
@@ -2576,7 +2580,7 @@ def do_all =
   do_seven_f;do_eight_f;do_nine_f;
 % italian flags
   do_i_one;do_i_two;do_i_three;do_i_four;do_i_five;do_i_six;do_i_seven;
-  do_ri_one;do_ri_two;do_ri_three;do_ri_four;do_ri_five;%%do_i_six;do_i_seven;
+  do_ri_one;do_ri_two;do_ri_three;do_ri_four;do_ri_five;do_ri_six;%%do_i_six;do_i_seven;
   do_i_eight;
   do_iii_two;do_iii_three;do_iii_four;do_iii_five;do_iii_six;do_iii_seven;
 % modern notes
@@ -2599,7 +2603,7 @@ def do_all =
   do_s_tie;do_b_tie;do_rpt;
   do_sharp;do_old_sharp;do_v;do_vv;
   do_l_paren;  do_r_paren;do_e_rest;do_q_rest;
-  do_mod_flat;do_natural;
+  do_mod_flat;do_natural;do_octave;
 enddef;
 %
 %

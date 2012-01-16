@@ -7,6 +7,8 @@
 #ifndef __NMIDI__
 #define __NMIDI__
 
+#include "i_buf.h"
+
 #define STRINGS 6		/* 7 for notes 3 for flags */
 
 struct chord {
@@ -27,15 +29,17 @@ class nmidi {
   int instmnt;
   void program();
   void writeVarLen(unsigned long value);
-  void midi_tail();
+  void midi_track_tail();
+  void nmidi_track_head(const int len);
   unsigned char buf[2048 * 32];
   int count;
   char *ntitle;
   int npatch;
-  double npulse;
+  int npulse;
   int format;
+  int ntracks;
 
-  void nmidi_head(unsigned char pulses);
+  void nmidi_head(unsigned short int pulses);
   void ntext(enum text_type, const char *words);
   void TimeSig(int num, int denom, int clocks, int bb);
   void stop_stop(chord *c, int index);
@@ -47,6 +51,9 @@ class nmidi {
   void set_pulse(double c);
   nmidi();
   ~nmidi();
+  void do_tempo_map_track();
+  void do_lute_music();
+  void do_file_head();
 };
 
 

@@ -16,6 +16,11 @@
 #include "i_buf.h"
 #include <time.h>
 #include "pk_bit.h"
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
+
 
 void read_pk_file(file_in *pk, print *ps);
 
@@ -186,6 +191,27 @@ void ps_print::file_head()
       }
       else 
 	p = getenv("TABFONTS");
+    
+    if (p == NULL ) {
+      char *font_file = "fonthome";
+      struct stat buf;
+      int ffd;
+      int nr;
+      char *c;
+      char ffd_name[300];
+
+      if (!stat(font_file, &buf)) { // stat returns 0 on success
+	ffd = open(font_file, O_RDONLY);
+	if (ffd != -1 ) {
+	  nr = read(ffd, ffd_name, sizeof(ffd_name));
+	  if (nr < sizeof(ffd_name)) 
+	    ffd_name[nr] = 0;
+	  c = strchr(ffd_name, '\n');
+	  if (c) *c = 0;
+	  p=ffd_name;
+	}
+      }
+    }
     if (p == NULL ) 
 #endif /* WIN32 */
 #ifdef TFM_PATH
@@ -234,7 +260,7 @@ void ps_print::file_head()
 
     file_in pk_in(pk_name, "rb");
 
-    //    printf("ps_print: pk font is %s\n", pk_name);
+    //    fprintf(stderr, "ps_print: pk font is %s\n", pk_name);
 
     read_pk_file(&pk_in, this);
 

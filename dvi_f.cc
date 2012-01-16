@@ -1738,8 +1738,8 @@ void do_time_sig( char ch[], int j, int font,
 
 	if ( j == 0 ) 	  /* before staff, Karen Meyers style */
 	    p->moveh( -0.28 );
-	else {
-	    p->moveh(0.11);	// this should match line in pass1 !
+	else {			// why do we do this?
+	  //    p->moveh(0.11);	// this should match line in pass1 !
 	}
 
 	if (f->flags & PS) font = 4;
@@ -1857,7 +1857,7 @@ void do_time_sig( char ch[], int j, int font,
 		p->put_a_char(cc);
 		p->clear_highlight();
 	    }
-	    else {
+	    else {   		// no highlight
 		if (ch[2] && ch[2] == '|' ) {
 		    p->push();
 		    p->moveh( 0.47 * f_a[font]->fnt->get_width(cc));
@@ -1927,16 +1927,16 @@ void do_time_sig( char ch[], int j, int font,
 	else {
 	  p->put_a_char(ch[1]);
 	  if (f->flags & NOTES) {
-		p->push();
-		p->movev((-7.25 * d_i_space - 
-			  f_a[0]->fnt->get_height('G')) / 2.0 );
-
-		p->movev ( -st_text -text_sp * f->n_text -m_space );
-		p->movev ( - f->c_space);
-		p->movev (-2.0 * m_space);
-		p->movev (f_a[font]->fnt->get_height(cc) / 2.0);
-		p->put_a_char(ch[1]);
-		p->pop();
+	    p->push();
+	    p->movev((-7.25 * d_i_space - 
+		      f_a[0]->fnt->get_height('G')) / 2.0 );
+	    
+	    p->movev ( -st_text -text_sp * f->n_text -m_space );
+	    p->movev ( - f->c_space);
+	    p->movev (-2.0 * m_space);
+	    p->movev (f_a[font]->fnt->get_height(cc) / 2.0);
+	    p->put_a_char(ch[1]);
+	    p->pop();
 	  }
 	}
     }

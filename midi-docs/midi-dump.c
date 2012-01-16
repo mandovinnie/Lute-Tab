@@ -109,6 +109,7 @@ main(int argc, char *argv[]) {
  */
 
 static int old_event=0;
+static int old_length = 0;
 
 int event () {
   int i;
@@ -127,24 +128,30 @@ int event () {
   event &= 0xff;
   data = *fp++;
   data &= 0xff;
+  if (deltime) 
+    count++;
   if (brief) {
-    if (deltime) {
-      count++;
-      printf("\nd-t %3d %3x ", count, deltime);
-    }
+    printf("\nd-t %3d %3x ", count, deltime);
   }
   else
     printf("d-time %3d %3x ", count, deltime);
 
 
-  if (!(event & 0x80)) {		/* this may help on events */
+  // DATA BYTE - first bit not set
+  if (!(event & 0x80)) {	/* if first bit not set it is a data byte */
+    *fp--;			/* here we have many of the same events strung together */
     *fp--;
-    *fp--;
-    data = *fp++&0xFF;
-    /*    printf("data fudge %x\n", data); */
+    length = old_length;
+    printf(" continued data bytes "); 
+    while (length--) {
+      data = (*fp++)&0xFF;
+      printf(" %x ", data); 
+    }
+    printf("\n"); 
     event = old_event;           /* where only the first is specified */
   }
 
+  // CHANNEL EVENTS ? 8 -> E
   if (((event & 0xf0) >= 0x80) && ((event & 0xf0) <= 0xE0)) {
     channel = event & 0x0f;
     /*    if (event & 0x0f)
@@ -155,6 +162,8 @@ int event () {
     event &= 0xf0;
     old_event = event;
   }
+  else
+    old_event = event;
 
   switch (event) {
   case 0x80:
@@ -173,17 +182,20 @@ int event () {
     printf("Note ON   note %2x velocity %x \n", data, velocity);
     on[data]= 1;
     break; 
-  case 0xb0:
+  case 0xa0: /* AFTERTOUCH */
+    printf("Polyphonic Key Pressure   data %d length %d\n", data, length);
+    break;
+  case 0xb0: /* MODE Message  */
     length = *fp++&0xFF;
     printf("Controller Change %d  %d\n", data, length);
     break;
   case 0xc0:
     printf("Program Change %x\n", data );
     break;
-  case 0xd0:
-    printf("Aftertouch %x\n", data );
+  case 0xd0: /* AFTERTOUCH */
+    printf("Channel Key Pressure %x\n", data );
     break;
-  case 0xe0:
+  case 0xe0: /* PITCH BEND */
     {
       int f;
       f=*fp++&0xFF;
@@ -269,12 +281,12 @@ int event () {
       printf("\n");
       break;
     case 0x20:
-      printf("MIDI Channel Prefix  channel");
-      *fp++;
+      printf("MIDI Channel Prefix  channel ");
+      /*     *fp++; */
       printf("%x \n", *fp++);
       break;
     case 0x21:
-      printf("Unknown - not on my list %x  ", length);
+      printf("MIDI Port (obsolete) length %x  port number ", length);
       while (length--)
 	printf("%x", *fp++);
       printf("\n");
@@ -331,7 +343,7 @@ int event () {
 	sf = *fp++&0xff;
 	mi = *fp++&0xff;
 	printf(
-	       "num sharps or flats%d major or minor %x\n", sf, mi);
+	       "num sharps or flats %d major or minor %x\n", sf, mi);
       }
       break;
     case 0x7f:
@@ -352,8 +364,10 @@ int event () {
     }
     break;
   default:
-    fprintf(stderr, "UNHANDLED EVENT %x\n", event);
+    fprintf(stderr, "UNHANDLED EVENT data %x length %x event %x\n", 
+	    data, length, event);
     exit(0);
+
     break;
   }
   return (1);

@@ -186,7 +186,7 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
 		
   if (breaksys2 &&
       nn->time != 'G' ) {		// carry over a tie
-    dbg0(Warning, "Breaksys2 set\n");
+    //    dbg0(Warning, "Breaksys2 set\n");
     breaksys2 = 0;
     p->push();
     p->moveh(-tlength);
@@ -217,7 +217,18 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
       p->movev (0.47 * m_space);
       p->put_a_char(21); /* 21 */
     }
-    // unset FCLAF flag
+    if (nn->note == '8') {
+      if (nn->sharp == 'a') {
+	p->moveh("0.089 in");
+	p->movev (-5*m_space);
+      }
+      if (nn->sharp == 'b') {
+	p->moveh("0.071 in");
+	p->movev (2.4*m_space);
+      }
+      p->put_a_char(26); /* a little 8 */
+    }
+    // unset FCLEF flag
     break;
   case 'F':
     p->movev( -3.5 * m_space);
@@ -436,7 +447,7 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
     if (nn->staff == 1 ) {
       if (nl->dat[0] == 'b') {
 	if ( ! nl->next) {
-	  printf("set breaksys\n");
+	  //	  printf("set breaksys\n");
 	  breaksys=1;
 	}
       }
