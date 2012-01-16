@@ -64,7 +64,7 @@ void
 do_w_uline(print *p, int *skip_spaces, int s1, int s2, int line);
 
 void
-do_thick_uline(print *p, int *skip_spaces, int s2, int s2, int line);
+do_thick_uline(print *p, int *skip_spaces, int s1, int s2, int line);
 
 double get_special_width(char **pp, class /* struct */ i_buf *i_b, 
 			 font_list *f_a, struct file_info *f);

@@ -185,6 +185,18 @@ start of line:
 { words } 	- one of more lines of text (unjustified, not wrapped)
 		- if the line starts with \CL/ the text afterwards is 
 		  centered.
+	     	- a hat followed by two numbers in the text specifies a font,
+		  as in ^05, italic and ^02 regular
+	 	  ^01 10 pt regular words to songs
+		  ^02 12 point regular titles
+		  ^03 12 pt bold  ^04  24 point large regular
+		  ^05 10 pst italic ^06 18 point regular music time sig
+		  ^07 12 point regular for page numbers
+		  you can use $textsize to change the point size of ^01
+		  you can use $alttextsize to change the point size of ^05
+		  you can use $titlesize to change the point size of ^02
+		  you can use $alttitlesize to change the point size of ^03
+		  you can use $textfont to change the fonts, too
 [ words }	- text, positioned closely above a system, for 
 		  Da capo, etc
 {words/words}	- words left and right justified, with a space in the 
@@ -205,6 +217,8 @@ b!		- don't print this barline
 bv		- a v above the staff, indicating page breaks in orig
 bV		- two v's
 b2, b3	- a barline with a number, 1 - 9, above it
+bQ              - a pale bar
+bX		- a bar line that does not count with -C or -c
 B		- a very thick barline (when followed by newline or !)
 B		- a breve (when followed by notes)
 bb 		- two barlines

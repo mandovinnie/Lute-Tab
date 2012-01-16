@@ -147,7 +147,11 @@ struct list *l)			/* data */
 			     + staff_h);
 	    }
 	}
-	check_bar(p, j, l_p, l); 
+	if (ch[1] == 'X' )
+	  ;
+	else check_bar(p, j, l_p, l); 
+
+//	printf ("dvi_f: measures %d ch %s\n", n_measures, ch);
 
 	if (ch[1] == 'T') {
 	    p->push();
@@ -173,7 +177,7 @@ struct list *l)			/* data */
 	p->pop();
 
 	if (f->flags & NOTES )	/* print a barline in the music */
-	    if (! (f->flags & NO_MUSIC_B)
+	  if (! (f->flags & NO_MUSIC_B)
 		|| j == 0 
 		|| ( j== 1 && l->prev->dat[0] == '8')
 		|| j == *l_p - 1
@@ -266,7 +270,9 @@ struct list *l)			/* data */
 	    p->put_rule (str_to_inch(thick_bar),
 			 val * d_i_space + staff_h);
 	}
-	check_bar(p, j, l_p, l);     
+	if (ch[1] == 'X' )
+	  ;
+	else check_bar(p, j, l_p, l);     
 	p->pop();
 	if (f->flags & NOTES) {
 	    p->push();
@@ -580,6 +586,8 @@ struct list *l)			/* data */
 	if (f->flags & NOTES){
 	  p->push();
 	  p->movev(-0.940);
+	  //	  printf("text ps %f n_text %d\n", text_sp, f->n_text);
+	  p->movev ( -text_sp * f->n_text );
 	  p->set_a_char(ch[1]);
 	  p->set_a_char('.');
 	  p->pop();
@@ -602,7 +610,7 @@ struct list *l)			/* data */
 	    if (f->flags & NOTES){
 	      //	      p->movev(-0.940);
 	      p->put_rule (staff_h,
-			 (val + 4) * d_i_space + staff_h + 0.940);
+			 (val + 4) * d_i_space + staff_h + 0.940 + (text_sp * f->n_text));
 	      //	      p->put_rule(0.05, 0.05);
 	    }
 	    else {
@@ -613,8 +621,9 @@ struct list *l)			/* data */
 	      check_bar(p, j, l_p, l);         
 	    if (f->flags & NOTES){
 	      	      p->movev(-0.940);
+		      p->movev(-text_sp * f->n_text);
 	    }
-	    p->movev  (-1 * (val + 4) * d_i_space + staff_h);
+	    p->movev  (-1 * (val + 4) * d_i_space + staff_h );
 	    p->put_rule(str_to_inch("0.60 in"), staff_h);
 	}
 	break;
@@ -632,7 +641,6 @@ struct list *l)			/* data */
 	p->moveh(-1.0 * last_move);
 	p->moveh(0.75 * EM);
 	if (baroque && l->prev && l->prev->dat[0] != '2' ) p->moveh(.05);
-/*	if (f->line_flag == ON_LINE) p->movev (-0.5 * d_i_space);  */
 	if (f->flags & MARKS) p->put_rule(0.01, 0.17);  
 	/* fall through */
     default:                  /* GRIDS and FLAGS HERE*/
@@ -679,7 +687,7 @@ struct list *l)			/* data */
 	if ((cc = ch[1]) == '#' || grid_flag /* GRIDS here */
 	    || cc == '*' || cc == '|' ) { 
 	    int nn;
-	    int grids=0;
+	    static int grids=0;
 
 	    if (! grid_flag ) {	/* first one */
 		grid_flag = atoi((char *)&*ch);
@@ -731,7 +739,7 @@ struct list *l)			/* data */
 		    p->move_n_v("0.19 in");
 		    p->movev  ( grids * str_to_inch ("0.05 in"));
 
-		    if (l->next->dat[1] != '|') { 
+		    if (l->next && l->next->dat[1] != '|') { 
 			if (!double_grid ) {    /* must be following dot */
 			    p->moveh  ( -1.0 * 
 					(l->space + l->padding)/ 2.2
@@ -1325,7 +1333,9 @@ struct list *l)			/* data */
 		  p->push();
 		  if (f->line_flag == ON_LINE) /* wbc Dec 16 2002 */
 		    p->movev (str_to_inch(italian_offset));
+		  p->moveh("0.03 in");
 		  p->put_a_char(cc);
+		  //		  fprintf(stderr, "print x ornament here\n");
 		  p->pop();
 		}
 		else {
@@ -1511,6 +1521,7 @@ int rev_bdot(struct list* l)
   return(1);
 }
 
+// print the bar count if appropriate and increment n_measures
 // -C bar_count means number every 5th bar, 
 // -c barCount means number every first bar on every line
 //

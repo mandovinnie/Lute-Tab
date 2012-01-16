@@ -654,7 +654,7 @@ void ps_print::use_font(int fontnum)
 { 
     curfont = fontnum;
     switch (fontnum) {
-    case 7:			/* page nnumber font doesn't shrink 12 pt */
+    case 7:			/* page number font doesn't shrink 12 pt */
 	ps_command( NUMFONT, 0, 0, 0, 0);
 	break;
     case 6:			/* font 6 18 pt text */
@@ -679,7 +679,7 @@ void ps_print::use_font(int fontnum)
 	ps_command( LUTE, 0, 0, 0, 0);
 	break;
     default:
-	dbg0(Warning, "tab: ps_setfont: undefined font number, using 2\n");
+	dbg1(Warning, "tab: ps_setfont: undefined font number %d, using 2\n", (void *)fontnum);
 	ps_command( ROMAN, 0, 0, 0, 0);
 	break;
     }

@@ -34,7 +34,7 @@ int badchar(unsigned char p) {
     return (1);
   else if ( p == '\n' )
     return (0);
-  else if (strchr("{%LJWw0123456xYyQqeMSkbBiIp8vV .-\n\r*$[F#C", p)) 
+  else if (strchr("{%PLJWw0123456xYyQqeMSkbBiIp8vV .-\n\r*$[F#C", p)) 
     return(0);
   return(1);
 }

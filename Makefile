@@ -132,7 +132,7 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	sample.tab demo.tab t.tab AboutTab.txt mac.cc mkdep \
 	version.pl makedepend
 
-DISTFILE = lute_tab4.3.5.tar
+DISTFILE = lute_tab4.3.10.tar
 
 distrib:	 ${DISTFILE}
 

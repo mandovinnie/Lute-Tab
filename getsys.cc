@@ -58,6 +58,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
     signed char get();
     int gridflag=0;
     int hushbar=0, tie=0, dimline=0;/* for non print bars, and ties */
+    int nocountbar=0;		// for non ocunting bar
     int Key=0;                       //for auto key signature
     int orig=0,Orig=0;
     int skip;
@@ -237,6 +238,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    else if (c == 'Q') dimline++;
 	    else if (c == 'v') orig=1;
 	    else if (c == 'V') Orig=1;
+	    else if (c == 'X') nocountbar=1;
 	    else if (c == 'b' || c == '.') {
 		Mstore( ib,l_p, (unsigned char *)"b-         ", f);
 		incr(buf);
@@ -262,6 +264,11 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		if ((c = buf[1]) == '!') hushbar++;
 		break;
 	    }
+	    else if ( buf[1] == 'X' ) {
+	      BARline++;
+	      nocountbar=1;
+	      break;
+	    } 
 	    else {
 		staff[0] = 'J';
 		staff[1] = '-';
@@ -771,6 +778,10 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		Mstore( ib, l_p, (unsigned char *)"bQ         ", f);
 		dimline = 0;
 	    }
+	    else if (nocountbar) {
+		Mstore( ib, l_p, (unsigned char *)"bX         ", f);
+		nocountbar = 0;
+	    }
 	    else if (orig) {
 		Mstore( ib, l_p, (unsigned char *)"bvabc      ", f);
 		orig = 0;
@@ -796,9 +807,12 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    BARline = 0;
 	    if (hushbar) 
 	        Mstore( ib, l_p, (unsigned char *)"B!         ", f);
+	    else if (nocountbar)
+	      Mstore( ib, l_p, (unsigned char *)"BX         ", f);
 	    else 
 	        Mstore( ib ,l_p, (unsigned char *)"B-         ", f);
 	    hushbar =0;
+	    nocountbar=0;
 
 	}
 	if (Key) {

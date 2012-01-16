@@ -8,21 +8,63 @@
 $numstyle=italian
 %$line=o
 %$midi-patch=14
--highlightred
+%-highlightred
 %-tuning c4d4e4f+4g4a3d3f+3a2d2f+2
+%$alttextsize=14
 
+-P 23
 -i
+-C
 
-%-highlightparen
-%-R9
-%-c
+{^05testte\"st^02test}
 
 %-twostaff
 %$sys-skip=0.2
--l "2.8 in"
+-l "1.1 in"
+
+V ".5 in"
 
 b
-1c&x
+1-a&x
+1-a&,
+1-a&_
+1-a
+b!
+1
+b
+e
+1
+b
+1
+b
+1
+b
+1
+B
+1c&x	2G0
+b
+1
+b
+1
+b
+1
+bv
+1
+b
+e
+
+V ".5 in"
+
+b
+A2
+1c&x	2G0	text
+b
+
+V ".5 in"
+
+b
+A3
+1c&x	2G0	text	text
 b
 e
 

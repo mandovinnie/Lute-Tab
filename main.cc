@@ -341,7 +341,7 @@ main(int argc, char **argv)
     //	dbg_set(Inter);
     
     if ( ! (f.m_flags & QUIET) )
-      dbg2(Warning, "tab %s copyright 1995-2001 by Wayne Cripps%c",
+      dbg2(Warning, "tab %s copyright 1995-2003 by Wayne Cripps%c",
 	   (void *)VERSION,
 	   (void *) NEWLINE );
     
@@ -356,6 +356,9 @@ main(int argc, char **argv)
     b.Seek(0, rew);
     
     tfm_stuff(&b, &f);
+
+    free (f.file);
+    free (f.out_file);
     return(0);
 }
 

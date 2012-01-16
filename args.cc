@@ -129,11 +129,12 @@ void set_O(const char *value, struct file_info *f) {
   f->note_flag = ITAL_NOTES;}
 void set_s(const char *value, struct file_info *f) { f->flags |= CON_SEV;}
 void set_T(const char *value, struct file_info *f) {
-  f->line_flag = BETWEEN_LINE;
+  // f->line_flag = BETWEEN_LINE;
   f->flag_flag = THIN_FLAGS;
-  f->char_flag = STAND_CHAR;
-  f->num_flag = STAND_NUM;
-  f->note_flag = ITAL_NOTES;}
+//  f->char_flag = STAND_CHAR;
+//  f->num_flag = STAND_NUM;
+//  f->note_flag = ITAL_NOTES;}
+}
 void set_w(const char *value, struct file_info *f) {
   f->line_flag = ON_LINE;
   f->flag_flag = S_ITAL_FLAGS; 
