@@ -17,7 +17,7 @@
 #include <time.h>
 #include "pk_bit.h"
 
-void read_pk_file(file_in *pk, ps_print *ps);
+void read_pk_file(file_in *pk, print *ps);
 
 int format_page(print *d_p, i_buf *i_b, font_list *f_l[], struct file_info *f);
 void bit_char(i_buf *ps, int char_num);
@@ -50,7 +50,7 @@ ps_print::ps_print(font_list *font_array[], file_info *f)
 	   dvi_to_mm(ps_top_of_page),
 	   ps_top_of_page,
 	   mm_to_dvi(32.42)); */
-    for (int i=0; i< 256; i++) ps_used[i] = 0;
+    /*     for (int i=0; i< 256; i++) ps_used[i] = 0; */
     f_i = f;
     f_a = font_array;
     f_name[0] = '\0';
@@ -345,7 +345,7 @@ void ps_print::make_ps_font(i_buf *ps_header)
     ps_header->Put10(MYCHARS);
     ps_header->PutString("{Encoding exch /.notdef put} for\n");
     for (i=0; i < 256; i++) {
-	if (bits[i].bm_w && ps_used[i]) {
+	if (bits[i].bm_w && print_used[i]) {
 	    ps_header->PutString("En ");
 	    ps_header->Put10(i);
 	    ps_header->PutString("/b_");
@@ -359,7 +359,7 @@ void ps_print::make_ps_font(i_buf *ps_header)
     ps_header->PutString("CharProcs begin\n");
     ps_header->PutString(" /.notdef { 1 1 add pop } bind def\n");
     for (i=0; i < 256; i++) {
-	if (bits[i].bm_w && ps_used[i]) {
+	if (bits[i].bm_w && print_used[i]) {
 //	    printf ( "b_%d", i);
 	    bit_char(ps_header, i);
 	} 
@@ -371,7 +371,7 @@ void ps_print::make_ps_font(i_buf *ps_header)
     ps_header->PutString("/.notdef [ 0 0 0 0 ] def\n");
     for (i=0; i < 256; i++) {
 	b = &bits[i];
-	if (b->bm_w && ps_used[i]) {	/* assume null chars have 0 width */
+	if (b->bm_w && print_used[i]) {	/* assume null chars have 0 width */
 	    ps_header->PutString("/b_");
 	    ps_header->Put10(i);
 	    ps_header->PutString("[ ");
@@ -541,8 +541,8 @@ void ps_print::put_a_char (unsigned char c)
 	else
 	  ps_command(P_S_GRAY, 0, 0, 0, 0);
     }
-    if (curfont == 0 && ps_used[c] < 4) 
-	ps_used[c]++;
+    if (curfont == 0 && print_used[c] < 4) 
+	print_used[c]++;
     ps_command(PCHAR, (int)c, 0, 0,0);
     if (highlight==On) { 
 	clear_highlight();  
@@ -550,7 +550,7 @@ void ps_print::put_a_char (unsigned char c)
 	  double www=f_a[curfont]->fnt->get_width(c);
 	    moveh (www);
 	    ps_command(PCHAR, (int)')', 0, 0, 0);
-	    ps_used['(']++;	ps_used[')']++;
+	    print_used['(']++;	print_used[')']++;
 	    moveh (-www);
 	}
 	else if (highlight_type == Red)
@@ -597,8 +597,8 @@ void ps_print::set_a_char (unsigned char c)
 	else if ( c == 0076) c = 0277; // ? inverted
     }
 
-    if (curfont == 0 && ps_used[c] < 4) 
-      ps_used[c]++;
+    if (curfont == 0 && print_used[c] < 4) 
+      print_used[c]++;
     ps_command(CHAR, (int)c, 0, 0,0);
     if (highlight==On) { 
 	clear_highlight();  
@@ -660,7 +660,7 @@ void ps_print::do_rtie(int bloc, int eloc)
 { 
     ps_command ( PTIE, (save_h[eloc] - save_h[bloc]), 0, 0, 0);
 }
-void ps_print::ps_clipped(char c, int font/* acutally height */)
+void ps_print::print_clipped(char c, int font/* acutally height */)
 { 
     ps_command ( PS_CLIP, c, font, dvi_h, dvi_v);
      dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width(c));
@@ -763,11 +763,11 @@ void ps_print::p_num(int n)
     pop();
 }
 
-void ps_print::ps_draft() 
+void ps_print::print_draft() 
 { 
     ps_command(PDRAFT, 0, 0, 0, 0);
 }
-void ps_print::ps_copyright() 
+void ps_print::print_copyright() 
 { 
     ps_command(PCOPYRIGHT, 0, 0, 0, 0);
 }

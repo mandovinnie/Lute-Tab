@@ -165,10 +165,16 @@ void set_N(const char *value, struct file_info *f) {
 void set_p(const char *value, struct file_info *f) { f->flags |= PAGENUM;}
 void set_P(const char *value, struct file_info *f) {
   f->flags |= PS;
+  f->flags &= ~PDF;
   f->flags &= ~DVI_O;}
 void set_dvi(const char *value, struct file_info *f) {
   f->flags |= DVI_O;
+  f->flags &= ~PDF;
   f->flags &= ~PS;}
+void set_pdf(const char *value, struct file_info *f) {
+  f->flags &= ~DVI_O;
+  f->flags &= ~PS;
+  f->flags |= PDF;}
 void set_2(const char *value, struct file_info *f) {
   f->m_flags |= DPI1200;
   red = 1.0;}
@@ -407,6 +413,7 @@ void args(int argc, char ** argv, struct file_info *f)
       {"N", (void*)set_N},
       {"P", (void*)set_P},
       {"dvi", (void*)set_dvi},
+      {"pdf", (void*)set_pdf},
       {"Q", (void*)set_Q},
       {"R7", (void*)set_R7},
       {"R8", (void*)set_R8},

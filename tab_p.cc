@@ -53,12 +53,12 @@ int format_page(print *p, i_buf *i_b,
 
     if (f->flags & DRAFT && f->flags & PS ) {
 	if (!(f->m_flags & QUIET)) dbg0 (Warning, "Draft\n");
-	p->ps_draft();
+	p->print_draft();
     }
 
     if (f->flags & COPYRIGHT && f->flags & PS ) {
 	dbg0 (Warning, "Copyright\n");
-	p->ps_copyright();
+	p->print_copyright();
     }
     if (!sys_count) {
 	if ( red == 1.0 ) {

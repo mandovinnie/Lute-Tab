@@ -166,7 +166,7 @@ enum pass{first, second};
 #define  MANUSCRIPT 0X00000001
 #define  DVI_O      0X00000002
 #define  PS         0X00000004
-#define  X          0X00000008
+#define  PDF        0X00000008
 #define  VERBOSE    0X00000010
 #define  FIVE       0X00000020
 #define  MARKS      0X00000040

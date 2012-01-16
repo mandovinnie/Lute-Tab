@@ -231,7 +231,7 @@ void dvi_print::do_rtie(int bloc, int eloc)
 { 
     dbg0(Warning, "tab: do_rtie: ties are not printed in dvi mode \n");
 }
-void dvi_print::ps_clipped(char c, int font)
+void dvi_print::print_clipped(char c, int font)
 { 
 //    dbg0(Warning, "Undefined Proceedure ps_clipped\n");
     switch (c) {
@@ -380,12 +380,12 @@ void dvi_print::p_num(int n)
     use_font(0);
     pop();
 }
-void dvi_print::ps_draft() { dbg0(Error, "Undefined Proceedure ps_draft\n");}
+void dvi_print::print_draft() { dbg0(Error, "Undefined Proceedure ps_draft\n");}
 void dvi_print::vert_curve(int len)
       { dbg0(Error, "Undefined Proceedure dvi vert_curve\n");}
-void dvi_print::ps_copyright() 
+void dvi_print::print_copyright() 
 { 
-    dbg0(Error, "Undefined Proceedure ps_copyright\n");
+    dbg0(Error, "Undefined Proceedure print_copyright\n");
 }
 void dvi_print::define_font(int font_num, char *name)
 {

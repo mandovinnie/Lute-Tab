@@ -29,7 +29,7 @@ class ps_print : public print {
     double font_sizes[FONT_NAMES];				    
     int nodump;
   public:
-    char ps_used[256];
+    /*    char ps_used[256]; */
 
     void PutByte(const char c);    
     void PutLine(const char * l);
@@ -56,7 +56,7 @@ class ps_print : public print {
     void do_half_tie(double length);
     void do_half_tie_reversed(double length);
     void do_rtie(int bloc, int eloc);
-    void ps_clipped(char c, int font);
+    void print_clipped(char c, int font);
     void push();
     void pop();
     void glp(int reg,int h[], int v[]);
@@ -67,11 +67,11 @@ class ps_print : public print {
     void put_med_slant(int bloc, int eloc);
     void put_slant(int bloc, int eloc);
     int more();
-    int is_used(char c) { return ps_used[(unsigned char)c]; }
+    int is_used(char c) { return print_used[(unsigned char)c]; }
     void showsave(int reg);	
     void p_num(int n); 
-    void ps_draft();
-    void ps_copyright();
+    void print_draft();
+    void print_copyright();
     void vert_curve(int len);
     void flush() {ps_command ( OTHER, 0, 0, 0, 0); }
     int ps_top() { return (ps_top_of_page);}

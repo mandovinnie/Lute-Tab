@@ -89,8 +89,10 @@ midi_snd::add(const int note)
   /* the 0 in tab is a b-flat two octaves below middle c
      60 is a midi middle c. so 60 - 24 (2 octaves) -1
      should be the conversion factor
+
+     Oct 2002 wbc added -2 correction
   */
-  t[tt] = note+35;
+  t[tt] = note+35-2;
   tt++;
 }
 

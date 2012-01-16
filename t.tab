@@ -1,4 +1,4 @@
-$start-system=2
+% $start-system=2
 %-b
 %$pstitlefont=pzcmi
 %$psalttitlefont=ptmr
@@ -19,12 +19,30 @@ $numstyle=italian
 
 %-twostaff
 %$sys-skip=0.2
--l "1.8 in"
+-l "2.8 in"
 
 
+F2
+
 b
-T-test
+1 cdc{
+x c  }
+1 cdc{
+x c}
+1 cdc[
+x c  ]
+1 cdc&[
+x c ]
+1 cdcU
+x c  X
+1 cdc&U
+x c X
 b
+
+[ text}
+
+Q
+e
 wQ  2Q32
 v
 0  456

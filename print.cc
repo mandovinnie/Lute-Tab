@@ -15,6 +15,7 @@ print::print()
     pr_out = new i_buf;
     sp=15;
     highlight=Off;
+    for (int i=0; i< 256; i++) print_used[i] = 0;
 }
 
 print::~print()

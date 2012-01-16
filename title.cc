@@ -582,7 +582,7 @@ double special(char **pp, print *p, i_buf *i_b, font_list *f_a, int print,
 	else if (d == 'j') {
 	  if (f->flags & PS) {
 	    int high = f_a->fnt->p_get_h(d);
-	    p->ps_clipped(d, high);
+	    p->print_clipped(d, high);
 	  }
 	  else p->set_a_char(021); /* dotless j */
 	}

@@ -73,6 +73,10 @@ Options:
     -CC prints every measure number below the staff.
     -c prints measure numbers only at the start of a line
     -dvi output in dvi format to out.dvi
+    -pdf generate pdf output to out.pdf
+	WARNING! - this is under development and does not work.  If you
+	try to use -pdf your computer may catch on fire and you may be injured.
+	Don't try this!  You have been warned!
     -D sort of like Dowland's style
     -e rotates the page 90 degrees for landscape music.
     -E prints "DRAFT" on every page along with the date.

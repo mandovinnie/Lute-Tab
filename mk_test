@@ -6,13 +6,22 @@
 #
 set FMT = plain
 #
+%
+mode_def cxnew =                       %\[ Canon CX, SX, LBP-LX (300dpi)
+  mode_param (pixels_per_inch, 600);
+  mode_param (blacker, 1.5);       % was 0
+  mode_param (fillin, .2);       % was .2
+  mode_param (o_correction, .65);  % was .6
+  mode_common_setup_;
+enddef;
+%
 #
 # laserwriter
 # virmf \&$FMT "\mode:=CanonCX; \mag:=1.0; input lute9; bye;"
 # gftopk ./lute9.300gf > ./lute9.300pk
 ##
-virmf \&$FMT "\mode:=CanonCX; \mag:=1.0; input blute9; bye;"
-gftopk ./blute9.300gf > ./blute9.300pk
+virmf \&$FMT "\mode:=cxnew; \mag:=1.0; input blute8; bye;"
+gftopk ./blute8.600gf > ./blute8.600pk
 ##
 ## virmf \&$FMT "\mode:=IBMFourZeroTwoNine; \mag:=1.0; input blute9; bye;"
 #virmf \&$FMT "\mode:=laserjetIV; \mag:=1.0; input blute9; bye;"

@@ -34,6 +34,8 @@ class print {
   public:
     print();
     ~print();
+
+    char print_used[256];
     virtual void file_head() = 0;
     virtual void page_head() = 0;
     virtual void file_trail() = 0;
@@ -72,7 +74,7 @@ class print {
     virtual void do_half_tie(double length) = 0;
     virtual void do_half_tie_reversed(double length) = 0;
     virtual void do_rtie(int bloc, int eloc) = 0;
-    virtual void ps_clipped(char c, int font) = 0;
+    virtual void print_clipped(char c, int font) = 0;
     virtual void saveloc(int reg) { slp(reg, save_h, save_v);} 
     virtual void glp(int reg,int h[], int v[]);
     void slp(int reg, int h[],int v[]);
@@ -94,9 +96,9 @@ class print {
     virtual int  more() = 0;
     virtual void showsave(int reg) = 0;	
     virtual void p_num(int n) = 0; 
-    virtual void ps_draft() = 0;
+    virtual void print_draft() = 0;
     virtual void vert_curve(int len)= 0;
-    virtual void ps_copyright() = 0;
+    virtual void print_copyright() = 0;
     virtual int ps_top() { return( 0);}
     virtual int get_page_number()= 0;
     virtual void comment(const char *string) = 0;

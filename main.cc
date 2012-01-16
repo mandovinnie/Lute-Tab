@@ -6,6 +6,7 @@
 #include "print.h"
 #include "dviprint.h"
 #include "ps_print.h"
+#include "pdf_print.h"
 
 #include "sound.h"
 #include "midi_snd.h"
@@ -86,6 +87,7 @@ void tfm_stuff(i_buf *b, file_info *f)
     print **pp;
     dvi_print *pdp = 0;
     ps_print *psp = 0;
+    pdf_print *pdfp = 0;
     struct font_list *f_a[MAXFONTS];
     int i, more=END_MORE;
     char lutefont[80];
@@ -160,6 +162,43 @@ void tfm_stuff(i_buf *b, file_info *f)
 	psp = new ps_print (f_a, f);
 	pp = (print **)&psp;
     }
+    else if (f->flags & PDF ) {
+      fprintf (stderr, "PDF!\n");
+	if (f->font_names[1]) {	// words
+	  f_a[1] = init_font_list(1, f->font_names[1], 1.2 );
+	  f_a[1]->real_name = get_real_name(f->font_names[1], 0);
+	}
+	else 
+	  f_a[1] = init_font_list(1, "pncr", 1.0 );
+	
+	if (f->font_names[2]) {	// title
+	  f_a[2] = init_font_list(2, f->font_names[2], f->font_sizes[2]/10. );
+	  f_a[2]->real_name = get_real_name(f->font_names[2], 0);
+	}
+	else 
+	  f_a[2] = init_font_list(2, "pncr", f->font_sizes[2]/10.);
+	
+	if (f->font_names[3]) {	// italic title
+	  f_a[3] = init_font_list(3, f->font_names[3], 1.2 );
+	  f_a[3]->real_name = get_real_name(f->font_names[3], 0);
+	}
+	else 
+	  f_a[3] = init_font_list(3, "pncri", 1.2 );
+
+	f_a[4] = init_font_list(4, "pncr", 2.4 );
+
+	if (f->font_names[5]) {	// italic text
+	  f_a[5] = init_font_list(5, f->font_names[5], 1.0 );
+	  f_a[5]->real_name = get_real_name(f->font_names[5], 0);
+	}
+	else 
+	  f_a[5] = init_font_list(5, "pncri", 1.0 );
+	f_a[6] = init_font_list(6, "pncr", 1.0 );
+	f_a[7] = init_font_list(7, "pncr", 1.0 / red );
+	
+	pdfp = new pdf_print (f_a, f);
+	pp = (print **)&pdfp;
+    }
     else {			/* dvi */
 
 	if (f->font_names[1])
@@ -217,6 +256,7 @@ void tfm_stuff(i_buf *b, file_info *f)
     }
     if (psp) delete psp;
     if (pdp) delete pdp;
+    if (pdfp) delete pdfp;
     if (f_a[0]) f_a[0] = delete_font_list(f_a[0]);
     if (f_a[1]) f_a[1] = delete_font_list(f_a[1]);
     if (f_a[2]) f_a[2] = delete_font_list(f_a[2]);
