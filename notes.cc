@@ -12,6 +12,7 @@
 
 
 #define LEDGER 	p->moveh ( -.043 );p->put_rule(0.16, str_to_inch(staff_height));
+
 /* EXTERNAL */
 int online(char c);
 double stem; 
@@ -96,6 +97,10 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
     else p->movev (-3.5 * m_space);
     do_rest++;
     break;
+  case '?':			/* do the A ledger line */
+    p->push();
+    LEDGER;
+    p->pop();
   case '@':                        /* this is low G */
   case 'A':
     p->push();
@@ -142,12 +147,27 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
 	
     p->movev (-14.0 * m_space / 2.0);
     p->push();
-    //p->moveh ( -.043 );
-    //	p->put_rule(0.16, str_to_inch(staff_height));
-    LEDGER
-      p->pop();
+    p->moveh ( -.043 );p->put_rule(0.16, str_to_inch(staff_height));
+    p->pop();
     p->movev (((double)( '1' - nn->note))
 	      * (m_space / 2.0));
+    break;
+  case 'h':			/* high a */
+    p->movev (-1.0 * ((double)( nn->note - 'a') + 7. )
+	      * (m_space / 2.0));
+    p->push();
+    p->moveh ( -.043 );
+    p->put_rule(0.16, str_to_inch(staff_height));
+    p->pop();
+    break;
+  case 'i':			/* high b */
+    p->movev (-1.0 * ((double)( nn->note - 'a') + 7. )
+	      * (m_space / 2.0));
+    p->push();
+    p->moveh ( -.043 );
+    p->movev(m_space / 2.0);
+    p->put_rule(0.16, str_to_inch(staff_height));
+    p->pop();
     break;
   case '0':			// no note here
     p->pop();
@@ -818,7 +838,8 @@ int is_music(char *text)
     if ( ! strchr("BLWw0123", *t))
 	return (0);
     t++;
-    if ( *t < '@' || *t > 'h')
+    if ( *t < '?' || *t > 'k')
+      if ( *t < '1' || *t > '4')
 	return (0);
     t++;
     if ( ! strchr ( "0+-^v.n", *t))

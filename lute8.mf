@@ -16,7 +16,7 @@ mode_def cxnew =                       %\[ Canon CX, SX, LBP-LX (300dpi)
   mode_param (o_correction, .65);  % was .6
   mode_common_setup_;
 enddef;
-mode:=cxnew;
+% mode:=cxnew;
 mode_setup;
 %
  em#:=6.222pt#; cap#:=8pt#;

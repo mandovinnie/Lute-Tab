@@ -48,7 +48,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[]);
 int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 { 
     int *l_p;
-    char N[2];
+    char N[3];
     int barline=0,BARline=0,barnum=0;
     unsigned char staff[STAFF], ornament[STAFF]; 
     unsigned char finger[STAFF], a_ornament[STAFF], t_ornament[STAFF];
@@ -142,6 +142,14 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    return(1);
 	case 'R':
 	    staff[0] = buf[1];
+	    if (staff[0] == '\n') {
+	      staff[0] = '1'; 	// do something
+	      if ( ! (f->m_flags & QUIET) )
+		dbg2(Warning, "Getsystem: R with no number after it sys %d chord %d\n",
+		 (void*) f->cur_system, 
+		 (void *)cur_chord);
+
+	    }
 	    staff[1] = c;
 	    for (i=2;i<STAFF;i++) staff[i] = ' ';
 	    j = 2;
@@ -431,6 +439,12 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    N[0] = buf[i+skip];
 		    skip++;
 		    N[1] = buf[i+skip];
+		    N[2] = 0;
+		    {
+		      unsigned int fff, rrr;
+		      fff = atoi(N);
+		      rrr = fff;
+		    }
 		    staff[i] = atoi(N);
 		    if ( ! isdigit (N[0])) 
 			dbg1(Warning, "bad fret number", (void *)((int)N[0]));
@@ -906,108 +920,113 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 void
 Mstore(i_buf *ib, int *l_p, unsigned char *staff, struct file_info *f)
 {
-    int i;
+  int i;
 
-    if ( f->flags & CONVERT 
-	 && staff[1] != 'R' 
-	 && staff[0] != '='
-	 && strchr( "LWw012345xYy", staff[0]) ) {
-      int n_lines = /* 8 */ 8;
-      if ( f->flags & CON_SEV ) n_lines = 9;
-      ib->PutByte (staff[0]);
-      ib->PutByte (staff[1]);
+  if ( f->flags & CONVERT 
+       && staff[1] != 'R' 
+       && staff[0] != '='
+       && strchr( "LWw012345xYy", staff[0]) ) {
+    int n_lines = /* 8 */ 8;
+    if ( f->flags & CON_SEV ) n_lines = 9;
+    ib->PutByte (staff[0]);
+    ib->PutByte (staff[1]);
 #ifndef __linux__
-      //      staff[1] = '-';		// to not screw up conversions..
+    //      staff[1] = '-';		// to not screw up conversions..
 #endif /* linux */
-      i = 2;
-      if (f->flags & CONV_COR) i = 1;
+    i = 2;
+    if (f->flags & CONV_COR) i = 1;
 
-      for (; i < n_lines; i++) {
-	int j = n_lines + 1 - i;
-	char c = staff[j];
+    for (; i < n_lines; i++) {
+      int j = n_lines + 1 - i;
+      unsigned char c = staff[j];
 
-	if ( tolower(c) >= 'a' && tolower(c) <= 'i') c = '0' + tolower(c) - 'a';
-       	else if ( c == '.' && staff[j-1] != ' ' && staff[j-1] != '-') {
-	  staff[j-2] = c;
-	  c = ' ';	/* don't print the dots */
-	}
-	else if ( c == ' ' && staff[j-1] != ' ' && staff[j-2] == '^') {
-	  c = '^';staff[j-2] = ' ';
-	}
-	else if ( c == 'k' ) c = '9';
-	else if ( c == 'l' ) c = 'x';
-	else if ( c == 'x' ) c = 'l';
-	else if ( c >= '0' && c <= '9') {
-	  if (i == 8 && f->line_flag == ON_LINE 
-	      && f->flags & CONV_COR ) {
-	    if ( c < '7' ) c = 'a' + c - '0';
-	    if ( c == '7' ) c = 'a';
-	  }
-	  else {
-	    c = 'a' + c - '0';
-	    if (c == 'd' && (  staff[j+1] != ' '))
-	      c = 'D';
-		if ( c == 'j' ) c = 'k';
-	  }
-	}
-	else if ( i == 3 && staff[n_lines] == '.' ) {
-	  c = '.';
-	  staff[n_lines] = ' ';
-	}
-	ib->PutByte(c);
+      if ( tolower(c) >= 'a' && tolower(c) <= 'i') c = '0' + tolower(c) - 'a';
+      else if ( c == '.' && staff[j-1] != ' ' && staff[j-1] != '-') {
+	staff[j-2] = c;
+	c = ' ';	/* don't print the dots */
       }
-      for ( ; i < STAFF; i++ ) 
-	ib->PutByte (staff[i]);
-    }
-    else if ( f->flags & CONVERT && staff[0] == '+' ) {
-      int n_lines = /* 8 */ 8;
-      if ( f->flags & CON_SEV ) n_lines = 9;
-      ib->PutByte (staff[0]);
-      ib->PutByte (staff[1]);
-      i = 2;
-      if (f->flags & CONV_COR) i = 1;
-      for (; i < n_lines; i++) {
-	int j = n_lines + 1 - i;
-	char c = staff[j];
-
-	ib->PutByte(c);
+      else if ( c == ' ' && staff[j-1] != ' ' && staff[j-2] == '^') {
+	c = '^';staff[j-2] = ' ';
       }
-      for ( ; i < STAFF; i++ ) 
-	ib->PutByte (staff[i]);
+      else if ( c == 'k' ) c = '9';
+      else if ( c == 'l' ) c = 'x';
+      else if ( c == 'x' ) c = 'l';
+      else if ( c == 230 ) c = 'l'; // N10
+      else if ( c == 231 ) c = 'm';
+      else if ( c == 232 ) c = 'n'; // N12
+      else if ( c == 233 ) c = 'o'; // N13
+      else if ( c == 234 ) c = 'p'; // N14
+      else if ( c >= '0' && c <= '9') {
+	if (i == 8 && f->line_flag == ON_LINE 
+	    && f->flags & CONV_COR ) {
+	  if ( c < '7' ) c = 'a' + c - '0';
+	  if ( c == '7' ) c = 'a';
+	}
+	else {
+	  c = 'a' + c - '0';
+	  if (c == 'd' && (  staff[j+1] != ' '))
+	    c = 'D';
+	  if ( c == 'j' ) c = 'k';
+	}
+      }
+      else if ( i == 3 && staff[n_lines] == '.' ) {
+	c = '.';
+	staff[n_lines] = ' ';
+      }
+      ib->PutByte(c);
     }
+    for ( ; i < STAFF; i++ ) 
+      ib->PutByte (staff[i]);
+  }
+  else if ( f->flags & CONVERT && staff[0] == '+' ) {
+    int n_lines = /* 8 */ 8;
+    if ( f->flags & CON_SEV ) n_lines = 9;
+    ib->PutByte (staff[0]);
+    ib->PutByte (staff[1]);
+    i = 2;
+    if (f->flags & CONV_COR) i = 1;
+    for (; i < n_lines; i++) {
+      int j = n_lines + 1 - i;
+      char c = staff[j];
 
-    else   /* not CONVERT */
-      for  (i = 0 ; i < STAFF ; i++)
-	ib->PutByte(staff[i]);
+      ib->PutByte(c);
+    }
+    for ( ; i < STAFF; i++ ) 
+      ib->PutByte (staff[i]);
+  }
+
+  else   /* not CONVERT */
+    for  (i = 0 ; i < STAFF ; i++)
+      ib->PutByte(staff[i]);
     
-    if (staff[0] != '^' && staff[0] != '+' && music[0]) {
-	ib->PutByte('M');
-	for (i = 0; i < 3; i++) {
-	    if (i == 0 && music[i] == 'B' ) ib->PutByte('J');
-	    else ib->PutByte(music[i]);
-	}
-	if (music[3]) ib->PutByte(music[3]);
-	music[0] = music[3] = '\0';
+  if (staff[0] != '^' && staff[0] != '+' && music[0]) {
+    ib->PutByte('M');
+    for (i = 0; i < 3; i++) {
+      if (i == 0 && music[i] == 'B' ) ib->PutByte('J');
+      else ib->PutByte(music[i]);
     }
-    if (music[4]) {
-	ib->PutByte('M');
-	for (i = 4; i < 7; i++) {
-	    if (i == 4 && music[i] == 'B' ) ib->PutByte('J');
-	    else ib->PutByte(music[i]);
-	}
-	if (music[7]) ib->PutByte(music[7]);
-	music[4] = music[7] = '\0';
+    if (music[3]) ib->PutByte(music[3]);
+    music[0] = music[3] = '\0';
+  }
+  if (music[4]) {
+    ib->PutByte('M');
+    for (i = 4; i < 7; i++) {
+      if (i == 4 && music[i] == 'B' ) ib->PutByte('J');
+      else ib->PutByte(music[i]);
     }
-    if ((staff[0] != '^' && staff[0] != '+') && (text_f || text_s)) {
-      // if ((text_f || text_s)) {
-	i = 0;
-	text_f = text_s = 0;
-	ib->PutByte('T');
-	while (i_text[i] != NEWLINE) 
-	  ib->PutByte(i_text[i++]);
-    }
-    ib->PutByte(NEWLINE);
-    *l_p++; 
+    if (music[7]) ib->PutByte(music[7]);
+    music[4] = music[7] = '\0';
+  }
+  if ((staff[0] != '^' && staff[0] != '+') && (text_f || text_s)) {
+    // if ((text_f || text_s)) {
+    i = 0;
+    text_f = text_s = 0;
+    ib->PutByte('T');
+    while (i_text[i] != NEWLINE) 
+      ib->PutByte(i_text[i++]);
+  }
+  ib->PutByte(NEWLINE);
+  *l_p++; 
 }
 
 void
@@ -1048,7 +1067,7 @@ do_music(i_buf *ib, unsigned char staff[], char buf[], int *l_p, int *skip,
         printf ("do music  XXXXX %X\n", f->m_flags);
         printf ("do music twostaff %x\n", TWOSTAFF);
         printf ("do music autokey  %x\n", AUTOKEY);
-	*/
+    */
 
     if (music[b] == 'G' || music[b] == 'F') {
 	music[b+1] = music[b+2] = ' ';
@@ -1126,7 +1145,7 @@ do_music(i_buf *ib, unsigned char staff[], char buf[], int *l_p, int *skip,
 	break;
     }
     //    printf("do music - music is %c%c%c%c\n", 
-    //   music[b], music[b+1], music[b+2], music[b+3]);
+    //    music[b], music[b+1], music[b+2], music[b+3]);
     if ( buf[++j + *skip] == '\t' ){ // test for more music first
 	if (is_music(&buf[j + *skip + 1])) {
 	    (void)do_music(ib, staff, buf, l_p, skip, j, f);

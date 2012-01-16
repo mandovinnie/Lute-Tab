@@ -211,7 +211,7 @@ void pdf_print::page_head()
 void pdf_print::file_trail()		// write_postamble
 {
   char buf[80];
-  flush();
+  //   flush();
 
   file_xref();
 
@@ -846,12 +846,13 @@ void pdf_print::pdf_command(int com, int h_n, int v_n, int hh_n, int vv_n)
   case MOVE:
     pr_out->PutF(d_to_p(h), places);
     pr_out->PutF(d_to_p(-v), places);
-    pr_out->PutString(" MT\n");
+    pr_out->PutString(" m\n");
     break;
   case RULE:		// now takes x, y
     pr_out->PutF(d_to_p(h), places);
     pr_out->PutF(d_to_p(v), places); //negate the v ???
-    pr_out->PutString(" Rule%%reg\n"); // v, h
+    pr_out->PutString(" l\n"); // v, h
+    //    pr_out->PutString(" Rule%%reg\n"); // v, h
     break;
   case MOVEH:
     pr_out->PutF(d_to_p(h), places);
@@ -872,10 +873,10 @@ void pdf_print::pdf_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     pr_out->PutString("0.2 setlinewidth ");
     pr_out->PutF(d_to_p(h), places);
     pr_out->PutF(d_to_p(v), places);
-    pr_out->PutString("MT ");
+    pr_out->PutString("m ");
     pr_out->PutF(d_to_p(hh), places);
     pr_out->PutF(d_to_p(vv), places);
-    pr_out->PutString("lineto stroke\n");
+    pr_out->PutString("l\n");
     break;
   case TH_LINE:
     pr_out->PutF(d_to_p(h), places);
@@ -904,21 +905,25 @@ void pdf_print::pdf_command(int com, int h_n, int v_n, int hh_n, int vv_n)
       pr_out->PutString(")");
     }
     else if (my_pdf_isprint(h)) {
-      pr_out->PutString("(");
-      pr_out->PutChar(h);
-      pr_out->PutString(")");
+      /*      pr_out->PutString("(");
+	      pr_out->PutChar(h);
+	      pr_out->PutString(")");
+      */;
     }
     else {
-      pr_out->PutString("<");
-      pr_out->Put16(h);
-      pr_out->PutString(">");
+      //      pr_out->PutString("<");
+      //      pr_out->Put16(h);
+      //      pr_out->PutString(">");
+      ; 
     }
-    if ( last_com == CHAR) pr_out->PutString("S\n");
-    else pr_out->PutString("X\n");
+    if ( last_com == CHAR) 
+      /* pr_out->PutString("S\n") */;
+    else 
+      /* pr_out->PutString("X\n") */;
     break;
   case LUTE:
     if ( last_font != LUTE ) {
-      pr_out->PutString("/LuteFont FF setfont\n"); 
+      //      pr_out->PutString("/LuteFont FF setfont\n"); 
       last_font = LUTE;
     }
     break;
@@ -1284,20 +1289,22 @@ unsigned int pdf_print::do_page_content(i_buf *i_b,  struct font_list *f_a[])
   unsigned int bytes = 0;
   char b[80];
   unsigned int scount ;
+  char s_buf[2048];
   
   fprintf (stderr, "Page Content\n");
   new_xref_entry( byte_count /* offset */);
   bytes += pr_out->PutStringC("4 0 obj\n");
-  scount = do_stream(i_b,  f_a);
+  scount = do_stream(i_b,  f_a, s_buf);
 
-  //  scount = 22;
-  //  sprintf (b, "  << /Length %u >>\n", scount);
-  //  bytes += pr_out->PutStringC(b);
+  // we need to know byte count of content stream here
+  // count includes trailing newline
+  
+  sprintf (b, "  << /Length %u >>\n", scount);
+  bytes += pr_out->PutStringC(b);
 
-  bytes += scount;
   bytes += pr_out->PutStringC("stream\n");
-  bytes += pr_out->PutStringC("100 100 m 100 200 l S \n");
-  print_stream();
+  bytes += pr_out->PutStringC(s_buf);
+  //  print_stream();
   // we go byte count in scount above
   bytes += pr_out->PutStringC("endstream\n");
   bytes += pr_out->PutStringC("endobj\n");   
@@ -1315,15 +1322,26 @@ unsigned int pdf_print::do_page_resource()
   return(bytes);
 }
 
-unsigned int pdf_print::do_stream(i_buf *i_b,  struct font_list *f_a[]) {
-  unsigned int bytes = 0;
-  //  pdf_print *page_buf;
+// static char s_buf[1024];
 
+unsigned int pdf_print::do_stream(i_buf *i_b,  struct font_list *f_a[],
+				  char *s_buf) {
+  unsigned int bytes = 0;
+
+  strcpy (s_buf, "100 100 m 100 200 l S \n");
+  bytes = strlen(s_buf);
+  fprintf(stderr,"pdf_print: do_stream: bytes dec %d oct %o\n", bytes, bytes);
+ 
+  //  pdf_print *page_buf;
+  
   //  page_buf = new pdf_print();
   // "this" must be a new temporary output buffer that I can count when done
-  //  page_retval = (format_page(page_buf, i_b, f_a, f_i));
+  page_retval = (format_page(this, i_b, f_a, f_i));
+  
   return (bytes);
 }
+
+// we don't need this anymore, I hope
 
 void pdf_print::print_stream() {
 }

@@ -42,6 +42,7 @@ void buffer::PutByte(const char c)
 char * buffer::GetLine(char *buf, int buflen)
 {
   char *p;
+  char q;
 
   p = buf;
   while ((*p = GetByte()) != NEWLINE) {
@@ -71,7 +72,9 @@ char * buffer::GetLine(char *buf, int buflen)
 	*p = NEWLINE;
 	p++;
 	*p = '\0';
-	(void)GetByte();	// remove the real newline
+	q = GetByte();	// remove the real newline
+	if ( q != '\n' )
+	  unGet( q );
 	return (buf);
       }
 #endif

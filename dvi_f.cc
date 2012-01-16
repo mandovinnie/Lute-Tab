@@ -664,7 +664,7 @@ struct list *l)			/* data */
       p->movev(-d_i_space/2
 	       -f_a[0]->fnt->get_height(
 		   f->flag_flag == ITAL_FLAGS ? 217 : 195));
-      for (i=1; i< 12 && ch[i] != '\0' && ch[i] != '}'; i++ )
+      for (i=1; i< 15 && ch[i] != '\0' && ch[i] != '}'; i++ )
 	p->set_a_char(ch[i]);   
       p->use_font(0);
     }
@@ -704,6 +704,16 @@ struct list *l)			/* data */
       }
       else if ( ch[0] == 'w') 
 	p->put_rule(0.09, d_i_space * .30);
+      else if ( ch[0] == '0') {
+	if (baroque) {
+	  p->movev(( f_a[0]->fnt->get_height(15))/2.0);
+	  p->put_a_char(15);
+	}
+	else {
+	  p->movev(( f_a[0]->fnt->get_height(0375))/2.0);
+	  p->put_a_char(0375);
+	}
+      }
       else if ( ch[0] == '1') {
 	p->movev(( f_a[0]->fnt->get_height(16))/2.0);
 	p->put_a_char(16);
@@ -815,6 +825,8 @@ struct list *l)			/* data */
 	     3 : f->flags & FIVE ? 4 : 5);
 	  if (f->flags & CON_SEV ) 
 	    p->p_movev (i_space/2);
+	  if (f->line_flag & ON_LINE )
+            p->p_movev (-i_space/2);
 	  p->movev((spaces + 1) * d_i_space + str_to_inch("4.0 pt"));
 	  p->put_rule (staff_h,
 		       spaces * d_i_space + staff_h);
@@ -851,7 +863,8 @@ struct list *l)			/* data */
       else if (ch[1] == 't') { /* special TRIPLET */
 	p->push();
 	p->saveloc(5);
-	//	mapflag(p, f_a, c, f);
+	if (!baroque)
+	  mapflag(p, f_a, c, f);
 
 	p->moveh((l->space + l->padding) );
 	if (strchr("^+&:", (int)*nxt)) /* another staff of */
@@ -1237,17 +1250,20 @@ struct list *l)			/* data */
 	      
 	/* big numbers for bass strings */
 	      
-	else if (cc >= '0' && cc <= '9' ) { // numbers
+	else if (cc >= '0' && cc <= '9' ) { // numbers  bourdons
 	  p->push();
 	  if (baroque && i == 8 && (cc == '4' 
-				    || cc == '5' || cc == '6')) {
+				    || cc == '5' || cc == '6'
+				    || cc == '7'  )) {
 	    p->movev(0.09);
 	    if (cc== '4')
-	      p->put_a_char(14);
+	      p->put_a_char(11);
 	    if (cc== '5')
-	      p->put_a_char(15);
+	      p->put_a_char(12);
 	    if (cc== '6')
-	      p->put_a_char(16);
+	      p->put_a_char(13);
+	    if (cc== '7')
+	      p->put_a_char(14);
 	  }
 	  else
 	    mapchar(p, f_a, (unsigned char)(cc - '0' + 150), f);

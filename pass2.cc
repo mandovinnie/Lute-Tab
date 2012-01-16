@@ -8,6 +8,7 @@
 #include "tfm.h"
 #include "system.h"
 #include "ascii.h"
+#include "nmidi.h"
 
 /* EXTERNAL */
 extern char mus_space[];
@@ -30,8 +31,6 @@ pass2(print *p, i_buf *i_b, font_list *f_a[], int *l_p, struct file_info *f, dou
     }
     else l = l->next;  
 
-/*    ll = l; */
-
     p->push();
 
     if (f->m_flags & ASCII) {
@@ -49,6 +48,9 @@ pass2(print *p, i_buf *i_b, font_list *f_a[], int *l_p, struct file_info *f, dou
 	else if (f->m_flags & ASCII ) {
 	  //	  dbg0 (Warning, "pass2: ascii\n");
 	  do_ascii(l, f, i_b);
+	}
+	else if (f->m_flags & NMIDI ) {
+	  do_nmidi(l, f, i_b);
 	}
 	else 
 	  dvi_format(p, i_b, f_a, l_p, j, f, l);

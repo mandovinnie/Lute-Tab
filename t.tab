@@ -1,41 +1,75 @@
-%$start-system=2
-%-b
-%$pstitlefont=pzcmi
-%$psalttitlefont=ptmr
-%$titlesize=18
-%$flagstyle=thin
-%$charstyle=
-%$numstyle=italian
-%$line=o
-%$midi-patch=14
-%-highlightred
-%-tuning c4d4e4f+4g4a3d3f+3a2d2f+2
-%$alttextsize=14
+-G
 
-%-P 23
--i
-%-C
-%-Q
+$scribe=Wayne Cripps
 
-{^05testte\"st^02test}
 
-%-twostaff
-%$sys-skip=0.2
--l "6.1 in"
+%-i
 
 
 b
-1 c
-x c
-x c
-x c
+w-c
+x-a
+1-c
+x-a
+x-c
+x-a
 b
-x c
-x c
-x c
-x b
+Wc
+e
+b
+1- cdc
+x- cDc 
+x-aaaaaa
+x      3
+b
+Q
+e
+
+
+b
+2abcdef
+2abc\3def
+b
+
+
+b
+10
+19
+x-!x
+xN11
+[123456789abcdefg}
+xN12
+xN13
+xN14
 b
 e
+
+22N12N11N10987
+x 1 3 N12
+x N13215
+x 0
+x N12
+x 1
+x 2
+x N13 N14 N15
+b
+e
+b
+S6-8
+RW
+Rw
+R0
+R1
+R2
+b
+x c    ///a
+x 123N12 4
+x c    5
+x c    6
+x c    7
+x b
+b
+
 
 b
 2 \:!x

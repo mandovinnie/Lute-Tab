@@ -271,7 +271,12 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
     case '&':		/* ornaments after the note*/
       l->padding = 0;
       //     l->padding =  f_a[0]->fnt->get_width(c);
-      l->padding = str_to_inch(min_O_w);
+      {
+	for (i = 2; i < STAFF; i++ ) {
+	  if (d[i] != ' ' && d[i] != '{' )
+	    l->padding = str_to_inch(min_O_w);	    
+	}
+      }
       weight = W_NONE;
       break;
     case '^':		/* fingerings */
@@ -416,6 +421,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
     case 'L':
       l->padding =  f_a[0]->fnt->get_width(c);
       weight = W_NONE;
+ //     weight = wp[0].weight;
       goto done;
     case 'J':
       l->padding = str_to_inch(wp[0].width);
@@ -542,9 +548,16 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
     case 'Y':
     case 'y':
       if (strchr ("b.", l->dat[1])) {
-	l->padding = 0.5 * 
-	  f_a[0]->fnt->get_width(c) + str_to_inch(min_d_w);
-	weight = W_TINY;
+	//	if (!l->next) {
+	if ((j == *l_p - 1) || ( l->next && l->next->dat[0] == 'Q')) {
+	  l->padding = 0.5 * f_a[0]->fnt->get_width(c);
+	  weight = W_NONE;
+	}
+	else {
+	  l->padding = 0.5 * 
+	    f_a[0]->fnt->get_width(c) + str_to_inch(min_d_w);
+	  weight = W_TINY;
+	}
       }
       else if (strchr ("+^:", l->prev->dat[0])) {
 	l->padding = f_a[0]->fnt->get_width(c);
@@ -697,7 +710,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
     case '[':
       //      dbg0(Warning, " [pass1: not implemented\n");
       l->padding = 0;
-	weight = 0;
+      weight = 0;
       break;
     default:
       dbg2(Warning, "tab: pass1: unknown flag %d %s\n", 
@@ -805,7 +818,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
     }                                 // end processing line of notes
   end:
     /* wbc added ij June 98  and v aug 2004 */
-    if (! strchr("xb.+^&F8*:dGTijD$v", c) && l->dat[1] != 'M') {
+    if (! strchr("xb.+^&F8*:dGTijD$v[", c) && l->dat[1] != 'M') {
       old_flag = c;
       if (d[1] == '*' || d[1] == '.' ){
 	old_width = l->padding / 1.6;
@@ -1073,7 +1086,7 @@ find_val(
     if (!*found && val != 'x') {
 	dbg3 (Warning,
 		"tab: find_val: value not found %s time %c offset %d\n",
-		(void *)(int)ll->dat, (void *)(int)val, (void *)(int)offset);
+		(void *)ll->dat, (void *)val, (void *)offset);
     }
 }
 

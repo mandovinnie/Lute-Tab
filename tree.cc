@@ -486,6 +486,18 @@ void set_transpose(const char *value, struct file_info *f)
   int i = atoi(value);
   f->transpose = i;
 }
+void set_scribe(const char *value, struct file_info *f)
+{
+  if (f->scribe != 0 ) {
+    free (f->scribe);
+    f->scribe = 0;
+    dbg0(Warning, "set scribe - re setting scribe\n");
+  }
+  f->scribe = (char * )malloc (strlen(value)+1);
+  strcat (f->scribe, value);
+  f->scribe[strlen(value)] = 0;
+
+}
 
 /*
 void setit(void *r, const char *flag, struct file_info *f)
@@ -532,6 +544,7 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {"midi-patch",   (void *)set_midi_patch},
     {"start-system", (void *)set_start_system},
     {"transpose",    (void *)set_transpose},
+    {"scribe",       (void *)set_scribe},
     {0,0}
   };
 
@@ -561,6 +574,7 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {"midi-patch",   (void *)first},
     {"start-system",   (void *)first},
     {"transpose",    (void *)first},
+    {"scribe",       (void *)first},
     {0,0}
   };
   

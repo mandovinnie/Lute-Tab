@@ -1,4 +1,3 @@
-
 /*
    This program is copyright 1991 by Wayne Cripps,
    P.O. Box 677 Hanover N.H. 03755.
@@ -33,7 +32,7 @@
 extern char interspace[];
 extern char staff_height[];
 
-void put_note(print *p, int string, char c, int timeval, struct file_info *f);
+void put_note(print *p, int string, unsigned char c, int timeval, struct file_info *f);
 void score(print *p, double space, double width,  struct file_info *f, char *ch, char *prev);
 int find_note(int string, char c, struct file_info *f);
 int setflag(file_info *f, char * string, pass pass);
@@ -144,7 +143,7 @@ int *tuning_str(char *str)
 
 int find_note(
      int string,
-     char c,
+     unsigned char c,
      struct file_info *f)
 {
     int fret;
@@ -162,16 +161,22 @@ int find_note(
 
     if (f->num_flag == ITAL_NUM && (
 	    (c >= '0' && c <= '9') 
+	    || ( c >= 230 && c <= 240 ) 
 	    || c == 'x') || c == 'y' || c == 'z') {
 	if ( c == 'x' )
 	    fret = 10;
-	else if ( c == 'y' )
+	else if ( c == 'y' || c == 231 )
 	    fret = 11;
-	else if ( c == 'z' )
+	else if ( c == 'z' || c == 232 )
 	    fret = 12;
+	else if ( c >= 232 && c <= 240 )
+	    fret = c - 220;
 	else
 	    fret = c  - '0';
-	note = str[7 - string] + fret;
+	if (f->m_flags & MILAN) 
+	  note = str[string] + fret;
+	else
+	  note = str[7 - string] + fret;
     }
     else if (string==7 && c >= '4' && c <= '6') {
 	if (c == '4') note = str[11];
@@ -202,7 +207,7 @@ score(print *p, struct list *l, struct file_info *f,
     char *prev=l->prev ? l->prev->dat: 0;
     char *next=l->next ? l->next->dat: 0;
     int i;
-    char c;
+    unsigned char c;
     int timeval=0;
     char cc = *ch;
     int rest_note=1;			// clear this when there is a note to play
@@ -323,6 +328,7 @@ score(print *p, struct list *l, struct file_info *f,
       }  
       
     case 'U':			// do nothing
+    case 'O':			// do nothing
     case 'A':			// do nothing
     case 'i':			// do nothing
     case 'Z':			// do nothing
@@ -358,14 +364,16 @@ score(print *p, struct list *l, struct file_info *f,
 	  for (i=2; i< STAFF; i++ ) {
 	    if ((c = tolower(ch[i])) != ' ') {
 	      rest_note=0;
-	      if (c > 'p' && c != 'x') continue;                   // feb 04 wbc raised this.
+	      if (c > 'p' && c != 'x' && c < 220 ) // june 05 wbc ignored the N10..N20
+		continue;                   // feb 04 wbc raised this.
 	      if ( prev && prev[0] == '+' && prev[i] == 'Q') {
 		p->set_highlight();
 	      }
-	      if ( i < 8 ) {
+	      if ( i < 8 ) {	
+		// flip italian
 		if (f->num_flag == ITAL_NUM &&
 		    (((c >= '0' && c <= '9') 
-		      || c == 'x') && i < 8)) {
+		      || c == 'x' || (c >= 230 && c <= 240 )) && i < 8)) {
 		  // 
 		  // Peter Nightingale uses !x, \.!x and \:!x for 10, 11, 12
 		  // 
@@ -379,6 +387,9 @@ score(print *p, struct list *l, struct file_info *f,
 		    else
 		      put_note(p, i-1, 'x', timeval, f);
 		  }
+
+		  else if (c >= 230 && c <= 240) // wbc June 2005
+		    put_note(p, i-1, c, timeval, f);
 		  else
 		    put_note(p, i-1, c, timeval, f);
 		}
@@ -386,7 +397,7 @@ score(print *p, struct list *l, struct file_info *f,
 		  put_note(p, i-1, 'd', timeval, f); 
 		else if (c >= 'a' && c <= 'p')
 		  put_note(p, i-1, c, timeval, f); /* i-1 is string number */
-	      }
+	      } // i >= 8 - bourdon
 	      else if (prev && isalnum(c)) {
 		if (prev[i] == '/' )
 		  put_note(p, 8, 'a', timeval, f);
@@ -465,7 +476,7 @@ score(print *p, struct list *l, struct file_info *f,
     p->moveh(space + width);
 }
 
-void put_note(print *p, int string, char c, int timeval, struct file_info *f)
+void put_note(print *p, int string, unsigned char c, int timeval, struct file_info *f)
 {
     int note, adj=0;
     int pos=0;

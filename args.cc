@@ -383,7 +383,18 @@ void set_fontpath(const char *value, struct file_info *f)
   font_path=(char *)malloc(strlen(value)+1);
   strcpy(font_path, value);
 }
-
+void set_milan(const char *value, struct file_info *f)
+{
+        f->m_flags |= MILAN;
+}
+void set_nmidi(const char *value, struct file_info *f)
+{
+        f->m_flags |= NMIDI;
+}
+void set_amidi_patch(const char *value, struct file_info *f)
+{
+        f->midi_patch = atoi(value);
+}
 void args(int argc, char ** argv, struct file_info *f)
 {
     char *aa=0;
@@ -480,6 +491,9 @@ void args(int argc, char ** argv, struct file_info *f)
       {"ascii", (void*)set_ascii},
       {"wide", (void*)set_wide},
       {"fontpath", (void*)set_fontpath},
+      {"milan", (void*)set_milan},
+      {"nmidi", (void*)set_nmidi},
+      {"midi-patch", (void*)set_amidi_patch},
       {0, 0}
     };
 
@@ -524,6 +538,9 @@ void args(int argc, char ** argv, struct file_info *f)
 	      }
 	    case 'a':
 	      if ( argv[0][1] != 'f') break;
+	    case 'm':
+	      if (strncmp(argv[0], "midi-patch", 10 )) 
+		break;
 	    case 'l':
 	    case 'o':
 	      *argv++;

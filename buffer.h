@@ -21,6 +21,8 @@ class buffer {
     int size;			// total size of buffer
   public:
     virtual void PutByte(const char c);
+    virtual unsigned char GetByte();
+    virtual unsigned char unGet(const char c);
     void PutLine(const char * l);	/* newline on end */
     void PutString(const char * l);	/* no newline */
     unsigned int PutStringC(const char * l){
@@ -31,8 +33,6 @@ class buffer {
     void Put10(const int num);        /* format decimal */
     void Put16(const int num);        /* format hexidecimal */
     void PutF(const double num, const int res);      /* format double */
-    virtual unsigned char GetByte();
-    virtual unsigned char unGet(const char c);
     char * GetLine(char *buf, int buflen);
     int Tell();
     virtual int Seek(const long offset, const int how);

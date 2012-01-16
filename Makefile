@@ -7,37 +7,17 @@
 #  your system, change the TFM_PATH to be the directory
 #  where the lute9.tfm file resides
 #
-OPTIM = -O3
 # OPTIM = -O2
 OPTIM = -g
 CC = g++3 -wuninitilized
-#LD = /usr/local/bin/g++
-#LD = /usr/local/egcs/bin/g++
-LD = g++ -v 
-LD = gcc
-#LD = g++3
-#LD = g++ -Wuninitilized
 LD = g++
-#LD = CC -trapuv
-#LD = g++ -mabi=64 
-#LD = gcc.2723 -v
-#LD = insure++
-LDFLAGS = ${OPTIM} -v 
-# CXX = g++ -Wall
-#CXX = /usr/local/egcs/bin/g++
-#CXX = /usr/local/bin/g++
-CXX = gcc 
-CXX = /usr/local/bin/g++
-CXX = g++3
+# LD = g++ -m64
+LD = g++ -m32
+LDFLAGS = ${OPTIM}  
 CXX = g++
-#CXX = g++ -Wuninitialized -O
-#CXX =  CC -trapuv
-#CXX = CC -64
-#CXX = g++ -mabi=64
+# CXX = g++ -m64
+CXX = g++ -m32
 #
-#CXX = gcc.2723 -v
-#CXX = insure++
-# 
 #
 LIBS =
 #
@@ -54,24 +34,18 @@ TLOC='"."'
 # TLOC = '"/usr/aeolus1/wbc/src/nnt"'
 # TLOC = '"/home/wbc/nnt"'
 #
-# CXXFLAGS = -g  -DTFM_PATH=${TLOC} -UX_WIN -Wtraditional -Wshadow  -Wpointer-arith -Wcast-qual  -Wcast-align -Wwrite-strings -Wconversion -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations  -Wnested-externs -Woverloaded-virtual -Winline
 #
-#-Wshadow -Wcast-qual 
-# sort of ..  -Wwrite-strings 
 #
 WARNS = -Wtraditional -Wpointer-arith -Wcast-align -Wconversion -Waggregate-return  -Wstrict-prototypes  -Wmissing-declarations   -Wnested-externs -Woverloaded-virtual -Winline -Wunused
-# CXXFLAGS = -g -O0 -DTFM_PATH=${TLOC} -UX_WIN -Wstrict-prototypes
-# CXXFLAGS = -g2 -pg -DTFM_PATH=${TLOC} -UX_WIN 
-CXXFLAGS = ${OPTIM} -DTFM_PATH=${TLOC} -UX_WIN 
+CXXFLAGS = ${OPTIM} -DTFM_PATH=${TLOC}  
 #
-#-Wredundant-decls
 
 OBJS = args.o buffer.o dbg.o draw.o dvi.o dvi_f.o dviprint.o \
 	file_in.o get_t.o getsys.o i_buf.o incl.o main.o \
 	map.o notes.o pass1.o pass2.o pk_font.o pk_in.o \
 	print.o ps_print.o score.o sizes.o tab_p.o tfm.o \
 	title.o tree.o uline.o sound.o beam.o raw_snd.o midi_snd.o \
-	pdf_print.o ascii.o
+	pdf_print.o ascii.o nmidi.o do_nmidi.o
 
 
 SOURCES = main.cc file_in.cc tfm.cc dvi.cc buffer.cc i_buf.cc \
@@ -79,13 +53,13 @@ SOURCES = main.cc file_in.cc tfm.cc dvi.cc buffer.cc i_buf.cc \
 	title.cc draw.cc pass1.cc pass2.cc dvi_f.cc map.cc notes.cc \
 	dviprint.cc score.cc uline.cc ps_print.cc \
 	pk_in.cc pk_font.cc dbg.cc tree.cc sound.cc beam.cc raw_snd.cc \
-	midi_snd.cc pdf_print.cc ascii.cc
+	midi_snd.cc pdf_print.cc ascii.cc nmidi.cc do_nmidi.cc
 
 
 HEADERS = buffer.h dbg.h file_in.h print.h system.h tfm.h pkfile.h\
 	dvi.h i_buf.h sizes.h tab.h dviprint.h ps.h pk_bit.h pk_input.h \
 	ps_print.h mac.h tree.h sound.h beam.h version.h raw_snd.h \
-	midi_snd.h pdf_print.h pdf.h ascii.h
+	midi_snd.h pdf_print.h pdf.h ascii.h nmidi.h
 
 all:	tab
 
@@ -128,11 +102,12 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	ptmb.tfm     ptmbo.tfm    ptmrc.tfm    ptmro.tfm    ptmrrn.tfm \
 	ptmbi.tfm    ptmr.tfm     ptmri.tfm    ptmrre.tfm \
 	pzcmi.tfm \
-	mk_font_local mk_test mk_600 mk_1200 mk_2400 \
+	mk_font_local mk_test mk_300 mk_600 mk_1200 mk_2400 \
 	sample.tab demo.tab t.tab AboutTab.txt mac.cc mkdep \
-	version.pl makedepend
+	version.pl makedepend CHANGELOG \
+	midi-docs/midi-dump.c midi-docs/Makefile
 
-DISTFILE = lute_tab4.3.30.tar
+DISTFILE = lute_tab4.3.40.tar
 
 distrib:	 ${DISTFILE}
 

@@ -8,6 +8,7 @@
 #include "ps_print.h"
 #include "pdf_print.h"
 #include "ascii.h"
+#include "nmidi.h"
 
 #include "sound.h"
 #include "midi_snd.h"
@@ -30,6 +31,7 @@ int my_main(int flags);
 #endif /* MAC */
 
 extern jmp_buf b_env;
+extern double conv;
 sound *sp=0;
 
 
@@ -81,11 +83,15 @@ void init(file_info *f)
     f->midi_patch = 0;
     f->start_system = 0;
     f->transpose=0;
+    f->scribe=0;
+    f->title=0;
 }
 
 char *
 get_real_name(const char *short_name, int dump);
 				/* this bit loads in the tfm metrics */
+nmidi *np=0;
+
 void tfm_stuff(i_buf *b, file_info *f)
 {
     print **pp;
@@ -251,11 +257,10 @@ void tfm_stuff(i_buf *b, file_info *f)
 	}
       } 
     }
-    //    else if (f->m_flags & ASCII) {
-    //     ap = new ascii();
-    //     f->utility = ap;
-    //   }
-
+    else if (f->m_flags & NMIDI) {
+      np = new nmidi();
+    }
+    
     while (more == END_MORE) {
 	(*pp)->page_head(); 
 	more = (*pp)->do_page(b, f_a);
@@ -265,6 +270,16 @@ void tfm_stuff(i_buf *b, file_info *f)
       delete sp;
       sp = 0;
     }
+    if (np) {
+      if (f->title)
+	np->set_nmidi_title(f->title);
+      if (f->midi_patch)
+	np->set_patch(f->midi_patch);
+      if (conv != 2) {
+	np->set_pulse(conv);
+      }
+    }
+    if (np) delete (np);
     if (psp) delete psp;
     if (pdp) delete pdp;
     if (pdfp) delete pdfp;
@@ -307,11 +322,7 @@ void  terminate(int val)
 }
 #endif /* unix */
 
-#ifdef MAC
-int my_main(int flags)
-#else
 main(int argc, char **argv)
-#endif
 {
     char buf[BUFSIZ];
     i_buf b;
@@ -332,16 +343,9 @@ main(int argc, char **argv)
     (void) alarm(17000);
 #endif /* unix */
 
-#ifdef MAC
-    if (flags & PS) {
-      f.flags |= PS;
-      f.flags &= ~DVI_O;
-    }
-#else
     argc--;
     *argv++;
     args (argc, argv, &f);
-#endif
     
     //	dbg_set(Proceedure);
     //	dbg_set(Widths);

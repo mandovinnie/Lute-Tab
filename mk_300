@@ -10,7 +10,8 @@ set FMT = plain
 # 
 # 
 set MODE=CanonCX
-set MODE=docutech
+mode=cx
+#set MODE=docutech
 # set MODE=cxnew
 #
 # if using precompiled modes set here, otherwise in lute9
@@ -25,32 +26,32 @@ set MODE=docutech
 #
 if ($#argv == 0  ) then
   virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input lute9; bye;"
-  gftopk ./lute9.600gf > ./lute9.600pk
-  rm ./lute9.600gf
+  gftopk ./lute9.300gf > ./lute9.300pk
+  rm ./lute9.300gf
   virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input lute8; bye;"
-  gftopk ./lute8.600gf > ./lute8.600pk
-  rm ./lute8.600gf
+  gftopk ./lute8.300gf > ./lute8.300pk
+  rm ./lute8.300gf
   virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input lute7; bye;"
-  gftopk ./lute7.600gf > ./lute7.600pk
-  rm ./lute7.600gf
+  gftopk ./lute7.300gf > ./lute7.300pk
+  rm ./lute7.300gf
   virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input lute6; bye;"
-  gftopk ./lute6.600gf > ./lute6.600pk
-  rm ./lute6.600gf
-  rm lute*log lute*600gf
+  gftopk ./lute6.300gf > ./lute6.300pk
+  rm ./lute6.300gf
+  rm lute*log lute*300gf
 else  
   if ( $1 == 'b' ) then
     echo baroque font
     virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input blute9; bye;"
-    gftopk ./blute9.600gf > ./blute9.600pk
+    gftopk ./blute9.300gf > ./blute9.300pk
     virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input blute85; bye;"
-    gftopk ./blute85.600gf > ./blute85.600pk
+    gftopk ./blute85.300gf > ./blute85.300pk
     virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input blute8; bye;"
-    gftopk ./blute8.600gf > ./blute8.600pk
+    gftopk ./blute8.300gf > ./blute8.300pk
     virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input blute7; bye;"
-    gftopk ./blute7.600gf > ./blute7.600pk
+    gftopk ./blute7.300gf > ./blute7.300pk
     virmf \&$FMT "\mode:=$MODE; \mag:=1.0; input blute6; bye;"
-    gftopk ./blute6.600gf > ./blute6.600pk
-    rm blute*log blute*600gf
+    gftopk ./blute6.300gf > ./blute6.300pk
+    rm blute*log blute*300gf
   else
     echo args:  b
   endif

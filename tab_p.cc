@@ -59,6 +59,36 @@ int format_page(print *p, i_buf *i_b,
 	if (!(f->m_flags & QUIET)) 
 	    dbg0 (Warning, "Copyright\n");
 	p->print_copyright();
+	if (f->scribe) {
+	  char *ppp = f->scribe;
+	  p->push();
+	  p->use_font(5);
+	  if ( red == 1.0 ) {
+	    p->movev(9.56); 		// to -690 in postscript units
+	    p->moveh(2.20);
+	  }
+	  else if (red == 0.94440){
+	    p->movev(9.56 / 0.94440); 	
+	    p->moveh(2.20 / 0.94440);
+	  }
+	  else if (red == 0.88880){
+	    p->movev(9.56 / 0.88880); 	
+	    p->moveh(2.20 / 0.88880);
+	  }
+	  else if (red == 0.777770){
+	    p->movev(9.56 / 0.777770); 	
+	    p->moveh(2.20 / 0.777770);
+	  }
+	  else {
+	    p->movev(9.56 / 0.666667); 	
+	    p->moveh(2.20 / 0.666667);
+	  }
+	  while (*ppp) {
+	    p->set_a_char((unsigned char)*ppp);
+	    ppp++;
+	  }
+	  p->pop();
+	}
     }
     if (!sys_count) {
 	if ( red == 1.0 ) {

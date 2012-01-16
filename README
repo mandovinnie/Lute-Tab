@@ -122,7 +122,12 @@ Options:
 	long name that must be on your printer.
     -longbar with music draws bar lines between tablature and staff
     -m print out the piano version of the tablature. This is kind of basic!
-    -midi sends a midi file to standard output.
+    -midi sends a midi file to standard output.  Be sure to say -midi
+	*before* the file name when you want midi output!
+        You must use numstyle=italian or -i if you are using numbers
+        for the fret values.
+    -midi-patch number  is the same as $midi-patch=number.  You can use
+        it on the command line.  Try patch 123!
     -modernNotes  use modern, rather then renaissance notation for music
     -M print marks on the page to show where the character positions are.
     -N uses fonts like Robinson
@@ -130,6 +135,10 @@ Options:
         characters they don't have - Mace only has f and e.
         Robinson has b-h.
     -n uses fonts like Mace
+    -nmidi sends midi output to the file nout.mid.  This variation
+       of midi output only works for 6 course music, italian
+       tablature right now.  This option only works on the command
+       line, you can not specify it within the file.
     -nobox  Do not set a bounding box - for postscript debugging
     -O uses thin line flags, like dalza. 
        and shifts the lines to the middle of the numbers
@@ -162,6 +171,8 @@ Options:
 	-tuning c4d4e4f4g4a3d3f3a2d2f2 	is d minor
 	-tuning c4d4e4f+4g4a3d3g3b2d2f+2 is sharp
 	-tuning c4d4e-4f4g4a3d3g3a+2d2f2 is flat
+    -twostaff allows you two insert two lines of music along with
+        one line of tablature.
     -T uses dalza style flags
     -t prints the notes on the line and does nothing else
     -v prints the intermediate language to the screen
@@ -336,7 +347,7 @@ $		- used to set these values. This flag must be
 		  $numstyle=italian
 		  
 		  $tempo=8			tempo for music, larger=faster
-						default is 2.  Ussed for
+						default is 2.  Used for
 						playing music, writing
 						piano version
 		  $note-conversion=0 		[0-12] how many more flags 
@@ -354,6 +365,8 @@ $		- used to set these values. This flag must be
 						beginning of a piece.  It also 
 						works for the printout, but does
 						not look good.
+		  $scribe="scribe"		Adds a name after the copyright 
+						(the -G flag)
 
 the following characters have special significance as the
 second letter on a line - in most cases, if not needed
@@ -419,8 +432,6 @@ of tablature, as the second to tenth character.
 	" is the prefix operator- most things default to prefix
 			  but you can print -- as a prefix
 			  as 1 "-c"-d"-da
-        \:a or \:b	- two dots above the a (or b or whatever)
-	\.a		- one dot above the a
 	Nxx		- print number xx -as in 10 through 30 for
 			- high frets in Italian tab or modern guitar tab.
 	R		- a rest
@@ -450,8 +461,10 @@ of tablature, as the second to tenth character.
 	M		- the next three characters are the time
 			(just like the flag), pitch [A-Ga-g], and
 			+ (sharp) -(flat)  . (dot)  ^ (sharp and dot)
-			v (flat and dot) n (natural) or anything else for 
-			music above the line of tablature. 
+			v (flat and dot) n (natural) or anything else for
+			music above the line of tablature.
+			For pitch you can also use ? @ for the low F and G
+			and 1 2 3 4 for high a b c d.
 			if the note is R you get a rest.
 			MG gives a g cleff in the music
 			M000 does not print anything, it is a space holder.
@@ -554,6 +567,7 @@ this runs on
 	HP 700 running HP-UX 8.05 and 9.01
 	Linux, though certain versions of the c compiler
 		have troubles.
+	Mac OSX in text windows
 
 
 If you like it ...

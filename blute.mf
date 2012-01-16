@@ -1168,7 +1168,7 @@ beginchar (144, .55em#, .7cap#, 0);" a small 4";
 endchar;enddef;
 %
 def do_b_four =
-beginchar (14, 1.5em#, 1.5cap#, 0);" a baroque bass 4";
+beginchar (11, 1.5em#, 1.5cap#, 0);" a baroque bass 4";
  pickup pencircle xscaled 1.4wid yscaled .7wid; do_four_p;
 endchar;enddef;
 %
@@ -1196,7 +1196,7 @@ beginchar (145, .55em#, .7cap#, 0);" a small 5";
 endchar;enddef;
 %
 def do_b_five =
-beginchar (15, 1.5em#, 1.5cap#, 0);" a small 5";
+beginchar (12, 1.5em#, 1.5cap#, 0);" a small 5";
  pickup pencircle xscaled 1.5wid yscaled .7wid; do_five_p;
 endchar;enddef;
 %
@@ -1229,7 +1229,7 @@ def do_six_p =
 enddef;
 %
 def do_b_six =
-beginchar (16, 1.5em#, 1.5cap#, 0);" a bourdon 6";
+beginchar (13, 1.5em#, 1.5cap#, 0);" a bourdon 6";
  pickup pencircle xscaled 1.5wid yscaled .7wid; do_six_p;
 endchar;enddef;
 %
@@ -1277,6 +1277,12 @@ endchar;enddef;
 def do_seven_f =
 beginchar (147, .55em#, .57cap#, 0);" a small 7";
  pickup pencircle xscaled .8wid yscaled .3wid; do_seven_p;
+endchar;enddef;
+%
+%
+def do_b_seven =
+beginchar (14, 1.5em#, 1.5cap#, 0);" a bourdon 6";
+ pickup pencircle xscaled 1.5wid yscaled .7wid; do_seven_p;
 endchar;enddef;
 %
 def do_eight_p =
@@ -1716,6 +1722,41 @@ beginchar (253, .7em#, 1.0cap#, 0); "an old rest";
 endchar;enddef;
 
 %
+def do_q_rest =
+  beginchar (15, .7em#, 1.8cap#, 0); "an quarter rest";
+    pickup pencircle xscaled 2.5 wid yscaled .3 wid rotated 120;
+    x0=.5w;top y0=h;
+    x12=.75w;y12=.83h;
+    rt x1=w;y1=.8h;
+    lft x4=0;y4=.5h;
+    rt x6=w;y6=.32h;
+    lft x10=0;y10=.2h;
+    x11=0.3w;bot y11=0;
+
+    draw z0..z12..z1&z1..tension 2.3 ..z4..tension 3..z6&z6{dir 160}..z10..z11;
+  endchar;
+enddef;
+%
+def do_e_rest =
+  beginchar (16, .7em#, 1.0cap#, 0); "an eighth rest";
+    pickup pencircle scaled .03 wid;
+    lft x0=0w;bot y0=0h;
+    rt x1=w;top y1=0.92h;
+    
+    x3=.4w;y3=h - .2w;
+    rt x4=.2w;top y4=h;
+    lft x5=0;y5=y3;
+    x6=x4;y6=h-.4w;
+    
+    lft x7=x6+.03w;bot y7=y6+.03h;
+    
+    fill z3..z4..z5..z6..cycle; 
+    pickup pencircle scaled .4 wid;
+    draw z7..z1;
+    pickup pencircle xscaled 1.2 wid yscaled .5wid rotated 10;
+    draw z1..z0;
+  endchar;enddef;
+%
 def do_leaf =
 beginchar (8, 1.0cap#, 1.0cap#, 0); "a leaf";
    pickup pencircle xscaled .3. wid yscaled .3wid rotated 10;
@@ -1771,8 +1812,9 @@ def do_all =
   do_s_tie;do_b_tie;do_rpt;
   do_sharp;do_old_sharp; do_flat;
   do_solid;do_solid_o;do_solid_oo;do_solid_ooo;do_solid_oooo;do_solid_ooooo;
-  do_b_four;  do_b_five; do_b_six;
+  do_b_four;  do_b_five; do_b_six; do_b_seven;
   do_open;
+  do_q_rest;do_e_rest;
 enddef;
 %
 %

@@ -12,7 +12,7 @@ enddef;
 %
 %  a new font
 %
-mode:=cxnew;
+% mode:=cxnew;
 
 mode_setup;
 %

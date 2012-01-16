@@ -12,7 +12,7 @@
 i_buf *buffer;
 void midi_head();
 void midi_track(const int len);
-void midi_tail();
+// void midi_tail();
 
 midi_snd::midi_snd()
 {
@@ -184,9 +184,10 @@ void midi_head()
   buffer->PutByte(0); buffer->PutByte(0x60);  /* pulses per quarter note */
 }
 
-void midi_snd :: midi_tail() {
+void 
+midi_snd :: midi_tail() {
   buf[count++] = 0x00;		// delta time 0
-  buf[count++] = 0xff;		// specail
+  buf[count++] = 0xff;		// special
   buf[count++] = 0x2f;		// end of track
   buf[count++] = 0x00; 
 }

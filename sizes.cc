@@ -14,7 +14,7 @@ char italian_offset[] = "4.5 pt";          /* shift staff for italain style */
 char em[] = "7.0 pt";		            /* basic character design width */
 char interspace[]="10.00 pt";	  /* distance between staff line was .10 pt */
 double staff_len = 6.5;                      /* length of line horizontally */
-double o_staff_len = 0;
+double o_staff_len = 6.5;	// wbc feb 2005 changed from 0
 char staff_height[] = "0.0057 in";/* 37 */       /* thickness of staff line */
 /* 0033 is light, 007 works on NeXT previewer */
 double text_sp = /* 0.17 */ 0.17;/* in */  /* padding for text below music  */

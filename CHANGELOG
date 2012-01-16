@@ -1,0 +1,44 @@
+VERSION "4.3.40"  Feb 16 06
+
+fixed o_staff_len default  so there is a begginging length for includes
+
+VERSION "4.3.36"  November 6 2005 -
+
+added source for midi-dump
+
+fixed buffer.cc for reading mac format EOL files, only
+chop off character after the \r if is it a \n, that is,
+a Windows format EOL
+
+new "milan" argument so that L de Milan style tab is
+converted to music correctly.
+
+
+VERSION "4.3.34"  July 15 2005
+
+July 15 changed score.c to ignore a flag of "O" for capirolla
+   ornaments
+July 13 changed dvi_f.cc to print flag for first triplet
+   if not baroque
+
+VERSION "4.3.33"  June 29 2005
+
+corrected is_music in notes.cc to allow 1234 for high notes, 
+also added ? as low F, and fixed ledger lines and stuff
+like that.  you can also use h, i for high a and b
+
+VERSION "4.3.32"  June 3 2005 -
+
+ added changelog
+ added 7 bourdon, rearranged baroque bourdons in font files, to
+avoid overlapping rests.  Changed baroque quarter rest to modern type.
+added R to badchar. fixed font building scripts.  added mk_300
+
+June 5 added "convert" option for N10 - N12 characters
+
+June 7 added $scribe option
+
+June 8 fixed score for N10-N20
+
+June 11 fixed $score for different page magnifications
+

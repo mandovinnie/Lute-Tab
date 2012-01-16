@@ -54,7 +54,7 @@ class pdf_print : public print {
     unsigned int  do_page_leaf();
     unsigned int  do_page_content(i_buf *i_b,  struct font_list *f_a[]);
     unsigned int  do_page_resource();
-    unsigned int  do_stream(i_buf *i_b,  struct font_list *f_a[]);
+    unsigned int  do_stream(i_buf *i_b,  struct font_list *f_a[], char * s_buf);
     void print_stream();
     void put_rule(char *w, char *h);
     void p_moveh(const int hor);

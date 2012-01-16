@@ -21,7 +21,7 @@ enddef;
 %  a new font 
 %
 %mode:=MyLaser;
-mode:=cxnew;
+% mode:=cxnew;
 mode_setup;
 %
  em#:=7pt#; cap#:=9pt#;

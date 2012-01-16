@@ -74,6 +74,7 @@ struct font_list *add_font(char *name, double scale);
 char * ps_map(char * name);
 
 void do_ascii(struct list *l, struct file_info *f, i_buf *i_b);
+void do_nmidi(struct list *l, struct file_info *f, i_buf *i_b);
 
 extern double st_text;
 extern double m_space;

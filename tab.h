@@ -87,6 +87,8 @@ struct file_info {
   double sys_skip;            /* extra space to skip between systems */
   unsigned int midi_patch;      /* a midi patch number - 0 is piano*/
   void *utility;		/* don't you hate old fashioned programmers? */
+  char *scribe;			/* the person who enTABulated the piece */
+  char *title;
 };
 
 struct font_list {
@@ -199,7 +201,7 @@ struct list {
  #define  CONV_COR   0X80000000  /* a correction for some conversions */
  /* style  flags */
 
- #define ON_LINE			0X0001
+ #define ON_LINE		0X0001
  #define BETWEEN_LINE	        0X0002
 
  #define STAND_FLAGS		0X0004
@@ -221,30 +223,32 @@ struct list {
  #define ITAL_NUM		0X2000
  #define ADOBE_NUM		0X3000
 
- #define MOD_NOTES               0X4000
- #define ITAL_NOTES              0X8000
+ #define MOD_NOTES              0X4000
+ #define ITAL_NOTES             0X8000
 
  /* more flags f->m_flags */
- #define NO_AUTO_END             0x0001
- #define DPI1200                 0x0002
+ #define NO_AUTO_END            0x0001
+ #define DPI1200                0x0002
  #define QUIET			0x0004
  #define PAREN			0x0008
- #define SOUND                   0x0010
- #define SEVEN                   0x0020
- #define LONGBAR                 0x0040
- #define FCLEF                   0x0080
- #define ALTTITLE                0x0100
- #define A4                      0x0200
- #define NOBOX                   0x0400
- #define TWOSTAFF                0x0800
- #define AUTOKEY                 0x1000
- #define DSUP                    0x2000
- #define DSDOWN                  0x4000
+ #define SOUND                  0x0010
+ #define SEVEN                  0x0020
+ #define LONGBAR                0x0040
+ #define FCLEF                  0x0080
+ #define ALTTITLE               0x0100
+ #define A4                     0x0200
+ #define NOBOX                  0x0400
+ #define TWOSTAFF               0x0800
+ #define AUTOKEY                0x1000
+ #define DSUP                   0x2000
+ #define DSDOWN                 0x4000
  #define EPSF                   0x08000
  #define RED                    0x10000
  #define DPI2400                0x20000
  #define ASCII                  0x40000
  #define AWIDE                  0x80000
+ #define MILAN                  0x100000
+ #define NMIDI                  0x200000
  /* variables defined in sizes.c */
 
 
