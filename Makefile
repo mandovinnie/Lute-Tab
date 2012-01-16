@@ -72,7 +72,7 @@ SOURCES = main.cc file_in.cc tfm.cc dvi.cc buffer.cc i_buf.cc \
 
 HEADERS = buffer.h dbg.h file_in.h print.h system.h tfm.h pkfile.h\
 	dvi.h i_buf.h sizes.h tab.h dviprint.h ps.h pk_bit.h pk_input.h \
-	ps_print.h mac.h tree.h sound.h beam.h
+	ps_print.h mac.h tree.h sound.h beam.h version.h
 
 all:	tab
 
@@ -115,11 +115,14 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	ptmb.tfm     ptmbo.tfm    ptmrc.tfm    ptmro.tfm    ptmrrn.tfm \
 	ptmbi.tfm    ptmr.tfm     ptmri.tfm    ptmrre.tfm \
 	mk_font_local mk_test mk_600 \
-	sample.tab demo.tab c.tab AboutTab.txt mac.cc mkdep
+	sample.tab demo.tab c.tab AboutTab.txt mac.cc mkdep \
+	version.pl
 
-distrib:	lute_tab4-1i.tar 
+DISTFILE = lute_tab4.2.1.tar
 
-lute_tab4-1i.tar:	 \
+distrib:	 ${DISTFILE}
+
+${DISTFILE}:	 \
 	Makefile \
 	${HEADERS} \
 	${SOURCES} main.cc  ${MISC}
@@ -128,7 +131,7 @@ lute_tab4-1i.tar:	 \
 	/bin/sed '/^# DO NOT DELETE/,/# IF YOU PUT ANYTH/d' | \
 	/bin/sed 's/^TLOC = /# TLOC = /' \
 	> Makefile; \
-	tar cvf lute_tab4-1i.tar \
+	tar cvf ${DISTFILE} \
 	Makefile \
 	t.tab \
 	${HEADERS} \
@@ -221,5 +224,6 @@ win:	${HEADERS} ${SOURCES} main.cc c.tab sample.tab
 	cp pncb.tfm pncbi.tfm pncr.tfm pncri.tfm psyr.tfm ptmr.tfm win
 	cp tab.rsrc.bin win
 
-
+version:
+	version.pl
 

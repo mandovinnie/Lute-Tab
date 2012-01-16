@@ -7,7 +7,7 @@
 #include <windows.h>
 #endif /* WIN32 */
 
-
+#include "version.h"
 #include "tab.h"
 #include "print.h"
 #include "ps_print.h"

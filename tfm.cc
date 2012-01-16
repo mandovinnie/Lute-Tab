@@ -21,6 +21,7 @@
 #include <windows.h>
 #endif /* WIN32*/
 
+#include "version.h"
 #include "tab.h"
 #include "dvi.h"
 #include "file_in.h"

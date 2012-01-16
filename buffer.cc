@@ -40,44 +40,48 @@ void buffer::PutByte(const char c)
 
 char * buffer::GetLine(char *buf, int buflen)
 {
-    char *p;
+  char *p;
 
-    p = buf;
-    while ((*p = GetByte()) != NEWLINE) {
-	if ((signed char)*p == (signed char)EOF) {
-	    if (p != buf) {
-		*p = NEWLINE;
-		p++;
-		*p = '\0';
-		if (buf[0] == 'e')
-		  dbg0(Warning, 
-		       "tab: buffer: file ends with no trailing newline\n");
-		else
-		  dbg1(Warning, "buffer: GetLine EOF at end of line %d\n", 
-		     (void *)((int)*buf & 0xff)); 
+  p = buf;
+  while ((*p = GetByte()) != NEWLINE) {
+    if ((signed char)*p == (signed char)EOF) {
+      if (p != buf) {
+	*p = NEWLINE;
+	p++;
+	*p = '\0';
+	if (buf[0] == 'e')
+	  dbg0(Warning, 
+	       "tab: buffer: file ends with no trailing newline\n");
+	else
+	  dbg1(Warning, "buffer: GetLine EOF at end of line %d\n", 
+	       (void *)((int)*buf & 0xff)); 
                                 /* *buf suggestion of insight */
-	    }
-	    else {
-		dbg0(Flow, "buffer: GetLine EOF\n");
-	    }
-	    return (buf);
-	}
-	else {
-#ifndef _WIN32
-	  if ( *p == '\r') {
-	    printf ("buffer: GetLine: discarding windows format return\n");
-	    //	    *p = GetByte();
-	    *p = 32;
-	  }
-#endif
-	  p++;
-	  buflen--;
-	}
+      }
+      else {
+	dbg0(Flow, "buffer: GetLine EOF\n");
+      }
+      return (buf);
     }
-    *p = NEWLINE;
-    p++;
-    *p = '\0';
-    return (buf);
+    else {
+#ifndef _WIN32
+      if ( *p == '\r') {
+	dbg0(Flow, 
+	     "buffer: GetLine: discarding windows format return\n");
+	*p = NEWLINE;
+	p++;
+	*p = '\0';
+	(void)GetByte();	// remove the real newline
+	return (buf);
+      }
+#endif
+      p++;
+      buflen--;
+      }
+  }
+  *p = NEWLINE;
+  p++;
+  *p = '\0';
+  return (buf);
 }
 
 void buffer::PutLine(const char * l)

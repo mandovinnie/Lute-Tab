@@ -1,7 +1,4 @@
 
-
-#define VERSION "4-1i"
-
 #ifndef __MWERKS__
 #include <stdio.h>
 #include <stdlib.h>
