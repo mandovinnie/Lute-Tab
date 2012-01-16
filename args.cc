@@ -268,6 +268,11 @@ void set_highlight_paren(const char *value, struct file_info *f)
 	f->m_flags |= PAREN;
 }
 
+void set_highlight_red(const char *value, struct file_info *f)
+{
+	f->m_flags |= RED;
+}
+
 void set_sound(const char *value, struct file_info *f)
 {
 	f->m_flags |= SOUND;
@@ -411,6 +416,7 @@ void args(int argc, char ** argv, struct file_info *f)
       {"sharpUp",    (void*)set_sharp_up},
       {"sharpNorm",    (void*)set_sharp_normal},
       {"highlightparen", (void*)set_highlight_paren},
+      {"highlightred", (void*)set_highlight_red},
       {"sound", (void*)set_sound},
       {"midi", (void*)set_sound},
       {"alttitle", (void*)set_alttitle},

@@ -20,6 +20,10 @@
 /* extern char *strstr(const char *, const char *); */
 /* extern char *strchr(const char *, int ); */
 
+#ifdef __linux__
+#include <ctype.h>
+#endif /* linux */
+
 #include <setjmp.h>
 #include "tfm.h"
 
@@ -234,6 +238,7 @@ enum pass{first, second};
 #define DSUP                    0x2000
 #define DSDOWN                  0x4000
 #define EPSF                    0x8000
+#define RED                    0x10000
 /* variables defined in sizes.c */
 
 

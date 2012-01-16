@@ -10,12 +10,13 @@
 OPTIM = -O3
 # OPTIM = -O2
 OPTIM = -g
-CC = g++
+CC = g++3
 #LD = /usr/local/bin/g++
 #LD = /usr/local/egcs/bin/g++
 LD = g++ -v
 LD = gcc
-LD = g++3
+#LD = g++3
+#LD = g++
 #LD = CC -64
 #LD = g++ -mabi=64 
 #LD = gcc.2723 -v
@@ -126,7 +127,7 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	sample.tab demo.tab t.tab AboutTab.txt mac.cc mkdep \
 	version.pl makedepend
 
-DISTFILE = lute_tab4.2.5.tar
+DISTFILE = lute_tab4.2.10.tar
 
 distrib:	 ${DISTFILE}
 

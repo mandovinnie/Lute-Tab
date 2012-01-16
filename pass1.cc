@@ -285,10 +285,11 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	      l->padding += 0.1;
 	      break;
 	    }
-	    if (l->next->dat[0] == '+' &&
-		l->next->next->dat[i] == 'E' || 
-		l->next->next->dat[i] == 'D') {
-	      l->padding += 0.05;			    
+	    if (l->next->dat[0] == '+' && l->next->next ) {
+	      if (l->next->next->dat[i] == 'E' || 
+		  l->next->next->dat[i] == 'D') {
+		l->padding += 0.05;  
+	      }
 	    }
 	    else   
 	      if (i > 2 && 
@@ -301,6 +302,10 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       }
 
       break;
+    case 'v':     /* line break in original */
+      weight = W_NONE;
+      l->padding = f_a[0]->fnt->get_width(9);
+      goto rest;
     case 'i':     /* insert a space */
       weight = W_NONE;
       l->padding = str_to_inch(min_d_w);
@@ -318,7 +323,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       if (l->next && 
 	  (l->next->dat[0] == '.' || l->next->dat[0] == 'b'
 	   || l->next->dat[0] == 'B')) {
-	l->padding = .7 * str_to_inch(min_d_w);
+	l->padding = str_to_inch(min_d_w);
 	goto rest;
       }
       else if (l->next && l->next->dat[0] && strchr("Yy", l->next->dat[0])) {
@@ -329,9 +334,9 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	//			printf("dot at end\n");
     case 'b':
       l->padding = 0.0;
-      if (l->next && 
-	  (l->next->dat[0] == '.')) 
-	l->padding = .7 * str_to_inch(min_d_w);
+//      if (l->next && 
+//	  (l->next->dat[0] == '.')) 
+//	l->padding = str_to_inch(min_d_w);
     rest:
       if ( j == *l_p - 1) {
 	weight = W_NONE;
@@ -345,7 +350,6 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	weight = W_NONE;
 	l->padding +=0.11;
       }
-      
       else if (strchr("Yy", l->next->dat[0])) {
 	l->padding += str_to_inch(min_d_w);
 	weight = W_NONE;		/* no expansion */
@@ -355,7 +359,8 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	if (c == '.') l->padding = str_to_inch(min_d_w);
       }
       else if (strchr("bB.Ai", l->next->dat[0])) {
-	l->padding += str_to_inch(min_d_w);
+	//  this overrides what was et above
+	l->padding = str_to_inch(min_d_w); /* wbc was += */
 	weight = W_NONE;		/* no expansion */
       }
       else {		        /* expansion - presumably notes here*/
@@ -475,6 +480,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       case '5':
       case '~':
       case 'i':
+      case 'v':
       case 'j':
       case 'd':
 	weight = old_weight;

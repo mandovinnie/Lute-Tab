@@ -27,6 +27,14 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f, char buf[]);
 void args_from_string(char *buf, struct file_info *f);
 void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f);
 
+int badchar(unsigned char p) {
+  if ((int)p > 127) 
+    return 1;
+  if (strchr("{%LJWw0123456xYyQqeMSkbBiIp8vV .-\n\r*$[", p)) 
+    return(0);
+  return(1);
+}
+
 /* static struct file_info *ff; */
 
 void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
@@ -43,7 +51,14 @@ void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
 	dbg1 (Flow, "tab: get_tab_file: %s", (void *)buf);
 	
 	p = buf;
+
+	// test to see if this is valid tab file stuff
 	
+	if ( badchar((unsigned char)*p) ) {
+	  dbg2(Error, "Bad character-%c-%x, this may not be a valid tab file\n", 
+	       (void *)*p, (void *)*p);
+	}
+
 	switch (*p) {
 	case '-':		/* these flags are set before inter file */
 	    switch (buf[1]) {	/* these flags are set for the whole */
@@ -171,5 +186,4 @@ void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
 	}
     }
 }
-
 

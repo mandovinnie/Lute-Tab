@@ -290,6 +290,17 @@ struct list *l)			/* data */
     case 'i':			/* indent as for barline - no line*/
     case 'j':			/* indent as for barline - no line*/
 	break;
+    case 'v':
+      //      printf("v here\n");
+      p->push();
+      p->moveh(-0.5 * f_a[0]->fnt->get_width(9));
+      p->movev(f_a[0]->fnt->get_height(9));
+      p->put_a_char (8);
+      p->movev(5.5 * d_i_space);
+      p->put_a_char (9);
+      //      p->movev(-5.5 * d_i_space);
+      p->pop();
+      break;
     case '.':
 	p->movev(baselinespace);
 	if (f->flags & CON_SEV ) 
@@ -832,6 +843,8 @@ struct list *l)			/* data */
 		    p->set_highlight();
 		    if (f->m_flags & PAREN ) 
 			p->paren_highlight();
+		    else if (f->m_flags & RED ) 
+			p->red_highlight();
 		    else 
 			p->gray_highlight();
 		}
@@ -851,10 +864,12 @@ struct list *l)			/* data */
 		    || ch[1] == 'W') { /* draw the flag dot */
 		    p->push();
 		    if (ch[1] == '@') p->set_highlight();
-			if (f->m_flags & PAREN ) 
-			    p->paren_highlight();
-			else
-			    p->gray_highlight();
+		    if (f->m_flags & PAREN ) 
+		      p->paren_highlight();
+		    else if (f->m_flags & RED ) 
+		      p->red_highlight();
+		    else
+		      p->gray_highlight();
 		    if (f->flag_flag == ITAL_FLAGS ||
 			f->flag_flag == S_ITAL_FLAGS) {
 			p->moveh (0.092);
@@ -973,9 +988,11 @@ struct list *l)			/* data */
 		&& l->prev->dat[i] == 'Q') {
 		p->set_highlight();
 		if (f->m_flags & PAREN ) 
-		    p->paren_highlight();
+		  p->paren_highlight();
+		else if (f->m_flags & RED ) 
+		  p->red_highlight();
 		else
-		    p->gray_highlight();
+		  p->gray_highlight();
 	    }
 	    else p->clear_highlight();
 	    if (c == ':' && ch[i] != ' ') {
@@ -1075,6 +1092,7 @@ struct list *l)			/* data */
 		    skip_spaces = 0;
 		}
 		/* case "-" */
+
 		if (cc == '-') { /* draw vertical bar*/
 		    double w = str_to_inch("0.006 in");
 		    double h = d_i_space; 
@@ -1252,7 +1270,8 @@ struct list *l)			/* data */
 			 && i > 2 
 			 && l->prev->dat[i - 1] == ','
 			 && l->prev->prev->space < 0.065 ) {
-		    p->put_a_char('D');
+		  //   p->put_a_char('D');
+		    mapchar(p, f_a, 'D', f);
 		}
 		else if (strchr(".+:#", (int)cc) &&
 			 strchr( "dD", (int)nxt[i])) {
@@ -1712,7 +1731,12 @@ void do_time_sig( char ch[], int j, int font,
 
 	    if (ch[2] && ch[2] == 'Q' ) {
 		p->set_highlight();
-		if (f->m_flags & PAREN ) p->gray_highlight();
+		if (f->m_flags & PAREN ) 
+		  p->paren_highlight();
+		else if (f->m_flags & RED ) 
+		  p->red_highlight();
+		else
+		  p->gray_highlight();
 		p->put_a_char(cc);
 		p->clear_highlight();
 	    }

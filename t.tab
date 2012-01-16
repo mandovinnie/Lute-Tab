@@ -3,13 +3,13 @@
 %$psalttitlefont=ptmr
 %$titlesize=18
 %$flagstyle=thin
-%$charstyle=robinson
-%$numstyle=italian
+%$charstyle=
+$numstyle=italian
 %$line=o
 %$midi-patch=14
-
+-highlightred
 %-tuning c4d4e4f+4g4a3d3f+3a2d2f+2
-%-i
+-i
 
 %-highlightparen
 %-R9
@@ -17,12 +17,49 @@
 
 %-twostaff
 %$sys-skip=0.2
+-l "1.8 in"
 
+b
+wQ  2Q32
+v
+0  456
+x  789
+v
+1  !x
+x  !v
+x  2Q3Q2
+x  232
+bv
+b
+
+-l "6 in"
+
+b
+1a
+v
+1a
+.
+1a
+b
+1a
+b
+.
+b
+1a\2c
+b
+1a&+
+b
+b
+.
 b
 Y0
 b
-e
+b
 
+-l "6.5 in"
+
+b
+1 d
 x b
 x c
 x d
@@ -42,6 +79,33 @@ x c
 x d
 x e
 x f
+b
+1 d
+x b
+x c
+x d
+x e
+x f
+b
+.
+b
+1 a
+x b
+x c
+x d
+x e
+x f
+b
+Y
+b
+1 a
+x b
+x c
+x d
+x e
+x f
+b
+Q
 b
 e
 

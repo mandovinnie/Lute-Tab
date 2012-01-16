@@ -52,7 +52,7 @@ int format_page(print *p, i_buf *i_b,
 //    dbg0(Flow, "in format page\n");
 
     if (f->flags & DRAFT && f->flags & PS ) {
-	dbg0 (Warning, "Draft\n");
+	if (!(f->m_flags & QUIET)) dbg0 (Warning, "Draft\n");
 	p->ps_draft();
     }
 

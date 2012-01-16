@@ -87,6 +87,8 @@ Options:
 	does nothing!
     -highlightparen uses parentheses instead of gray characters in
 		postScript output.
+    -highlightred uses red characters instead of gray characters in
+		postScript output.
     -I maps the flags to renaissance style  
     -i shifts the lines to the middle of the numbers,
        and maps the flags to renaissance style

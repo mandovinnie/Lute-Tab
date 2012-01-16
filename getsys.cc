@@ -676,6 +676,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	case 'q':		/* a tail */
 	case 'V':		/* a hold */
 	case 'i':		/* indent as for barline, no barline */
+	case 'v':
 	case 'j':		// small indent
 	case 'f':		/* fine */
 	    staff[0] = c;
@@ -727,13 +728,14 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    ib->PutByte(NEWLINE);
 	}  
 	break;
-	default:
+	default:	
+	  if ( ! (f->m_flags & QUIET) ) 
 	    dbg3(Warning, 
 		 "getsystem: bad flag character %c in system %d chord %d\n", 
 		 (void *)((int)c), 
 		 (void*) f->cur_system, 
 		 (void *)cur_chord);
-	    break;
+	  break;
 	}
     done:
 	if (barline) {
