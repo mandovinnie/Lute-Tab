@@ -1,85 +1,23 @@
--R8
--N
+
+-staff-line-thickness "0.9 mm"
 
 b
-c
-2 cdc
-x cdc
-x cdc
-x cdc
+0c2
+1 c
 b
-C
-S3
-2 cdc
-x cdc
-x cdc
-x cdc
+#2 c
+x c
+x c
+x b
 b
-c
+MG
+S3-4
 S3
-2 cdc
-x cdc
-x cdc
-x cdc
-b
-S3
-C
-2 cdc
-x cdc
-x cdc
-x cdc
-b
-S3
-c
-2 cdc
-x cdc
-x cdc
-x cd
-b
-
-b
-c
-0 cdc
-S3
-Sc
-x cdc
-S3
-SC
-x cdc
-Sc
-S3
-x cdc
-SC
-S3
-x cdc
-x cdc
-b
-C
-S3
-0 cdc
-x cdc
-x cdc
-x cdc
-b
-c
-S3
-0 cdc
-x cdc
-x cdc
-x cdc
-b
-S3
-C
-0 cdc
-x cdc
-x cdc
-x cdc
-b
-S3
-c
-0 cdc
-x cdc
-x cdc
-x cd
-b
+1. c	WG0	Wb0	test^test
+x c
+1 c
+x c
+bT
+1 d
+e
 

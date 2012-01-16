@@ -193,6 +193,7 @@ int find_note(
 }
 
 int dot=0;
+int o_dot=0;
 int o_timeval=0;
 extern sound *sp;
 double conv=2;
@@ -219,14 +220,24 @@ score(print *p, struct list *l, struct file_info *f,
 
     p->use_font(0);
 
+    if (ch[1] == '.') 
+      dot = 1;
+
     switch (cc) {
     case 'B':
     case 'b':
 	p->movev(mus_space);
 	p->movev(10.0 * str_to_inch(mus_space));
-	p->put_rule (str_to_inch(staff_height),
-		     10.0 * str_to_inch(mus_space) 
-		     + str_to_inch (staff_height));
+	if (f->m_flags & GUIT ) {
+	  p->movev(-6.0 * str_to_inch(mus_space));
+	  p->put_rule (str_to_inch(staff_height),
+		       4.0 * str_to_inch(mus_space) 
+		       + str_to_inch (staff_height));
+	}
+	else
+	  p->put_rule (str_to_inch(staff_height),
+		       10.0 * str_to_inch(mus_space) 
+		       + str_to_inch (staff_height));
 	if (f->m_flags & SOUND) {
 	  sp->add_bar();
 	}
@@ -295,6 +306,7 @@ score(print *p, struct list *l, struct file_info *f,
 	break;
     case 'x':
 	timeval = o_timeval;
+	dot = o_dot;
 	goto rest;
     case 'Y':
     case 'y':
@@ -359,7 +371,7 @@ score(print *p, struct list *l, struct file_info *f,
 	     (void *)((int)cc));
     rest:
 	o_timeval = timeval;
-	if (ch[1] == '.') dot++;
+	o_dot = dot;
 	if (!strchr ((const char *)"+^i", (int)cc)) {
 	  for (i=2; i< STAFF; i++ ) {
 	    if ((c = tolower(ch[i])) != ' ') {
@@ -483,6 +495,10 @@ void put_note(print *p, int string, unsigned char c, int timeval, struct file_in
 
     note = find_note(string, c, f);
     pos = getpos(note, &adj);
+    //    if (f->m_flags & GUIT) {
+    //      fprintf(stderr, "HERE\n");
+    //      pos -= 12;
+    //    }
     p->push();
     p->movev("0.083 in");
     p->movev((double)(pos) * str_to_inch(mus_space) *  0.5);
@@ -504,6 +520,23 @@ void put_note(print *p, int string, unsigned char c, int timeval, struct file_in
 	p->moveh(-1.0 * str_to_inch(".1 in"));
     }
    	/* ledger line */
+    if (f->m_flags & GUIT ) {
+      // on line
+      if (pos == 11 || pos == 13 || pos == 15 || pos == 17 || pos == 19 || pos == 21 || pos == 23) ledger (p, 0.5);
+      if (pos == 13 || pos == 15 || pos == 17 || pos == 19 || pos == 21 || pos == 23) ledger (p, 1.5);
+      if (pos == 15 || pos == 17 || pos == 19 || pos == 21 || pos == 23) ledger (p, 2.5);
+      if (pos == 17 || pos == 19 || pos == 21 || pos == 23) ledger (p, 3.5);
+      if (pos == 19 || pos == 21 || pos == 23) ledger (p, 4.5);
+      if (pos == 21 || pos == 23) ledger (p, 5.5);
+      if (pos == 23) ledger (p, 6.5);
+      // between lines
+      if (pos == 10 || pos == 12 || pos == 14 || pos == 16 || pos == 18 || pos == 20 || pos == 22) ledger (p, 1.0);
+      if (pos == 12 || pos == 14 || pos == 16 || pos == 18 || pos == 20 || pos == 22) ledger (p, 2.0);
+      if (pos == 14 || pos == 16 || pos == 18 || pos == 20 || pos == 22) ledger (p, 3.0);
+      if (pos == 16 || pos == 18 || pos == 20 || pos == 22) ledger (p, 4.0);
+      if (pos == 18 || pos == 20 || pos == 22) ledger (p, 5.0);
+      if (pos == 20 || pos == 22) ledger (p, 6.0);
+    }
     if (pos == 11 || pos == 23 || pos == 25) ledger (p, 0.5);
     else if (pos == 24 || pos == 26) ledger (p, 1.0);
     if (pos == 25) ledger (p, 1.5);

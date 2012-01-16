@@ -89,7 +89,10 @@ do_uline(print *p, int *skip_spaces, int s1, int s2, int line)
     p->getloc(s1a);		/* go to start */
 
     if (s1 > 7 ) p->put_slant(s1a, s2);
-    else  p->put_uline( s1a, s2);
+    else {
+      p->put_uline( s1a, s2);
+      // p->put_r_uline( s1a, s2);
+    }
     p->pop();
     p->p_movev(i_space); 
 }

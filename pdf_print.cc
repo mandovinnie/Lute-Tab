@@ -95,16 +95,8 @@ void pdf_print::file_head()
     i_buf pdf_header;
     time_t t;
     char pk_name[300];
-#if defined WIN32
-    LPBYTE p;
-#else
     char *p = NULL;
-#endif
-#if defined WIN32
-    HKEY hKey, hSubKey;
-    DWORD dwSize, dwType;
-#endif    /* WIN32 */
- 
+
     if (nodump) 
       return;
 
@@ -137,10 +129,7 @@ void pdf_print::file_head()
     else
 	strcpy(pk_name, (char *)p);
 
-#if defined WIN32
-    free(p);
-#endif  /* WIN32 */
-
+    /* free(p); windows */
     strcat (pk_name, "/");
 
     if (f_i->font_names[0]) {

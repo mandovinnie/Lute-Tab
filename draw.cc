@@ -20,7 +20,6 @@
  * drawing and typesetting stuff
  *
  */
-#include <setjmp.h>
 #include "tab.h"
 #include "print.h"
 #include "tfm.h"

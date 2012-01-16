@@ -1,3 +1,31 @@
+
+VERSION "4.3.50"  Nov 20 2006
+
+fixes to after ornament spacing
+added -staff-line-thickness option
+fix to certain slurs
+
+VERSION "4.3.49"  Oct 20 2006
+
+fixes to highlighting, -listfonts option fixed converting x after dotted
+note in midi and piano music
+Fixed missing time sig in second staff line
+
+VERSION "4.3.48"  Oct 6 2006
+
+many little fixes to compile in Visual Studio C++ 2005
+changes to nmidi.
+Old Mac preX and old windows stuff removed
+
+VERSION "4.3.47"  Sept 6 2006
+
+fix for single line music and 5 or 4 line in staff   tablature
+fixed "v" marks for non italian music, when used between barlines.  Sept 03 06
+
+VERSION "4.3.46"
+
+added $left_margin (set in points) and -guitar (to do music on one staff)
+
 VERSION "4.3.45"  July 11 2006
 
 Added inverted italian 3 flag note

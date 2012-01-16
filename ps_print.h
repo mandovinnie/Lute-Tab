@@ -28,6 +28,7 @@ class ps_print : public print {
     char f_name[120];		// this should be in ps_print.h 
     double font_sizes[FONT_NAMES];				    
     int nodump;
+    unsigned int left_margin;
   public:
     /*    char ps_used[256]; */
 
@@ -81,3 +82,4 @@ class ps_print : public print {
     void comment(const char *string);
 };
 #endif /* _PS_PRINT_ */
+

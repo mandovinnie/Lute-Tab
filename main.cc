@@ -30,10 +30,9 @@ void file_stuff(i_buf *i_b, struct file_info *f);
 int my_main(int flags);
 #endif /* MAC */
 
-extern jmp_buf b_env;
 extern double conv;
 sound *sp=0;
-
+extern char staff_height[];
 
 int baroque;
 int n_system;
@@ -47,6 +46,7 @@ void init(file_info *f)
 {
     baroque = 0;
     n_system = 0;
+    strncat(staff_height, "0.0057 in", 80);
 
     /*    int barCount = 0; */
     /*    int pagenum = 0; */
@@ -85,6 +85,7 @@ void init(file_info *f)
     f->transpose=0;
     f->scribe=0;
     f->title=0;
+    f->left_margin=72;
 }
 
 char *
@@ -322,7 +323,11 @@ void  terminate(int val)
 }
 #endif /* unix */
 
+#ifdef _WIN32
+int my_main(int argc, char **argv)
+#else
 main(int argc, char **argv)
+#endif /* _WIN32 */
 {
     char buf[BUFSIZ];
     i_buf b;
@@ -347,7 +352,7 @@ main(int argc, char **argv)
     *argv++;
     args (argc, argv, &f);
     
-    //	dbg_set(Proceedure);
+    //    dbg_set(Proceedure);
     //	dbg_set(Widths);
     //	dbg_set(TFM);
     //	dbg_set(Stack);
@@ -355,7 +360,7 @@ main(int argc, char **argv)
     //	dbg_set(Inter);
     
     if ( ! (f.m_flags & QUIET) )
-      dbg2(Warning, "tab %s copyright 1995-2005 by Wayne Cripps%c",
+      dbg2(Warning, "tab %s copyright 1995-2006 by Wayne Cripps%c",
 	   (void *)VERSION,
 	   (void *) NEWLINE );
     

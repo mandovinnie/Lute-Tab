@@ -18,7 +18,6 @@
  */
 
 #include "tab.h"
-#include <setjmp.h>
 #include "system.h"
 #include "tree.h"
 
@@ -31,7 +30,6 @@ void set_ps_size(int num, int size);
 void set_ps_font(int num, char * name);
 void ps_text_tfm(struct file_info *f, int fontnum);
 extern char flag_to_staff[];
-extern jmp_buf m_env;
 extern int title_font, text_font;
 char *get_real_name(const char *short_name, int dump);
 int setflag(file_info *f, char * string, pass pass);
@@ -395,6 +393,17 @@ void set_amidi_patch(const char *value, struct file_info *f)
 {
         f->midi_patch = atoi(value);
 }
+void set_guitar(const char *value, struct file_info *f)
+{
+        f->m_flags |= GUIT;
+	f->flags |= MANUSCRIPT;
+}
+
+void set_line_thickness(const char *value, struct file_info *f)
+{
+  strncpy(staff_height, value, 20);
+}
+
 void args(int argc, char ** argv, struct file_info *f)
 {
     char *aa=0;
@@ -494,6 +503,8 @@ void args(int argc, char ** argv, struct file_info *f)
       {"milan", (void*)set_milan},
       {"nmidi", (void*)set_nmidi},
       {"midi-patch", (void*)set_amidi_patch},
+      {"guitar", (void*)set_guitar},
+      {"staff-line-thickness", (void*)set_line_thickness},
       {0, 0}
     };
 
@@ -540,6 +551,9 @@ void args(int argc, char ** argv, struct file_info *f)
 	      if ( argv[0][1] != 'f') break;
 	    case 'm':
 	      if (strncmp(argv[0], "midi-patch", 10 )) 
+		break;
+	    case 's':
+	      if (strncmp(argv[0], "staff-line-thickness", 18 )) 
 		break;
 	    case 'l':
 	    case 'o':

@@ -76,6 +76,7 @@ Options:
     -C prints every fifth measure number below the staff.
     -CC prints every measure number below the staff.
     -c prints measure numbers only at the start of a line
+    -compressStaff sets interspace to 9.0 pt and m_space to 0.068 which makes things tighter
     -dvi output in dvi format to out.dvi
     -pdf generate pdf output to out.pdf
 	WARNING! - this is under development and does not work.  If you
@@ -94,6 +95,7 @@ Options:
     -fontpath  <path> sets font directory to path
     -G prints a copyright notice at the bottom of the page
        useful if you have the right name.....
+    -guitar printe manuscript on a single guitar staff
     -h converts french tab to italian tab automatically!
     -H does the same, but for 7 course tablature
 	the second -h or -H unsets the conversion
@@ -117,9 +119,11 @@ Options:
 	   of mm, in or pt.  The default is "6.5 in". The double
 	   quotes are mandatory.
 	-l reset resets the line length to the previous length.
+    -staff_line_thickness "x.x in"    sets the thickness of the staff line
     -listfonts  lists the PostScsript fonts, with short name
      	that you specify in the $titlefont= command and the
-	long name that must be on your printer.
+	long name that must be on your printer. This lists the
+        font names that are built in to tab.
     -longbar with music draws bar lines between tablature and staff
     -m print out the piano version of the tablature. This is kind of basic!
     -midi sends a midi file to standard output.  Be sure to say -midi
@@ -177,7 +181,7 @@ Options:
     -t prints the notes on the line and does nothing else
     -v prints the intermediate language to the screen
     -V gives the version and date
-	-x notes on the line, thin flags, standard characters
+    -x notes on the line, thin flags, standard characters
 	   italian numers and italian notes.
     -wide in ascii mode prints 132 characters wide.
     -X supresses note expansion for debugging
@@ -268,6 +272,7 @@ L		- longa
 I filename	- include filename
 i		- indent a bit (used at the beginning of a line
 	          that doesn't start with a bar)
+j		- the same as i but less padding when the line is justified
  .		- after a number, dot the value of the flag
  !		- after a number or b - don't print flag but use its value
 		  for spacing - for replicating manuscripts.
@@ -305,12 +310,14 @@ t 		- first note of a triplet, followed by the
 	 	  if there were lines - eg. t3 a,x b, xb,
 		  this places a 3 above the second note.
 	        - a t before a barline is a tie across the barline
+v               - a mark above and below the staff, indicating a line break in the
+                  original ms.  It can also follow a b or B.
 V " 2.2 in"	- vertical skip
 x		- more notes in same grid
 Y		- fermata
 y		- another fermata
 		  a Yb or yb draws a fermata above a barline
-	          Y. YW YB also work
+	          Y. YW Yw YB also work
 $		- used to set these values. This flag must be 
 		  outside of the systems to work.  A $flag in a system
 		  is ignored.
@@ -369,6 +376,7 @@ $		- used to set these values. This flag must be
 						not look good.
 		  $scribe="scribe"		Adds a name after the copyright 
 						(the -G flag)
+    		  $left_margin=nn               sets the left margin in 1/72 inch (points)
 
 the following characters have special significance as the
 second letter on a line - in most cases, if not needed
@@ -442,14 +450,15 @@ of tablature, as the second to tenth character.
 			  bass note. line starts beside character above U
 			  With PostSCript output this is a curved line like a slur
 	X		- ends the underline
-	[ ]		- horizontal underline with a curve to it
+	[ ]		- horizontal underline with a curve to it, a slur
 			- a ]v (a v after the ] ) draws an upside down slur
-	( )		- another horizontal underline, so you can use two.
+                        - a ]w (a w after the ] ) draws a wavy up-down slur
+	( )		- a straight horizontal underline, so you can use two.
 			  the slope is determined by the position of
   			  the beginning and end parenthesis.
 			  you can use the & to start a line beside a note.
 	{ }		- a horizontal underline with no curve to it
-			  the above two must end on th eline they start on!
+			  the above two must end on the same line they start on!
 	/		- a slash for a bourdon if used on bottom line
 			  otherwise a light slash
 	//		- two slashes
@@ -503,7 +512,7 @@ the following are currently working:
 			\[ is [, \] is ]
 			\{ is {, \} is }
 			] is a tie between letters
-			\wt is a tie between letters
+			\wt is a tie between letters (May not work now)
 			@ is a ~ with dots for repeat
 			| as the last letter buts the word against 
 			  the next word

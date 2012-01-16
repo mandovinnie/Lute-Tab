@@ -43,7 +43,6 @@ char min_b_w[] = "0.03 in   ";	/* bar */
 char min_d_w[] = "0.06 in   ";	/* repeat dot */
 char min_O_w[] = "0.09 in   ";	/* ornament was 0.09 */
 char min_F_w[] = "0.07 in   ";	/* a fingering number */
-char min_tilde_w[] = "0.15 in";	/* waves */
 
 struct w chart[10] = {
     {"0.26   in", 6.0},		/* B (J) */
@@ -270,10 +269,10 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       break;
     case '&':		/* ornaments after the note*/
       l->padding = 0;
-      //     l->padding =  f_a[0]->fnt->get_width(c);
       {
 	for (i = 2; i < STAFF; i++ ) {
-	  if (d[i] != ' ' && d[i] != '{' )
+	  if (d[i] != ' ' && d[i] != '{' && d[i] != '}' 
+	      && d[i] != '(' && d[i] != ')' )
 	    l->padding = str_to_inch(min_O_w);	    
 	}
       }
@@ -495,7 +494,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       // end test
       break;
     case '~':
-      l->padding = str_to_inch(min_tilde_w);
+      l->padding = f_a[0]->fnt->get_width (55);	// the "wave" character
       weight = W_NONE;
       break;
     case 'x':
@@ -577,7 +576,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  weight = W_TINY;
 	}
       }
-      else if (strchr ("+^:", l->prev->dat[0])) {
+      else if (l->prev && strchr ("+^:", l->prev->dat[0])) {
 	l->padding = f_a[0]->fnt->get_width(c);
 	/*		l->padding -= f_a[0]->fnt->get_width('+'); */
 	weight = W_TINY;

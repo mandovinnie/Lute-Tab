@@ -21,7 +21,8 @@ public:
   node();			// for root
   node(const char *key, void *val, node *top); // create node and set val 
   ~node();
-  void * getval(const char *key); /* return val for key */
+  void * get_val(const char *key); /* return val for key */
+  void * get_val(); /* return val for current  key */
   char * get_key();
   node * getleft();
   node * getright();
@@ -37,11 +38,12 @@ public:
   tree(struct tuple data[]);
   ~tree();
   void * get(const char *key);
-  void dump() { dump(top); };
-  void dump(node * n);
+  void dump_t() { dump_t(top); };
+  void dump_t(node * n);
   void dumpval() { dumpval(top); };
   void dumpval(node * n);
   char * getkey(node *n);
+  char * getval(node *n);
 };
 
 void setit(void *r(), const char *flag, struct file_info *f);

@@ -1,33 +1,22 @@
 
-#ifndef __MWERKS__
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef DOS
-#ifndef WIN32
-/* clude </emx/include/strings.h> */
-#endif /* WIN32 */
-#else /* DOS */
-#include <string.h>
-#endif /* DOS */
 #include <ctype.h>
+#include <string.h>
+
 #define NEWLINE '\n'
-#else
-#define MAC
-#include "mac.h"
-#define NEWLINE '\r'
-#endif /* __MWERKS__ */
+/* #else
+   #define MAC
+   #include "mac.h"
+   #define NEWLINE '\r'
+*/
 
 /* extern char *strstr(const char *, const char *); */
 /* extern char *strchr(const char *, int ); */
 
-#ifdef __linux__
-#include <ctype.h>
-#endif /* linux */
 
-#include <setjmp.h>
 #include "tfm.h"
 
-extern jmp_buf b_env;
 enum dbg_type {File = 1, Path = 2, TFM = 4, Inter = 8, 
 		 Flow=16, Warning=32, Error = 64, Stack=128, 
 		 Proceedure=256, Fonts=512, Bug=1024, Widths=2048, 
@@ -89,6 +78,7 @@ struct file_info {
   void *utility;		/* don't you hate old fashioned programmers? */
   char *scribe;			/* the person who enTABulated the piece */
   char *title;
+  unsigned int left_margin;	/* the left margin in PostScript units for PS output only */
 };
 
 struct font_list {
@@ -249,6 +239,7 @@ struct list {
  #define AWIDE                  0x80000
  #define MILAN                  0x100000
  #define NMIDI                  0x200000
+ #define GUIT                   0x400000
  /* variables defined in sizes.c */
 
 

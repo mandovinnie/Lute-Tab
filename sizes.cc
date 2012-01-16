@@ -5,6 +5,7 @@
  */
 
 #include "tab.h"
+#include <string.h>
 
 double st_text = .32; /* in */		      /* basic staff to music space */
 double m_space = .09; /* in */  /* was .1 */  /* interline spacing in music */
@@ -15,8 +16,11 @@ char em[] = "7.0 pt";		            /* basic character design width */
 char interspace[]="10.00 pt";	  /* distance between staff line was .10 pt */
 double staff_len = 6.5;                      /* length of line horizontally */
 double o_staff_len = 6.5;	// wbc feb 2005 changed from 0
-char staff_height[] = "0.0057 in";/* 37 */       /* thickness of staff line */
+char staff_height[120];
+
+/* char staff_height[] = "00000.0057 in"; */ /* 37 */ /* thickness of staff line */
 /* 0033 is light, 007 works on NeXT previewer */
+
 double text_sp = /* 0.17 */ 0.17;/* in */  /* padding for text below music  */
 char mus_space[] = "7 pt";  /* interline space for tab transcribed to music */
 int n_measures=0;

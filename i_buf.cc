@@ -10,11 +10,14 @@ i_buf::i_buf()
     dbg0(Proceedure, "starting i_buf");
 
     start = new link;
+
+    //    fprintf(stderr, "create %X\n", start);
+
     if ( start == NULL)
       dbg0(Error, "i_buf, new failed\n");
     start->prev = NULL;
     start->next = NULL;
-    start->bytes = bytes = /* new char [BUFSIZ] */ (char *)malloc(BUFSIZ);
+    start->bytes = bytes = (char *)malloc(BUFSIZ);
 
     buf_l = start;
 
@@ -52,22 +55,26 @@ void i_buf::more_buffer()
 
 i_buf::~i_buf()
 {
-  link *t;
+  link *ttt;
   
   dbg2(Proceedure, "ending i_buf ptr %d size %d\n", 
        (void *)read_ptr, (void *)size);
-  t = start;
-  while ( t->next ) 
-    t = t->next;
+
+  //  fprintf(stderr, "delete %X\n", start);
+
+  ttt = start;
+  while ( ttt->next ) 
+    ttt = ttt->next;
   
-  while (t->prev) {
-    free (t->bytes);
-    t = t->prev;
-    free (t->next);
+  while (ttt->prev) {
+    free (ttt->bytes);
+    ttt = ttt->prev;
+    free (ttt->next);
   }
   
-  delete start->bytes;
-  delete start;
+  //  if (start->bytes)
+  //  free (start->bytes);
+  //delete start;
 }
 
 void i_buf::PutByte(const char c)

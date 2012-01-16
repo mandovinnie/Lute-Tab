@@ -1,11 +1,9 @@
 
 #include <stdlib.h>
 #include "dbg.h"
-#include <setjmp.h>
 #include <stdio.h>
 
 int debug_flag=0;
-jmp_buf b_env;
 
 void dbg_set(const dbg_type type)
 {
@@ -34,7 +32,8 @@ void dbg4(const int type, const char *fmt,
 	printf ( fmt, a, b, c, d);
 #endif
     }
-    if (type == Error) exit(-1);//longjmp(b_env, 5);
+    if (type == Error) 
+      exit(-1);
 }
 void dbg3(const int type, const char *fmt, void *a, void *b, void *c)
 {
@@ -45,7 +44,7 @@ void dbg3(const int type, const char *fmt, void *a, void *b, void *c)
 	printf ( fmt, a, b, c);
 #endif
     }
-    if (type == Error) exit(-1);//longjmp(b_env, 5);
+    if (type == Error) exit(-1);
 }
 void dbg2(const int type, const char *fmt, void *a, void *b)
 {
@@ -56,7 +55,7 @@ void dbg2(const int type, const char *fmt, void *a, void *b)
 	printf ( fmt, a, b);
 #endif
     }
-    if (type == Error) exit(-1);//longjmp(b_env, 5);
+    if (type == Error) exit(-1);
 }
 void dbg1(const int type, const char *fmt, void *a)
 {
@@ -67,7 +66,7 @@ void dbg1(const int type, const char *fmt, void *a)
 	printf ( fmt, a);
 #endif
     }
-    if (type == Error) exit(-1);//longjmp(b_env, 5);
+    if (type == Error) exit(-1);
 }
 void dbg0(const int type, const char *fmt)
 {
@@ -78,5 +77,5 @@ void dbg0(const int type, const char *fmt)
 	printf (fmt);
 #endif
     }
-    if (type == Error) exit(-1);//longjmp(b_env, 5);
+    if (type == Error) exit(-1);
 }

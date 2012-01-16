@@ -365,6 +365,29 @@ void nmidi::do_lute_music()
       }
     }
     
+    
+    // stop an augmented eighth below
+    for (i=3; i< STRINGS; i++) {
+      if((midi_p->start[i] - 13) == saved[i+2] ) {
+	midi_p->stop[i+2] = saved[i+2];
+	saved[i+2] = 0;
+	if (midi_p->start[i+2] == 0) {
+	  stop_stop(midi_p, i+2);
+	}
+      }
+    }
+
+    // stop an augmented eighth  above
+    for (i=0; i< STRINGS-2; i++) {
+      if((midi_p->start[i] + 13) == saved[i+2] ) {
+	midi_p->stop[i+2] = saved[i+2];
+	saved[i+2] = 0;
+	if (midi_p->start[i+2] == 0) {
+	  stop_stop(midi_p, i+2);
+	}
+      }
+    }
+
     for (i=1; i< STRINGS; i++) {
       if (saved [i-1] != 0) {
 	int t = saved [i-1] - midi_p->start[i];
@@ -533,7 +556,7 @@ void nmidi::do_file_head()
   int i;
   int maxval=0, secondval=0;
   int maxi=0, secondi=0;
-  unsigned char pulses;
+  unsigned short int pulses;
 
   for (i=0; i< N_TIME; i++) {
     //    printf("index %d time counts %d\n", i, time_r[i] );
@@ -578,6 +601,4 @@ void nmidi::do_file_head()
   }
   else
     nmidi_head(pulses);
-
-
 }

@@ -3,7 +3,6 @@
 
 
 
-/*#include <setjmp.h>*/
 #include "tab.h"
 #include "print.h"
 #include "tfm.h"
@@ -449,19 +448,24 @@ int format_page(print *p, i_buf *i_b,
 		}
 		else {  /* just one line of music, thick vert line */
 		  p->push();
-		  p->movev(
-			   5 * m_space + text_sp * f->n_text +
-			   f->c_space  + 6 * str_to_inch(interspace)
-			   + flag_h + str_to_inch(flag_to_staff) 
-			   -.011 
-			   - (f->line_flag == ON_LINE ? 
-			      str_to_inch(interspace)/2 : 0.0 ));
-		  p->put_rule( 0.03,
-			       5 * m_space + text_sp * f->n_text +
-			       f->c_space  + 6 * str_to_inch(interspace)
-			       + flag_h + str_to_inch(flag_to_staff) -.011
-			       - (f->line_flag == ON_LINE ? 
-				  str_to_inch(interspace)/2 : 0.0 ));
+		  {
+		    double jj=5;
+		    if (f->flags & FIVE) jj=3.5;
+		    else if (f->flags & FOUR) jj=2;
+		    p->movev(
+			     jj * m_space + text_sp * f->n_text +
+			     f->c_space  + 6 * str_to_inch(interspace)
+			     + flag_h + str_to_inch(flag_to_staff) 
+			     -.011 
+			     - (f->line_flag == ON_LINE ? 
+				str_to_inch(interspace)/2 : 0.0 ));
+		    p->put_rule( 0.03,
+				 jj * m_space + text_sp * f->n_text +
+				 f->c_space  + 6 * str_to_inch(interspace)
+				 + flag_h + str_to_inch(flag_to_staff) -.011
+				 - (f->line_flag == ON_LINE ? 
+				    str_to_inch(interspace)/2 : 0.0 ));
+		  }
 		  p->pop();
 		}
 		for (i=0; i< 5; i++ ) {

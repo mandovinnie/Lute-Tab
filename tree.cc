@@ -63,7 +63,7 @@ node::~node()
 }
 
 void *
-node::getval(const char  *key) 
+node::get_val(const char  *key) 
 {
   node * pp;
 
@@ -74,7 +74,7 @@ node::getval(const char  *key)
 	pp = pp->l;
       }
       else {
-	//	printf ("getval: no match\n");
+	//	printf ("get_val: no match\n");
 	break;
       }
     else if ( strcmp ( key, pp->k) < 0 )
@@ -82,7 +82,7 @@ node::getval(const char  *key)
 	pp = pp->r;
       }
       else {
-	//	printf ("getval: no match\n");
+	//	printf ("get_val: no match\n");
 	break;
       }
     else {
@@ -96,6 +96,12 @@ char *
 node::get_key ()
 {
   return (this->k);
+}
+
+void *
+node::get_val ()
+{
+  return (this->v);
 }
 
 // node *node::getleft();
@@ -141,7 +147,7 @@ void *
 tree::get(const char * key)
 {
   //  fprintf (stderr, "get: top %X\n", top); 
-  return top->getval(key);
+  return top->get_val(key);
 }
 
 node *
@@ -178,29 +184,38 @@ char * tree::getkey(node *n)
   return (cp);
 }
 
-void tree::dump(node * n)
+char * tree::getval(node *n)
+{
+  char *cp;
+  cp = (char *)n->get_val();
+  return (cp);
+}
+
+void tree::dump_t(node * n)
 {
   char *key;
   node * nn;
   if (nn=n->getright())
-    dump(nn);
+    dump_t(nn);
   key=getkey(n);
-  dbg1 (Warning, "tab: tree: %s\n", (void *)key);
+  dbg1 (Warning, "tab: tree: key: %s  ", (void *)key);
+  key = getval(n);
+  dbg1 (Warning, "tab: tree: val: %s\n", (void *)key);
   if (nn=n->getleft())
-    dump(nn);
+    dump_t(nn);
 }
 void tree::dumpval(node * n)
 {
   char *key;
   node * nn;
   if (nn=n->getright())
-    dump(nn);
+    dump_t(nn);
   key=getkey(n);
   dbg1 (Warning, "tab: %s", (void *)key);
   if (key)
     dbg1 (Warning, "  %s\n", (void *)get(key));
   if (nn=n->getleft())
-    dump(nn);
+    dump_t(nn);
 }
 /****************************************
  *
@@ -496,8 +511,13 @@ void set_scribe(const char *value, struct file_info *f)
   f->scribe = (char * )malloc (strlen(value)+1);
   strcat (f->scribe, value);
   f->scribe[strlen(value)] = 0;
-
 }
+void set_left_margin(const char *value, struct file_info *f)
+{
+  int i = atoi(value);
+  f->left_margin = i;
+}
+
 
 /*
 void setit(void *r, const char *flag, struct file_info *f)
@@ -545,6 +565,7 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {"start-system", (void *)set_start_system},
     {"transpose",    (void *)set_transpose},
     {"scribe",       (void *)set_scribe},
+    {"left-margin", (void*)set_left_margin},
     {0,0}
   };
 
@@ -575,6 +596,7 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {"start-system",   (void *)first},
     {"transpose",    (void *)first},
     {"scribe",       (void *)first},
+    {"left-margin", (void*)first},
     {0,0}
   };
   

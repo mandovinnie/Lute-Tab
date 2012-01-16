@@ -102,6 +102,6 @@ pass2(print *p, i_buf *i_b, font_list *f_a[], int *l_p, struct file_info *f, dou
 
     if (f->flags & MANUSCRIPT) {
 	p->p_movev(6 * str_to_dvi(mus_space));
-	do_system(p, f);			
+	if ( ! (f->m_flags & GUIT))do_system(p, f);			
     }	
 }

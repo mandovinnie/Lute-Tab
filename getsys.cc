@@ -22,7 +22,6 @@
  *
  */
 
-#include <setjmp.h>
 #include "tab.h"
 #include "file_in.h"
 #include "i_buf.h"
@@ -323,8 +322,8 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    staff[1] = buf[1];
 	    if (c == 'Y' || c == 'y') {
 		switch (staff[1]) { 
-		case '.':
-		    staff[1] = '.';
+		case '.':                
+		    staff[1] = '.'; 
 		    staff[2] = staff[8] = ' ';
 		    for (i=3;i<8;i++)  staff[i] = 'Z';
 		    Mstore( ib, l_p, staff, f);
@@ -339,6 +338,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		case 'B':
 		case 'W':
 		case 'w':
+		case '1':
 		    break;
 		default:
 		    staff[1] = '-';
@@ -658,9 +658,10 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    
 		    if ( ccc == 'v' ) 
 		      cc = 133;
-		    if ( ccc == 'w' ) 
+		    else if ( ccc == 'w' ) 
 		      cc = 134;
-
+		    else
+		      skip -= 1;
 		  }
 
 		  if (cc == '\n') {

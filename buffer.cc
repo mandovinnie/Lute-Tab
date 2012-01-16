@@ -54,10 +54,11 @@ char * buffer::GetLine(char *buf, int buflen)
 	if (buf[0] == 'e')
 	  dbg0(Warning, 
 	       "tab: buffer: file ends with no trailing newline\n");
-	else
-	  dbg1(Warning, "buffer: GetLine EOF at end of line %d\n", 
+	else {
+	  dbg1(Error, "buffer: GetLine EOF at end of line %d\n", 
 	       (void *)((int)*buf & 0xff)); 
                                 /* *buf suggestion of insight */
+	}
       }
       else {
 	dbg0(Flow, "buffer: GetLine EOF\n");

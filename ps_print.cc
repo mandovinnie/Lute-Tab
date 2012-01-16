@@ -3,8 +3,8 @@
  *
  */
 
-#if defined WIN32
-#include <windows.h>
+#if defined _WIN32
+#include <io.h>
 #endif /* WIN32 */
 
 #include "version.h"
@@ -18,7 +18,9 @@
 #include "pk_bit.h"
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifndef _WIN32
 #include <unistd.h>
+#endif /* _WIN32 */
 #include <fcntl.h>
 
 
@@ -69,6 +71,7 @@ ps_print::ps_print(font_list *font_array[], file_info *f)
     if (f->m_flags & SOUND)
       nodump = 1;
     else nodump = 0;
+    left_margin = f->left_margin;
 }
 
 ps_print::~ps_print()
@@ -81,6 +84,9 @@ ps_print::~ps_print()
     }
     else
       pr_out->dump( "out.ps", Append);
+    //should we expliciteliy delete things here?
+    // need to delete ps_print object
+    // need to delete print object
 }
 
 
@@ -89,15 +95,9 @@ void ps_print::file_head()
     i_buf ps_header;
     time_t t;
     char pk_name[300];
-#if defined WIN32
-    LPBYTE p;
-#else
+
     char *p = NULL;
-#endif
-#if defined WIN32
-    HKEY hKey, hSubKey;
-    DWORD dwSize, dwType;
-#endif    /* WIN32 */
+
  
     if (nodump) 
       return;
@@ -110,7 +110,9 @@ void ps_print::file_head()
     if (!(f_i->flags & ROTATE) && npages < 2) {
 	int val;
 	if ( ! (f_i->m_flags & NOBOX) ) {
-	  ps_header.PutString("%%BoundingBox: 55 ");
+	  ps_header.PutString("%%BoundingBox:");
+	  ps_header.Put10(55 - (72 - left_margin));
+	  ps_header.PutString(" ");
 	  val = (int)((dvi_to_inch(dvi_v) - 2.75 ) * 72.27 * red);
 	  ps_header.Put10(val);
 	  ps_header.PutString(" 555 735\n"); 
@@ -170,21 +172,7 @@ void ps_print::file_head()
 #ifdef MAC
     strcpy(pk_name, "");
 #else
-#ifdef WIN32
-    RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Software", 0 ,KEY_READ, &hKey);
-    RegOpenKeyEx(hKey, "Wayne Cripps", 0 ,KEY_READ, &hSubKey);
-    RegCloseKey(hKey);
-    hKey = hSubKey;
-    RegOpenKeyEx(hKey, "tab", 0 ,KEY_READ, &hSubKey);
-    RegCloseKey(hKey);
-    hKey = hSubKey;
-    RegOpenKeyEx(hKey, VERSION, 0 ,KEY_READ, &hSubKey);
-    RegCloseKey(hKey);
-    hKey = hSubKey;
-    RegQueryValueEx(hKey,"pkDir",NULL,&dwType,NULL,&dwSize);
-    p=(LPBYTE)malloc(dwSize);
-    if(RegQueryValueEx(hKey,"pkDir",NULL,&dwType,p,&dwSize) != ERROR_SUCCESS)
-#else /* not MAC or WIN32 */
+
       if (font_path) {
 	//	fprintf (stderr, "ps_print.c - setting font path %s from command line\n", font_path);
 	p = font_path;
@@ -213,7 +201,7 @@ void ps_print::file_head()
       }
     }
     if (p == NULL ) 
-#endif /* WIN32 */
+
 #ifdef TFM_PATH
 	strcpy(pk_name, TFM_PATH);
 #else
@@ -221,10 +209,6 @@ void ps_print::file_head()
 #endif /* TFM_PATH */
     else
 	strcpy(pk_name, (char *)p);
-
-#if defined WIN32
-    free(p);
-#endif  /* WIN32 */
 
     strcat (pk_name, "/");
 #endif /* MAC */
@@ -306,13 +290,17 @@ void ps_print::page_head()
     pr_out->PutString("%%BeginPageSetup\n");
     pr_out->PutString("/pgsave save def\n");
     pr_out->PutString("%%EndPageSetup\n");
+    /* NOTE - INDENT PAGE HERE */
+    /* you can change the left margin by changing the 72 below */
     if (f_i->flags & LSA_FORM )
 	pr_out->PutString("72 -42 translate\n"); 
     else if (f_i->flags & ROTATE)
 	/* for fun try [ 0 1 1 0 -250 72 ] concat */
 	pr_out->PutString("[0 1 -1 0  818 72 ] concat\n"); 
-    else
-	pr_out->PutString("72 -35 translate\n");
+    else {
+	pr_out->Put10(left_margin);
+	pr_out->PutString(" -35 translate\n");
+    }
     pr_out->PutString("/LuteFont FF setfont\n"); 
 /*    in case there is no default font */
     
@@ -596,6 +584,9 @@ void ps_print::p_moveto(const int hor, const int ver)
 void ps_print::p_put_rule(int w, int h) 
 { 
     if (highlight==On){
+      if (highlight_type==Red)
+	ps_command(P_S_RED, 0, 0, 0, 0);
+      else
 	ps_command(P_S_GRAY, 0, 0, 0, 0);
     }
     ps_command(RULE, w, h, 0, 0);
@@ -638,49 +629,54 @@ void ps_print::put_a_char (unsigned char c)
 }
 void ps_print::set_a_char (unsigned char c) 
 { 
-    if (highlight==On) 
-	ps_command(P_S_GRAY, 0, 0, 0, 0);
-    if (c == 0365) 
-      dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width('i'));
-    else if ( c == 0074)
-      dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width('!'));
-    else if ( c == 0076)
-      dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width('?'));
-    else if ( c == 014 )  /* fi */
-      dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width(0256));
-    else if ( c == 015 )  /* fl */
-      dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width(0257));
-    else if ( c == 031 )  /* german ss */
-      dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width(031));
+  if (highlight==On) 
+    if (highlight_type == Red) {
+      ps_command(P_S_RED, 0, 0, 0, 0);
+    } 
     else
-      dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width(c));
+      ps_command(P_S_GRAY, 0, 0, 0, 0);
 
-    if (curfont != 0) {
-//	printf("set_a_char: c is %d %c\n", c, c);
-	if ( c == 0013) {
-	    c = 0146; // ff - just one f in postscript
-	    ps_command(CHAR, (int)c, 0, 0,0); // print the first one
-	}
-	else if ( c == 0014) c = 0256; // fi
-	else if ( c == 0015) c = 0257; // fl
-	else if ( c == 0031) c = 0373; // fs
-	else if ( c == 0032) c = 0361; // ae
-	else if ( c == 0035) c = 0341; // AE
-	else if ( c == 0033) c = 0372; // oe
-	else if ( c == 0036) c = 0352; // OE
-	else if ( c == 0034) c = 0371; // oo
-	else if ( c == 0037) c = 0351; // OO
-	else if ( c == 0074) c = 0241; // ! inverted
-	else if ( c == 0076) c = 0277; // ? inverted
+  if (c == 0365) 
+    dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width('i'));
+  else if ( c == 0074)
+    dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width('!'));
+  else if ( c == 0076)
+    dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width('?'));
+  else if ( c == 014 )  /* fi */
+    dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width(0256));
+  else if ( c == 015 )  /* fl */
+    dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width(0257));
+  else if ( c == 031 )  /* german ss */
+    dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width(031));
+  else
+    dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width(c));
+  
+  if (curfont != 0) {
+    //	printf("set_a_char: c is %d %c\n", c, c);
+    if ( c == 0013) {
+      c = 0146; // ff - just one f in postscript
+      ps_command(CHAR, (int)c, 0, 0,0); // print the first one
     }
-
-    if (curfont == 0 && print_used[c] < 4) 
-      print_used[c]++;
-    ps_command(CHAR, (int)c, 0, 0,0);
-    if (highlight==On) { 
-	clear_highlight();  
-	ps_command(P_U_GRAY, 0, 0, 0, 0);
-    }
+    else if ( c == 0014) c = 0256; // fi
+    else if ( c == 0015) c = 0257; // fl
+    else if ( c == 0031) c = 0373; // fs
+    else if ( c == 0032) c = 0361; // ae
+    else if ( c == 0035) c = 0341; // AE
+    else if ( c == 0033) c = 0372; // oe
+    else if ( c == 0036) c = 0352; // OE
+    else if ( c == 0034) c = 0371; // oo
+    else if ( c == 0037) c = 0351; // OO
+    else if ( c == 0074) c = 0241; // ! inverted
+    else if ( c == 0076) c = 0277; // ? inverted
+  }
+  
+  if (curfont == 0 && print_used[c] < 4) 
+    print_used[c]++;
+  ps_command(CHAR, (int)c, 0, 0,0);
+  if (highlight==On) { 
+    clear_highlight();  
+    ps_command(P_U_GRAY, 0, 0, 0, 0);
+  }
 }
 void ps_print::use_font(int fontnum) 
 { 

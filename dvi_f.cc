@@ -21,7 +21,6 @@
  *
  */
 #include "tfm.h"
-#include <setjmp.h>
 #include "tab.h"
 #include "print.h"
 #include "sizes.h"
@@ -122,8 +121,13 @@ struct list *l)			/* data */
       p->p_movev((int)(5.5 * i_space));
     else p->p_movev(6 * i_space);
     if (ch[1] != '!') {
-      if (ch[1] == 'Q' ) 
+      if (ch[1] == 'Q' ) {
 	p->set_highlight();
+	if (f->m_flags & RED ) 
+	  p->red_highlight();
+	else
+	  p->gray_highlight();
+      }
       if (j == 0 || j == (*l_p - 1)) {
 	p->put_rule (1.3 * staff_h,
 		     val * d_i_space 
@@ -140,7 +144,14 @@ struct list *l)			/* data */
 	      + 5 * m_space
 	      + f->c_space;
 	  }
-	  p->put_rule(1.3 * staff_h, v_bar);
+	  if (f->flags & FIVE) {
+	    p->put_rule(1.3 * staff_h, v_bar - d_i_space);
+	  }
+	  else if (f->flags & FOUR) {
+	    p->put_rule(1.3 * staff_h, v_bar - 2 * d_i_space);
+	  }
+	  else
+	    p->put_rule(1.3 * staff_h, v_bar);
 	}
       }
       else {
@@ -195,7 +206,7 @@ struct list *l)			/* data */
 	      
 	if ( j == 0 || j == *l_p -1) { // thicken first, last barline
 
-	  p->put_rule (1.3 * staff_h, 4 * m_space + staff_h);
+	  //	  p->put_rule (1.3 * staff_h, 4 * m_space + staff_h);
 
 	  if (f->m_flags & TWOSTAFF ) {
 	    p->movev( -5 * m_space );
@@ -203,7 +214,7 @@ struct list *l)			/* data */
 	    p->movev( -str_to_inch(interspace) );
 	    p->movev ( -f->c_space );
 	    p->put_rule (1.3 * staff_h,
-			 4 * m_space + staff_h);
+	    		 4 * m_space + staff_h);
 	  }
 	}
 	else {
@@ -211,8 +222,8 @@ struct list *l)			/* data */
 	  if (f->m_flags & LONGBAR ) {
 	    p->push();
 	    p->put_rule (staff_h, 
-			 -( st_text + text_sp * f->n_text + m_space
-			    + f->c_space + str_to_inch(flag_to_staff)));
+	    		 -( st_text + text_sp * f->n_text + m_space + m_space
+	    		    + f->c_space + str_to_inch(flag_to_staff)));
 	    p->pop();
 	  }
 	  if (f->m_flags & TWOSTAFF ) {
@@ -266,11 +277,25 @@ struct list *l)			/* data */
       v_bar = 6 * d_i_space
 	+ st_text + text_sp * f->n_text 
 	+ f->c_space + 5 * m_space;
-      p->put_rule(str_to_inch(thick_bar), v_bar);
+      if (f->flags & FIVE) {
+	p->put_rule(str_to_inch(thick_bar), v_bar - d_i_space);
+      }
+      else if (f->flags & FOUR) {
+	p->put_rule(str_to_inch(thick_bar), v_bar - 2 * d_i_space);
+      }
+      else
+	p->put_rule(str_to_inch(thick_bar), v_bar);
     }
     else {
-      p->put_rule (str_to_inch(thick_bar),
-		   val * d_i_space + staff_h);
+      if (f->flags & FIVE) {
+        p->put_rule(str_to_inch(thick_bar), val * d_i_space + staff_h - d_i_space);
+      }
+      else if (f->flags & FOUR) {
+        p->put_rule(str_to_inch(thick_bar), val * d_i_space + staff_h  - 2 * d_i_space);
+      }
+      else
+	p->put_rule (str_to_inch(thick_bar),
+		     val * d_i_space + staff_h);
     }
     if (ch[1] == 'X' )
       ;
@@ -303,6 +328,8 @@ struct list *l)			/* data */
     p->push();
     p->moveh(-0.5 * f_a[0]->fnt->get_width(9));
     p->movev(f_a[0]->fnt->get_height(9));
+    if (f->line_flag != ON_LINE)
+      p->movev(0.5 * d_i_space);	// wbc Sept 06
     p->put_a_char (8);
     p->movev(5.5 * d_i_space);
     p->put_a_char (9);
@@ -325,6 +352,13 @@ struct list *l)			/* data */
 
       if (f->line_flag == ON_LINE) p->movev( -5.5 * d_i_space);
       else p->movev ( -6.0 * d_i_space);     /* to top of staff */
+
+      if (f->flags & FIVE) {
+	p->movev(i_space); 
+      }
+      else if (f->flags & FOUR) {
+	p->movev(2 * i_space); 
+      }
 
       p->movev ( -st_text);
       p->movev ( -text_sp * f->n_text - f->c_space);
@@ -787,8 +821,11 @@ struct list *l)			/* data */
 	      p->moveh  ( -1.0 * 
 			  (l->space + l->padding)/ 2.2
 			  + str_to_inch(".01 in"));
+	      // dec 06 - change to stop using staff_h which can change
+	      // 0.005 is from ps_print.cc ps_print::put_slash
+	      //
 	      p->put_rule((l->space + l->padding)/ 2.2, 
-			  staff_h);
+			  /* staff_h */ str_to_inch("0.005 in"));
 	    }
 	    else {
 	      /* finish double grid */
@@ -799,7 +836,7 @@ struct list *l)			/* data */
 	    double_grid++;
 	    p->moveh(0.006); /* fudge factor, unknown reason */
 	    p->put_rule((l->space + l->padding), 
-			staff_h);
+			/* staff_h */ str_to_inch("0.005 in"));
 	  }
 	}
 	p->pop();
@@ -811,7 +848,16 @@ struct list *l)			/* data */
 	p->movev(flag_to_staff); 
 	p->put_a_char(c);
 	// now we must draw the dot... feb 2001
-	if (ch[1] == '-') {
+	if (ch[1] == '-' || ch[3] == 'Z') {
+	  p->put_a_char(92);
+	}
+	if (f->flags & NOTES ) {
+	  p->movev(-(/*        6 * d_i_space */
+		     + st_text 
+		     + text_sp * f->n_text 
+		     + f->c_space 
+		     + 5 * m_space));
+	  p->put_a_char(c);
 	  p->put_a_char(92);
 	}
 	p->pop();
@@ -928,8 +974,9 @@ struct list *l)			/* data */
 	    || ch[1] == 'W') { /* draw the flag dot */
 	  p->push();
 	  if (ch[1] == '@') p->set_highlight();
-	  if (f->m_flags & PAREN ) 
-	    p->paren_highlight();
+	  if (f->m_flags & PAREN ) {
+	    p->clear_highlight(); /* p->paren_highlight()*/;
+	  }
 	  else if (f->m_flags & RED ) 
 	    p->red_highlight();
 	  else
@@ -1792,6 +1839,7 @@ void do_time_sig( char ch[], int j, int font,
 		p->movev ( -text_sp * f->n_text);
 		p->movev (-3.2 * m_space);
 		p->push();
+		p->push();
 
 		len = 0;
 		i=1;
@@ -1804,12 +1852,41 @@ void do_time_sig( char ch[], int j, int font,
 		i=1;
 		while (ch[i] != '-')  p->set_a_char(ch[i++]);
 		p->pop();
+
 		p->movev(1.8 * f_a[font]->fnt->get_height('1') + .3 * m_space);
 		j= ++i;	len = 0.0;
 		while (ch[j] != ' ')  
 		  len += 1.5 * f_a[font]->fnt->get_width(ch[j++]);
 		p->moveh (len / -2.0);
 		while (ch[i] != ' ')  p->set_a_char(ch[i++]);
+		p->pop();
+
+		if (f->m_flags & TWOSTAFF ) {
+		  len = 0;
+		  i=1;
+
+		  p->push();
+		  p->movev( -5 * m_space - staff_h);
+		  p->movev( -1 * str_to_inch(interspace) );
+		  p->movev( -text_sp * f->n_text );
+		  p->movev ( -f->c_space );
+		  p->push();
+
+		  while (ch[i] != '-') 
+		    len += 1.5 * f_a[font]->fnt->get_width(ch[i++]);
+		  p->moveh (len / -2.0);
+		  i=1;
+		  while (ch[i] != '-')  p->set_a_char(ch[i++]);
+		  p->pop();
+
+		  p->movev(1.8 * f_a[font]->fnt->get_height('1') + .3 * m_space);
+		  j= ++i;	len = 0.0;
+		  while (ch[j] != ' ')  
+		    len += 1.5 * f_a[font]->fnt->get_width(ch[j++]);
+		  p->moveh (len / -2.0);
+		  while (ch[i] != ' ')  p->set_a_char(ch[i++]);
+		  p->pop();
+		}
 	    }
 	}
 	else {		/* eg. 3 , no music */
