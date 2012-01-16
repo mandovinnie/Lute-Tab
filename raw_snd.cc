@@ -1,6 +1,6 @@
 #include <stdio.h>
 #ifndef __APPLE__
-#include <malloc.h>
+//#include <malloc.h>
 #endif
 #include "tab.h"
 #include "sound.h"

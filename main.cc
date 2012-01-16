@@ -7,6 +7,7 @@
 #include "dviprint.h"
 #include "ps_print.h"
 #include "pdf_print.h"
+#include "ascii.h"
 
 #include "sound.h"
 #include "midi_snd.h"
@@ -30,6 +31,7 @@ int my_main(int flags);
 
 extern jmp_buf b_env;
 sound *sp=0;
+
 
 int baroque;
 int n_system;
@@ -78,6 +80,7 @@ void init(file_info *f)
     f->include = 0;
     f->midi_patch = 0;
     f->start_system = 0;
+    f->transpose=0;
 }
 
 char *
@@ -246,6 +249,11 @@ void tfm_stuff(i_buf *b, file_info *f)
 	}
       } 
     }
+    //    else if (f->m_flags & ASCII) {
+    //     ap = new ascii();
+    //     f->utility = ap;
+    //   }
+
     while (more == END_MORE) {
 	(*pp)->page_head(); 
 	more = (*pp)->do_page(b, f_a);

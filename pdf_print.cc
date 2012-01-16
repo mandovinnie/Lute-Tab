@@ -23,11 +23,17 @@ int format_page(print *d_p, i_buf *i_b, font_list *f_l[], struct file_info *f);
 void pdf_bit_char(i_buf *pdf, int char_num);
 int my_pdf_isprint(int c);
 
+void print_xref_table();
+static struct xref_entry xref_list;
+void new_xref_entry(const int offset);
+void new_xref_list();
+
 int pdf_max_b_w=0;                  /* max bitmap width for pdf */
 int pdf_max_b_h=0;                  /* max bitmap height for pdf */
 int pdf_max_off_w=0;                /* max bitap width offset for pdf */
 int pdf_max_off_h=0;                /* max bitmap height offset for pdf */
 
+extern char *font_path;
 
 pdf_print::pdf_print(font_list *font_array[], file_info *f)
 {
@@ -37,6 +43,11 @@ pdf_print::pdf_print(font_list *font_array[], file_info *f)
     //    printf ("val %d\n", mm_to_dvi(17.6));
     //    printf ("val %f\n", dvi_to_inch(98670000));
     npages=0;
+    byte_count = 0;
+    xref_offset = 0;
+    generation = 0;
+    new_xref_list();
+
     if (f->m_flags & A4 ) { // a4 is  297mm*210mm
       if (!(f->flags & ROTATE)) 
 	pdf_top_of_page = 98670000 +  6563672/* 6712847 */;
@@ -96,10 +107,12 @@ void pdf_print::file_head()
     if (nodump) 
       return;
 
-    pdf_header.PutString("%PDF-1.4");
-    //    if (f_i->m_flags & EPSF )
-    //      pdf_header.PutString(" EPSF-3.0");
-    pdf_header.PutString("\n");
+    byte_count =  pdf_header.PutStringC("%PDF-1.4\n");
+    byte_count += pdf_header.PutStringC("%’");
+    byte_count += pdf_header.PutStringC("\n");
+
+    new_xref_entry(byte_count);
+
 
     //    if (!(f_i->flags & ROTATE) && npages < 2) {
     //	int val;
@@ -119,47 +132,47 @@ void pdf_print::file_head()
     //    }
     //    else /* no rotate, many pages */
     //	pdf_header.PutString("%%BoundingBox:  50 65 555 740\n");
-    pdf_header.PutString("%%Creator: (tab, version ");
-    pdf_header.PutString(VERSION);
-    pdf_header.PutString(", by Wayne Cripps)\n");
-    pdf_header.PutString("%%Creation Date: ");
-    t = time(0);
-    pdf_header.PutString( ctime(&t));
-    pdf_header.PutString("%%Orientation: ");
-    if (!(f_i->flags & ROTATE)) 
-	pdf_header.PutString("Portrait\n");
-    else
-	pdf_header.PutString("Landscape\n");
-    pdf_header.PutString("%%Pages: ");
-    pdf_header.Put10(npages);
-    pdf_header.PutString("\n");
-    pdf_header.PutString("%%PageOrder: Ascend\n");
-#ifndef MAC
-    pdf_header.PutString("%%Title: (");
-    pdf_header.PutString(f_i->file);
-    pdf_header.PutString(")\n");
-#endif
-    pdf_header.PutString("%%EndComments\n");
+    //pdf_header.PutString("%%Creator: (tab, version "); 
+    //pdf_header.PutString(VERSION);
+    //pdf_header.PutString(", by Wayne Cripps)\n");
+    //pdf_header.PutString("%%Creation Date: ");
+    //t = time(0);
+    //pdf_header.PutString( ctime(&t));
+    //pdf_header.PutString("%%Orientation: ");
+    //if (!(f_i->flags & ROTATE)) 
+    //	pdf_header.PutString("Portrait\n");
+    //   else
+    //	pdf_header.PutString("Landscape\n");
+    //pdf_header.PutString("%%Pages: ");
+    //pdf_header.Put10(npages);
+    //pdf_header.PutString("\n");
+    //pdf_header.PutString("%%PageOrder: Ascend\n");
+    //#ifndef MAC
+    //pdf_header.PutString("%%Title: (");
+    //pdf_header.PutString(f_i->file);
+    //pdf_header.PutString(")\n");
+    //#endif
+    //pdf_header.PutString("%%EndComments\n");
 
-    pdf_header.PutString("%%BeginDefaults\n");
+    //pdf_header.PutString("%%BeginDefaults\n");
 //    pdf_header.PutString("%%PageBoundingBox: 50 65 555 740\n");
-    pdf_header.PutString("%%PageOrientation: ");
-    if (!(f_i->flags & ROTATE)) 
-	pdf_header.PutString("Portrait\n");
-    else
-	pdf_header.PutString("Landscape\n");
-    pdf_header.PutString("%%EndDefaults\n");
+    //pdf_header.PutString("%%PageOrientation: ");
+    //if (!(f_i->flags & ROTATE)) 
+    //	pdf_header.PutString("Portrait\n");
+    //else
+    //	pdf_header.PutString("Landscape\n");
+    //pdf_header.PutString("%%EndDefaults\n");
  
-    pdf_header.PutString("%%BeginProlog\n");
-    pdf_header.PutString("%%EndProlog\n");
-    pdf_header.PutString("%%BeginSetup\n");
-    if (f_i->flags & DPI600) 
-	pdf_header.PutString("%%Feature: *Resolution 600\n");
-    else if (f_i->m_flags & DPI1200) 
-	pdf_header.PutString("%%Feature: *Resolution 1200\n");
-    else if (f_i->m_flags & DPI2400) 
-	pdf_header.PutString("%%Feature: *Resolution 2400\n");
-    else pdf_header.PutString("%%Feature: *Resolution 300\n");
+    //pdf_header.PutString("%%BeginProlog\n");
+    //pdf_header.PutString("%%EndProlog\n");
+    //pdf_header.PutString("%%BeginSetup\n");
+    //if (f_i->flags & DPI600) 
+    //	pdf_header.PutString("%%Feature: *Resolution 600\n");
+    //else if (f_i->m_flags & DPI1200) 
+    //	pdf_header.PutString("%%Feature: *Resolution 1200\n");
+    //else if (f_i->m_flags & DPI2400) 
+    //	pdf_header.PutString("%%Feature: *Resolution 2400\n");
+    //else pdf_header.PutString("%%Feature: *Resolution 300\n");
 
 #ifdef MAC
     strcpy(pk_name, "");
@@ -179,6 +192,11 @@ void pdf_print::file_head()
     p=(LPBYTE)malloc(dwSize);
     if(RegQueryValueEx(hKey,"pkDir",NULL,&dwType,p,&dwSize) != ERROR_SUCCESS)
 #else /* not MAC or WIN32 */
+      if (font_path) {
+	//        fprintf (stderr, "tfm.c - setting font path %s from command line\n", font_path);
+        p = font_path;
+      }
+      else
 	p = getenv("TABFONTS");
     if (p == NULL ) 
 #endif /* WIN32 */
@@ -230,9 +248,9 @@ void pdf_print::file_head()
 
     read_pk_file(&pk_in, this);
 
-    make_pdf_font(&pdf_header);
+    //    make_pdf_font(&pdf_header);
 
-    pdf_header.PutString("%%EndSetup\n");
+    //    pdf_header.PutString("%%EndSetup\n");
 
     if (f_name[0]) {
 	pdf_header.dump( f_name, Creat);
@@ -256,6 +274,7 @@ void pdf_print::define_all_fonts()
 
 void pdf_print::page_head()
 {
+  return;
   // parens around name string for Rainer Jan 2002 wbc
     pr_out->PutString("%%Page: (");
     pr_out->PutString(f_i->file);
@@ -287,21 +306,35 @@ void pdf_print::page_head()
 
 void pdf_print::file_trail()		// write_postamble
 {
-    flush();
-    pr_out->PutString("%%Trailer\n");
-    pr_out->PutString("%%EOF\n");
+  char buf[80];
+  flush();
+
+  file_xref();
+
+  pr_out->PutString("trailer\n");
+  sprintf (buf, "<< /Size %d\n", xref_count );
+  pr_out->PutString(buf);
+  pr_out->PutString("<< /Root 2 0 R\n");
+  pr_out->PutString(">>\n");
+
+  pr_out->PutString("startxref\n");
+  pr_out->Put10(byte_count);
+  pr_out->PutString("\n");
+  pr_out->PutString("%%EOF\n"); //  official last line!
 }
 
 void pdf_print::page_trail()
 {
 // why? 	reset_dvi_vh();
-    flush();
-    pr_out->PutString("pgsave restore\n");
-    pr_out->PutString("showpage\n");}
+//    flush();
+//    pr_out->PutString("pgsave restore\n");
+//    pr_out->PutString("showpage\n");
+}
 
 int pdf_print::do_page(i_buf *i_b,  struct font_list *f_a[])
 {
     npages++;
+    return (0);
     return (format_page(this, i_b, f_a, f_i));
 }
 
@@ -1233,4 +1266,79 @@ void pdf_print::comment(const char *string)
     //	pdf_command(RAW, (int)*c, 0, 0, 0);
     //	c++;
     //    }
+}
+
+
+void new_xref_list()
+{
+  fprintf(stderr, "first xref entry\n");
+
+  xref_root = (xref_entry *) malloc (sizeof (xref_entry));
+  xref_root->byte_offset = 0;
+  xref_root->generation = 65535;
+  xref_root->use = 'f';
+  xref_root->next=0;
+  xref_count = 1;
+}
+
+void new_xref_entry(const int offset)
+{
+  xref_entry *t, *u;
+
+  fprintf(stderr, "adding xref entry\n");
+
+  t = (xref_entry *) malloc (sizeof (xref_entry));
+  
+  t->byte_offset = offset;
+  t->generation = 0;
+  t->use = 'n';
+  t->next = 0;
+
+  xref_count += 1;
+  
+  u = xref_root;
+  while (u->next) {
+    fprintf(stderr, "increment\n");
+    u = u->next;
+  }
+  u->next = t;
+
+}
+
+void pdf_print::file_xref()
+{
+  xref_entry *u;
+  char tstring[20];
+
+  pr_out->PutString("xref\n");
+  sprintf (tstring, "%d %d\n", 0, xref_count);
+  pr_out->PutString(tstring);
+
+  u = xref_root;
+  if (! u ) {
+    dbg0 (Error, "pdf_print: file_xref: uninitialized list");
+  }
+
+  while (u) {
+    sprintf (tstring, "%010d %05d n \n", u->byte_offset, 0);
+    pr_out->PutString(tstring);
+    u = u->next;
+    // free nodes here
+  }
+}
+
+void pdf_print::do_catalog()
+{
+  char buf[80];
+  pr_out->PutString("<< /Type /Catalog");
+  sprintf (buf, "/Pages /Kids [\n");
+  pr_out->PutString( buf );
+  sprintf (buf, "] /Count %d \n", 1);
+  pr_out->PutString( buf );
+  pr_out->PutString(">>\nendobj\n"); 
+}
+
+void pdf_print::do_page_tree() 
+{
+ pr_out->PutString("<< /Type /Pages");
 }

@@ -105,6 +105,8 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	      if (!strncmp(&buf[1], "twostaff", 8)) {
 		goto end;
 	      }
+	      dbg1(Warning, "getsystem: flag -%c in middle of a system\n", 
+		   (void *)*pp );
 	      break;
 	    case 'e':
 	    case 'b':
@@ -600,19 +602,31 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		}
 		/*  after ornaments */
 		if ((cc = buf[i + skip + 1]) == '&' ) {
-		    cc = buf[i + (skip += 2)];
-		    if (cc == '*' ) cc = '.'; /* was Z */
-		    if (cc == '%' ) cc = ':'; /* was Z */
-		    if (cc == '\n') {
-		      dbg2(Warning, 
-	    "tab: getsystem: & with no character after it line %d sys %d\n",
-			   (void*)cur_line,
-			   (void*)f->cur_system);
-		      buf[i + (skip += 2)]= ' ';
-		      buf[i + (skip += 3)]= '\n';
-		      cc = ' ';
-		    }
-		    a_ornament[i] = cc;
+		  char ccc;
+		  cc = buf[i + (skip += 2)];
+		  if (cc == '*' ) cc = '.'; /* was Z */
+		  if (cc == '%' ) cc = ':'; /* was Z */
+
+		  if (cc == ']') {
+		    ccc = buf[i + (skip += 1)];
+		    
+		    if ( ccc == 'v' ) 
+		      cc = 133;
+		    if ( ccc == 'w' ) 
+		      cc = 134;
+
+		  }
+
+		  if (cc == '\n') {
+		    dbg2(Warning, 
+       	 "tab: getsystem: & with no character after it line %d sys %d\n",
+			 (void*)cur_line,
+			 (void*)f->cur_system);
+		    buf[i + (skip += 2)]= ' ';
+		    buf[i + (skip += 3)]= '\n';
+		    cc = ' ';
+		  }
+		  a_ornament[i] = cc;
 		}
 	    }
 	    for ( i=2; i< STAFF; i++) 

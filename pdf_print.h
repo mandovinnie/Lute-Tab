@@ -28,6 +28,11 @@ class pdf_print : public print {
     char f_name[120];		// this should be in pdf_print.h 
     double font_sizes[FONT_NAMES];				    
     int nodump;
+
+    unsigned int byte_count;
+    unsigned int xref_offset;
+    unsigned int generation;
+    
   public:
     char pdf_used[256];
 
@@ -37,11 +42,13 @@ class pdf_print : public print {
     pdf_print(font_list *f[], file_info *ff);
     ~pdf_print();
     void file_head();
-    void page_head();
+    void file_xref();
     void file_trail();
+    void page_head();
     void page_trail();
     int do_page(i_buf *b, font_list *f_l[]);
-
+    void do_catalog();
+    void do_page_tree();
     void put_rule(char *w, char *h);
     void p_moveh(const int hor);
     void p_movev(const int ver);
@@ -80,4 +87,15 @@ class pdf_print : public print {
     int get_page_number() {return (npages);}
     void comment(const char *string);
 };
+
+struct xref_entry {
+  unsigned int byte_offset;
+  unsigned int generation;
+  char use;
+  struct xref_entry *next;
+};
+
+static xref_entry *xref_root;
+static unsigned int xref_count;
+
 #endif /* _PDF_PRINT_ */

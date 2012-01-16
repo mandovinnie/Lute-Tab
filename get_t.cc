@@ -27,6 +27,8 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f, char buf[]);
 void args_from_string(char *buf, struct file_info *f);
 void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f);
 
+int  setflag(file_info *f, char * string, pass pass);
+
 int badchar(unsigned char p) {
   if ( p == 255 )
     return (0);
@@ -34,7 +36,7 @@ int badchar(unsigned char p) {
     return (1);
   else if ( p == '\n' )
     return (0);
-  else if (strchr("{%PLJWw0123456xYyQqeMSkbBiIp8vV .-\n\r*$[F#C", p)) 
+  else if (strchr("{%PLJWw0123456xYyQqeMSkbBiIp8vV .-\n\r*$[F#Cc", p)) 
     return(0);
   return(1);
 }
@@ -181,6 +183,29 @@ void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
     case 'K':
       ib->PutByte('K'); ib->PutByte(NEWLINE);
       break;   
+    case '$':
+      // code ripped out of getsystem.cc
+      {
+	int i, c, j=0;
+	char buffer[80];
+	char *bp;
+	bp = &buffer[0];
+	for (i=1; (c = buf[i]) != NEWLINE; i++) {
+	  *bp=c;
+	  bp++;
+	}
+	
+	buffer[--i] = 0;
+	if (setflag(f, buffer, first))
+	  break;            // return if we set the flag
+	ib->PutByte('$');
+	while (j < i && buffer[j] != '\0') {
+	  ib->PutByte(buffer[j++]);
+	}
+	ib->PutByte(NEWLINE);
+      }
+      
+      break;
     default:		/* assume that it must be lines of chords */
       r = getsystem(fi, ib, f, buf);	/* get line tab */
       f->cur_system++;

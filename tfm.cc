@@ -35,6 +35,7 @@ void mac_close_font_file();
 
 void open_pk_file(char * f, struct file_info *ff);
 double tfm_dvi_to_inch(int dvi);
+char *font_path=0;		// allow setting font path from cammand line
 
 #ifdef VAX
 #undef TFM_PATH
@@ -60,7 +61,7 @@ tfm_font::tfm_font(const char *font_name, double scale)
 
 #ifdef MAC
     strcpy(font_n, font_name);
-#else
+#else  /* not MAC */
 #if defined WIN32
     RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Software", 0 ,KEY_READ, &hKey);
     RegOpenKeyEx(hKey, "Wayne Cripps", 0 ,KEY_READ, &hSubKey);
@@ -75,8 +76,13 @@ tfm_font::tfm_font(const char *font_name, double scale)
     RegQueryValueEx(hKey,"tfmDir",NULL,&dwType,NULL,&dwSize);
     p=(LPBYTE)malloc(dwSize);
     if(RegQueryValueEx(hKey,"tfmDir",NULL,&dwType,p,&dwSize) != ERROR_SUCCESS)
-#else    
-    p = getenv("TABFONTS");
+#else    /* not WIN32 and not MAC */
+      if (font_path) {
+	//	fprintf (stderr, "tfm.c - setting font path %s from command line\n", font_path);
+	p = font_path;
+      }
+    else 
+	p = getenv("TABFONTS");
     if (p == NULL ) 
 #endif /* WIN32 */
 #ifdef TFM_PATH

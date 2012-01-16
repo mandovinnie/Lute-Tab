@@ -31,6 +31,7 @@
 void mapflag(print *p, font_list *f_a[], char c, struct file_info *f);
 void mapchar(print *p, font_list *f_a[], unsigned char c, struct file_info *f);
 void change_ps_font(char *line);
+int setflag(file_info *f, char * string, pass pass);
 
 // void put_slant(int bloc, int eloc);
 
@@ -394,7 +395,23 @@ struct list *l)			/* data */
 	p->pop();
 	break;
     case '$':			// swallow it
-	break;
+      //            fprintf(stderr, "in dvi_f: got $\n");
+      {
+	int i, j=0;
+	char buffer[80];
+	char *bp;
+	bp = &buffer[0];
+	for (i=1; (c = l->dat[i]) != NEWLINE && c ; i++) {
+	  *bp=c; 
+	  bp++;
+	}
+	
+	buffer[--i] = 0;
+	if (setflag(f, buffer, second))
+	  break;		// return if we set the flag
+      }  
+      
+      break;
     case 'm':
 	c = 191;
     case 'Q':			/* squiggle */
@@ -1026,6 +1043,7 @@ struct list *l)			/* data */
 		skip_spaces++; 
 		break;		/* dont print the blanks */
 	    case 'Q':
+		skip_spaces++; 
 		break;
 		/* this has been removed - it is for debugging
 		  case 'r':
@@ -1113,73 +1131,73 @@ struct list *l)			/* data */
 		do_w_uline(p, &skip_spaces, 7, 8, i);
 		break;
 	    default:
-		if (skip_spaces) {
-		    p->p_movev(skip_spaces * i_space);
-		    skip_spaces = 0;
+	      if (skip_spaces) {
+		p->p_movev(skip_spaces * i_space);
+		skip_spaces = 0;
+	      }
+	      /* case "-" */
+	      
+	      if (cc == '-') { /* draw vertical bar*/
+		double w = str_to_inch("0.006 in");
+		double h = d_i_space; 
+		double pp = 0.0;
+		
+		if (baroque) {
+		  w = 0.011;
 		}
-		/* case "-" */
-
-		if (cc == '-') { /* draw vertical bar*/
-		    double w = str_to_inch("0.006 in");
-		    double h = d_i_space; 
-		    double pp = 0.0;
-
-		    if (baroque) {
-			w = 0.011;
-		    }
-
-		    if (baroque && f->flags & PS && c == '+' 
-			&& ch[i+1] == '-' ) {
-			int s_h, s_v, e_h, e_v;
-			p->get_current_loc(&s_h, &s_v);
-			p->movev(i_space);
-			i++;
-			while (ch[i+1] == '-') {
-			    i++;
-			    p->movev(i_space);
-			}
-			// fudge - extend a bit
-			p->movev(0.03);
-			p->get_current_loc(&e_h, &e_v);
-			p->vert_curve(s_v - e_v);
-		    }
-		    else {
-			p->push();
-			p->p_movev( i_space / 2);
-			p->moveh(0.3 * EM); /* fudge factor! */
-			if ( strchr(" -G", (int)(ccc = ch[i + 1]))) {
-			    pp = 0.0;
-			    h = d_i_space;
-			}
-			else if (strchr("dl", (int)ccc)) {
-			    pp = str_to_inch("-7.0 pt");
-			    h = str_to_inch("3.0 pt");			
-			}
-			else if (strchr("ib", (int)ccc)) {
-			    pp = str_to_inch("-4.0 pt");
-			    h = str_to_inch("6.0 pt");			
-			}
-			else if (strchr("jmnop", (int)ccc)) {
-			    pp = str_to_inch("-3.0 pt");
-			    h = str_to_inch("7.0 pt");			
-			}
-			else {
-			    pp = str_to_inch("-2.5 pt");
-			    h = str_to_inch("7.5 pt");			
-			}
-			p->movev(pp);
-			
-			//
-			//   I should use the real height of letter here!
-			//   p->movev(-1.0 * f_a[0]->fnt->get_depth(0, ccc));
-			//   h = d_i_space - f_a[0]->fnt->get_depth(0, ccc);
-
-			if (ch[i - 1] == 'G') 
-			    h -= str_to_inch("4.5 pt");
-			if (h > 0.0 )p->put_rule(w, h);
-			p->pop();
-		    }
-		} 
+		
+		if (baroque && f->flags & PS && c == '+' 
+		    && ch[i+1] == '-' ) {
+		  int s_h, s_v, e_h, e_v;
+		  p->get_current_loc(&s_h, &s_v);
+		  p->movev(i_space);
+		  i++;
+		  while (ch[i+1] == '-') {
+		    i++;
+		    p->movev(i_space);
+		  }
+		  // fudge - extend a bit
+		  p->movev(0.03);
+		  p->get_current_loc(&e_h, &e_v);
+		  p->vert_curve(s_v - e_v);
+		}
+		else {
+		  p->push();
+		  p->p_movev( i_space / 2);
+		  p->moveh(0.3 * EM); /* fudge factor! */
+		  if ( strchr(" -G", (int)(ccc = ch[i + 1]))) {
+		    pp = 0.0;
+		    h = d_i_space;
+		  }
+		  else if (strchr("dl", (int)ccc)) {
+		    pp = str_to_inch("-7.0 pt");
+		    h = str_to_inch("3.0 pt");			
+		  }
+		  else if (strchr("ib", (int)ccc)) {
+		    pp = str_to_inch("-4.0 pt");
+		    h = str_to_inch("6.0 pt");			
+		  }
+		  else if (strchr("jmnop", (int)ccc)) {
+		    pp = str_to_inch("-3.0 pt");
+		    h = str_to_inch("7.0 pt");			
+		  }
+		  else {
+		    pp = str_to_inch("-2.5 pt");
+		    h = str_to_inch("7.5 pt");			
+		  }
+		  p->movev(pp);
+		  
+		  //
+		  //   I should use the real height of letter here!
+		  //   p->movev(-1.0 * f_a[0]->fnt->get_depth(0, ccc));
+		  //   h = d_i_space - f_a[0]->fnt->get_depth(0, ccc);
+		  
+		  if (ch[i - 1] == 'G') 
+		    h -= str_to_inch("4.5 pt");
+		  if (h > 0.0 )p->put_rule(w, h);
+		  p->pop();
+		}
+	      } 
 
 		/* big numbers for bass strings */
 
@@ -1258,21 +1276,24 @@ struct list *l)			/* data */
 		    else p->put_a_char (249);
 		    p->pop();
 		}
-		else if (cc == '.') {
-		    p->push();
-		    if (f->line_flag == ON_LINE) {
-			if (c == '+' && baroque) {
-			    p->movev (italian_offset);
-			    p->movev (.35 * d_i_space);
-			}
-			else {
-			    p->movev (italian_offset);
-			    p->movev (-.2 * d_i_space);
-			}
-		    }
-		    p->put_a_char(cc);  /* draw dot */
-		    p->pop();
+	      else if (cc == '.') {
+		p->push();
+		if (baroque && l->dat[i-1] == 'E' ) {
+		  p->moveh ( "0.02 in");
 		}
+		if (f->line_flag == ON_LINE) {
+		  if (c == '+' && baroque) {
+		    p->movev (italian_offset);
+		    p->movev (.35 * d_i_space);
+		  }
+		  else {
+		    p->movev (italian_offset);
+		    p->movev (-.2 * d_i_space);
+		  }
+		}
+		p->put_a_char(cc);  /* draw dot */
+		p->pop();
+	      }
 		else if (cc == '*') {
 		    p->put_a_char(64); /* star */
 		}
@@ -1299,7 +1320,7 @@ struct list *l)			/* data */
 		  //   p->put_a_char('D');
 		    mapchar(p, f_a, 'D', f);
 		}
-		else if (strchr(".+:#", (int)cc) &&
+		else if (strchr(".+:#", (int)cc) && nxt &&
 			 strchr( "dD", (int)nxt[i])) {
 		    p->push();
 		    p->movev("0.02 in");

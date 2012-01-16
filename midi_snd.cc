@@ -1,6 +1,6 @@
 #include <stdio.h>
 #ifndef __APPLE__
-#include <malloc.h>
+//#include <malloc.h>
 #endif
 #include "tab.h"
 #include "version.h"
@@ -119,6 +119,37 @@ midi_snd::play(const double time)
   }
   tt=0;
   //  printf("midi_snd play count = %d %f\n", count, time);
+}
+
+void
+midi_snd::rest(const double time)
+{
+  writeVarLen(0);	  /* delta time */
+  buf[count++] = (char)0x90;  /* note on channel 0*/
+  buf[count++] = (char)60; /* the note - 60 = middle c*/
+  buf[count++] = (char)0;	  /* velocity */
+  
+  writeVarLen((unsigned int) time * 3);	  /* delta time */
+  
+  buf[count++] = (char)0x80;  /* note on channel 0*/
+  buf[count++] = (char)60; /* the note - 60 = middle c*/
+  buf[count++] = (char)64;	  /* velocity */
+  
+  tt=0;
+}
+
+void midi_snd::play_note(const int note, const double time)
+{
+   writeVarLen(0);	  /* delta time */
+  buf[count++] = (char)0x90;  /* note on channel 0*/
+  buf[count++] = (char)note; /* the note - 60 = middle c*/
+  buf[count++] = (char)64;	  /* velocity */
+  
+  writeVarLen((unsigned int) time * 3);	  /* delta time */
+  
+  buf[count++] = (char)0x80;  /* note on channel 0*/
+  buf[count++] = (char)note; /* the note - 60 = middle c*/
+  buf[count++] = (char)64;	  /* velocity */
 }
 
 void midi_head()

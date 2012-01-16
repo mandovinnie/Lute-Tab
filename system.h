@@ -73,6 +73,8 @@ double print_special_char(char **pp, print *p, i_buf *i_b,
 struct font_list *add_font(char *name, double scale);
 char * ps_map(char * name);
 
+void do_ascii(struct list *l, struct file_info *f, i_buf *i_b);
+
 extern double st_text;
 extern double m_space;
 extern char flag_to_staff[];

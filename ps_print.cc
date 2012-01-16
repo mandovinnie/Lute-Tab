@@ -28,6 +28,7 @@ int max_b_h=0;                  /* max bitmap height for ps */
 int max_off_w=0;                /* max bitap width offset for ps */
 int max_off_h=0;                /* max bitmap height offset for ps */
 
+extern char *font_path;
 
 ps_print::ps_print(font_list *font_array[], file_info *f)
 {
@@ -179,6 +180,11 @@ void ps_print::file_head()
     p=(LPBYTE)malloc(dwSize);
     if(RegQueryValueEx(hKey,"pkDir",NULL,&dwType,p,&dwSize) != ERROR_SUCCESS)
 #else /* not MAC or WIN32 */
+      if (font_path) {
+	//	fprintf (stderr, "ps_print.c - setting font path %s from command line\n", font_path);
+	p = font_path;
+      }
+      else 
 	p = getenv("TABFONTS");
     if (p == NULL ) 
 #endif /* WIN32 */

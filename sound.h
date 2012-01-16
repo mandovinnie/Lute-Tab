@@ -9,4 +9,6 @@ public:
   virtual ~sound();
   virtual void add(const int note) = 0;
   virtual void play(const double time)= 0;
+  virtual void rest(const double time)= 0;
+  virtual void play_note(const int note, const double time) = 0;
 };

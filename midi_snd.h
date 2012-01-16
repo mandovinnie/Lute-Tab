@@ -20,4 +20,6 @@ public:
   ~midi_snd();
   void add(const int note);
   void play(const double time);
+  void rest(const double time);
+  void play_note(const int note, const double time);
 };

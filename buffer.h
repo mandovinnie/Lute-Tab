@@ -23,6 +23,7 @@ class buffer {
     virtual void PutByte(const char c);
     void PutLine(const char * l);	/* newline on end */
     void PutString(const char * l);	/* no newline */
+    int  PutStringC(const char * l){PutString(l);return strlen(l);}
     void PutChar(const char c) {PutByte(c);}		/* ascii */
     void Put10(const int num);        /* format decimal */
     void Put16(const int num);        /* format hexidecimal */

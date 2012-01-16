@@ -7,12 +7,15 @@
 #include "print.h"
 #include "tfm.h"
 #include "system.h"
+#include "ascii.h"
 
 /* EXTERNAL */
 extern char mus_space[];
 extern char interspace[];
 
 static int first_2=0;
+
+ascii *ap=0;
 
 void
 pass2(print *p, i_buf *i_b, font_list *f_a[], int *l_p, struct file_info *f, double *extra)
@@ -31,6 +34,11 @@ pass2(print *p, i_buf *i_b, font_list *f_a[], int *l_p, struct file_info *f, dou
 
     p->push();
 
+    if (f->m_flags & ASCII) {
+      ap = new ascii();
+      f->utility = ap;
+    }
+
     for ( j=0; j < *l_p && l; j++) {	/* loop through line of notes */
       //	printf ("pass 2: %s\n", l->dat);
 
@@ -38,14 +46,20 @@ pass2(print *p, i_buf *i_b, font_list *f_a[], int *l_p, struct file_info *f, dou
 	    f->line_flag = BETWEEN_LINE;
 	    score(p, l, f, i_b, f_a);
 	}
+	else if (f->m_flags & ASCII ) {
+	  //	  dbg0 (Warning, "pass2: ascii\n");
+	  do_ascii(l, f, i_b);
+	}
 	else 
-	dvi_format(p, i_b, f_a, l_p, j, f, l);
+	  dvi_format(p, i_b, f_a, l_p, j, f, l);
 
 	if (! l->next) break;
 	l = l->next;
 	//	free (l->prev);
     }
     
+    if (ap) delete (ap);
+
     while (l->prev) {
       if (l->notes)   free (l->notes);
       if (l->notes2)  free (l->notes2);

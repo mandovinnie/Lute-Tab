@@ -52,7 +52,7 @@ TLOC='"."'
 # TLOC = '"/net/wbc/src/nnt"'
 # TLOC = '"/usr/aeolus1/wbc/src/nnt"'
 # TLOC = '"/home/wbc/nnt"'
-# TLOC = '"/Users/wc/nnt"'
+# TLOC = '"/Users/wbc/nnt"'
 #
 # CXXFLAGS = -g  -DTFM_PATH=${TLOC} -UX_WIN -Wtraditional -Wshadow  -Wpointer-arith -Wcast-qual  -Wcast-align -Wwrite-strings -Wconversion -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations  -Wnested-externs -Woverloaded-virtual -Winline
 #
@@ -71,7 +71,7 @@ OBJS = args.o buffer.o dbg.o draw.o dvi.o dvi_f.o dviprint.o \
 	map.o notes.o pass1.o pass2.o pk_font.o pk_in.o \
 	print.o ps_print.o score.o sizes.o tab_p.o tfm.o \
 	title.o tree.o uline.o sound.o beam.o raw_snd.o midi_snd.o \
-	pdf_print.o
+	pdf_print.o ascii.o
 
 
 SOURCES = main.cc file_in.cc tfm.cc dvi.cc buffer.cc i_buf.cc \
@@ -79,13 +79,13 @@ SOURCES = main.cc file_in.cc tfm.cc dvi.cc buffer.cc i_buf.cc \
 	title.cc draw.cc pass1.cc pass2.cc dvi_f.cc map.cc notes.cc \
 	dviprint.cc score.cc uline.cc ps_print.cc \
 	pk_in.cc pk_font.cc dbg.cc tree.cc sound.cc beam.cc raw_snd.cc \
-	midi_snd.cc pdf_print.cc
+	midi_snd.cc pdf_print.cc ascii.cc
 
 
 HEADERS = buffer.h dbg.h file_in.h print.h system.h tfm.h pkfile.h\
 	dvi.h i_buf.h sizes.h tab.h dviprint.h ps.h pk_bit.h pk_input.h \
 	ps_print.h mac.h tree.h sound.h beam.h version.h raw_snd.h \
-	midi_snd.h pdf_print.h pdf.h 
+	midi_snd.h pdf_print.h pdf.h ascii.h
 
 all:	tab
 
@@ -132,7 +132,7 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	sample.tab demo.tab t.tab AboutTab.txt mac.cc mkdep \
 	version.pl makedepend
 
-DISTFILE = lute_tab4.3.10.tar
+DISTFILE = lute_tab4.3.20.tar
 
 distrib:	 ${DISTFILE}
 

@@ -200,6 +200,9 @@ void set_v(const char *value, struct file_info *f) {
   f->flags |= VERBOSE;
   dbg_set(Inter);}
 void set_V(const char *value, struct file_info *f) {}
+void set_wide(const char *value, struct file_info *f) {
+  f->m_flags |= AWIDE;
+}
 void set_W(const char *value, struct file_info *f) {
   f->line_flag = BETWEEN_LINE;
   f->flag_flag = S_ITAL_FLAGS; 
@@ -264,7 +267,7 @@ void set_o(const char *value, struct file_info *f)  {
 
 void set_tuning(const char *value, struct file_info *f)  { 
   extern char *arg_str;
-  //  dbg1(Warning, "in set_tuning %s\n", (void *) value);
+  // dbg1(Warning, "in set_tuning %s\n", (void *) value);
   arg_str=(char *)malloc(strlen(value)+1);
   strcpy(arg_str, value);
 }
@@ -363,6 +366,18 @@ void set_EPSF(const char *value, struct file_info *f)
         f->m_flags |= EPSF;
 }
 
+void set_ascii(const char *value, struct file_info *f)
+{
+        f->m_flags |= ASCII;
+}
+void set_fontpath(const char *value, struct file_info *f)
+{
+  extern char *font_path;
+  //  dbg1(Warning, "in set_fontpath %s\n", (void *) value);
+  font_path=(char *)malloc(strlen(value)+1);
+  strcpy(font_path, value);
+}
+
 void args(int argc, char ** argv, struct file_info *f)
 {
     char *aa=0;
@@ -454,6 +469,9 @@ void args(int argc, char ** argv, struct file_info *f)
       {"allDsdown", (void*)set_allDsdown},
       {"modernNotes", (void*)set_ModNotes},
       {"EPSF", (void*)set_EPSF},
+      {"ascii", (void*)set_ascii},
+      {"wide", (void*)set_wide},
+      {"fontpath", (void*)set_fontpath},
       {0, 0}
     };
 
@@ -465,8 +483,6 @@ void args(int argc, char ** argv, struct file_info *f)
 
 	if (**argv == '-') {
 	    (*argv)++;
-	    //r = (void *)at.get(*argv);
-	    //	    r = (void (*)(const char *, file_info *))at.get(*argv);
 	    r = (void(*)(const char*, file_info*))at.get(*argv);
 	    
 	    if (r) {
@@ -479,9 +495,25 @@ void args(int argc, char ** argv, struct file_info *f)
 	      dbg1(Warning, "tab: args: unknown flag %c\n", (void*)aa);
 	    }
 
+	    //swallow argument values here
+
 	    switch (argv[0][0]){
 	    case 't':
-	      if ( argv[0][1] != 'u') break;
+	      if ( argv[0][1] != 'u') 
+		break;
+	      else {
+		*argv++;
+		argc--;
+		break;		
+	      }
+	    case 'f':
+	      if ( argv[0][1] != 'o') 
+		break;
+	      else {
+		*argv++;
+		argc--;
+		break;		
+	      }
 	    case 'a':
 	      if ( argv[0][1] != 'f') break;
 	    case 'l':

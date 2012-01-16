@@ -189,6 +189,8 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  dbg0 ( Inter, "  Y"); 
 	else if (dd == 'Z') 
 	  dbg0 ( Inter, "  Z"); 
+	else if (dd == '^') 
+	  dbg0 ( Inter, "  ^"); 
 	else if (dd == 's') 
 	  dbg0 ( Inter, " //"); 
 	else if (dd == 254) 
@@ -197,6 +199,8 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  dbg0 ( Inter, "///"); 
 	else if (dd == ' ') 
 	  dbg1 ( Inter, "  %1c", (void *)'X'); 
+	else if ( dd == '\n' )
+	  goto eend;
 	else if (dd >= 040 && dd <= 0100 )
 	  dbg1 ( Inter, "  %1c", (void *)((int)dd)); 
 	else if (dd >= 0202 && dd <= 0213)
@@ -210,6 +214,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	else 
 	  dbg1 ( Inter, "%03d",  (void *)((int)dd)); 
       }
+    eend:
       dbg0 ( Inter, "\n"); 
     }
 
@@ -425,7 +430,6 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       weight = wp[2].weight;
       goto done;
     case '0':
-      //    case '$':
       l->padding = str_to_inch(wp[3].width);
       weight = wp[3].weight;
       goto done;
@@ -452,6 +456,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
     case '6':
       weight = wp[8].weight/2;
       goto done;
+    case '$':
     case 'O':			/* no size ! */
       l->padding = 0.0;
       weight = 0.0;
@@ -472,7 +477,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	}
       }
       // this is sort of a test Oct 2003
-      else if (l->next->dat[0] == '&') { // pad after ornaments
+      else if (l->next && l->next->dat[0] == '&') { // pad after ornaments
 	char jjj;
 	for (i=2; i<8; i++ ){
 	  if (l->next->dat[i] == 'x') {
@@ -506,6 +511,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
     case 'v':
     case 'j':
     case 'd':
+    case '$':
       weight = old_weight;
       break;
     default:
@@ -676,10 +682,10 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       l->padding = f_a[2]->fnt->get_width(d[1]);
       weight = /* W_TWO */ 0.01;
       break;
-    case '$':			// flags
+      //    case '$':			// flags
       //    case '-':
       //      fprintf(stderr,"pass1: here\n");
-      break;
+      //break;
     default:
       dbg2(Warning, "tab: pass1: unknown flag %d %s\n", 
 	   (void *)(int)c, (void *)l->dat );
@@ -785,8 +791,8 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       }	                              // end if (l->dat[1] == 
     }                                 // end processing line of notes
   end:
-    /* wbc added ij June 98 */
-    if (! strchr("xb.+^&F8*:dGTijD", c) && l->dat[1] != 'M') {
+    /* wbc added ij June 98  and v aug 2004 */
+    if (! strchr("xb.+^&F8*:dGTijD$v", c) && l->dat[1] != 'M') {
       old_flag = c;
       if (d[1] == '*' || d[1] == '.' ){
 	old_width = l->padding / 1.6;

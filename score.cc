@@ -36,6 +36,7 @@ extern char staff_height[];
 void put_note(print *p, int string, char c, int timeval, struct file_info *f);
 void score(print *p, double space, double width,  struct file_info *f, char *ch, char *prev);
 int find_note(int string, char c, struct file_info *f);
+int setflag(file_info *f, char * string, pass pass);
 #define OCTAVE 12
 
 /* low b-flat is 0 */
@@ -159,9 +160,15 @@ int find_note(
     else 
 	str = strings;
 
-    if (f->num_flag == ITAL_NUM && ((c >= '0' && c <= '9') || c == 'x')) {
+    if (f->num_flag == ITAL_NUM && (
+	    (c >= '0' && c <= '9') 
+	    || c == 'x') || c == 'y' || c == 'z') {
 	if ( c == 'x' )
 	    fret = 10;
+	else if ( c == 'y' )
+	    fret = 11;
+	else if ( c == 'z' )
+	    fret = 12;
 	else
 	    fret = c  - '0';
 	note = str[7 - string] + fret;
@@ -193,10 +200,12 @@ score(print *p, struct list *l, struct file_info *f,
     double width=l->padding;
     char *ch=l->dat;
     char *prev=l->prev ? l->prev->dat: 0;
+    char *next=l->next ? l->next->dat: 0;
     int i;
     char c;
     int timeval=0;
     char cc = *ch;
+    int rest_note=1;			// clear this when there is a note to play
 
     //    printf("conv %f\n", conv);
     p->clear_highlight();
@@ -206,6 +215,7 @@ score(print *p, struct list *l, struct file_info *f,
     p->use_font(0);
 
     switch (cc) {
+    case 'B':
     case 'b':
 	p->movev(mus_space);
 	p->movev(10.0 * str_to_inch(mus_space));
@@ -224,6 +234,7 @@ score(print *p, struct list *l, struct file_info *f,
 	p->put_a_char('Z');
 	break;
     case 'G':
+      break;
     case 'R':
     case 'S':
       //    case 'T':
@@ -245,9 +256,9 @@ score(print *p, struct list *l, struct file_info *f,
 	if (baroque || f->flag_flag == CONTEMP_FLAGS) timeval = cc - '0' + 1;
 	else timeval = cc - '0';
 	goto rest;
-    case 'B':
-	timeval = -2;
-	goto rest;
+	//    case 'B':
+	//	timeval = -2;
+	//	goto rest;
     case 'W':
 	if (baroque || f->flag_flag == CONTEMP_FLAGS) timeval = -1;
 	else timeval = -2;
@@ -284,9 +295,27 @@ score(print *p, struct list *l, struct file_info *f,
 	    l->text = NULL;
 	}
 	break;
+    case '$':
+      //      fprintf(stderr, "in score: got $\n");
+      {
+	int i, j=0;
+	char buffer[80];
+	char *bp;
+	bp = &buffer[0];
+	for (i=1; (c = l->dat[i]) != NEWLINE; i++) {
+	  *bp=c; 
+	  bp++;
+	}
+	
+	buffer[--i] = 0;
+	if (setflag(f, buffer, second))
+	  break;		// return if we set the flag
+      }  
+      
     case 'U':			// do nothing
     case 'A':			// do nothing
     case 'i':			// do nothing
+    case 'd':
 	break;
     case 'f':
 	p->push();
@@ -317,14 +346,31 @@ score(print *p, struct list *l, struct file_info *f,
 	if (!strchr ((const char *)"+^i", (int)cc)) {
 	  for (i=2; i< STAFF; i++ ) {
 	    if ((c = tolower(ch[i])) != ' ') {
-	      if (c > 'm') continue;
+	      rest_note=0;
+	      if (c > 'p' && c != 'x') continue;                   // feb 04 wbc raised this.
 	      if ( prev && prev[0] == '+' && prev[i] == 'Q') {
 		p->set_highlight();
 	      }
 	      if ( i < 8 ) {
 		if (f->num_flag == ITAL_NUM &&
-		    (((c >= '0' && c <= '9') || c == 'x') && i < 8))
-		  put_note(p, i-1, c, timeval, f);
+		    (((c >= '0' && c <= '9') 
+		      || c == 'x') && i < 8)) {
+		  // 
+		  // Peter Nightingale uses !x, \.!x and \:!x for 10, 11, 12
+		  // 
+		  if ( c == 'x') {
+		    if (prev[i] == ':') {
+		      put_note(p, i-1, 'z', timeval, f);
+		    }
+		    else if (prev[i] == '.') {
+		      put_note(p, i-1, 'y', timeval, f);
+		    }
+		    else
+		      put_note(p, i-1, 'x', timeval, f);
+		  }
+		  else
+		    put_note(p, i-1, c, timeval, f);
+		}
 		else if (c == 'z')
 		  put_note(p, i-1, 'd', timeval, f); 
 		else if (c >= 'a' && c <= 'p')
@@ -353,6 +399,10 @@ score(print *p, struct list *l, struct file_info *f,
 	      }
 	      p->clear_highlight();
 	    }
+	    // else space here
+	    //  else {
+	    //  put_note(p, i-1, 255, timeval, f);
+	    //}
 	  }
 	  if (f->m_flags & SOUND) {
 	    // timeval is from -2 to 5 - 128 to 
@@ -384,9 +434,17 @@ score(print *p, struct list *l, struct file_info *f,
 	      break;
 	    }
 	    if (dot) t_val = 1.5 * t_val;
-	    sp->play(t_val/conv);
+	    // 
+	    // handle rests here
+	    // 
+	    if (rest_note) {
+	      sp->rest(t_val/conv);
+	    }
+	    else
+	      sp->play(t_val/conv);
 	  }
 	}
+
 	dot = 0;
 	break;
     }
@@ -398,7 +456,7 @@ score(print *p, struct list *l, struct file_info *f,
 
 void put_note(print *p, int string, char c, int timeval, struct file_info *f)
 {
-    int note, adj;
+    int note, adj=0;
     int pos=0;
 
     note = find_note(string, c, f);
@@ -406,6 +464,7 @@ void put_note(print *p, int string, char c, int timeval, struct file_info *f)
     p->push();
     p->movev("0.083 in");
     p->movev((double)(pos) * str_to_inch(mus_space) *  0.5);
+    // fprintf (stderr, "put_note: pos is %d %d %c\n", pos, adj, note);
 
     if (timeval == -3 ) p->put_a_char('W');
     else if (timeval == -2 ) p->put_a_char('J');         /* whole note*/

@@ -1,34 +1,95 @@
-% $start-system=2
+%$start-system=2
 %-b
 %$pstitlefont=pzcmi
 %$psalttitlefont=ptmr
 %$titlesize=18
 %$flagstyle=thin
 %$charstyle=
-$numstyle=italian
+%$numstyle=italian
 %$line=o
 %$midi-patch=14
 %-highlightred
 %-tuning c4d4e4f+4g4a3d3f+3a2d2f+2
 %$alttextsize=14
 
--P 23
+%-P 23
 -i
--C
+%-C
+%-Q
 
 {^05testte\"st^02test}
 
 %-twostaff
 %$sys-skip=0.2
--l "1.1 in"
+-l "6.1 in"
 
-V ".5 in"
+%V ".5 in"
 
 b
+2 \:!x
+2
+2 \.!x
+2 !x
+2 9
+2 8
+%2 \:!x
+b
+e
+
+b
+2 m
+2 n
+2 o
+2 p
+b
+e
+W.abcdefg
+w.abcdefg
+0.abcdefg
+1.abcdefg
+2.abcdefg
+3.abcdefg
+b
+
+b
+Wabcdefg
+wa c e g
+0+a*b+c
+1abcdefg
+2ab&+cde&_fg
+3abcdefg
+b
+
+b
+i
+0abcdefg
+i
+xabcdefg
+1abcdefg
+xabcdefg
+v
+xabcdefg
+xabcdefg
+x
+bv
+b
+e
+
+
+
+b
+1- "'a "`a
+1-"\a
+%1-\a
+1-"/a
+1-*/a
+1- /a
+b
+e
 1-a&x
 1-a&,
 1-a&_
-1-a
+1 Qa
 b!
 1
 b

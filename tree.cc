@@ -451,9 +451,8 @@ void set_description(const char *value, struct file_info *f)
 void set_tempo(const char *value, struct file_info *f)
 {
   extern double conv;
-  
   conv = atof(value);
-
+  //   fprintf(stderr, "in set tempo %f\n", conv);
 }
 
 void set_noteconv(const char *value, struct file_info *f)
@@ -482,6 +481,12 @@ void set_start_system(const char *value, struct file_info *f)
   int i = atoi(value);
   f->start_system = i;
 }
+void set_transpose(const char *value, struct file_info *f)
+{
+  int i = atoi(value);
+  f->transpose = i;
+}
+
 /*
 void setit(void *r, const char *flag, struct file_info *f)
 {
@@ -526,6 +531,7 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {"sys-skip",   (void *)set_sys_skip},
     {"midi-patch",   (void *)set_midi_patch},
     {"start-system", (void *)set_start_system},
+    {"transpose",    (void *)set_transpose},
     {0,0}
   };
 
@@ -549,11 +555,12 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {"description", (void *)first},
     {"val",  (void *)first},
     {"line",       (void *)second},
-    {"tempo",      (void *)first},
+    {"tempo",      (void *)second},
     {"note-conversion", (void *)first},
     {"sys-skip",   (void *)first},
     {"midi-patch",   (void *)first},
     {"start-system",   (void *)first},
+    {"transpose",    (void *)first},
     {0,0}
   };
   

@@ -52,6 +52,10 @@ Options:
     -alttitle	use alternate title font
     -alttitle-off use regular title font
     -a4 adjust for a4 paper size
+    -ascii  print "ascii tab" for email
+	this option understands the -Q option to cram music into a
+	small space.  also the -wide option to print on 132 character
+	wide paper (if you have an old fashioned high speed printer)
     -autoKey sets key signature on all lines as on first line
     -2 prints 1200 dpi
     -1200 does the same
@@ -87,6 +91,7 @@ Options:
     -f resets to french style (the default)
     -fc sets the characters to standard style
     -ff sets the flags to standard style
+    -fontpath  <path> sets font directory to path
     -G prints a copyright notice at the bottom of the page
        useful if you have the right name.....
     -h converts french tab to italian tab automatically!
@@ -163,6 +168,7 @@ Options:
     -V gives the version and date
 	-x notes on the line, thin flags, standard characters
 	   italian numers and italian notes.
+    -wide in ascii mode prints 132 characters wide.
     -X supresses note expansion for debugging
     -Y supresses word fitting for debugging
     
@@ -273,13 +279,13 @@ P		- pagenumber
 Q		- a flourish for the end
 q		- same
 R		- a rest (hat) - followed by the flag number - as in R2
-S		- a time signature - ie S34 or SC
+S		- a time signature - ie S3-4 or SC
 		  a dash, as 12-8 draws the signature in the music
 		  rather than the tablature.
 		  S2| or S3| draws a line throught the number
 		  a single digit followed by Q is highlighted
 		  SO and So do Narvaez style time sig
-T		- text to go on system lines
+T		- text to go on system lines  (a tab gives a second line)
 t 		- first note of a triplet, followed by the
 		  followed by the number of lines there would be
 	 	  if there were lines - eg. t3 a,x b, xb,
