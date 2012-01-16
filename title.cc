@@ -74,7 +74,7 @@ format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
 	  return;
 	}
 	if (! f->title) {
-	  f->title = (char *)malloc(120);
+	  f->title = (char *)malloc(LLINE);
 	  tp = f->title;
 	}
 	*tp++ = *b_bp;

@@ -1058,6 +1058,11 @@ beginchar (151, .9em#, 1.0cap#, 0);" a 1 bourdon";
  do_one_p;
 endchar;enddef;
 %
+def do_b_one =
+beginchar (8, 1.5em#, 1.5cap#, 0);" a baroque bass 1";
+ pickup pencircle xscaled 1.4wid yscaled .7wid; do_one_p;
+endchar;enddef;
+%
 def do_one_f =
 beginchar (141, .5em#, .7cap#, 0);" a small 1";
  pickup pencircle xscaled .8wid yscaled .3wid rotated 25;
@@ -1110,6 +1115,11 @@ penpos6(2.1wid,66);
 penstroke  z7e..z5e..z6e;
 endchar;enddef;
 %
+def do_b_two =
+beginchar (9, 1.5em#, 1.5cap#, 0);" a baroque bass 2";
+ pickup pencircle xscaled 1.4wid yscaled .7wid; do_two_p;
+endchar;enddef;
+%
 def do_three_p =
  x1=.15w; x4=.1w;
  y1=y2=.66h;
@@ -1141,15 +1151,21 @@ beginchar ("T", 1.8em#, 2.0cap#, 0);"a big three";
  x34 = .5[x3,x4];bot y34=0;
  draw z1{dir 100}..z11..z2..z5 &
  z5..z3..z34..{dir 80}z4;
-
+endchar;enddef;
+%
 def do_bbb =
 beginchar (153, .8em#, 1.0cap#, 0);" a 3 bourdon";
  pickup pencircle xscaled 1.0wid yscaled .5wid;
  do_three_p
 endchar;enddef;
 %
-
+def do_b_three =
+beginchar (10, 1.5em#, 1.5cap#, 0);" a baroque bass 3";
+ pickup pencircle xscaled 1.4wid yscaled .7wid; do_three_p;
 endchar;enddef;
+%
+
+% endchar;enddef;
 %
 def do_four_p =
  x1=x2=x3=.65w; lft x4=0w; x5=w; top y1=top y3=h; y2=0h; y4=y5=.27h;
@@ -1281,7 +1297,7 @@ endchar;enddef;
 %
 %
 def do_b_seven =
-beginchar (14, 1.5em#, 1.5cap#, 0);" a bourdon 6";
+beginchar (14, 1.5em#, 1.5cap#, 0);" a bourdon 7";
  pickup pencircle xscaled 1.5wid yscaled .7wid; do_seven_p;
 endchar;enddef;
 %
@@ -1303,6 +1319,12 @@ beginchar (148, .55em#, .7cap#, 0);" a small 8";
  pickup pencircle xscaled .8wid yscaled .3wid; do_eight_p;
 endchar;enddef;
 %
+def do_b_eight =
+beginchar (6, 1.5em#, 1.5cap#, 0);" a bourdon 8";
+ pickup pencircle xscaled 1.5wid yscaled .7wid; do_eight_p;
+endchar;enddef;
+%
+%
 def do_nine_p =
  x4=.1w;y4=.1h;
  x1=.2w;y1=-0.070h;
@@ -1317,6 +1339,11 @@ beginchar (159, .8em#, 1.0cap#, 0);" a 9 bourdon";
  %pencircle xscaled 1.0wid yscaled .5wid;
  pickup pencircle xscaled 1.2 wid yscaled .3wid rotated 30;
  do_nine_p;
+endchar;enddef;
+%
+def do_b_nine =
+beginchar (7, 1.5em#, 1.5cap#, 0);" a bourdon 9";
+ pickup pencircle xscaled 1.5wid yscaled .7wid; do_nine_p;
 endchar;enddef;
 %
 def do_nine_f =
@@ -1812,7 +1839,7 @@ def do_all =
   do_s_tie;do_b_tie;do_rpt;
   do_sharp;do_old_sharp; do_flat;
   do_solid;do_solid_o;do_solid_oo;do_solid_ooo;do_solid_oooo;do_solid_ooooo;
-  do_b_four;  do_b_five; do_b_six; do_b_seven;
+  do_b_one;do_b_two;do_b_three;do_b_four;do_b_five;do_b_six;do_b_seven;do_b_eight;do_b_nine;
   do_open;
   do_q_rest;do_e_rest;
 enddef;

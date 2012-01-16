@@ -129,8 +129,11 @@ void do_nmidi(struct list *l, struct file_info *f, i_buf *i_b)
       else if (l->dat[i+2] == 'x') {
 	midi_p->dat[i] = i_nmidi_strings[i] + 10;
       }
-      else if ((l->dat[7-i] >= 'a') && (l->dat[7-i] <= 'h')) {
+      else if ((l->dat[7-i] >= 'a') && (l->dat[7-i] <= 'i')) {
         midi_p->dat[i] = i_nmidi_strings[i] + (l->dat[7-i] -'a');
+      } 
+      else if (l->dat[7-i] == 'j' || l->dat[7-i] == 'k' || l->dat[7-i] == 'l') {
+        midi_p->dat[i] = i_nmidi_strings[i] + (l->dat[7-i] -'a' - 1);
       } 
       else 
 	midi_p->dat[i] = 0;

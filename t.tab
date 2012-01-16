@@ -1,8 +1,12 @@
 
+-b
 -twelvedots
 % {n\sln i\slt  i\sle }
+{A]/A]}
 
--l "1.3 in"
+-7
+
+-l "4.9 in"
 -i
 -Q
 -ts
@@ -10,15 +14,33 @@
 -C
 
 b
-%SO
-%So
+.
+b
+So
+b
 S0
+b
+S3
+b
+S3-4
 1-N11 N10N11N12
 1-N12
 %0000000
 Y-0   00
+B
+1aaaaaa1
+x      2
+x      3
+x      4
+x      5
+x      6
+x      7
+x      8
+x      9
 Q
 b
+.
+B
 e
 x3
 x4
