@@ -297,7 +297,7 @@ struct list *l)			/* data */
       else
 	p->put_rule (str_to_inch(thick_bar),
 		     val * d_i_space + staff_h);
-    }
+    } 
     if (ch[1] == 'X' )
       ;
     else check_bar(p, j, l_p, l);     
@@ -345,7 +345,7 @@ struct list *l)			/* data */
       p->p_movev((int)(1.5 * i_space));
     else p->p_movev(2 * i_space);
 
-    for (i=0; i < (f->flags & FOUR ? 3:f->flags & FIVE ? 4:5);i++) {
+    for (i=0; i < (f->flags & FOUR ? 3:f->flags & FIVE ? 4:f->m_flags & SEVEN ? 6:5);i++) {
       mapchar(p, f_a, /* ch[i+3] */'Z', f);
       p->p_movev(i_space);
     }
@@ -455,6 +455,8 @@ struct list *l)			/* data */
     p->movev( 5.9 * d_i_space);
     if (f->flags & CON_SEV ) 
       p->p_movev (i_space);
+    if (f->m_flags & SEVEN)  
+      p->movev(0.5 * d_i_space);
     if (f->line_flag == ON_LINE)
       p->p_movev (i_space/-2);
     p->put_a_char(c);
@@ -1301,18 +1303,39 @@ struct list *l)			/* data */
 	      
 	else if (cc >= '0' && cc <= '9' ) { // numbers  bourdons
 	  p->push();
-	  if (baroque && i == 8 && (cc == '4' 
-				    || cc == '5' || cc == '6'
-				    || cc == '7'  )) {
+	  if (baroque && i == 8 && (cc >= '1' && cc <= '9')) {
+	    if (f->m_flags & SEVEN ) 
+	      p->movev(d_i_space);
 	    p->movev(0.09);
-	    if (cc== '4')
-	      p->put_a_char(11);
-	    if (cc== '5')
-	      p->put_a_char(12);
-	    if (cc== '6')
-	      p->put_a_char(13);
-	    if (cc== '7')
-	      p->put_a_char(14);
+	    switch (cc) {
+	    case '1':
+	      p->put_a_char(8);
+		break;
+	    case '2':
+	      p->put_a_char(9);
+		break;
+	    case '3':
+		p->put_a_char(10);
+		break;
+	    case '4':
+		p->put_a_char(11);
+		break;
+	    case '5':
+		p->put_a_char(12);
+		break;
+	    case '6':
+		p->put_a_char(13);
+		break;
+	    case '7':
+		p->put_a_char(14);
+		break;
+	    case '8':
+		p->put_a_char(6);
+		break;
+	    case '9':
+		p->put_a_char(7);
+		break;
+	    }
 	  }
 	  else
 	    mapchar(p, f_a, (unsigned char)(cc - '0' + 150), f);
@@ -1806,8 +1829,12 @@ void do_time_sig( char ch[], int j, int font,
 		p->movev(3.0 * d_i_space);
 	    else 
 		p->movev(3.5 * d_i_space);
-	    if (f->flags & FOUR)  p->movev(-1 *  d_i_space);
-	    else if (f->flags & FIVE)  p->movev(d_i_space/ -2);
+	    if (f->flags & FOUR)  
+	      p->movev(-1 *  d_i_space);
+	    else if (f->flags & FIVE)  
+	      p->movev(d_i_space/ -2);
+	    else if (f->m_flags & SEVEN)  /* wbc - watch this */ 
+	      p->movev(0.5 * d_i_space);
 		  
 	    p->push();		/* upper characters */
 	    i=1;
@@ -1925,6 +1952,8 @@ void do_time_sig( char ch[], int j, int font,
 	    else p->movev(3.5 * d_i_space);
 	    if (f->flags & FOUR)  p->movev(-1 *  d_i_space);
 	    else if (f->flags & FIVE)  p->movev(d_i_space/ -2);
+	    else if (f->m_flags & SEVEN) 
+	      p->movev(0.5 * d_i_space);
 
 	    p->movev( 0.5 * f_a[font]->fnt->get_height(cc));
 
@@ -1978,6 +2007,8 @@ void do_time_sig( char ch[], int j, int font,
 	  p->movev(-1 *  d_i_space);
 	else if (f->flags & FIVE)  
 	  p->movev(d_i_space/ -2);
+	else if (f->m_flags & SEVEN)  
+	      p->movev(0.5 * d_i_space);
 
 	if ( j == 0 ) 
 	    p->moveh( -1 * str_to_inch("0.28 in"));

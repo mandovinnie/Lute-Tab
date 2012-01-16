@@ -69,7 +69,7 @@ tt:	tree.o tt.o dbg.o
 	$(LD)  $(LDFLAGS) -o tt tree.o tt.o dbg.o
 
 tab:	${OBJS} 
-	$(LD)  $(LDFLAGS) -o tab ${OBJS} -lm
+	$(LD)  $(LDFLAGS) -o tab ${OBJS} -lm 
 
 clean:
 	rm -f *~ *.dvi *.ps *.log
@@ -112,7 +112,7 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	tlute9.600pk tlute8.600pk tlute7.600pk tlute6.600pk \
  	simple.tab midi-docs/Makefile midi-docs/midi-dump.c
 
-DISTFILE = lute_tab4.3.65.tar
+DISTFILE = lute_tab4.3.70.tar
 
 distrib:	 ${DISTFILE}
 

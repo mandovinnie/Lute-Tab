@@ -1,3 +1,18 @@
+VERSION "4.3.70" Nov 29 2010
+fix time signatures for seven lines
+
+VERSION "4.3.69" Nov 27 2010
+fixed repeat dots for seven staves
+
+VERSION "4.3.68"
+fixed buffer overflow on title.cc -  LLINE
+
+VERSION "4.3.67" November 21 2010
+fixed baroque 2, 3, 8 and 9 bourdons to work
+
+VERSION "4.3.66"  November 21 2020
+fixed do_nmidi to handle i l and k
+
 #define VERSION "4.3.65"  Oct 17 2010
 added a fix when a ] is followed by } or / in a title
 

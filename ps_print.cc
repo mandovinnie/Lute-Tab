@@ -1219,7 +1219,7 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     pr_out->PutString("12 scalefont setfont\n");
     pr_out->PutString("0 -690 rmoveto\n");
     pr_out->PutString("( \251 ) show\n");
-    pr_out->PutString("(TAB by Wayne Cripps 2008)show\n");
+    pr_out->PutString("(TAB by Wayne Cripps 2010)show\n");
     pr_out->PutString("grestore \n");
     break;
   case P_S_GRAY:

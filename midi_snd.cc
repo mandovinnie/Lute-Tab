@@ -21,7 +21,7 @@ midi_snd::midi_snd()
   buffer = new i_buf();
   midi_head();
   count = 0;
-  sprintf(s, "tab %s copyright 1995-2008 by Wayne Cripps",  VERSION);
+  sprintf(s, "tab %s copyright 1995-2010 by Wayne Cripps",  VERSION);
   text(Copyright, s);
   text(Text, "converted by TAB");
   instmnt = 0;
@@ -36,7 +36,7 @@ midi_snd::midi_snd(const unsigned int instrument)
   buffer = new i_buf();
   midi_head();
   count = 0;
-  sprintf(s, "tab %s copyright 1995-2008 by Wayne Cripps",  VERSION);
+  sprintf(s, "tab %s copyright 1995-2010 by Wayne Cripps",  VERSION);
   text(Copyright, s);
   text(Text, "converted by TAB");
   instmnt = instrument;
@@ -53,7 +53,7 @@ midi_snd::midi_snd(const unsigned int instrument,
   buffer = new i_buf();
   midi_head();
   count = 0;
-  sprintf(s, "tab %s copyright 1995-2008 by Wayne Cripps",  VERSION);
+  sprintf(s, "tab %s copyright 1995-2010 by Wayne Cripps",  VERSION);
   text(Copyright, s);
   text(Text, "converted by TAB");
   instmnt = instrument;
