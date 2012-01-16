@@ -97,6 +97,7 @@ void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
       case 'e':		/* printout! */
       case 'b':		/* baroque uses different font files */
       case 'E': 
+      case 'G':			/* copyright */
       case 'h': 		/* flakey behavior */ 
       case 'H': 		/* h cant be turned off */
       case 'j':

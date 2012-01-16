@@ -1,3 +1,20 @@
+VERSION "4.3.55"  Feb 8 2007
+
+In dvi_f added check for music only in middle of grids
+
+VERSION "4.3.54"  Feb 1 2007
+
+fixed "copyright" which somehow had gotten lost as a 
+first pass flag.
+
+VERSION "4.3.53"  Jan 30 2007
+
+fixed "$transpose" option
+fixed midi to ignore music with no tablature
+
+VERSION "4.3.52"  Jan 10 2007
+
+fixed mensural note positioning for -R7 reduction
 
 VERSION "4.3.50"  Nov 20 2006
 

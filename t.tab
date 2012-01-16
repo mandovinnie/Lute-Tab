@@ -1,5 +1,11 @@
 
--staff-line-thickness "0.9 mm"
+-G
+
+$scribe="scribe"
+
+$transpose=-3
+
+%-staff-line-thickness "0.9 mm"
 
 b
 0c2
@@ -10,6 +16,7 @@ x c
 x c
 x b
 b
+e
 MG
 S3-4
 S3

@@ -376,6 +376,8 @@ $		- used to set these values. This flag must be
 						not look good.
 		  $scribe="scribe"		Adds a name after the copyright 
 						(the -G flag)
+		  $transpose=n			transposes midi or mensural 
+                                                notation n half steps
     		  $left_margin=nn               sets the left margin in 1/72 inch (points)
 
 the following characters have special significance as the

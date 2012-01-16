@@ -32,7 +32,7 @@
 extern char interspace[];
 extern char staff_height[];
 
-void put_note(print *p, int string, unsigned char c, int timeval, struct file_info *f);
+void put_note(print *p, int string, unsigned char c, int timeval, struct file_info *f, char *ch);
 void score(print *p, double space, double width,  struct file_info *f, char *ch, char *prev);
 int find_note(int string, char c, struct file_info *f);
 int setflag(file_info *f, char * string, pass pass);
@@ -188,6 +188,7 @@ int find_note(
 	if (fret > 9) fret--;
 	note = str[string] + fret;
     }
+    note += f->transpose;
 //    printf("find note: note %d\n", note);
     return (note);
 }
@@ -391,51 +392,51 @@ score(print *p, struct list *l, struct file_info *f,
 		  // 
 		  if ( c == 'x') {
 		    if (prev[i] == ':') {
-		      put_note(p, i-1, 'z', timeval, f);
+		      put_note(p, i-1, 'z', timeval, f, ch);
 		    }
 		    else if (prev[i] == '.') {
-		      put_note(p, i-1, 'y', timeval, f);
+		      put_note(p, i-1, 'y', timeval, f, ch);
 		    }
 		    else
-		      put_note(p, i-1, 'x', timeval, f);
+		      put_note(p, i-1, 'x', timeval, f, ch);
 		  }
 
 		  else if (c >= 230 && c <= 240) // wbc June 2005
-		    put_note(p, i-1, c, timeval, f);
+		    put_note(p, i-1, c, timeval, f, ch);
 		  else
-		    put_note(p, i-1, c, timeval, f);
+		    put_note(p, i-1, c, timeval, f, ch);
 		}
 		else if (c == 'z')
-		  put_note(p, i-1, 'd', timeval, f); 
+		  put_note(p, i-1, 'd', timeval, f, ch); 
 		else if (c >= 'a' && c <= 'p')
-		  put_note(p, i-1, c, timeval, f); /* i-1 is string number */
+		  put_note(p, i-1, c, timeval, f, ch); /* i-1 is string number */
 	      } // i >= 8 - bourdon
 	      else if (prev && isalnum(c)) {
 		if (prev[i] == '/' )
-		  put_note(p, 8, 'a', timeval, f);
+		  put_note(p, 8, 'a', timeval, f, ch);
 		else if (prev[i] == 's' )
-		  put_note(p, 9, 'a', timeval, f);
+		  put_note(p, 9, 'a', timeval, f, ch);
 		else if (prev[i] == 't' )
-		  put_note(p, 10, 'a', timeval, f);
+		  put_note(p, 10, 'a', timeval, f, ch);
 		else if (prev[0] != '+' && c == '4') 
-		  put_note(p, 11, 'a', timeval, f);
+		  put_note(p, 11, 'a', timeval, f, ch);
 		else if (prev[0] != '+' && c == '5') 
-		  put_note(p, 12, 'a', timeval, f);
+		  put_note(p, 12, 'a', timeval, f, ch);
 		else if (!(f->num_flag == ITAL_NUM)) {
 		  if ( c != 'u' && c != 'x')
-		    put_note(p, i-1, c, timeval, f);
+		    put_note(p, i-1, c, timeval, f, ch);
 		}
 		else
-		  put_note(p, i-1, c, timeval, f);
+		  put_note(p, i-1, c, timeval, f, ch);
 	      }
 	      else if (isalnum(c)) { // no / here
-		put_note(p, 7, c, timeval, f);
+		put_note(p, 7, c, timeval, f, ch);
 	      }
 	      p->clear_highlight();
 	    }
 	    // else space here
 	    //  else {
-	    //  put_note(p, i-1, 255, timeval, f);
+	    //  put_note(p, i-1, 255, timeval, f, ch);
 	    //}
 	  }
 	  if (f->m_flags & SOUND) {
@@ -471,7 +472,9 @@ score(print *p, struct list *l, struct file_info *f,
 	    // 
 	    // handle rests here
 	    // 
-	    if (rest_note) {
+	    if (ch[1] == 'M')
+	      ;
+	    else if (rest_note) {
 	      sp->rest(t_val/conv);
 	    }
 	    else
@@ -488,7 +491,7 @@ score(print *p, struct list *l, struct file_info *f,
     p->moveh(space + width);
 }
 
-void put_note(print *p, int string, unsigned char c, int timeval, struct file_info *f)
+void put_note(print *p, int string, unsigned char c, int timeval, struct file_info *f, char *ch)
 {
     int note, adj=0;
     int pos=0;
@@ -547,7 +550,8 @@ void put_note(print *p, int string, unsigned char c, int timeval, struct file_in
 	else p->put_a_char('?');
     }
     p->pop();
-    if (f->m_flags & SOUND) 
+
+    if ((f->m_flags & SOUND) && (ch[1] != 'M')) 
       sp->add(note);
       
 }

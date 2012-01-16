@@ -238,7 +238,8 @@ struct list *l)			/* data */
 	p->pop();
       }
     if (ch[1] > '0' && ch[1] <= '9' ) {
-      dbg1(Warning, 
+      if (!(f->m_flags & QUIET ))
+	dbg1(Warning, 
 	   "tab: dvi_f -number after barline %c\n", (void *)((int)ch[1]));
       p->push();
       p->movev(-.1);
@@ -802,7 +803,8 @@ struct list *l)			/* data */
       if ( ! strchr("+^&:", (int)c)) {
 	p->push();
 	p->moveh(flag_indent);
-	p->put_a_char(194);                          /* flag staff */
+	if(ch[1] != 'M')             /* wbc feb 07  for music no tablature*/
+	  p->put_a_char(194);                          /* flag staff */
 
 	if (cc == '*') {                            /* print dot */
 	  if (f->flag_flag == CONTEMP_FLAGS) {

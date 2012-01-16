@@ -71,8 +71,8 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
     l_center = 0.003 + m_space/2.0;
   }
   else {
-    center = 0.02 + m_space/2.0;
-    w_center = 0.005 + m_space/2.0;
+    center = -0.005 + m_space/2.0;
+    w_center = 0.00 + m_space/2.0;
     l_center = 0.003 + m_space/2.0;
   }
   i_center += center;

@@ -104,11 +104,11 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	ptmbi.tfm    ptmr.tfm     ptmri.tfm    ptmrre.tfm \
 	pzcmi.tfm \
 	mk_font_local mk_test mk_300 mk_600 mk_1200 mk_2400 \
-	sample.tab demo.tab c.tab t.tab AboutTab.txt mac.cc mkdep \
+	sample.tab demo.tab c.tab t.tab AboutTab.txt  mkdep \
 	version.pl makedepend CHANGELOG \
 	midi-docs/midi-dump.c midi-docs/Makefile
 
-DISTFILE = lute_tab4.3.50.tar
+DISTFILE = lute_tab4.3.55.tar
 
 distrib:	 ${DISTFILE}
 
@@ -127,23 +127,6 @@ ${DISTFILE}:	 \
 	c.tab \
 	${HEADERS} \
 	${SOURCES} main.cc ${MISC}
-
-mac:	${HEADERS} ${SOURCES} main.cc mac.cc c.tab sample.tab
-	rm -rf mac/*
-	cp ${HEADERS} ${SOURCES} main.cc mac.cc mac
-	cp c.tab sample.tab README AboutTab.txt mac
-	rm -rf mac_font/*
-	cp blute[6789].300pk mac_font
-	cp blute[6789].tfm  mac_font
-	cp blute85.300pk    mac_font
-	cp blute85.tfm      mac_font
-	cp lute[6789].tfm   mac_font
-	cp lute[6789].300pk mac_font
-
-	cp cmr1[02].tfm cmti1[02].tfm mac_font
-	cp pncb.tfm pncbi.tfm pncr.tfm pncri.tfm psyr.tfm ptmr.tfm mac_font
-	cp tab.rsrc.bin mac_font
-
 
 cmr12.tfm:	
 	cp -p /usr/lib/tex/fonts/tfm/cmr12.tfm .
@@ -194,14 +177,13 @@ Palatino-BoldItalic.tfm:	/usr/lib/tex/fonts/tfm/Palatino-BoldItalic.tfm
 	cp /usr/lib/tex/fonts/tfm/Palatino-BoldItalic.tfm .
 
 win:	${HEADERS} ${SOURCES} main.cc c.tab sample.tab
-	mkdir win
+	mkdir -p win
 	rm -rf win/*
 	cp ${HEADERS} ${SOURCES} main.cc win
 	cp c.tab sample.tab README AboutTab.txt win
 
 	for f in win/*.cc ;do \
 	 ff=`echo $$f| awk '{print substr($$0, 1, index($$0, ".")-1)}'`; \
-	 echo '#include "stdafx.h"' > $$ff.cpp; \
 	 echo '#include <io.h>' >> $$ff.cpp; \
 	 echo '#define _CRT_SECURE_NO_DEPRECATE' >> $$ff.cpp; \
 	 cat $$f >>  $$ff.cpp; rm $$f; \

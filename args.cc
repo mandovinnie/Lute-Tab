@@ -78,7 +78,8 @@ void set_F(const char *value, struct file_info *f) {
   f->char_flag = STAND_CHAR;
   f->num_flag  = STAND_NUM;
   f->note_flag = ITAL_NOTES;}
-void set_G(const char *value, struct file_info *f) { f->flags |= COPYRIGHT;}
+void set_G(const char *value, struct file_info *f) 
+{ f->flags |= COPYRIGHT;}
 void set_h(const char *value, struct file_info *f) { 
   if ( f->flags & CONVERT ) f->flags &= ~CONVERT;
   else f->flags |= CONVERT;

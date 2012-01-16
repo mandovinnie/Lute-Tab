@@ -326,7 +326,7 @@ int format_page(print *p, i_buf *i_b,
 		cmdbuf[i++] = c;
 	    cmdbuf[i++] = '\0';
 	    cmdbuf[i++] = '\0';
-	    dbg1(Inter, "tab_p: %s\n", (void *)cmdbuf);
+	    dbg1(Inter, "tab_p: argument: %s\n", (void *)cmdbuf);
 	    args_from_string(cmdbuf, f);
 
 	    break;
