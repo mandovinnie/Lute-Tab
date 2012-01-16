@@ -1,0 +1,140 @@
+
+/*
+   This program is copyright 1991 by Wayne Cripps,
+   P.O. Box 677 Hanover N.H. 03755.
+   All rights reserved.  It is supplied "as is" 
+   without express or implied warranty.
+
+   Permission is granted to use, copy, modify and distribute
+   this software without fee, provided that this notice appears
+   in all copies, and that a copy of this notice is provided to
+   anyone who recieves a binary copy without sources.
+
+   This software may not be used for commercial purposes
+   without explicit, prior written permission.
+
+   Please mail bug reports, suggestions, and improvements
+   to wbc@sunapee.dartmouth.edu.
+
+ */
+
+
+***************************************************************************
+*     get on the lute mailing list - send e-mail to
+*     lute-request@sunapee.dartmouth.edu
+***************************************************************************
+
+tab is a program to typset lute tablature.  It works like TeX  in that
+a plain text file (that bears little resemblance to the desired output)
+is created and processed into a device independent printer format
+file.  This file can be previewed with a dvi previewer and formatted
+for your printer with a dvi to printer filter, which is not included
+in this package.  This program is not particularly beginner-friendly,
+but is quite fast once you have gotten used to it.  
+
+INSTALLATION:
+The newest (2.0 +) version of tab does not require TeX or
+metafont support - the output is in PostScript, which can be
+directly sent to and PostScript printer.  See the instructions for
+PostScript output below.
+
+You should have TeX and Metafont installed on
+your computer to use tab.  If you don't have Tex installed but
+know someone who does, get that person's help.  You *can* install
+it without having TeX, but you will have to get the font distribution
+(lute8.tar) from sunapee.dartmouth.edu, and get a program to convert
+the dvi format output to something that you can print out.  It
+is nice to have a program to preview either the dvi files or converted
+printer files on a computer screen too.
+
+1: unpack the files - type:
+
+   tar xvf lute_tab3-0h.tar
+
+2: edit the Makefile
+
+   there is a line in Makefile that tells tab where to look for
+   the font files.  If you have TeX installed, and you can put
+   the font files in the TeX directory this should read something like
+   '"/usr/lib/tex/fonts/tfm"' - note the use of two kinds of quotes.
+   If the font files are going in your own directory the line should
+   read '"./"'  Tab isn't smart enough to look in more than one place,
+   so all the font files (actually all the files that end in .tfm)
+   will have to be together.  Tab doesn't care about the bitmap
+   files with the .300pk extensions.
+
+2a - Edit the tab.h file
+
+   the file "tab.h" includes some lines at the top that
+   configure tab for PostScript output.  If you comment out
+   the line that starts with 
+	  #define DVI
+   by placing /* at the beginning of the line:
+	  /* #define DVI
+   tab will automatically produce PostScript files which
+   may be previewed with a PostScript previewer (if you have one)
+   or sent directly to a PostScript printer.  If you leave the
+   DVI defined then you must specify the -P option to tab
+   to print a PostScript file rather than a dvi file.  The 
+   PostScript output file is always named "out.ps"
+
+   There is a definition -
+
+#define OLD_PRINTER
+
+   which should be defined if the output file doesn't print
+   and reports a PostScript error.   
+	
+3: build tab - type:
+
+   make depend
+
+   (you do not have to run make depend if you are not modifying the code
+   and the compiler doesn't complain about missing headers)
+
+   make
+
+   if make depend does not work for you, find the line that says
+# DO NOT DELETE THIS LINE -- mkdep uses it.
+# DO NOT PUT ANYTHING AFTER THIS LINE, IT WILL GO AWAY.
+   and delete these lines and everything up to the end of the Makefile
+
+4: build the fonts - you do not have to do this if you
+   build the PostScript version, as the lute9.300pk font is included,
+   and the text fonts are already installed in the printer.
+   Besides, the fonts are included in the tar file.
+  
+   You can also use mf and the file lute8.mf to build the
+   fonts yourself - this is necessary if your printer is other
+   that 300 dots per inch.  The file makelutefont is a script
+   which does that - it builds the fonts and copies them to the
+   system font directories.  You may have to edit this script
+   quite a lot - to specify other output directories for example.
+   You most certainly will have to replace all references to the
+   format file <wplain> with <plain>.  You may have to change the
+   mode as well.  You had best consult your local TeX maintainer
+   if you have one!
+
+5: test it - type
+ 
+   tab music/Lothe.tab
+
+   there should be a message "opening music/Lothe.tab" and a new
+   file, <out.dvi> in your directory.  This file (always names out.dvi)
+   can be priviewed with a dvi previewer like xdvi, or formatted 
+   for printing on a PostScript printer with dvips.  Usually
+   you print the PostScript output file by simply sending it
+   to the printer - lpr out.ps
+
+6:  if you don't have a way to print -
+   Most people have postscript printers - tab really won't work on
+   an Imagewriter, inkjet printer, or line printer.  The file 
+   out.dvi is in dvi format, which is a format that no printer uses
+   but which can be easily converted to the correct format for many 
+   printers.  To do this you need to find a copy of something like
+   dvips, which takes a dvi format file and writes a PostScript
+   format file that you can print.  You will need the font files
+   for dvips to work.  You can ftp them from sunapee.dartmouth.edu.
+   If you can not find a copy of dvips send me mail (wbc@sunapee.dartmouth.edu)
+   and I will help you get a copy.
+

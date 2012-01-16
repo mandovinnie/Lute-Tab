@@ -1,0 +1,365 @@
+
+/*
+   This program is copyright 1991 by Wayne Cripps,
+   P.O. Box 677 Hanover N.H. 03755.
+   All rights reserved.  It is supplied "as is" 
+   without express or implied warranty.
+
+   Permission is granted to use, copy, modify and distribute
+   this software without fee, provided that this notice appears
+   in all copies, and that a copy of this notice is provided to
+   anyone who recieves a binary copy without sources.
+
+   This software may not be used for commercial purposes
+   without explicit, prior written permission.
+
+   Please mail bug reports, suggestions, and improvements
+   to wbc@sunapee.dartmouth.edu.
+
+ */
+
+
+***************************************************************************
+*     get on the lute mailing list - send e-mail to
+*     lute-request@sunapee.dartmouth.edu
+***************************************************************************
+
+tab is a program to typset lute tablature.  It works like TeX  in that
+a plain text file (that bears little resemblance to the desired output)
+is created and processed into a device independent printer format
+file.  This file can be previewed with a dvi previewer and formatted
+for your printer with a dvi to printer filter, which is not included
+in this package.  This program is not particularly beginner-friendly,
+but is quite fast once you have gotten used to it.  
+
+Options:
+    These can be used on the command line, as in tab -P -6
+    or in the tab source file.
+
+    -a extended arguments - 
+	-af num Font-Name uses Font-Name for font num - see
+	F below.
+    -5 prints only five staves
+    -C prints every fifth measure number below the staff.
+    -c prints measure numbers only at the start of a line
+    -b uses baroque tuning to transcribe to music
+    -B uses flags and f,h, and i like those used by
+       M. Board and other english writers.
+	-D sort of like Dowland's style
+    -E prints "DRAFT" on every page along with the date
+    -F maps the flags to modern style flags
+	-h translates french to italian, 6 courses only
+    -G prints a copyright notice at the bottom of the page
+       useful if you have the right name..
+    -I maps the flags to renaissance style  
+    -i shifts the lines to the middle of the numbers,
+       and maps the flags to renaissance style
+    -O uses thin line flags, like dalza.
+       and shifts the lines to the middle of the numbers
+    -T uses dalza style flags
+    -f resets to french style (the default)
+    -L format for the LSA book
+    -l "n units"  sets line length to n units, where n
+	   is a floating point number, eg 3.25, and units is one
+	   of mm, in or pt.  The default is "6.5 in". The double
+	   quotes are mandatory.
+	-l reset resets the line length to the previous length.
+    -m print out the piano version of the tablature. This is kind of basic!
+    -t prints the notes on the line
+    -M print marks on the page to show where the character positions are.
+    -n uses fonts like Maceb
+    -N uses fonts like Robinson
+        these fonts use the default characters for any 
+        characters they don't have - Mace only has f and e.
+        Robinson has b-h.
+    -o specifies an output file.  default is out.dvi
+       if the .dvi or .ps extension is not specified it is added.
+	   this can not be specified in the input file.
+    -P the output file out.ps, in PostScript format, is
+           generated - this can be sent to a printer directly,
+	   without running dvips on it.
+    -Q space the notes correctly when whole notes are used a lot
+    -R  reduces size to 66%, -R9 to 88% -R8 to 77%
+    -S don't advance the line after the current system
+    -v prints the intermediate language to the screen
+    -V gives the version and date
+    -X supresses note expansion for debugging
+    -Y supresses word fitting for debugging
+    -W transposes the above up a full pitch, for harp, a-lute.
+
+    a line in the .tab file beginning with - is read as command
+line options.  You may reset options between systems, to 
+reset line length, print two tyes of tab, or print tab and
+regular musical notation.  If you wish to use the -R flag to reduce
+the type size (as in -R8) you must put it on the first part of the
+first line, as the first line of the input file is scanned
+once for commands before loading fonts.
+
+Input:
+
+A file is created in the pattern of ./music/Mathias.tab, using the following
+characters.  The file should have a .tab extension to its name.  Note
+that a character often has a different meaning as the first letter
+in a pattern than it does in following positions.
+
+start of line:
+{ words } 	- one of more lines of text (unjustified, not wrapped)
+[ words }	- text, positioned closely above a system, for 
+		  Da capo, etc
+{words/words}	- words left and right justified, with a space in the 
+		  middle
+	there must be exactly one blank line between text and staff
+
+% 		- comment
+#		- first note of a grid
+		  followed by number of lines in grid
+~		- wavy lines over these notes
+=		- in music, eg W = W.
+A		- first, second repeats in modern style (Another)
+		  number is second char on line.
+b		- barline
+bT		- a barline with a tie
+b!		- don't print this barline
+B		- a very thick barline (when followed by newline or !)
+B		- a breve (when followed by notes)
+bb 		- two barlines
+  (blank line)  - break line here - you must specify line
+	 	  breaks yourself!
+. 		- column of 5 dots (for a repeat) as in .bb.
+C 		- a big C
+c		- cut time
+d		- the del signe sign
+D		- a big 2 (no - a D.C.)
+e		- end of document -tab will work but will complain
+		  without it.
+F Num Name	- specify a font - this is tricky -
+		  Num is between 1 and 5
+		  1 words to songs
+		  2 titles
+		  3 big time signatures - not used
+		  4 big time signature
+		  5 text, but not used
+		  as if F 2 Helvetica-Bold
+		  the Name *must* be a font on your printer or
+		  the job will fail in the printer!
+f		- fin (spanish - should be fine in some languages)
+
+0, 1, 2, 3, 4, 5 - a note with that many flags
+W		- a whole note  0   |
+w		- a half note       0
+8		- 8vb in the music
+k		- key signature
+L		- longa
+I filename	- include filename
+i		- indent a bit (used at the beginning of a line
+	          that doesn't start with a bar)
+ .		- after a number, dot the value of the flag
+ !		- after a number or b - don't print flag but use its value
+		  for spacing - for replicating manuscripts.
+ -       	- after a number, allows you to put a ! or . on the top line.
+x 		- same number of flags as the last one
+M		- a note of music with no tab M#n+ where # equals 
+		  number of flags
+		  n is the note value A-Ga-g, and + is + for sharp, 
+ 		  - for flat, or 0 for neither
+p		- force end of page.
+P		- pagenumber
+Q		- a flourish for the end
+q		- same
+R		- a rest (hat) - followed by the flag number - as in R2
+S		- a time signature - ie S34 or SC
+		  a dash, as 12-8 draws the signature in the music
+		  rather than the tablature.
+		  a single digit followed by Q is highlighted
+T
+t 		- first note of a triplet, followed by the
+		  followed by the number of lines there would be
+	 	  if there were lines - eg. t3 a,x b, xb,
+		  this places a 3 above the second note.
+x		- more notes in same grid
+Y		- fermata
+y		- another fermata
+		  a Yb or yb draws a fermata above a barline
+
+the following characters have special significance as the
+second letter on a line - in most cases, if not needed
+they can be ignored:
+
+ - 	a place marker, techincally should be the default second character
+	but usually can be left out - it helps when you want to use a
+	*, # or - ornament on the character on the top line.
+ .	a dotted flag
+ # 	begin a grid- you may say #2 or 2# but for an ornament 
+	you must say 2-#aa, not 2#aa!
+ *	a dotted not within a grid
+ | 	a flag with an extra bar within a grid.
+ t	a tie to the next note
+ W	a tie and a dot
+ !	after a number - don't print flag but use its spacing
+ !	after a b - don't print barline, but count it.
+ Q	highlight this flag
+
+the following are the characters that can be used in a line
+of tablature, as the second to tenth character.
+
+	a b c d e f g h i j k l m n o p - the tab characters
+		F G H I give characters like M Board used
+	  ( I know you don't use j, but it is there for completeness)
+	space	i	- no character on this line
+			  a 0 no longer indicates a space!
+	z		- a zero
+	\\		- one backslash in note position
+	. 		- one dot below tab
+	:		- two dots below tab
+	|		- stroke - for thumb 
+	-		- vertical bar - play similtaneously
+	+ * # x $ < 	- an ornament before the next note
+		'	- a comma above the line
+		`	- a comma on the line
+		Q	- character is highlighted
+	%		- two dots (colon )preceeding next note`
+	?		- a flat
+	>		- something like a flat but different
+	@		- an asterix
+	= or &=		- colon
+	$ or &$		- double colon
+	_ or &_ 	- a smiley
+	&+ &* &# &' &`	- an ornament after preceeding note
+	w, u		- for italian style tab
+	&x		- a postfix x
+	<		- two dots as an ornament
+	^		- a hat
+	& is the postfix operator - the next character is printed
+			  to the right of the preceeding char.
+	! is the escape operator - for example, print / ( a prefix )
+			  in a note position rather than treating it
+ 			  as a prefix, which is its default.
+			  1 c!/ca
+	" is the prefix operator- most things default to prefix
+			  but you can print -- as a prefix
+			  as 1 "-c"-d"-da
+        \:a or \:b	- two dots above the a (or b or whatever)
+	Nxx		- print number xx -as in 10 through 24 for
+			- high frets in Italian tab or modern guitar tab.
+	R		- a rest
+	R!		- a rest, with no flag
+	U		- begins an underline to indicate a held bass note.
+			  line starts beside character above U
+	X		- ends the underline
+	{ }		- a sloping underline
+	( )		- another sloping underline, so you can use two.
+			  the slope is determined by the position of
+  			  the beginning and end parenthesis.
+			  you can use the & to start a line beside a note.
+	[ ]		- underline with a curve to it
+	/		- a slash for a bourdon if used on bottom line
+			  otherwise a light slash
+	//		- two slashes
+ 	///		- three slashes
+        1 3 4 5 6 7	- the number for bass string when you 
+			  run out of slashes
+	\1 \2 \3 \4	- left hand fingerings placed
+			- before the next letter.
+	r		- show current dvi location (for debugging)
+	
+	M		- the next three characters are the time
+			(just like the flag), pitch [A-Ga-g], and
+			+ (sharp) -(flat)  . (dot)  ^ (sharp and dot)
+			v (flat and dot) or anything else for 
+			music above the line of tablature. 
+			if the note is R you get a rest.
+			
+	T		- text to be associated with this chord
+			the music must come before text, and 
+			you can replace the M or T with a tab 
+			character.
+			< puts a slash / over the next letter
+			% puts a back slash over the next letter
+			> puts a ~ over the next letter
+			[ puts a wiggle below the next letter
+			] is a tie between letters
+			( is an upside down !
+			) is an upside down ?
+			\ escapes a special character
+			@ is a ~ with dots for repeat
+			| as the last letter buts the word abainst the next word
+,		- a comma may be used to seperate chords on one line
+e		- end of document
+
+Music is written as a sequence of chords - each chord starting on the top
+string, with spaces  representing unplayed strings.
+
+b
+S3
+1abd a
+xf
+#2d   c
+xc
+b
+1.ab  d
+2 a
+#2  d
+... etc
+ 
+I see this as representing tablature on its side (through a mirror)
+
+When the document is completed, type < tab document.tab > to format it into
+a file named " out.dvi ".  You can view it with xdvi (if you have xdvi )
+by saying < xdvi out > - you can format it to postscrip if you have
+dvips by saying < dvips out >.
+
+If you have the postscript version of tab, then < tab file > will produce a
+PostScript document that you can send to a Laserwriter or view with ghostview
+or any postscript previewer.  there is a line in the file, tab.h, that
+you can comment out, and the output will always be in PostScript.
+
+Errors:
+
+tab makes two passes to format your tablature.  The first pass reads the
+input file and formats it into an internal document.  Any errors that are
+detected in this pass are reported with a line number and character position
+in the file.
+
+The second pass processes the internal document into a dvi format file.  
+because tab sometimes maps a single line of input, or even a single
+"chord" to two or more chords it is not possible to report the line number
+and character position in the input file corresponding to the error,
+but you can use the -i option to print the internal format document
+and look for the error there, and try and match it up with your input 
+file.  Internal document errors are reported with system number, and 
+"chord" number in that ystem.  In the internal format ornaments, graces,
+barlines, etc are each given a seperate chord.
+ 
+Fonts:
+
+makelutefont is template of a shell script for building the lute fonts 
+necessary for the previewer and printer.  You will have to edit it for 
+your own site.  You shouldn't have to build fonts, though, as fonts
+are in the distribution.
+
+
+this runs on 
+	sun-3 running 4.1.0 and 3.5
+	sparcstation running 4.1.1
+	decstation running ultrix 4.1, 4.2
+        silicon graphics iris IRIX 3.3.2 -> 5.2
+	HP 700 running HP-UX 8.05 and 9.01
+
+Changes:
+
+   If you don't like the spacing or want to adjust visual aspects
+you can edit the top of draw.c - where various defaults are listed
+as ascii strings representing measurements in inches (in), points (pt),
+or mm.  You can change the input character set by hacking getsystem.c,
+but that will mke it hard for you to share files!
+
+If you like it ...
+
+   If you actually use this program and want to be notified of
+updates, and maybe exchange tablature, send email to me.
+
+
+	Wayne Cripps
+	wbc@cs.dartmouth.edu
+	June 9, 1994
+
