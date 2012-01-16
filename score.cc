@@ -27,7 +27,7 @@
 #include "system.h"
 #include "sound.h"
 #include "raw_snd.h"
-#include "midi_snd.h"
+/* #include "midi_snd.h" */
 
 extern char interspace[];
 extern char staff_height[];
@@ -264,6 +264,7 @@ score(print *p, struct list *l, struct file_info *f,
 	break;
     case 'Q':
     case 'q':
+    case 'm':
 	p->movev (9.0 * str_to_inch(mus_space));
 	p->put_a_char(cc);
 	break;

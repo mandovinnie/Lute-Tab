@@ -80,6 +80,7 @@ struct file_info {
   char *scribe;			/* the person who enTABulated the piece */
   char *title;
   unsigned int left_margin;	/* the left margin in PostScript units for PS output only */
+  unsigned int midi_volume;     /* the volume or velocity for a midi file*/
 };
 
 struct font_list {

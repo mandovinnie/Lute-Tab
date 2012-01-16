@@ -83,6 +83,7 @@ void init(file_info *f)
     f->cur_system = 0;
     f->include = 0;
     f->midi_patch = 0;
+    f->midi_volume = 110;
     f->start_system = 0;
     f->transpose=0;
     f->scribe=0;
@@ -243,24 +244,24 @@ void tfm_stuff(i_buf *b, file_info *f)
 	pdp = new dvi_print(f_a, f);
 	pp = (print **)&pdp;
     }
-
+    // this seems to be where an old style midi file is started
     if (f->m_flags & SOUND) {
       if (!sp) {
 	if (f->midi_patch) {
 	  if (!strncmp(f->out_file, "stdout", 6))
-	    sp = new midi_snd(f->midi_patch, "stdout");
+	    sp = new midi_snd(f->midi_patch, f->midi_volume, "stdout");
 	  else 
-	    sp = new midi_snd(f->midi_patch);
+	    sp = new midi_snd(f->midi_patch, f->midi_volume);
 	}
 	else {			// no midi patch
 	  if (!strncmp(f->out_file, "stdout", 6)) 
-	    sp = new midi_snd(34, "stdout");
+	    sp = new midi_snd(34, f->midi_volume , "stdout");
 	  else if ( strlen(f->out_file)) 
-	    sp = new midi_snd(34, f->out_file);
+	    sp = new midi_snd(34, f->midi_volume, f->out_file);
 	  else 
 	    sp = new midi_snd;
 	}
-      } 
+      }
     }
     else if (f->m_flags & NMIDI) {
       np = new nmidi();

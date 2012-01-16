@@ -14,14 +14,18 @@ private:
   void text(enum text_type, const char *words);
   void program();
   int bar;
+  unsigned int velocity;
 public:
   midi_snd();
-  midi_snd(const unsigned int instrument);
-  midi_snd(const unsigned int instrument, const char *filename);
+  midi_snd(const unsigned int instrument, const unsigned int volume);
+  midi_snd(const unsigned int instrument, const unsigned int volume,
+    const char *filename);
   ~midi_snd();
   void add(const int note);
   void play(const double time);
   void rest(const double time);
   void play_note(const int note, const double time);
   void add_bar();
+  unsigned int get_volume();
+  void set_volume(unsigned int value);
 };

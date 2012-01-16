@@ -517,6 +517,10 @@ void set_left_margin(const char *value, struct file_info *f)
   int i = atoi(value);
   f->left_margin = i;
 }
+void set_midi_volume(const char *value, struct file_info *f)
+{
+  f->midi_volume = atoi(value);
+}
 
 
 /*
@@ -562,6 +566,7 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {(char*)"note-conversion", (void *)set_noteconv},
     {(char*)"sys-skip",   (void *)set_sys_skip},
     {(char*)"midi-patch",   (void *)set_midi_patch},
+    {(char*)"midi-volume",   (void *)set_midi_volume},
     {(char*)"start-system", (void *)set_start_system},
     {(char*)"transpose",    (void *)set_transpose},
     {(char*)"scribe",       (void *)set_scribe},
@@ -593,6 +598,7 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {(char*)"note-conversion", (void *)first},
     {(char*)"sys-skip",   (void *)first},
     {(char*)"midi-patch",   (void *)first},
+    {(char*)"midi-volume",   (void *)first},
     {(char*)"start-system",   (void *)first},
     {(char*)"transpose",    (void *)first},
     {(char*)"scribe",       (void *)first},

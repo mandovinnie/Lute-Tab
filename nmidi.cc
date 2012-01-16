@@ -27,6 +27,9 @@ void dpt() {
 	  midi_p->dat[3], midi_p->dat[4], midi_p->dat[5] );
 }
 
+// #define VEL 64
+#define VEL 80
+
 nmidi::nmidi(){
   int i;
 
@@ -467,14 +470,14 @@ void nmidi::do_lute_music()
 	else writeVarLen(0);
 	buf[count++] = (char)0x80;  /* note off channel 0*/
 	buf[count++] = (char)midi_p->stop[i]; /* the note - 60 = middle c*/
-	buf[count++] = (char)64;      /* velocity */
+	buf[count++] = (char)VEL;      /* velocity */
       }
     }
     if (stopped) {
       writeVarLen((unsigned int) (old_time));   /* delta time */
       buf[count++] = (char)0x80;  /* note off channel 0*/
       buf[count++] = (char)0; /* the note - 60 = middle c*/
-      buf[count++] = (char)64;      /* velocity */
+      buf[count++] = (char)VEL;      /* velocity */
     }
 
     if (verbose)
@@ -487,9 +490,9 @@ void nmidi::do_lute_music()
 	buf[count++] = (char)0x90;  /* note on channel 0*/
 	buf[count++] = (char)midi_p->start[i]; /* the note - 60 = middle c*/
 	if (midi_p->bar) 
-	  buf[count++] = (char)70 /*velocity*/ ;        /* velocity */
+	  buf[count++] = (char)VEL+16 /*velocity*/ ;        /* velocity */
 	else
-	  buf[count++] = (char)64 /*velocity*/ ;        /* velocity */
+	  buf[count++] = (char)VEL /*velocity*/ ;        /* velocity */
       }
     }
     if (verbose)
@@ -513,7 +516,7 @@ void nmidi::do_lute_music()
 	writeVarLen(0);
       buf[count++] = (char)0x80;  /* note off channel 0*/
       buf[count++] = (char)old_strings[i]; /* the note - 60 = middle c*/
-      buf[count++] = (char)64;      /* velocity */
+      buf[count++] = (char)VEL;      /* velocity */
       on[old_strings[i]] = 0;
     }
   }

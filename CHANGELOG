@@ -1,3 +1,6 @@
+VERSION "4.3.76"  jan 2012
+volume control for MIDI, fix for Mesngeau fourish and midi
+
 VERSION "4.3.75"  May 29 2011
 fix thick bar for four and five bar staves
 make 4 and 5 staff lines work with -h ital to french conversion
