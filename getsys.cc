@@ -54,7 +54,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
     unsigned char finger[STAFF], a_ornament[STAFF], t_ornament[STAFF];
     signed char c;
     char cc, *p, *pp;
-    int i, j;
+    int i, j=0;
     signed char get();
     int gridflag=0;
     int hushbar=0, tie=0, dimline=0;/* for non print bars, and ties */
@@ -419,6 +419,17 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		case 'z':
 		    staff[i] = '0';
 		    break;
+		case ']':
+		  staff[i] = ']';
+		  if (buf[i+skip+1] == 'v') {
+		    staff[i] = 133;
+		    skip++;
+		  }
+		  if (buf[i+skip+1] == 'w') {
+		    staff[i] = 134;
+		    skip++;
+		  }
+		  break;
 		case NEWLINE:
 		    line++;
 		    for ( ; i < STAFF; i++)
@@ -456,6 +467,16 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    break;
 		case '"':	/* prefix a non prefix char */
 		    ornament[i] = buf[i + (++skip)];
+		    if (ornament[i] == ']' ) {
+		      if ( buf[i+skip+1] == 'v') {
+			ornament[i] = 133;
+			skip++;
+		      }
+		      if ( buf[i+skip+1] == 'w') { //wavy
+			ornament[i] = 134;
+			skip++;
+		      }
+		    }
 		    skip++;
 		    i--;
 		    break;
@@ -878,11 +899,12 @@ Mstore(i_buf *ib, int *l_p, unsigned char *staff, struct file_info *f)
       for ( ; i < STAFF; i++ ) 
 	ib->PutByte (staff[i]);
     }
+
     else   /* not CONVERT */
       for  (i = 0 ; i < STAFF ; i++)
 	ib->PutByte(staff[i]);
     
-    if (music[0]) {
+    if (staff[0] != '^' && staff[0] != '+' && music[0]) {
 	ib->PutByte('M');
 	for (i = 0; i < 3; i++) {
 	    if (i == 0 && music[i] == 'B' ) ib->PutByte('J');
@@ -900,7 +922,8 @@ Mstore(i_buf *ib, int *l_p, unsigned char *staff, struct file_info *f)
 	if (music[7]) ib->PutByte(music[7]);
 	music[4] = music[7] = '\0';
     }
-    if (text_f || text_s) {
+    if ((staff[0] != '^' && staff[0] != '+') && (text_f || text_s)) {
+      // if ((text_f || text_s)) {
 	i = 0;
 	text_f = text_s = 0;
 	ib->PutByte('T');
@@ -1057,13 +1080,5 @@ do_music(i_buf *ib, unsigned char staff[], char buf[], int *l_p, int *skip,
 	return;
     }
 }
-
-
-
-
-
-
-
-
 
 

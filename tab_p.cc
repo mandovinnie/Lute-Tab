@@ -15,7 +15,6 @@ extern int n_measures;
 
 
 /* return 0 on completion, 1 if there is more iniput */
-static int ssys=0;
 double hor_offset=0;		/* for two systems on a line */
 extern int title_font;
 extern int text_font;
@@ -352,7 +351,7 @@ int format_page(print *p, i_buf *i_b,
 	    break;
 	case 'V':		/* vertical skip */
 	{
-	    double skip;
+	    double skip=0.0;
 	    char buf[80], *bufp = buf;
 	    *bufp = '\0';
 	    while (( c = i_b->GetByte()) != NEWLINE) {
@@ -569,7 +568,7 @@ signed char getisystem(i_buf *i_b, font_list *f_a[],
 {
     signed char c;
 
-//    dbg0(Flow, "getisystem: \n");
+    dbg0(Flow, "getisystem: \n");
 
     *l_p = 0;
     while (( c = getiline(i_b, f_a, l_p, f)) != END_SYSTEM && c != END_FILE ) 
@@ -627,7 +626,7 @@ signed char getiline(i_buf *i_b, font_list *f_a[],
 	c = i_b->GetByte();
 
 	if ( i == 0 ) {
-//	    dbg1(Flow, "getiline: new line %c\n", (void *)c);
+	    dbg1(Flow, "getiline: new line %c\n", (void *)c);
 	    switch (c) {
 	    case '-':		/* command options */
 		p = cmdbuf;
@@ -785,7 +784,7 @@ signed char getiline(i_buf *i_b, font_list *f_a[],
 	}
     }
     l->dat[STAFF+1] = '\0';
-//    dbg1(Flow, "tab: getiline returns: l->dat %s\n", l->dat);
+    dbg1(Flow, "tab: getiline returns: l->dat %s\n", l->dat);
     *l_p = *l_p + 1;
 
     return (c);

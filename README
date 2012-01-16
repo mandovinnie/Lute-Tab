@@ -403,16 +403,18 @@ of tablature, as the second to tenth character.
 			- high frets in Italian tab or modern guitar tab.
 	R		- a rest
 	R!		- a rest, with no flag
-	U		- begins a straight underline to indicate a held bass note.
-			  line starts beside character above U
-			  With PostSCript output thos is a curved line like a slur
+	U		- begins a horizontal underline to indicate a held 
+			  bass note. line starts beside character above U
+			  With PostSCript output this is a curved line like a slur
 	X		- ends the underline
-	{ }		- a sloping underline
-	( )		- another sloping underline, so you can use two.
+	[ ]		- horizontal underline with a curve to it
+			- a ]v (a v after the ] ) draws an upside down slur
+	( )		- another horizontal underline, so you can use two.
 			  the slope is determined by the position of
   			  the beginning and end parenthesis.
 			  you can use the & to start a line beside a note.
-	[ ]		- underline with a curve to it
+	{ }		- a horizontal underline with no curve to it
+			  the above two must end on th eline they start on!
 	/		- a slash for a bourdon if used on bottom line
 			  otherwise a light slash
 	//		- two slashes

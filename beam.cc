@@ -19,7 +19,7 @@ do_beam(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
 {
   static beam *beam1=NULL;
   static beam *beam2=NULL;
-  beam *b, *b_base, *last_b;
+  beam *b=0, *b_base, *last_b=0;
   int h, v;
   list *nn_p;
   notes* nn_pp;
@@ -201,7 +201,7 @@ do_beam(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
   /* draw the beam */
 
   p->push();
-  firsttime;
+  // firsttime;
 
   for (i=0; i < firsttime; i++){
     int bs = i * inch_to_dvi(bar_space);

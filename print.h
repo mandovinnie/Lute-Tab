@@ -90,6 +90,8 @@ class print {
     virtual void put_slash
       (int bloc, int eloc, int count, struct file_info *f) = 0; 
     virtual void put_uline(int bloc, int eloc) = 0;
+    virtual void put_r_uline(int bloc, int eloc) = 0;
+    virtual void put_w_uline(int bloc, int eloc) = 0;
     virtual void put_thick_slant(int bloc, int eloc) = 0;
     virtual void put_med_slant(int bloc, int eloc) = 0;
     virtual void put_slant(int bloc, int eloc) = 0;

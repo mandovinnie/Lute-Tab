@@ -98,7 +98,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
   static struct list *l;
   struct list *ll;		/* for second pass */
   char *d, cc;
-  double weight;
+  double weight=0.0;
   double total_width=0.0, total_weight=0.0;
   unsigned char dd;
   struct w *wp;
@@ -183,6 +183,8 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  dbg0 ( Inter, "  W"); 
 	else if (dd == 'w') 
 	  dbg0 ( Inter, "  w"); 
+	else if (dd == 'x') 
+	  dbg0 ( Inter, "  x"); 
 	else if (dd == 'Y') 
 	  dbg0 ( Inter, "  Y"); 
 	else if (dd == 'Z') 
@@ -274,6 +276,12 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	    if (l->next->dat[i] == 'D') {
 	      if (baroque) l->padding += 0.107;
 	      else l->padding += 0.08;
+	      break;
+	    }
+	    else if ( l->dat[0] == '^' 
+		      && f->char_flag == ROB_CHAR 
+		      && l->next->dat[i] == 'd' ) {
+	      l->padding += 0.05;
 	      break;
 	    }
 	    else if  (baroque && l->next->dat[0] == '+' && 
@@ -788,8 +796,10 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       if (l->notes){
 	double extra = 1.1 * f_a[0]->fnt->get_width(22);
 	if (( ! ( f->flags & SHARP_UP ))
-	    && l->notes->sharp == '+' || l->notes->sharp == '^') {
-	  if (l->prev) {
+	    && l->notes->sharp == '+' || l->notes->sharp == '-') {
+	  if (l->prev 
+	      && l->prev->dat[0] != '^' 
+	      && l->prev->dat[0] != '+' ) {
 	    l->prev->padding += (extra);
 	    total_width += (extra);
 	  }
@@ -902,7 +912,7 @@ text_check(
     int notes=0;		/* notes to be expanded */
     int nospace_flag;
     int i;
-    struct text *text;
+    struct text *text=0;
 
 
     if (staff == 1 ) text = l->text;

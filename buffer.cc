@@ -139,7 +139,7 @@ void buffer::dump(const char *fname, const mode mode)	// dump to a file
 #ifdef MAC
 	dbg0(Warning, "buffer::dump: undefined proceedure\n");
 #else
-    FILE *fp;
+    FILE *fp=0;
 
     Seek(rew, 0);
     if (strcmp(fname, "stdout")) {
@@ -152,7 +152,7 @@ void buffer::dump(const char *fname, const mode mode)	// dump to a file
     }
     else {             /* really is stdout */
       fwrite(bytes, num_bytes, 1, stdout);
-      fclose(fp);
+      //      fclose(fp);
     }
 #endif
 }

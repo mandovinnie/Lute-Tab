@@ -21,11 +21,20 @@ $numstyle=italian
 %$sys-skip=0.2
 -l "2.8 in"
 
+b
+1c&x
+b
+e
+
 
 F2
 
 b
-1 cdc{
+1 \4cdc{	2G+	test
+v
+1  xc	2G-	t
+b
+e
 x c  }
 1 cdc{
 x c}
@@ -41,8 +50,8 @@ b
 
 [ text}
 
-Q
-e
+-l reset
+
 wQ  2Q32
 v
 0  456
@@ -60,7 +69,7 @@ x  232
 bv
 b
 
--l "6 in"
+-l "4 in"
 
 b
 1a

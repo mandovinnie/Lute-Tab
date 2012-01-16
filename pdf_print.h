@@ -63,6 +63,8 @@ class pdf_print : public print {
     void put_slash
       (int bloc, int eloc, int count, struct file_info *f); 
     void put_uline(int bloc, int eloc);
+    void put_r_uline(int bloc, int eloc) { put_uline(bloc, eloc); };
+    void put_w_uline(int bloc, int eloc) { put_uline(bloc, eloc); };
     void put_thick_slant(int bloc, int eloc);
     void put_med_slant(int bloc, int eloc);
     void put_slant(int bloc, int eloc);

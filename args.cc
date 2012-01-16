@@ -368,8 +368,6 @@ void args(int argc, char ** argv, struct file_info *f)
     //    void (*r) (const char *, struct file_info *f);
     void (*r)(const char *, struct file_info *);
 
-    struct tuple onearg={"af", (void*)set_font_flag};
-
     struct tuple arglist[] = {
       {"af", (void*)set_font_flag},
       {"C", (void*)set_C},
