@@ -1,0 +1,106 @@
+
+-l "4.9 in"
+%%% $midi-volume=94
+
+b
+1 c
+b
+e
+1abcd
+11234
+So
+b
+S0
+b
+S3
+b
+S3-4
+1-N11 N10N11N12
+1-N12
+%0000000
+Y-0   00
+B
+1aaaaaa1
+x      2
+x      3
+x      4
+x      5
+x      6
+x      7
+x      8
+x      9
+Q
+b
+.
+B
+e
+x3
+x4
+x5
+x6
+x7
+x8
+x9
+024  0
+x   4
+x    37
+x    15
+x    03
+b
+0   03
+x3  1 0
+x 2
+x  003
+b
+Q
+b
+e
+
+b
+0     0
+x    3
+x    1
+x    0
+x   3
+x   1
+x   0
+x   1
+x   3
+x    0
+x    1
+x    3
+x     0
+b
+e
+
+%b
+%W  2
+%b
+%w   0
+%w.   3
+%bT
+%0   1
+%w  2
+%b
+%0     0
+%x   0
+%w   1
+%b
+%w   0 2
+0     5
+x   2
+% bar 5
+%b
+x   3
+x     3
+x     0
+x    0
+b
+e
+
+b
+w     0
+x   0
+x   1
+b
+e

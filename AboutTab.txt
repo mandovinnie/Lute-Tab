@@ -1,0 +1,137 @@
+
+
+Tab is a typesetter for lute tablature, for renaissance and baroque
+lutes and theorboes, in French and Italian notation.  The program 
+"tab" is copyright by Wayne Cripps, 1995, and is his (my) property 
+exclusively.  You may use this software non-commercially without 
+any charge and freely distribute it to others, provided that you acknowledge 
+Wayne Cripps as the owner, tell others where you got this software,
+and give them a copy of this document.  You may not use tab commercially, 
+distribute it commercially, or use any part of it in any commercial 
+software distribution without explicit permission from Wayne Cripps.  
+If you use tab to typeset a book or other material for sale you 
+must send one copy to Wayne, free of all charge, and post paid.  
+Tab is provided "as is," without any warranty, explicit or implied, 
+of any kind!
+
+Tab runs on Unix, Linux, VAX-VMS, and Macintosh Power PC platforms, 
+and has been ported to run on DOS and Windows 32.  Tab is not a point and click 
+program - rather it is a part of multi step procedure.  You must
+have other software to use tab to produce output on paper or your 
+screen.  Most people need to have a PostScript printer to print
+the tab output.
+
+First you use your word processor to create a plain ASCII text document
+with carriage returns in a special format like this:
+
+b
+2 cdc
+x d
+1 cdc
+b
+e
+
+this typesets something that looks like this:
+
+  |\    |\
+  |\    |
+  |     |
+___________
+|_c__d__c_|
+|_d_____d_|
+|_c_____c_|
+|_________|
+|_________|
+
+only a lot nicer!
+
+Then you run tab on this document to produce a printer format file,
+in either PostScript or dvi format.  You then use your printer 
+program - lpr, dvitohplj, gs, dvitops, Drop-PS, etc to send the
+document to a printer, or use Ghostview or xdvi to view it on your
+screen.  (Note that you must find and install these programs
+yourself!)
+
+If you have a Mac, you can get ghostview and Drop-PS from
+info-mac.  You can get ftp://mirrors.aol.com/pub/info-mac/prn/drop-ps-113.hqx
+and ftp://mirrors.aol.com/pub/info-mac/gst/grf/1994 mac-ghostscript-252b3.hqx
+(there is a no-fonts version that is smaller - I don't know what the difference is..)
+
+You can create your own fonts if you have access to MetaFont, 
+or if you have a way of creating PostScript fonts and generating
+the appropriate tfm files (the utilities for doing this are
+in dvips distributions.)  MetaFont is part of the TeX distribution
+and is free, runs on all sorts of computers, but you have to know
+a bit to install it.  It is popular with Math departments at colleges.
+
+You can get tab via ftp from ftp.cs.dartmouth.edu.  Log in as ftp
+with your real name as the password.  Change directories to
+/pub/lute.  the DOS binaries are in the DOS directory.  
+The Unix sources are in the 
+form of a tar file like lute_tab4-0b.tar.  Be sure to use the *bin*
+command before you *get* either the mac, dos, or vax binaries or 
+the tarfile of the source.
+
+The Mac version is really new, and is an alpha version - that means
+that it might break, and if it does you should notify me but I
+may not fix it really quickly.  Note that there are two versions,
+for PowerPC's and for the older Macs.  Currently I only distribute
+the mac version on floppies.
+
+The DOS/Windows version is ported by Michael Daether, using a runtime
+emulator.  Since I do not have access to a dos machine you must direct
+all installation questions to Michael - his e-mail address is in
+the DOS distribution, along with lots of information on how to install it.
+
+There is also a Windows 32 version available in the tabwin32 directory.
+This was ported by Rainer aus dem Spring.  This is more up to date than
+the DOS version.
+
+You can also send tab source to the e-mail server, 
+
+ 	tab-serv@cs.dartmouth.edu
+
+as part of the body of your message and not as an enclosure, and get 
+a postscript formatted document in the return mail.  You can then delete
+the mail headers, so that !%PS are the very first characters on the
+very first line of your file, and send it to a printer.
+If you are running DOS or windows you *may* have to insert
+a control-D (0x4) at the beginning of the postscript file.
+The README file in the ftp site has all the commands necessary.
+There is no real good users manual - I hope someone offers to 
+write one sometime!
+
+It is possible to create your own fonts for tab, if you have
+access to MetaFont, which is distributed along with TeX.  Mathematicians
+will know all about TeX.  It is also possible to change the way
+tab works, if you are a programmer, as the source is available.  I
+will consider doing modifications for people.
+
+You will find a lot of tab source files at
+
+	ftp://ftp.cs.dartmouth.edu/pup/lute/TabSource
+
+which you can download.
+
+
+Since I develop tab in my spare time, and I am not charging money for it,
+I don't put my energy into making it easy to install and use.
+I prefer to extend the functionality and appearance of tab.
+You may find it challenging to learn, compared with other software 
+products which are intended for the mass market, but if you are
+persistant your efforts will pay off.
+
+One last bit - different computers operate in *very* different ways.
+If you write to me with questions, *please* tell me what kind of computer
+you have.  PC users tend to assume that everyone else has a pc - this
+is not true!  Some people, like me, don't even know how to run one.
+Tab for DOS is quite different from tab for Windows, so be sure to tell
+me if you are running windows.
+
+by the way, there is a large collection of music in tab source format -
+in ftp://ftp.cs.dartmouth.edu/pub/lute/TabSource/ If you use
+ftp directly to connect, log in as "ftp" with your name as the password.
+
+	Wayne Cripps		Oct 4 1995
+	wbc@cs.dartmouth.edu
+

@@ -1,0 +1,20 @@
+%
+%  a new font 
+%
+%
+mode_setup;
+%
+ em#:=5.444pt#; cap#:=7pt#;
+ ptt#:=1.16665pt#;
+ wid#:=1.16665pt#;
+define_pixels(em,cap);
+define_corrected_pixels(ptt,wid);
+%
+font_quad:=em#;font_normal_space:=0.7em#;font_normal_stretch:=0.24em#;
+font_normal_shrink:=0.2em#;
+font_identifier:="Lute7-wbc";
+font_size 7pt#;
+%
+%
+input lute.mf
+do_all;

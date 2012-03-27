@@ -1,0 +1,62 @@
+#!/bin/csh
+#
+#  make the lute9 font
+#
+#
+#set FMT = plain
+#set FMT = mf
+#
+# 600 dpi ...
+# ljfour  canonex docutech lexmarku ljfive ljfzzzfr okifte qmsostf qmsoszz ricohsp vtszz
+# 
+# 
+set MODE=CanonCX
+set MODE=ljfzzzfr
+set MODE=ljfive
+set MODE=docutech
+# set MODE=cxnew
+#
+# if using precompiled modes set here, otherwise in lute9
+#
+# note - aug 2002 - mode doesn't seem to do much
+# here, overridden in lute9.mf most likely.
+# but it is needed for the command line, don't know why.
+# but it means fixing the mode in lute9.mf for different dpi
+# mag:=1.0 is default, no need to specify
+#
+#
+#
+if ($#argv == 0  ) then
+  mf "\mode:=$MODE; \mag:=1.0; input lute9; bye;"
+  gftopk ./lute9.600gf > ./lute9.600pk
+  rm ./lute9.600gf
+  mf "\mode:=$MODE; \mag:=1.0; input lute8; bye;"
+  gftopk ./lute8.600gf > ./lute8.600pk
+  rm ./lute8.600gf
+  mf "\mode:=$MODE; \mag:=1.0; input lute7; bye;"
+  gftopk ./lute7.600gf > ./lute7.600pk
+  rm ./lute7.600gf
+  mf "\mode:=$MODE; \mag:=1.0; input lute6; bye;"
+  gftopk ./lute6.600gf > ./lute6.600pk
+  rm ./lute6.600gf
+  rm lute*log lute*600gf
+else  
+  if ( $1 == 'b' ) then
+    echo baroque font
+    mf "\mode:=$MODE; \mag:=1.0; input blute9; bye;"
+    gftopk ./blute9.600gf > ./blute9.600pk
+    mf "\mode:=$MODE; \mag:=1.0; input blute85; bye;"
+    gftopk ./blute85.600gf > ./blute85.600pk
+    mf "\mode:=$MODE; \mag:=1.0; input blute8; bye;"
+    gftopk ./blute8.600gf > ./blute8.600pk
+    mf "\mode:=$MODE; \mag:=1.0; input blute7; bye;"
+    gftopk ./blute7.600gf > ./blute7.600pk
+    mf "\mode:=$MODE; \mag:=1.0; input blute6; bye;"
+    gftopk ./blute6.600gf > ./blute6.600pk
+    rm blute*log blute*600gf
+  else
+    echo args:  b
+  endif
+endif
+#
+

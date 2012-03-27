@@ -1,0 +1,180 @@
+VERSION "4.3.76"  jan 2012
+volume control for MIDI, fix for Mesngeau fourish and midi
+
+VERSION "4.3.75"  May 29 2011
+fix thick bar for four and five bar staves
+make 4 and 5 staff lines work with -h ital to french conversion
+(makes them work for whole file)
+
+VERSION "4.3.74"  April 11 2011
+fix cewnterline, broken in last title.cc fix
+
+VERSION "4.3.73"  Feb 21 2011
+adding seventh course to nmidi
+
+VERSION "4.3.72"  Feb 21 2011
+added a fix to title.cc for nmidi with lots of titles
+Just take the first one
+
+VERSION "4.3.71"  Feb 10 2011
+Big rewriting of title.cc
+
+VERSION "4.3.70" Nov 29 2010
+fix time signatures for seven lines
+
+VERSION "4.3.69" Nov 27 2010
+fixed repeat dots for seven staves
+
+VERSION "4.3.68"
+fixed buffer overflow on title.cc -  LLINE
+
+VERSION "4.3.67" November 21 2010
+fixed baroque 2, 3, 8 and 9 bourdons to work
+
+VERSION "4.3.66"  November 21 2020
+fixed do_nmidi to handle i l and k
+
+#define VERSION "4.3.65"  Oct 17 2010
+added a fix when a ] is followed by } or / in a title
+
+VERSION "4.3.64"  April 2009
+fixed offset of SO and So time signatures
+Added S0
+added -twelvedot
+July 09 check for null pointer pass1.cc 
+July 09 added a few checks for null pointers in notes.cc
+
+VERSION "4.3.63" Sept 2008
+fixed spacing on long s
+
+fixed nmidi "Breve"
+working in improving "sustain" function
+
+
+VERSION "4.3.60"  Mar 7 2008
+changed squiggle "Q" to vector drawn character which makes gs happier
+ Fix for [text interfering with score
+Fix for flat in tuning
+
+VERSION "4.3.59"  Feb 5 2008
+added check for -o with no file specified
+fixed score = j treated like i
+changed v to have no width when used without barline
+
+VERSION "4.3.58"  Dec 2007
+forgotten changes to dvi_f, nmidi, do_nmidi (probably for high notes)
+changed copyright dates to 2008
+
+VERSION "4.3.57   Sept 2007
+
+fixed conversion (-h) for n, m
+
+VERSION "4.3.56"  Feb 10 2007
+
+starting to add thin renaissance font
+
+VERSION "4.3.55"  Feb 8 2007
+
+In dvi_f added check for music only in middle of grids
+
+VERSION "4.3.54"  Feb 1 2007
+
+fixed "copyright" which somehow had gotten lost as a 
+first pass flag.
+
+VERSION "4.3.53"  Jan 30 2007
+
+fixed "$transpose" option
+fixed midi to ignore music with no tablature
+
+VERSION "4.3.52"  Jan 10 2007
+
+fixed mensural note positioning for -R7 reduction
+
+VERSION "4.3.50"  Nov 20 2006
+
+fixes to after ornament spacing
+added -staff-line-thickness option
+fix to certain slurs
+
+VERSION "4.3.49"  Oct 20 2006
+
+fixes to highlighting, -listfonts option fixed converting x after dotted
+note in midi and piano music
+Fixed missing time sig in second staff line
+
+VERSION "4.3.48"  Oct 6 2006
+
+many little fixes to compile in Visual Studio C++ 2005
+changes to nmidi.
+Old Mac preX and old windows stuff removed
+
+VERSION "4.3.47"  Sept 6 2006
+
+fix for single line music and 5 or 4 line in staff   tablature
+fixed "v" marks for non italian music, when used between barlines.  Sept 03 06
+
+VERSION "4.3.46"
+
+added $left_margin (set in points) and -guitar (to do music on one staff)
+
+VERSION "4.3.45"  July 11 2006
+
+Added inverted italian 3 flag note
+
+VERSION "4.3.44"  June 14 2006
+
+Made cosmetic fixes to SC, C especially when combined with S3
+
+VERSION "4.3.42"  Amrch 7 2006
+
+Midi file format 1, with a "tempo track"
+
+VERSION "4.3.41"  March 6 2006
+
+fixed bug in setting number of tracks
+
+VERSION "4.3.40"  Feb 16 06
+
+fixed o_staff_len default  so there is a begginging length for includes
+
+VERSION "4.3.36"  November 6 2005 -
+
+added source for midi-dump
+
+fixed buffer.cc for reading mac format EOL files, only
+chop off character after the \r if is it a \n, that is,
+a Windows format EOL
+
+new "milan" argument so that L de Milan style tab is
+converted to music correctly.
+
+
+VERSION "4.3.34"  July 15 2005
+
+July 15 changed score.c to ignore a flag of "O" for capirolla
+   ornaments
+July 13 changed dvi_f.cc to print flag for first triplet
+   if not baroque
+
+VERSION "4.3.33"  June 29 2005
+
+corrected is_music in notes.cc to allow 1234 for high notes, 
+also added ? as low F, and fixed ledger lines and stuff
+like that.  you can also use h, i for high a and b
+
+VERSION "4.3.32"  June 3 2005 -
+
+ added changelog
+ added 7 bourdon, rearranged baroque bourdons in font files, to
+avoid overlapping rests.  Changed baroque quarter rest to modern type.
+added R to badchar. fixed font building scripts.  added mk_300
+
+June 5 added "convert" option for N10 - N12 characters
+
+June 7 added $scribe option
+
+June 8 fixed score for N10-N20
+
+June 11 fixed $score for different page magnifications
+

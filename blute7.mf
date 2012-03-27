@@ -1,0 +1,32 @@
+%
+%  a new font 
+%
+%
+mode_def cxnew =                       %\[ Canon CX, SX, LBP-LX (300dpi)
+  mode_param (pixels_per_inch, 600);
+  mode_param (blacker, 1.5);       % was 0
+  mode_param (fillin, .2);       % was .2
+  mode_param (o_correction, .65);  % was .6
+  mode_common_setup_;
+enddef;
+%
+%  a new font
+%
+% mode:=cxnew;
+
+mode_setup;
+%
+ em#:=5.444pt#; cap#:=7pt#;
+ ptt#:=1.16665pt#;
+ wid#:=1.16665pt#;
+define_pixels(em,cap);
+define_corrected_pixels(ptt,wid);
+%
+font_quad:=em#;font_normal_space:=0.7em#;font_normal_stretch:=0.24em#;
+font_normal_shrink:=0.2em#;
+font_identifier:="Lute7-wbc";
+font_size 7pt#;
+%
+%
+input blute.mf
+do_all;

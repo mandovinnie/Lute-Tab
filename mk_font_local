@@ -1,0 +1,50 @@
+#!/bin/csh
+#
+#  make the lute9 font
+#
+# xdvi
+#
+set FMT = plain
+#
+#
+# laserwriter
+#
+virmf \&$FMT "\mode:=CanonCX; \mag:=1.0; input lute9; bye;"
+gftopk ./lute9.300gf > ./lute9.300pk
+#
+# virmf \&$FMT "\mode:=IBMFourZeroTwoNine; \mag:=1.0; input lute9; bye;"
+# gftopk ./lute9.600gf > ./lute9.600pk
+#
+rm -f lute9*gf lute9*bdf lute9.log
+#
+# reduced font
+#
+#
+virmf \&$FMT "\mode:=CanonCX; \mag:=1.0; input lute6; bye;"
+gftopk ./lute6.300gf > ./lute6.300pk
+#
+rm -f lute6*gf lute6*bdf lute6.log
+#
+# less reduced font
+#
+echo lute8
+virmf \&$FMT "\mode:=CanonCX; \mag:=1.0; input lute8; bye;"
+gftopk ./lute8.300gf > ./lute8.300pk
+#
+rm -f lute8*gf lute8*bdf lute8.log
+#
+echo lute85
+virmf \&$FMT "\mode:=CanonCX; \mag:=1.0; input lute85; bye;"
+gftopk ./lute85.300gf > ./lute85.300pk
+#
+rm -f lute8*gf lute8*bdf lute8.log
+#
+# less less reduced font
+#
+echo lute7
+virmf \&$FMT "\mode:=CanonCX; \mag:=1.0; input lute7; bye;"
+gftopk ./lute7.300gf > ./lute7.300pk
+#
+rm -f lute7*gf lute7*bdf lute7.log
+
+
