@@ -365,7 +365,7 @@ main(int argc, char **argv)
     //  dbg_set(Fonts);
     
     if ( ! (f.m_flags & QUIET) )
-      dbg2(Warning, "tab %s copyright 1995-2010 by Wayne Cripps%c",
+      dbg2(Warning, "tab %s copyright 1995-2012 by Wayne Cripps%c",
 	   (void *)VERSION,
 	   (void *) NEWLINE );
     
