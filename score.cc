@@ -412,9 +412,9 @@ score(print *p, struct list *l, struct file_info *f,
 		    put_note(p, i-1, c, timeval, f, ch);
 		} // end flip italian
 		// wbc august
-		else if ((c >= '0' && c <= '9') //spanish - don't flip
+    		else if ((c >= '0' && c <= '9') //spanish - don't flip
 		      || c == 'x' || (c >= 230 && c <= 240 )) {
-		  put_note(p, i-1, c, timeval, f, ch);
+		  put_note(p, i-1, 'a' - '0' + c, timeval, f, ch);
 		}
 		// end wbc august
 		else if (c == 'z')
