@@ -414,7 +414,20 @@ score(print *p, struct list *l, struct file_info *f,
 		// wbc august
     		else if ((c >= '0' && c <= '9') //spanish - don't flip
 		      || c == 'x' || (c >= 230 && c <= 240 )) {
-		  put_note(p, i-1, 'a' - '0' + c, timeval, f, ch);
+		  if (c == 'x' ) 
+		    put_note(p, i-1, 'l', timeval, f, ch);
+		  else if (c == 230 )
+                    put_note(p, i-1, 'l', timeval, f, ch);
+		  else if (c == 231 )
+                    put_note(p, i-1, 'm', timeval, f, ch);
+		  else if (c == 232 )
+                    put_note(p, i-1, 'n', timeval, f, ch);
+		  else if (c == 233 )
+                    put_note(p, i-1, 'o', timeval, f, ch);
+		  else if (c == 234 )
+                    put_note(p, i-1, 'p', timeval, f, ch);
+		  else
+		    put_note(p, i-1, 'a' - '0' + c, timeval, f, ch);
 		}
 		// end wbc august
 		else if (c == 'z')
