@@ -1,3 +1,7 @@
+VERSION "4.3.77"
+allow negative value for $sys-skip
+new variable, $top_margin , takes points.
+
 VERSION "4.3.76"  jan 2012
 volume control for MIDI, fix for Mesngeau fourish and midi
 

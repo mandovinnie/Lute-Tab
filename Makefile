@@ -8,7 +8,7 @@
 #  where the lute9.tfm file resides
 #
 # OPTIM = -O2
-OPTIM = -g -O0 
+OPTIM = -g -O0
 CC = g++3 -wuninitilized
 LD = g++
 # LD = g++ -m64
@@ -30,6 +30,7 @@ TLOC='"."'
 #
 # TLOC = '"/Users/wbc/nnt"'
 # TLOC = '"/net/wbc/src/nnt"'
+# TLOC = '"/net/quimby/wbc/src/nnt"'
 # TLOC = '"/net/wbc/src/old-nnt"'
 # TLOC = '"/net/tahoe4/wbc/src/nnt"'
 # TLOC = '"/usr/aeolus1/wbc/src/nnt"'
@@ -112,7 +113,7 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	tlute9.600pk tlute8.600pk tlute7.600pk tlute6.600pk \
 	simple.tab 
 
-DISTFILE = lute_tab4.3.76.tar
+DISTFILE = lute_tab4.3.77.tar
 
 distrib:	 ${DISTFILE}
 

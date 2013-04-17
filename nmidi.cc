@@ -333,7 +333,7 @@ void nmidi::do_lute_music()
   for (i=0; i< STRINGS; i++)
     saved[i] = 0;
 
-  sprintf(s, "tab %s copyright 1995-2012 by Wayne Cripps",  VERSION);
+  sprintf(s, "tab %s copyright 1995-2010 by Wayne Cripps",  VERSION);
   ntext(Copyright, s);
   ntext(Text, "converted by TAB");
   ntext(Track, "lute");

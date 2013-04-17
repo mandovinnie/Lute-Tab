@@ -33,6 +33,7 @@ node::node(const char *key, void *val, node *top)
   k = (char *)malloc(strlen(key)+2);
   //  k = new char(strlen(key)+2); malloc is better for windows
   strcpy (k, key);
+  // printf("new node: %s\n", key);
   v = val;
   r = 0;
   l = 0;
@@ -517,6 +518,11 @@ void set_left_margin(const char *value, struct file_info *f)
   int i = atoi(value);
   f->left_margin = i;
 }
+void set_top_margin(const char *value, struct file_info *f)
+{
+  int i = atoi(value);
+  f->top_margin = i;
+}
 void set_midi_volume(const char *value, struct file_info *f)
 {
   f->midi_volume = atoi(value);
@@ -570,7 +576,8 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {(char*)"start-system", (void *)set_start_system},
     {(char*)"transpose",    (void *)set_transpose},
     {(char*)"scribe",       (void *)set_scribe},
-    {(char*)"left-margin", (void*)set_left_margin},
+    {(char*)"left-margin", (void *)set_left_margin},
+    {(char*)"top-margin", (void *)set_top_margin},
     {0,0}
   };
 
@@ -602,7 +609,8 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {(char*)"start-system",   (void *)first},
     {(char*)"transpose",    (void *)first},
     {(char*)"scribe",       (void *)first},
-    {(char*)"left-margin", (void*)first},
+    {(char*)"left-margin", (void *)first},
+    {(char*)"top-margin", (void *)first},
     {0,0}
   };
   

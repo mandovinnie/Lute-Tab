@@ -410,31 +410,12 @@ score(print *p, struct list *l, struct file_info *f,
 		    put_note(p, i-1, c, timeval, f, ch);
 		  else
 		    put_note(p, i-1, c, timeval, f, ch);
-		} // end flip italian
-		// wbc august
-    		else if ((c >= '0' && c <= '9') //spanish - don't flip
-		      || c == 'x' || (c >= 230 && c <= 240 )) {
-		  if (c == 'x' ) 
-		    put_note(p, i-1, 'l', timeval, f, ch);
-		  else if (c == 230 )
-                    put_note(p, i-1, 'l', timeval, f, ch);
-		  else if (c == 231 )
-                    put_note(p, i-1, 'm', timeval, f, ch);
-		  else if (c == 232 )
-                    put_note(p, i-1, 'n', timeval, f, ch);
-		  else if (c == 233 )
-                    put_note(p, i-1, 'o', timeval, f, ch);
-		  else if (c == 234 )
-                    put_note(p, i-1, 'p', timeval, f, ch);
-		  else
-		    put_note(p, i-1, 'a' - '0' + c, timeval, f, ch);
 		}
-		// end wbc august
 		else if (c == 'z')
 		  put_note(p, i-1, 'd', timeval, f, ch); 
 		else if (c >= 'a' && c <= 'p')
 		  put_note(p, i-1, c, timeval, f, ch); /* i-1 is string number */
-	      }   // i >= 8 - bourdon
+	      } // i >= 8 - bourdon
 	      else if (prev && isalnum(c)) {
 		if (prev[i] == '/' )
 		  put_note(p, 8, 'a', timeval, f, ch);

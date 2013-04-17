@@ -525,6 +525,7 @@ int format_page(print *p, i_buf *i_b,
 		    + str_to_inch("0.33 in");
 
 		if (f->sys_skip > 0.0) staff_space += f->sys_skip;
+/* wbc mar 2013 */	if (f->sys_skip < 0.0) staff_space += f->sys_skip;
 		if (f->flags & LSA_FORM ) staff_space += .5;
 		if (f->flags & JAM ) staff_space -= .1;
 		if (f->flags & ROTATE  && baroque)staff_space -= .1;

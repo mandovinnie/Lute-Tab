@@ -29,6 +29,7 @@ class ps_print : public print {
     double font_sizes[FONT_NAMES];				    
     int nodump;
     unsigned int left_margin;
+    unsigned int top_margin;
   public:
     /*    char ps_used[256]; */
 

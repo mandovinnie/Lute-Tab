@@ -89,6 +89,7 @@ void init(file_info *f)
     f->scribe=0;
     f->title=0;
     f->left_margin=72;
+    f->top_margin=72;
 }
 
 char *
@@ -365,7 +366,7 @@ main(int argc, char **argv)
     //  dbg_set(Fonts);
     
     if ( ! (f.m_flags & QUIET) )
-      dbg2(Warning, "tab %s copyright 1995-2012 by Wayne Cripps%c",
+      dbg2(Warning, "tab %s copyright 1995-2010 by Wayne Cripps%c",
 	   (void *)VERSION,
 	   (void *) NEWLINE );
     
