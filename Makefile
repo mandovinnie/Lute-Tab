@@ -8,7 +8,7 @@
 #  where the lute9.tfm file resides
 #
 # OPTIM = -O2
-OPTIM = -g -O0
+OPTIM = -g -O0 -Wno-int-to-pointer-cast
 CC = g++3 -wuninitilized
 LD = g++
 # LD = g++ -m64
@@ -100,10 +100,12 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	blute9.tfm blute8.tfm blute85.tfm \
 	cmr10.tfm cmr12.tfm cmti10.tfm cmti12.tfm \
 	ptmr.tfm ptmri.tfm psyr.tfm \
+	pbkd.tfm  pbkdi.tfm pbkl.tfm pbkli.tfm \
 	pncb.tfm    pncbi.tfm   pncr.tfm    pncri.tfm  \
 	ptmb.tfm     ptmbo.tfm    ptmrc.tfm    ptmro.tfm    ptmrrn.tfm \
 	ptmbi.tfm    ptmrre.tfm \
 	pzcmi.tfm \
+	pplr.tfm pplri.tfm pplb.tfm pplbi.tfm \
 	mk_font_local mk_test mk_300 mk_600 mk_1200 mk_2400 \
 	sample.tab demo.tab c.tab t.tab AboutTab.txt  mkdep \
 	version.pl makedepend CHANGELOG \
@@ -113,7 +115,7 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	tlute9.600pk tlute8.600pk tlute7.600pk tlute6.600pk \
 	simple.tab 
 
-DISTFILE = lute_tab4.3.77.tar
+DISTFILE = lute_tab4.3.79.tar
 
 distrib:	 ${DISTFILE}
 

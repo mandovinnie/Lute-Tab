@@ -1,3 +1,13 @@
+VERSION "4.3.79"
+added a new character, a '/. for strum. use "q" for it.  
+Also $extended_character_set to print q-v rather than the ornament
+also, modifiet tfm.cc to allow for an apparently new header format
+emitted by mf, which omits the name and coding scheme
+
+VERSION "4.3.78"
+added a warning when a double quote is used at the end of the line
+with nothing to quote
+	
 VERSION "4.3.77"
 allow negative value for $sys-skip
 new variable, $top_margin , takes points.

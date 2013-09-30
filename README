@@ -188,6 +188,7 @@ Options:
 	and N11 to an X with a dot above it
     -T uses dalza style flags
     -t prints the notes on the line and does nothing else
+    -tfmdump  dumps useful info about the TFM file headers (developrs only)
     -thin uses the older,renaissance font "tlute"
     -v prints the intermediate language to the screen
     -V gives the version and date
@@ -297,8 +298,8 @@ M		- a note of music with no tab M#n+ where # equals
  		    - for flat, n for natural, or 0 for neither
 		    v for dot and flat, ^ for sharp and dot
 		    N for dot and natural
-		  MG gives a G cleff in the music.  MF gives
-		  an F cleff in the music
+		  MG gives a G clef in the music.  MF gives
+		  an F clef in the music
 		  appending an 8b places an 8 below the G and MGa places
                   an 8 above the G clef.
 O		- this chord is an ornament, as in Capirola book - 
@@ -390,6 +391,8 @@ $		- used to set these values. This flag must be
 		  $transpose=n			transposes midi or mensural 
                                                 notation n half steps
     		  $left_margin=nn               sets the left margin in 1/72 inch (points)
+		  $extended_character_set	Normally q is an ornament, 
+						if you need q-v to be letters use this
 
 the following characters have special significance as the
 second letter on a line - in most cases, if not needed
@@ -457,6 +460,7 @@ of tablature, as the second to tenth character.
 			  as 1 "-c"-d"-da
 	Nxx		- print number xx -as in 10 through 30 for
 			- high frets in Italian tab or modern guitar tab.
+	q		- a '/. sign for Kapsberger
 	R		- a rest
 	R!		- a rest, with no flag
 	U		- begins a horizontal underline to indicate a held 

@@ -3,11 +3,11 @@
 //
 #ifndef __TFM_FONT__
 #define __TFM_FONT__
-#define MAXFONTS 8
-#define MAXWIDTHS 256
-#define MAX_W_VAL 64
-#define NAME_SIZE 32 /* was 20 - is that 20 hex ? */
-#define MAX_H_VAL 16
+#define MAXFONTS 2 * 8
+#define MAXWIDTHS 2 * 256
+#define MAX_W_VAL 2 * 64
+#define NAME_SIZE 2 * 128 /* was 32 after that  was 20 - is that 20 hex ? */
+#define MAX_H_VAL 2 * 16
 
 class tfm_font {
     short f_l;	/* length */
@@ -23,7 +23,8 @@ class tfm_font {
     short f_extproglen;
     short f_params;
     unsigned int f_type_len; /* length of type comment */
-    char commnt[NAME_SIZE];  /* comment */
+    char commnt[NAME_SIZE]; /*  wbc sep 2013 */ /* comment */
+ /*   char *commnt; */  /* comment */
     unsigned int   f_name;   /* length of font name */
     char names[NAME_SIZE];   /* font name */
     int   f_check_sum;

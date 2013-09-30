@@ -82,6 +82,7 @@ struct file_info {
   unsigned int left_margin;	/* the left margin in PostScript units for PS output only */
   unsigned int top_margin;	/* the top margin in PostScript units for PS output only */
   unsigned int midi_volume;     /* the volume or velocity for a midi file*/
+  unsigned int extended_character_set; /* is q a character or ornament? */
 };
 
 struct font_list {

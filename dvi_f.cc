@@ -1475,11 +1475,23 @@ struct list *l)			/* data */
 	}
 	else if ( cc > 'p' && cc < 'x' && c != '+' ) {
 	  //		  printf ("here c is %d %c\n", cc, cc);
-	  p->push();
-	  p->use_font(2);  
-	  p->put_a_char(cc);
-	  p->use_font(0);
-	  p->pop();
+	  if ( f->extended_character_set ) {
+	  //  printf ("HERE %c\n", cc);
+	    p->push();
+            p->use_font(2);
+            p->put_a_char(cc);
+            p->use_font(0);
+            p->pop();
+	  }
+	  else if ( cc == 'q' ) 
+            p->put_a_char(070); // wbc sep 2013 a Kapsberger ornament //
+          else {		// use extended char set if char not defined
+	    p->push();
+	    p->use_font(2);  
+	    p->put_a_char(cc);
+	    p->use_font(0);
+	    p->pop();
+          }
 	}
 	else if ( (c == '+' || c == '&') && cc == 'x' ) {
 	  // this is for ornaments as opposed to ital ten (X)

@@ -485,7 +485,9 @@ int format_page(print *p, i_buf *i_b,
 	      else {		/* compensate for flag height here */
 		p->movev(flag_h + str_to_inch(flag_to_staff));
 	      }
-
+   	      
+	      if (!(f->m_flags & QUIET)) 
+		dbg1(Warning, "tab: tab_p: sys_count: %d\n", (void *)(sys_count+1));
 	      printsystem(p, i_b, f_a, &l_p[sys_count], f);
 	    }
 

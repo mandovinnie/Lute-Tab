@@ -52,7 +52,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
     unsigned char staff[STAFF], ornament[STAFF]; 
     unsigned char finger[STAFF], a_ornament[STAFF], t_ornament[STAFF];
     signed char c;
-    char cc, *p, *pp;
+    char cc, *p, *pp; 
     int i, j=0;
     signed char get();
     int gridflag=0;
@@ -104,8 +104,8 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	      if (!strncmp(&buf[1], "twostaff", 8)) {
 		goto end;
 	      }
-	      dbg1(Warning, "getsystem: flag -%c in middle of a system\n", 
-		   (void *)*pp );
+	      dbg1(Warning, "getsystem: flag -%c in middle of a system\n",
+		   (void *) *pp );
 	      break;
 	    case 'e':
 	    case 'b':
@@ -522,6 +522,11 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 			ornament[i] = 134;
 			skip++;
 		      }
+		    }
+		    else if (ornament[i] == '\n') {
+		      dbg0 (Warning, "tab: getsys: double quote with no following character at end of line\n");
+		      skip--;
+//		      i = STAFF;
 		    }
 		    skip++;
 		    i--;

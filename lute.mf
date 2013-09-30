@@ -1342,6 +1342,16 @@ def a_dot(suffix $)(expr wid)(expr hi) =
  fill z$1..z$2..z$3..z$4..cycle;
 enddef;
 %
+def do_arpeggio =
+beginchar (56, 1.0em#, 1.0cap#, 0);"a little thing to indicat repeat";
+        pickup lute_pen;
+        x0=0w; y0=0.35h;
+        x1=1w; y1=0.45h;
+        a_dot(1, .29w, 0.836h);
+        a_dot(2, .38w , 0.21h );
+        draw z0{right}..tension 4.0..{right}z1;
+	endchar;enddef;
+%
 def do_rpt =
 beginchar (57, 2.5em#, .8cap#, 0);"a little thing to indicat repeat";
 	pickup lute_pen;
@@ -2421,10 +2431,11 @@ beginchar (252, 1.6em#, 2.2cap#, 0); "G Clef";
    x5=x2;y5=y3;
    x6=x4;y6=.4h;
    x7=.48w;y7=.3h;
+
    penpos0(2.4 wid,-50);
    penpos1(2.4 wid,-40);
-   penpos2(2.4 wid,-40); 
-   penpos3(2.4 wid,0);
+   penpos2(2.2 wid,-50);
+   penpos3(2.2 wid,-10);
    penpos4(.8 wid,90);
    penpos5(1.6 wid, 180);
    penpos6(.4wid, 270);
@@ -2610,6 +2621,7 @@ def do_all =
   do_in_zero;do_in_one;do_in_two;do_in_three;do_in_four;do_in_five;
   do_in_six;do_in_seven;do_in_eight;do_in_nine;
   do_s_tie;do_b_tie;do_rpt;
+  do_arpeggio;
   do_sharp;do_old_sharp;do_v;do_vv;
   do_l_paren;  do_r_paren;do_e_rest;do_q_rest;
   do_mod_flat;do_natural;do_octave;

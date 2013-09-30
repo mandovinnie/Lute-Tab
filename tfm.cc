@@ -150,97 +150,110 @@ tfm_font::tfm_input(double scale) // read current file to current struct
     /* check for too many widths */
     if (( n_widths = f_ec - f_bc + 1) > MAXWIDTHS) 
       dbg0(Error, "tab: tfm_input: too many widths\n");
-
+    
     if (n_widths < 5) {	/* oops! */
-	dbg1 (Warning, 
-	      "tab: tfm_file: there are only %d characters in this font!!\n",
-	      (void *)n_widths);
+      dbg1 (Warning, 
+	    "tab: tfm_file: there are only %d characters in this font!!\n",
+	    (void *)n_widths);
     }
+
     f_nw = get_short();	/* number of widths */
     f_nh = get_short();	/* number of heights */
+    dbg2 (TFM,  " %d widths, %d heights\n", (void *)(int)f_nw, (void *)(int)f_nh);
+
+    /* by now 3 header words have been read */
+
     f_nd = get_short(); /* number of depths */
     f_ics = get_short();
     f_ligproglen = get_short();
     f_n_kerns = get_short();
     f_extproglen = get_short();
     f_params = get_short();
-
-    /* we get the Headea (after the File Header)r */
-
-    dbg2 (TFM,  " %d widths, %d heights\n", (void *)(int)f_nw, (void *)(int)f_nh);
-    dbg1 (TFM,  "program length is %d, ", (void *)(int)f_ligproglen);
-    dbg2 (TFM,  "%d italics, %d kerns, ", (void *)(int)f_ics, (void *)(int)f_n_kerns);
+    dbg4 (TFM,  "%d depths %d italics, %d kerns, %d extproglen, ", 
+	(void *)(int)f_nd, (void *)(int)f_ics, (void *)(int)f_n_kerns, (void *)(int)f_extproglen);
+    dbg1 (TFM,  "ligature program length is %d, ", (void *)(int)f_ligproglen);
     dbg1 (TFM,  "%d parameters\n",(void *) (int)f_params);
-
+      
+    /* we get the Header (after the File Header)r */
+    
     for (k=1;k <= f_lh; k++) { /* check sum and design size */
-	if ( k == 1 ) {
-	    f_check_sum = (int)get_long();
-/*	    pk_checksum[nf] = f_check_sum; */
-	    dbg1 (TFM, "check sum is %X\n", (void *)f_check_sum);
+      if ( k == 1 ) {
+	f_check_sum = (int)get_long();
+	/*	    pk_checksum[nf] = f_check_sum; */
+	dbg1 (TFM, "check sum is %X\n", (void *)f_check_sum);
+      }
+      else if (k == 2) {
+	f_design_size = (int)get_long() / 8;
+	dbg1 (TFM, "design size is %X\n", (void *)f_design_size);
+      }
+      else if (k == 3 ) {	/* seems to be 1 byte size 19 name */
+	int i;
+	read_tfm_word(&b0, &b1, &b2, &b3);
+	i = f_type_len = (unsigned int)b0;
+	/*	    commnt = (char *)malloc(f_type_len+3);  */  /* wbc sept 2013 */
+	p = commnt;
+	*p++ = b1; 
+	*p++ = b2; 
+	*p++ = b3; 
+	i-=3;
+	while (i > 0 && f_lh > k) {
+	  read_tfm_word(&b0, &b1, &b2, &b3);
+	  k++;
+	  i-=4;
+	  *p++ = b0; 
+	  *p++ = b1; 
+	  *p++ = b2; 
+	  *p++ = b3; 
 	}
-	else if (k == 2) {
-	    f_design_size = (int)get_long() / 8;
-	    dbg1 (TFM, "design size is %X\n", (void *)f_design_size);
+	/*	    commnt[f_type_len-1] = '\0'; */
+	dbg2 (TFM, "type length %d, coding scheme %s\n",
+	      (void *)f_type_len, (void *)commnt);
+	if (f_type_len > 39 )
+	   dbg0 (TFM, "the type length is over the maximum of 39 bytes\n");
+	dbg2 (Widths, " tfm_input: type length %d coding scheme %s\n",
+	      (void *)f_type_len, (void *)commnt);
+      }
+      else if ( k == 13) {
+	int i;
+	/* seems to be 1 byte size 19 bytes name */	    
+	p = names;
+	read_tfm_word(&b0, &b1, &b2, &b3); /* at word 14 */
+	i = f_name = (unsigned int)(b0/* & 0x000f */);
+	i-=3;
+	*p++ = b1; 
+	*p++ = b2; 
+	*p++ = b3;
+	/* while (k <= 18) { */
+	while (i>0 && k <= 18) {
+	  read_tfm_word(&b0, &b1, &b2, &b3);
+	  *p++ = b0; 
+	  *p++ = b1; 
+	  *p++ = b2; 
+	  *p++ = b3; 
+	  i-=4;
+	  k++;
 	}
-	else if (k == 3 ) {	/* seems to be 1 byte size 19 name */
-	    int i;
-	    p = commnt;
-	    read_tfm_word(&b0, &b1, &b2, &b3);
-	    i = f_type_len = (unsigned int)b0;
-	    *p++ = b1; 
-	    *p++ = b2; 
-	    *p++ = b3; 
-	    i-=3;
-	    while (i>0) {
-		read_tfm_word(&b0, &b1, &b2, &b3);
-		k++;
-		i-=4;
-		*p++ = b0; 
-		*p++ = b1; 
-		*p++ = b2; 
-		*p++ = b3; 
-	    }
-	    commnt[f_type_len-1] = '\0';
-	    dbg2 (TFM, "type length %d, coding scheme %s\n",
-		      (void *)f_type_len, (void *)commnt);
-	    dbg2 (Widths, " tfm_input: type length %d coding scheme %s\n",
-		      (void *)f_type_len, (void *)commnt);
+	names[f_name] = '\0'; 
+	
+	dbg2 (TFM,    "tfm_input: namelen %d name %s\n",
+	      (void *)f_name,(void *) names);
+	
+	dbg2 (Widths, "tfm_input: namelen %d name %s\n",
+	      (void *)f_name,(void *) names);
+	
+	ps_text = 0;
+	if (!strstr(names, "wbc") && strchr(names, 'P')) {
+	  ps_text = 1;
 	}
-	else if ( k == 13) {
-	    int i;
-	    /* seems to be 1 byte size 19 bytes name */	    
-	    p = names;
-	    read_tfm_word(&b0, &b1, &b2, &b3); /* at word 14 */
-	    i = f_name = (unsigned int)(b0/* & 0x000f */);
-	    i-=3;
-	    *p++ = b1; 
-	    *p++ = b2; 
-	    *p++ = b3;
-	    /* while (k <= 18) { */
-	    while (i>0 && k <= 18) {
-		read_tfm_word(&b0, &b1, &b2, &b3);
-		*p++ = b0; 
-		*p++ = b1; 
-		*p++ = b2; 
-		*p++ = b3; 
-		i-=4;
-		k++;
-	    }
-	    names[f_name] = '\0';
-
-	    dbg2 (TFM,    "tfm_input: namelen %d name %s\n",
-		  (void *)f_name,(void *) names);
-	    
-	    dbg2 (Widths, "tfm_input: namelen %d name %s\n",
-		  (void *)f_name,(void *) names);
-
-	    ps_text = 0;
-	    if (!strstr(names, "wbc") && strchr(names, 'P')) {
-	      ps_text = 1;
-	    }
-	}
-	else (void) get_long();
+      }
+      else if ( k == 18 ) {
+	read_tfm_word(&b0, &b1, &b2, &b3);
+	dbg2 (TFM, "tfm_input: seven bit safe %d  face %d\n", (void *)b0, (void *)b3);
+      }
+      else (void) get_long();
     }
+    
+    dbg0 (TFM, "\n");
 
     /* now we get Char Info for each character */
 

@@ -746,10 +746,10 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       weight = 0;
       break;
     default:
-      dbg2(Warning, "tab: pass1: unknown flag %d %s\n", 
-	   (void *)(int)c, (void *)l->dat );
+      dbg3(Warning, "tab: pass1: unknown flag %d %s at index %d\n", 
+	   (void *)(int)c, (void *)l->dat, (void *)j );
       dbg2(Warning, 
-	   "pass1: unknown flag value in inter file %d %d",
+	   "pass1: unknown flag value in inter file %d %d\n",
 	   (void *)n_system, (void *)(j+1));
       break;
     }

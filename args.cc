@@ -471,6 +471,10 @@ void set_thin_font(const char *value, struct file_info *f)
     dbg0(Error, "Args.cc: You can't use both -thin and -b at the same time \n");
   thin_renaissance=1;     
 }
+void set_tfmdump(const char *value, struct file_info *f)
+{
+	dbg_set(TFM);
+}
 void set_twelvedots(const char *value, struct file_info *f)
 {
   f->m_flags |= TWELVEDOTS;
@@ -579,6 +583,7 @@ void args(int argc, char ** argv, struct file_info *f)
       {(char*)"guitar", (void*)set_guitar},
       {(char*)"staff-line-thickness", (void*)set_line_thickness},
       {(char*)"thin", (void*)set_thin_font},
+      {(char*)"tfmdump", (void*)set_tfmdump},
       {(char*)"twelvedots", (void*) set_twelvedots},
       {(char *)0, (void*)0}
     };

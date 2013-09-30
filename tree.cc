@@ -527,6 +527,10 @@ void set_midi_volume(const char *value, struct file_info *f)
 {
   f->midi_volume = atoi(value);
 }
+void set_extended_character_set(const char *value, struct file_info *f)
+{
+  f->extended_character_set = 1;
+}
 
 
 /*
@@ -578,6 +582,7 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {(char*)"scribe",       (void *)set_scribe},
     {(char*)"left-margin", (void *)set_left_margin},
     {(char*)"top-margin", (void *)set_top_margin},
+    {(char*)"extended_character_set", (void *)set_extended_character_set},
     {0,0}
   };
 
@@ -611,6 +616,7 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {(char*)"scribe",       (void *)first},
     {(char*)"left-margin", (void *)first},
     {(char*)"top-margin", (void *)first},
+    {(char*)"extended_character_set", (void *)first},
     {0,0}
   };
   
