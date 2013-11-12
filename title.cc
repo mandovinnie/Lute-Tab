@@ -22,6 +22,9 @@
 #include "print.h"
 #include "tfm.h"
 #include "i_buf.h"
+#if defined _WIN32
+#define bzero(s,n) memset((s), 0, (n))
+#endif /* WIN32 */
 
 extern int line;
 static int centerline;

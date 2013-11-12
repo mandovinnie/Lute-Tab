@@ -314,15 +314,15 @@ void set_o(const char *value, struct file_info *f)  {
   }
 #ifndef NO_STDOUT
   if (f->m_flags & SOUND ) {
-    strcat (f->out_file, ".mid");
+    strncat (f->out_file, ".mid", 4);
   }
   else if (f->flags & PS ) { 
     if ( strcmp (f->out_file, "stdout")) {
-      strcat (f->out_file, ".ps");
+      strncat (f->out_file, ".ps", 3);
     }
   }
 #endif /* NO_STDOUT */
-  else strcat (f->out_file, ".dvi");
+  else strncat (f->out_file, ".dvi", 4);
   if ( ! (f->m_flags & QUIET)) {
       dbg1 (Warning, "tab: sending output to %s\n", (void *)f->out_file);
   }
@@ -362,7 +362,7 @@ void set_sound(const char *value, struct file_info *f)
 	f->flags |= MANUSCRIPT;
 	f->m_flags |= QUIET;
 #ifndef NO_STDOUT
-	strcat (f->out_file, "stdout");	//  was /dev/null
+	strncat (f->out_file, "stdout", 6);	//  was /dev/null
 #endif
 }
 
@@ -480,6 +480,11 @@ void set_twelvedots(const char *value, struct file_info *f)
   f->m_flags |= TWELVEDOTS;
 }
 
+void set_curly_e(const char *value, struct file_info *f)
+{
+  f->m_flags |= BAROQUE_E;
+}
+
 void args(int argc, char ** argv, struct file_info *f)
 {
     char *aa=0;
@@ -585,6 +590,7 @@ void args(int argc, char ** argv, struct file_info *f)
       {(char*)"thin", (void*)set_thin_font},
       {(char*)"tfmdump", (void*)set_tfmdump},
       {(char*)"twelvedots", (void*) set_twelvedots},
+      {(char*)"curly-e", (void*) set_curly_e},
       {(char *)0, (void*)0}
     };
 

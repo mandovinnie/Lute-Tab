@@ -246,7 +246,6 @@ struct list {
  #define GUIT                   0x400000
  #define THIN_R                 0x800000
  #define TWELVEDOTS             0x1000000
+ #define BAROQUE_E		0x2000000
  /* variables defined in sizes.c */
-
-
 

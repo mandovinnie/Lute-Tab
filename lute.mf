@@ -1344,12 +1344,13 @@ enddef;
 %
 def do_arpeggio =
 beginchar (56, 1.0em#, 1.0cap#, 0);"a little thing to indicat repeat";
-        pickup lute_pen;
-        x0=0w; y0=0.35h;
-        x1=1w; y1=0.45h;
-        a_dot(1, .29w, 0.836h);
-        a_dot(2, .38w , 0.21h );
-        draw z0{right}..tension 4.0..{right}z1;
+%        pickup lute_pen;
+	pickup pencircle xscaled 1.2wid yscaled .3 wid rotated 70;
+        x0=0w; y0=0.15h;
+        x1=1w; y1=0.65h;
+        a_dot(1, .29w, 0.886h);
+        a_dot(2, .41w , 0.23h );
+        draw z0{dir 45}..tension 2.0..{dir 60}z1;
 	endchar;enddef;
 %
 def do_rpt =

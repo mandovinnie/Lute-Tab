@@ -174,6 +174,8 @@ void mapchar(print *p, font_list *f_a[], unsigned char c, struct file_info *f)
 {
     extern char italian_offset[];
 
+    //    printf ("mapchar c is %c  %d\n", c, c);
+
     if (f->line_flag == ON_LINE )       /* shift here in case we have  */
 	if (c != 'Z') p->movev(italian_offset);    /* italian and mace, etc */
 
@@ -252,48 +254,51 @@ void mapchar(print *p, font_list *f_a[], unsigned char c, struct file_info *f)
 	}
     }
     else if (( c >= 'A' && c <= 'P') || ( c >= 'a' && c <= 'p')) {
-	switch (f->char_flag) {
-	    
-	case STAND_CHAR:
-	    p->put_a_char(c);
-	    break;
-	case MACE_CHAR:
-	    if (f_a[0]->fnt->is_defined(tolower((char)c) - 'a' + 160))
-		p->put_a_char(tolower((char)c) - 'a' + 160);
-	    else p->put_a_char (c);
-	    break;
-	case ROB_CHAR:
-	    if (f_a[0]->fnt->is_defined(tolower((char)c) - 'a' + 175)) {
-		// printf("char %d\n", tolower((char)c) - 'a' + 175);
-		// printf("widths %d\n", f_a[0]->fnt->f_widths[(int)cc]);
-		// printf("width %f\n", f_a[0]->fnt->get_width(c));
-		// printf("mapping %c\n", c);
-		p->put_a_char(tolower((char)c) - 'a' + 175);
-	    }
-	    else p->put_a_char (c);
-	    break;
-	case BOARD_CHAR:
-	    switch (c) {
-	    case 'E':
-		p->put_a_char(tolower((char)c) - 'a' + 175);
-		break;
-	    case 'f':
-	    case 'h':
-	    case 'i':
-		p->put_a_char(toupper((char)c));
-		break;
-	    case 'G':
-		p->put_a_char(tolower((char)c));
-		break;
-	    default:
-		p->put_a_char(c);
-	    }
-	    break;
-	default:
-	    dbg1 (Warning, "mapchar: unknown or duplicate character flag %X\n ",
-		  (void *)f->char_flag);
-	    break;
+      if ( c == 'e' && baroque && (f->m_flags & BAROQUE_E)) {
+	c = 'E';			//  the curly baroque e
+      }
+
+      switch (f->char_flag) {	
+      case STAND_CHAR:
+	p->put_a_char(c);
+	break;
+      case MACE_CHAR:
+	if (f_a[0]->fnt->is_defined(tolower((char)c) - 'a' + 160))
+	  p->put_a_char(tolower((char)c) - 'a' + 160);
+	else p->put_a_char (c);
+	break;
+      case ROB_CHAR:
+	if (f_a[0]->fnt->is_defined(tolower((char)c) - 'a' + 175)) {
+	  // printf("char %d\n", tolower((char)c) - 'a' + 175);
+	  // printf("widths %d\n", f_a[0]->fnt->f_widths[(int)cc]);
+	  // printf("width %f\n", f_a[0]->fnt->get_width(c));
+	  // printf("mapping %c\n", c);
+	  p->put_a_char(tolower((char)c) - 'a' + 175);
 	}
+	else p->put_a_char (c);
+	break;
+      case BOARD_CHAR:
+	switch (c) {
+	case 'E':
+	  p->put_a_char(tolower((char)c) - 'a' + 175);
+	  break;
+	case 'f':
+	case 'h':
+	case 'i':
+	  p->put_a_char(toupper((char)c));
+	  break;
+	case 'G':
+	  p->put_a_char(tolower((char)c));
+	  break;
+	default:
+	  p->put_a_char(c);
+	}
+	break;
+      default:
+	dbg1 (Warning, "mapchar: unknown or duplicate character flag %X\n ",
+	      (void *)f->char_flag);
+	break;
+      }
     }
     else if ( c == 'x' && f->num_flag ==  ITAL_NUM ) {
       //           printf("here in map flag\n");

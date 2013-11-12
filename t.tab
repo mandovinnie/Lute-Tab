@@ -1,14 +1,16 @@
 
--italFlags 
+-b
+%-italFlags 
 -l "4.9 in"
 %%% $midi-volume=94
 
 b
+1 e
 S0
 MG
 1 cdcq
 x cefqo
-x abq
+x abqp
 b
 e
 1abcd

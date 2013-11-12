@@ -248,12 +248,12 @@ tfm_font::tfm_input(double scale) // read current file to current struct
       }
       else if ( k == 18 ) {
 	read_tfm_word(&b0, &b1, &b2, &b3);
-	dbg2 (TFM, "tfm_input: seven bit safe %d  face %d\n", (void *)b0, (void *)b3);
+	if (b0) dbg2 (TFM, "tfm_input: seven bit safe %d  face %d\n", (void *)b0, (void *)b3);
       }
       else (void) get_long();
     }
     
-    dbg0 (TFM, "\n");
+ /*   dbg0 (TFM, "\n"); */
 
     /* now we get Char Info for each character */
 
@@ -351,8 +351,10 @@ tfm_font::tfm_input(double scale) // read current file to current struct
 	    if (k==3) dbg1 (TFM, "space_shrink: %d ", (void *)x);
 	    if (k==4) dbg1 (TFM, "x_height: %d ", (void *)x);
 	    if (k==5) dbg1 (TFM, "quad: %d ", (void *)x);
-	    if (k==6) dbg1 (TFM, "extra_space: %d\n", (void *)x);
+	    if (k==6) dbg1 (TFM, "extra_space: %d", (void *)x);
+	    dbg0 (TFM, "\n");
     }
+    dbg0 (TFM, "\n");
 }
 
 long tfm_font::get_long()

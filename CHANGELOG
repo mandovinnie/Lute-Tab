@@ -3,6 +3,7 @@ added a new character, a '/. for strum. use "q" for it.
 Also $extended_character_set to print q-v rather than the ornament
 also, modifiet tfm.cc to allow for an apparently new header format
 emitted by mf, which omits the name and coding scheme
+also added -curly-e for baroque tablature - I though I already had this ??
 
 VERSION "4.3.78"
 added a warning when a double quote is used at the end of the line
