@@ -400,7 +400,7 @@ void nmidi::do_lute_music()
       if (0)
 	for (i=0; i< STRINGS; i++) {
 	  int diss=0;
-	  if (diss=dissonant(midi_p->dat[i], 10, saved)) 
+	  if ((diss=dissonant(midi_p->dat[i], 10, saved)))
 	    stop_string(diss, saved, midi_p);
 	}
       
@@ -408,7 +408,7 @@ void nmidi::do_lute_music()
       if (1)
 	for (i=0; i< STRINGS; i++) {
 	  int diss=0;
-	  if (diss=dissonant(midi_p->dat[i], 11, saved)) 
+	  if ((diss=dissonant(midi_p->dat[i], 11, saved)) )
 	    stop_string(diss, saved, midi_p);
 	}
       
@@ -416,7 +416,7 @@ void nmidi::do_lute_music()
       if (1)
 	for (i=0; i< STRINGS; i++) {
 	  int diss=0;
-	  if (diss=dissonant(midi_p->dat[i], 13, saved)) 
+	  if ((diss=dissonant(midi_p->dat[i], 13, saved)))
 	    stop_string(diss, saved, midi_p);
 	}
       
@@ -424,12 +424,12 @@ void nmidi::do_lute_music()
       if (1)
 	for (i=0; i< STRINGS; i++) {
 	  int diss=0;
-	  if (diss=dissonant(midi_p->dat[i], 1, saved)) 
+	  if ((diss=dissonant(midi_p->dat[i], 1, saved))) 
 	    stop_string(diss, saved, midi_p);
 	}
 	for (i=0; i< STRINGS; i++) {
 	  int diss=0;
-	  if (diss=dissonant(midi_p->dat[i], 2, saved)) 
+	  if ((diss=dissonant(midi_p->dat[i], 2, saved))) 
 	    stop_string(diss, saved, midi_p);
 	}
       
@@ -703,8 +703,7 @@ int nmidi::get_chord(chord * c) {
   fprintf(stderr, "%s  ", numtonote(dat[1]));
   fprintf(stderr, "%s  ", numtonote(dat[2]));
   fprintf(stderr, "%s\n", numtonote(dat[3]));
-  /* */
-
+  */
   for ( ; i<STRINGS; i++) 
     dat[i] = 0;
 

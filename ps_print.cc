@@ -641,8 +641,8 @@ void ps_print::set_a_char (unsigned char c)
     if (highlight_type == Red) {
       ps_command(P_S_RED, 0, 0, 0, 0);
     } 
-    else
-      ps_command(P_S_GRAY, 0, 0, 0, 0);
+    else {
+      ps_command(P_S_GRAY, 0, 0, 0, 0);}
 
   if (c == 0365) 
     dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width('i'));

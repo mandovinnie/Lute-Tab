@@ -190,7 +190,7 @@ int format_page(print *p, i_buf *i_b,
 
     p->get_current_loc(&orig_h, &orig_v); // in case we need to come back
 	
-    while (c = i_b->GetByte()) {
+    while ((c = i_b->GetByte())) {
 	i_b->unGet(c);
 
  /* return if there isn't enough room */

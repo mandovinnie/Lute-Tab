@@ -333,7 +333,7 @@ void  terminate(int val)
 #ifdef _WIN32
 int main(int argc, char **argv)
 #else
-main(int argc, char **argv)
+int main(int argc, char **argv)
 #endif /* _WIN32 */
 {
     char buf[BUFSIZ];

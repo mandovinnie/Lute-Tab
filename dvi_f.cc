@@ -1099,8 +1099,8 @@ struct list *l)			/* data */
     }
     for (i=2; i < STAFF; i++) { 
       /*	    printf ("ch[%d] is %d %c\n", i, ch[i], ch[i]);  */
-      if (ch[0] == 'O' || l->prev && l->prev->dat[0] != 'G' 
-	  && l->prev->dat[i] == 'Q') {
+      if (ch[0] == 'O' || (l->prev && l->prev->dat[0] != 'G' 
+			   && l->prev->dat[i] == 'Q')) {
 	p->set_highlight();
 	if (f->m_flags & PAREN ) 
 	  p->paren_highlight();

@@ -54,7 +54,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
     signed char c;
     char cc, *p, *pp; 
     int i, j=0;
-    signed char get();
+/*    signed char get(); */
     int gridflag=0;
     int hushbar=0, tie=0, dimline=0;/* for non print bars, and ties */
     int nocountbar=0;		// for non ocunting bar

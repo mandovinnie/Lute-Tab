@@ -157,7 +157,7 @@ tree::first()
   node *n;
 
   if (top) {
-    if (n = top->getleft()) 
+    if ((n = top->getleft()))
       return(first(n));
     else return (top);
   }
@@ -170,7 +170,7 @@ tree::first(node * n)
  node * nn;
 
  if (n) {
-    if (nn = n->getleft())
+    if ((nn = n->getleft()))
       //      return (nn);
       return (first(nn));
     else return (n);
@@ -196,26 +196,26 @@ void tree::dump_t(node * n)
 {
   char *key;
   node * nn;
-  if (nn=n->getright())
+  if ((nn=n->getright()))
     dump_t(nn);
   key=getkey(n);
   dbg1 (Warning, "tab: tree: key: %s  ", (void *)key);
   key = getval(n);
   dbg1 (Warning, "tab: tree: val: %s\n", (void *)key);
-  if (nn=n->getleft())
+  if ((nn=n->getleft()))
     dump_t(nn);
 }
 void tree::dumpval(node * n)
 {
   char *key;
   node * nn;
-  if (nn=n->getright())
+  if ((nn=n->getright()))
     dump_t(nn);
   key=getkey(n);
   dbg1 (Warning, "tab: %s", (void *)key);
   if (key)
     dbg1 (Warning, "  %s\n", (void *)get(key));
-  if (nn=n->getleft())
+  if ((nn=n->getleft()))
     dump_t(nn);
 }
 /****************************************
@@ -545,7 +545,7 @@ void setit(void *r, const char *flag, struct file_info *f)
 int
 set_string(const char *arg, const char *val, struct file_info *f, pass pass) 
 {
-  void ** res();
+ /* void ** res(); */
   void (*r)(const char *, struct file_info *);
 
   struct tuple data[] = {

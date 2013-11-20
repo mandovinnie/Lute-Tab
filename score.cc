@@ -159,10 +159,10 @@ int find_note(
     else 
 	str = strings;
 
-    if (f->num_flag == ITAL_NUM && (
+    if ((f->num_flag == ITAL_NUM) && ((
 	    (c >= '0' && c <= '9') 
 	    || ( c >= 230 && c <= 240 ) 
-	    || c == 'x') || c == 'y' || c == 'z') {
+	    || c == 'x') || c == 'y' || c == 'z')) {
 	if ( c == 'x' )
 	    fret = 10;
 	else if ( c == 'y' || c == 231 )

@@ -303,13 +303,13 @@ void set_o(const char *value, struct file_info *f)  {
     return;
   }
   strcpy (f->out_file, value);
-  if (ptr = strstr (f->out_file, ".tab")) {
+  if ((ptr = strstr (f->out_file, ".tab"))) {
     *ptr = '\0';
   }
-  if (ptr = strstr (f->out_file, ".ps")) {
+  if ((ptr = strstr (f->out_file, ".ps"))) {
     *ptr = '\0';
   }
-  if (ptr = strstr (f->out_file, ".mid")) {
+  if ((ptr = strstr (f->out_file, ".mid"))) {
     *ptr = '\0';
   }
 #ifndef NO_STDOUT

@@ -312,8 +312,8 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	    }
 	    else   
 	      if (i > 2 && 
-		  (l->next->dat[i-1] == 'g') ||
-		  (l->next->dat[i-1] == 'G')) {
+		  ((l->next->dat[i-1] == 'g') ||
+		  (l->next->dat[i-1] == 'G'))) {
 		l->padding += 0.02;
 	      }
 	  }
@@ -876,7 +876,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       if (l->notes){
 	double extra = 1.1 * f_a[0]->fnt->get_width(22);
 	if (( ! ( f->flags & SHARP_UP ))
-	    && l->notes->sharp == '+' || l->notes->sharp == '-') {
+	    && (l->notes->sharp == '+' || l->notes->sharp == '-')) {
 	  if (l->prev 
 	      && l->prev->dat[0] != '^' 
 	      && l->prev->dat[0] != '+' ) {
@@ -885,7 +885,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  }
 	}
 	else if (( ! ( f->flags & SHARP_UP ))               // flat
-		 && l->notes->sharp == '-' || l->notes->sharp == 'v') {
+		 && (l->notes->sharp == '-' || l->notes->sharp == 'v')) {
 	  extra = 1.62 * f_a[0]->fnt->get_width('?');
 	  if (l->prev) {
 	    l->prev->padding += (extra);
@@ -1011,7 +1011,7 @@ text_check(
 
     while (line && 
 	   (nospace_flag || 
-	   text  && text->size - t_size > l->padding ) ) {
+	   (text  && text->size - t_size > l->padding ))) {
 	line--;
 	if ( in_sys 
 	    || ( (staff == 1 && ll->next->text )
