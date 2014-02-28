@@ -1362,6 +1362,7 @@ struct list *l)			/* data */
 	  if (baroque) {
 	    p->moveh(-.02);
 	    if (l->next->dat[i] == 'D') p->moveh(.096);
+	    if (l->next->dat[i] == 'e') { p->moveh(.036); p->movev(.026);} 
 	  }
 	  if (f->line_flag == ON_LINE)
 	    p->movev(0.5 * d_i_space);

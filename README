@@ -405,7 +405,8 @@ they can be ignored:
  # 	begin a grid- you may say #2 or 2# but for an ornament 
 	you must say 2-#aa, not 2#aa!
  *	a dotted note within a grid
- | 	a flag with an extra bar within a grid.
+ | 	a flag with an extra bar within a grid.  using | instead of #
+        at the beginning of a series starts with a note with extra flag
  t	a tie to the next note	(this doesn't look like it works)
  W	a tie and a dot		(this doesn't look like it works either!)
  !	after a number - don't print flag but use its spacing

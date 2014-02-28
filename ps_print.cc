@@ -470,7 +470,7 @@ void ps_print::make_ps_font(i_buf *ps_header)
 
 /* do a reversed slur, given horizontal length */
     ps_header->PutString("/dorslur { /delta exch def\n");
-    ps_header->PutString("gsave 1 setlinecap 0.7 setlinewidth\n");
+    ps_header->PutString("gsave 1 setlinecap 0.8 setlinewidth\n"); /* wbc Feb 2014 width was 0.7 */
     /* height is the height of the slur, delta is the hor distance point to point*/
     ps_header->PutString("/delta delta 3 div def /height -5 def\n");
     ps_header->PutString("currentpoint 2 copy 2 copy 2 copy\n");
@@ -638,11 +638,13 @@ void ps_print::put_a_char (unsigned char c)
 void ps_print::set_a_char (unsigned char c) 
 { 
   if (highlight==On) 
+    {
     if (highlight_type == Red) {
       ps_command(P_S_RED, 0, 0, 0, 0);
     } 
     else {
       ps_command(P_S_GRAY, 0, 0, 0, 0);}
+    }
 
   if (c == 0365) 
     dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width('i'));
