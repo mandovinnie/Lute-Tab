@@ -21,7 +21,7 @@ midi_snd::midi_snd()
   buffer = new i_buf();
   midi_head();
   count = 0;
-  sprintf(s, "tab %s copyright 1995-2010 by Wayne Cripps",  VERSION);
+  sprintf(s, "tab %s copyright 1995-2014 by Wayne Cripps",  VERSION);
   text(Copyright, s);
   text(Text, "converted by TAB");
   instmnt = 0;
@@ -30,16 +30,18 @@ midi_snd::midi_snd()
   velocity = 100;
 }
 
-midi_snd::midi_snd(const unsigned int instrument,const unsigned int volume )
+midi_snd::midi_snd(const unsigned int instrument, const unsigned int volume, 
+		   const char * infile )
 {
   char s[80];
   //  printf("Start midi_snd 1 arg\n");
   buffer = new i_buf();
   midi_head();
   count = 0;
-  sprintf(s, "tab %s copyright 1995-2010 by Wayne Cripps",  VERSION);
+  sprintf(s, "tab %s copyright 1995-2014 by Wayne Cripps",  VERSION);
   text(Copyright, s);
   text(Text, "converted by TAB");
+  text(Text, infile);
   instmnt = instrument;
   program();
   fname[0] = '\0';
@@ -49,6 +51,7 @@ midi_snd::midi_snd(const unsigned int instrument,const unsigned int volume )
 
 midi_snd::midi_snd(const unsigned int instrument,
 		   const unsigned int volume,
+		   const char *infile,
 		   const char * filename)
 {
   char s[80];
@@ -56,9 +59,10 @@ midi_snd::midi_snd(const unsigned int instrument,
   buffer = new i_buf();
   midi_head();
   count = 0;
-  sprintf(s, "tab %s copyright 1995-2010 by Wayne Cripps",  VERSION);
+  sprintf(s, "tab %s copyright 1995-2014 by Wayne Cripps",  VERSION);
   text(Copyright, s);
   text(Text, "converted by TAB");
+  text(Text, infile);
   instmnt = instrument;
   program();
   strncat (fname, filename, 120);

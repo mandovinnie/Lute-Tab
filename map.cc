@@ -158,13 +158,13 @@ void mapflag(print *p, font_list *f_a[], char c, struct file_info *f)
 	}	
 	break;
     case '~':
-	p->put_a_char(067);
-	break;
+      p->put_a_char(067);
+      break;
     case '6':
     case 'x':
-	break;
+      break;
     default:
-	p->put_a_char(c);	
+      p->put_a_char(c);	
     }
 }
 
@@ -306,13 +306,14 @@ void mapchar(print *p, font_list *f_a[], unsigned char c, struct file_info *f)
 		     - f_a[0]->fnt->get_width('X'))/2.0); 
 	   p->put_a_char('X');
     }
+    else if ( c == 0xd1) {
+      dbg0 (Warning, "mapchar: apple dash detected, fudging\n ");
+      p->moveh(0.04);
+      p->movev(0.08);
+      p->put_rule(0.006, 0.13837);
+      //      p->put_a_char('-');
+    }
     else {
       p->put_a_char(c);
     }
 }
-
-
-
-
-
-

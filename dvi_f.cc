@@ -1504,6 +1504,12 @@ struct list *l)			/* data */
 	  //		  fprintf(stderr, "print x ornament here\n");
 	  p->pop();
 	}
+	else if ( c == '&' && cc == '^') {
+	  p->push();
+	  p->moveh("0.05 in");
+	  mapchar(p, f_a, cc, f);
+	  p->pop();
+	}
 	else {
 	  p->push();
 	  mapchar(p, f_a, cc, f);

@@ -148,8 +148,6 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 
   /* figure out basic widths on the first pass through */
 
-
-
   for (j=0; j < (*l_p) && l; j++){	/* get widths */
     
     if ( l == 0 ){
@@ -228,6 +226,8 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	l->padding = 0.01 /* str_to_inch(min_d_w) */;
       else if (strchr("{}[]()UX", c)) 
 	l->padding = 0.01;
+      else if (strchr("x", l->dat[2])||strchr("x", l->dat[3])||strchr("x", l->dat[4])||strchr("x", l->dat[5])) 
+	l->padding += 0.04;
       else {
 	if ( l->prev && l->prev->padding > 0.04 ) {
 	  l->prev->padding -= 0.04;
@@ -272,8 +272,14 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       {
 	for (i = 2; i < STAFF; i++ ) {
 	  if (d[i] != ' ' && d[i] != '{' && d[i] != '}' 
-	      && d[i] != '(' && d[i] != ')' )
-	    l->padding = str_to_inch(min_O_w);	    
+	      && d[i] != '(' && d[i] != ')' ) {
+	    l->padding = str_to_inch(min_O_w);
+	    //	if ( 1 && l->prev && l->prev->dat[i] == 'e') { 
+	    //  printf ("HERE  ornament is %c\n", d[i]);
+	    //  l->prev->padding += 0.5;
+	    //   total_width += 0.5;
+	    //  }
+	  }
 	}
       }
       weight = W_NONE;

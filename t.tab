@@ -1,13 +1,21 @@
 
--b
+%-b
 -italFlags 
 -l "4.9 in"
 $midi-volume=94
 
+%i
+%1   d  /a
+%x    f.
+%x   a
+%1  d.
+1  e&^
+x b.
 b
-1| f
+d
+1| f  !0376
 x| c
-x| b
+x| xb
 x f
 x| c
 x| b

@@ -22,6 +22,9 @@ unsigned char buffer::GetByte()
 	return((unsigned char )EOF);
     }
     c = bytes[read_ptr];
+    //   if (c == (unsigned char)0xd1 ) {
+    //     c = '-';
+    //   }
     read_ptr++;
     return(c);
 }

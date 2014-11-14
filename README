@@ -390,7 +390,8 @@ $		- used to set these values. This flag must be
 						(the -G flag)
 		  $transpose=n			transposes midi or mensural 
                                                 notation n half steps
-    		  $left_margin=nn               sets the left margin in 1/72 inch (points)
+    		  $left-margin=nn               sets the left margin in 1/72 inch (points)
+    		  $top-margin=nn                sets the top margin in 1/72 inch (points)
 		  $extended_character_set	Normally q is an ornament, 
 						if you need q-v to be letters use this
 
@@ -454,7 +455,7 @@ of tablature, as the second to tenth character.
 			  in a note position rather than treating it
  			  as a prefix, which is its default.
 			  1 c!/ca
-			  !0375 will give a del signe -
+			  !0376 will give a del signe -
 			  other 0xxx codes could be added
 	" is the prefix operator- most things default to prefix
 			  but you can print -- as a prefix

@@ -17,9 +17,10 @@ private:
   unsigned int velocity;
 public:
   midi_snd();
-  midi_snd(const unsigned int instrument, const unsigned int volume);
-  midi_snd(const unsigned int instrument, const unsigned int volume,
-    const char *filename);
+  midi_snd(const unsigned int instrument, const unsigned int volume, 
+	   const char *infile);
+  midi_snd(const unsigned int instrument, const unsigned int volume, 
+	   const char *infile, const char *filename);
   ~midi_snd();
   void add(const int note);
   void play(const double time);

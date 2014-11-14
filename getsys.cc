@@ -192,11 +192,12 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    staff[1] = 19; /* a C signature */
 		  else
 		    staff[1] = 'U'; /* a C signature */
-		else if (staff[1] == 'c')
+		else if (staff[1] == 'c') {
 		  if (baroque)
 		    staff[1] = 20;
 		  else
 		    staff[1] = 'u';
+		}
 		staff[2] = buf[2];
 		if (staff[2] == NEWLINE || staff[2] == '\0') {
 		    staff[2] = ' ';
@@ -511,6 +512,22 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		      skip += 3;
 		    }
 		    break;
+		case 0xe2:	// this is a three character apple
+		  if (buf[i+1+skip] == (char)0x80) {              // double quote
+		    //	    printf ("HERE %x %x %x \n", 
+		    //	    staff[i], (buf[i+1+skip]& 0xff), (buf[i+2+skip]&0xff));
+		    skip++;skip++;
+		  }
+		  else {
+		    dbg3(Warning, "uncaught special character %x %x %x \n", 
+			 (void*)(buf[i+skip]&0xff), (void*)(buf[i+1+skip]&0xff), 
+			 (void*)(buf[i+2+skip]&0xff));
+		    staff[i] = '"';
+		    skip++;skip++;
+		  }
+		case 0xd2:
+		case 0xd3:
+//		  DON'T BREAK break; Continue on as if we had a real quote
 		case '"':	/* prefix a non prefix char */
 		    ornament[i] = buf[i + (++skip)];
 		    if (ornament[i] == ']' ) {
@@ -1010,8 +1027,14 @@ Mstore(i_buf *ib, int *l_p, unsigned char *staff, struct file_info *f)
   }
 
   else   /* not CONVERT */
-    for  (i = 0 ; i < STAFF ; i++)
+    for  (i = 0 ; i < STAFF ; i++) {
+      if ( staff[i] == 209 ) { // mac special double dash
+	staff[i]  = '-'; 
+	if ( i < (STAFF-1)) 
+	  staff[i+1]  = '-'; 
+      }
       ib->PutByte(staff[i]);
+    }
     
   if (staff[0] != '^' && staff[0] != '+' && music[0]) {
     ib->PutByte('M');

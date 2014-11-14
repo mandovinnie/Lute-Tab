@@ -707,28 +707,35 @@ void args_from_string(char *buf, struct file_info *f)
 	argp[argc] = &argv[j]; /* start a new arg */
 	argc++;
 	while (1) {
-	    argv[j] = buf[i];
-
-	    if (argv[j] == '"' || argv[j] == '\'') {
-		if (quote) {	/* end quote */
-		    quote = 0;
-		    argv[j] = '\0';
-		    i++;
-		}
-		else {
-		    i++;
-		    argv[j] = buf[i];
-		    quote++;
-		}
+	  argv[j] = buf[i];
+	  // the 0xd2 and 0xd3 are apple textedit quotes
+	  if (argv[j] == '"' || argv[j] == '\'' ||
+	      argv[j] == (signed char)0xd2 ||
+	      argv[j] == (signed char)0xd3 ||
+	      argv[j] == (signed char)0xe2 ) {  
+	    if (argv[j] == (signed char)0xe2 ) {
+	      argv[j] = '"';
+	      i++;i++;
 	    }
-	    j++;
-	    i++;
-	    if (buf[i] == '\0') break;
-	    if (buf[i] == NEWLINE) break;
-	    if (!quote && buf[i] == ' ') {
-		argv[j] = '\0';
-		break;
+	    if (quote) {	/* end quote */
+	      quote = 0;
+	      argv[j] = '\0';
+	      i++;
 	    }
+	    else {
+	      i++;
+	      argv[j] = buf[i];
+	      quote++;
+	    }
+	  }
+	  j++;
+	  i++;
+	  if (buf[i] == '\0') break;
+	  if (buf[i] == NEWLINE) break;
+	  if (!quote && buf[i] == ' ') {
+	    argv[j] = '\0';
+	    break;
+	  }
 	}
     }
     argv[i]='\0';

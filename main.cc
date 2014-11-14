@@ -249,21 +249,21 @@ void tfm_stuff(i_buf *b, file_info *f)
     // this seems to be where an old style midi file is started
     if (f->m_flags & SOUND) {
       if (!sp) {
-	if (f->midi_patch) {
-	  if (!strncmp(f->out_file, "stdout", 6))
-	    sp = new midi_snd(f->midi_patch, f->midi_volume, "stdout");
-	  else 
-	    sp = new midi_snd(f->midi_patch, f->midi_volume);
-	}
-	else {			// no midi patch
-	  if (!strncmp(f->out_file, "stdout", 6)) 
-	    sp = new midi_snd(34, f->midi_volume , "stdout");
-	  else if ( strlen(f->out_file)) 
-	    sp = new midi_snd(34, f->midi_volume, f->out_file);
-	  else 
-	    sp = new midi_snd;
-	}
+	if (!f->midi_patch)  f->midi_patch = 34;
+	if (!strncmp(f->out_file, "stdout", 6))
+	  sp = new midi_snd(f->midi_patch, f->midi_volume, f->file, "stdout");
+	else if (strlen(f->out_file)) 
+	  sp = new midi_snd(f->midi_patch, f->midi_volume, f->file, f->out_file);
+	else 
+	  sp = new midi_snd(f->midi_patch, f->midi_volume, f->file);
       }
+      // wbc sept 2014 
+      //	else {			// no midi patch
+      //	  if (!strncmp(f->out_file, "stdout", 6)) 
+      //	    sp = new midi_snd(34, f->midi_volume , "stdout");
+      //	  else 
+      //	    sp = new midi_snd;
+      //	}
     }
     else if (f->m_flags & NMIDI) {
       np = new nmidi();
@@ -358,7 +358,7 @@ int main(int argc, char **argv)
     *argv++;
     args (argc, argv, &f);
     
-    //    dbg_set(Proceedure);
+    //  dbg_set(Proceedure);
     //	dbg_set(Widths);
     //	dbg_set(TFM);
     //	dbg_set(Stack);
