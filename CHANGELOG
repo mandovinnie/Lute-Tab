@@ -1,3 +1,5 @@
+VERSION "4.3.84"  January 9 2015
+fix score for the N10 character
 
 VERSION "4.3.83"  September 8 2014
 fix del signe \0376  and added file name to midi file in -midi
