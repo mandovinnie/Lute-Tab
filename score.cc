@@ -313,6 +313,7 @@ score(print *p, struct list *l, struct file_info *f,
     case 'Y':
     case 'y':
 	timeval = -2;
+	timeval = 0;  /* wbc sept 2015 */
 	goto rest;
     case 'T':
 	if (l->text) {

@@ -1,3 +1,9 @@
+VERSION "4.3.86"
+fix ^03 error where the caret shoed up in the final document
+
+VERSION "4.3.85"
+add SPANISH for music and score conversion or numeric spanish tab
+
 VERSION "4.3.84"  January 9 2015
 fix score for the N10 character
 

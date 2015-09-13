@@ -247,5 +247,6 @@ struct list {
  #define THIN_R                 0x800000
  #define TWELVEDOTS             0x1000000
  #define BAROQUE_E		0x2000000
+ #define SPANISH		0x4000000
  /* variables defined in sizes.c */
 

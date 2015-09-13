@@ -104,6 +104,7 @@ format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
 	    title_font = font = atoi(c);
 	    //		dbg1(Warning, "title %d\n", (void*)font);
 	    p->use_font(font);
+	    *b_bp--; // wbc sept 2015
 	  }
 	  break;
 	case ' ':

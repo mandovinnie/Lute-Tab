@@ -485,6 +485,11 @@ void set_curly_e(const char *value, struct file_info *f)
   f->m_flags |= BAROQUE_E;
 }
 
+void set_spanish(const char *value, struct file_info *f)
+{
+  f->m_flags |= SPANISH;
+}
+
 void args(int argc, char ** argv, struct file_info *f)
 {
     char *aa=0;
@@ -591,6 +596,7 @@ void args(int argc, char ** argv, struct file_info *f)
       {(char*)"tfmdump", (void*)set_tfmdump},
       {(char*)"twelvedots", (void*) set_twelvedots},
       {(char*)"curly-e", (void*) set_curly_e},
+      {(char*)"spanish", (void*) set_spanish},
       {(char *)0, (void*)0}
     };
 

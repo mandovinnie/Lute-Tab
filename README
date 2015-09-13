@@ -173,6 +173,8 @@ Options:
 	recompiled the right way can create a raw sound file
 	with a 8000 integer 8 bit unsigned format  
         called "data".
+    -spanish when used with -m and -h converts "spanish" tab to 
+        music correctly.
     -tuning 
 	-tuning C4D4E4F4G4c3f3a2d2g2	renaissance
 	-tuning e4a3d3f+3b2e2		for guitar
