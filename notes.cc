@@ -41,7 +41,7 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
   double w_center = -0.01;
   double l_center = 0.0;
   double n_center = m_space / 18.0;
-  double mod_off = m_space / -6;	/* -3.77 move up for modern flags */
+  double mod_off = (m_space / -6);	/* -3.77 move up for modern flags */
   static int up;
   rest = m_space / 2 * .8;
 
@@ -290,7 +290,8 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
 	p->put_rule (0.09, rest);
       }
       else {
-	p->movev(mod_off);
+	p->movev(mod_off-.0045);
+	p->moveh(0.0005);
 	p->put_a_char(211); // 212 is older notes
 	do_a_stem(p, f_a, nn);
       }
