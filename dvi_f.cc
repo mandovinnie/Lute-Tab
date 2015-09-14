@@ -1040,14 +1040,15 @@ struct list *l)			/* data */
     }
     p->pop();			/* end flags */
 
-    if (ch[1] == 'W' 
+    if (( ch[1] == 'W' ||  ch[1] == 'w')          /* wbc sept 2015 */
 	&& ch[0] != 'Y'  /* || ch[1] == 'w' */) { /* a tie or slur */
       double t_width, t_note;
       struct list *tt = l->next;
 
       t_width = l->space + l->padding;
 
-      while (tt->dat[0] == 'b' || tt->dat[0] == '&') {
+      while (tt->dat[0] == 'b' || tt->dat[0] == '&'
+	    || tt->dat[0] == 'B' || tt->dat[0] == '.' ) {
 	t_width +=( tt->space + tt->padding); 
 	if (tt->next) 
 	  tt = tt->next;
@@ -1056,7 +1057,7 @@ struct list *l)			/* data */
       p->push();
       p->moveh(t_note = f_a[0]->fnt->get_width('w'));
       p->movev(-1 * f_a[0]->fnt->get_height(0302));
-      p->do_tie(t_width - t_note);	/* length of tie in inches */
+      p->do_tie(t_width - (1.46 * t_note));	/* length of tie in inches */
       if (f->flags & NOTES ) {
 	if ( ! (f->flags & TXT )) p->movev(f_a[0]->fnt->get_height(0302) ); 
 
