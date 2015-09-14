@@ -103,7 +103,11 @@ do_beam(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
   }
 
   while(b) {
-    c_total += b->note;
+    // printf ("note %d %d \n", b->note, (b->note + 29));
+    if ( b->note >= 'a')
+      c_total += b->note;
+    else
+      c_total += (b->note + 29);
     count++;
     if (!b->next) 
       last_b = b;

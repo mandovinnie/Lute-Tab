@@ -1,5 +1,6 @@
 VERSION "4.3.86"
 fix ^03 error where the caret shoed up in the final document
+Also fix tie at flag level
 
 VERSION "4.3.85"
 add SPANISH for music and score conversion or numeric spanish tab
