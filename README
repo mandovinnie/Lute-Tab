@@ -59,7 +59,7 @@ Options:
     -autoKey sets key signature on all lines as on first line
     -2 prints 1200 dpi
     -1200 does the same
-    -24 prints 2400 dpi
+    -2400 prints 2400 dpi
 	be warned that some large glyphs won't print at 1200
 	and PostScript will crash!
     -300 prints 300 dpi
