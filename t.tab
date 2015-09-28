@@ -1,14 +1,70 @@
-
 %-b
-%-i
--l "4.9 in"
-$midi-volume=94
+-5
+-i
+%-l "4.9 in"
+%$midi-volume=94
+%{title}
 
+b
+1- a  a&{
+1- b}
+b
+1&[a   a&{
+1&]a
+1- a[
+1- b] &}
+b
+1- a
+1- b
+b
+e
+1-     a&{
+1-    }
+e
+1-c&,d&,e&,
+1&{fgh&,
+1&+i"}jk
+1&+fgh&,
+1&{fgh
+1fgh&,
+1i"}jk
+1- a[
+1- b]
+b
+e
+
+b
+M	0e0
+M	010
+M	we0
+M	w10
+0a	130
+0a	130#
+M	120x
+wacd a	010
+M	11-#
+M	11-x
+M	1g+#
+M	1g+x
+M	1i0#
+M	1h0x
+b
+
+b
+%% fix next line to be tie without dot
+0tb&'dc
+.b
+B
+0.
+bb
+e
 b
 0W
 1
 0t
 1
+b
+e
 0|
 1*
 b

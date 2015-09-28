@@ -17,6 +17,12 @@
    to wbc@sunapee.dartmouth.edu.
 
  */
+/*
+ * this draws an underline
+ * my_underline sets the starting point.  When the program
+ * gets to the endpoint do_uline is called, and the line is 
+ * drawn from the saved beginning to the current point
+ */
 
 #include "tab.h"
 #include "print.h"
@@ -35,19 +41,23 @@ extern char interspace[];
  */
 
 void
-my_underline(print *p, font_list *f_a[],int *skip_spaces, int s1, int line)
+my_underline(print *p, font_list *f_a[],
+	     int *skip_spaces,
+	     int s1,
+	     int line)
  	/* should we adjust beginning and end? */
 {
     int i_space = str_to_dvi(interspace);
     int s1a;
 
-    if (s1 < 9) s1a = 15 + (((s1-3) / 2) *line);
-    else (s1a = s1);
+    if (s1 < 9)
+      s1a = 15 + (((s1-3) / 2) * line);
+    else
+      s1a = s1;
 
-/*
-    printf ("my_underline: skip %d line %d s1 %d s1a %d\n", 
-	    *skip_spaces, line, s1, s1a);
- */
+    //   printf ("my_underline: skip %d line %d s1 %d s1a %d\n", 
+    //	    *skip_spaces, line, s1, s1a);
+ 
     if (*skip_spaces) {
 	p->p_movev(*skip_spaces * i_space);
 	*skip_spaces = 0;
@@ -73,7 +83,8 @@ do_uline(print *p, int *skip_spaces, int s1, int s2, int line)
     if (s1 < 9) s1a = 15 + (((s1-3) / 2) * line);
     else (s1a = s1);
 
-    //    printf ("do_uline: line %d s1 %d s2 %d s1a %d\n", line, s1, s2, s1a);
+    //    printf ("do_uline: line %d s1 %d sa-current-location 2 %d s1a-start %d\n",
+    //	    line, s1, s2, s1a);
 
     if (*skip_spaces) {
 	p->p_movev(*skip_spaces * i_space);
@@ -106,7 +117,7 @@ do_r_uline(print *p, int *skip_spaces, int s1, int s2, int line)
     if (s1 < 9) s1a = 15 + (((s1-3) / 2) * line);
     else (s1a = s1);
 
-    //    printf ("do_uline: line %d s1 %d s2 %d s1a %d\n", line, s1, s2, s1a);
+    // printf ("do_r_uline: line %d s1 %d s2 %d s1a %d\n", line, s1, s2, s1a);
 
     if (*skip_spaces) {
 	p->p_movev(*skip_spaces * i_space);
@@ -136,7 +147,7 @@ do_w_uline(print *p, int *skip_spaces, int s1, int s2, int line)
     if (s1 < 9) s1a = 15 + (((s1-3) / 2) * line);
     else (s1a = s1);
 
-    //    printf ("do_uline: line %d s1 %d s2 %d s1a %d\n", line, s1, s2, s1a);
+    // printf ("do_w_uline: line %d s1 %d s2 %d s1a %d\n", line, s1, s2, s1a);
 
     if (*skip_spaces) {
 	p->p_movev(*skip_spaces * i_space);
@@ -163,6 +174,8 @@ do_thick_uline(print *p, int *skip_spaces, int s1, int s2, int line)
     int i_space = str_to_dvi(interspace);
     int s1a;
  
+    // printf ("do_thick_uline: line %d s1 %d s2 %d s1a %d\n", line, s1, s2, s1a);
+
     if (s1 < 9)
       s1a = 15 + (((s1-3) / 2) * line);
     else 

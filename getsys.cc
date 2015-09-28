@@ -79,7 +79,9 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	cur_chord++;
 
 	staff[0] = 0; skip = 0;
-
+	for (i = 0; i < STAFF ; i++) a_ornament[i] = ' ';
+	a_ornament[1] = '-';
+	    
 	switch (c) {
 	case '?':
 	    staff[0] = c;
@@ -380,20 +382,35 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    else if (staff[1] == 'B') {	/* dot before flag */
 		staff[1] = 'B';
 	    }
+	    else if (staff[1] == '&') { /* flag ornament new Sept 2015 wbc*/
+	      a_ornament[0] = '&';
+              a_ornament[1] = buf[2];
+
+	      //printf("Flag Ornament: %c\n", buf[2] ); // wbc Sept 2015
+              //printf("buf before: %s", buf);
+	      buf[1] = '-';
+              for (i=3;i<STAFF;i++) buf[i-1] = buf[i];
+	      //  printf("buf after: %s", buf);
+	      //printf ("a_ornament at 393: %s\n", a_ornament);
+              staff[1] = buf[1];
+	    }
 	    else {
 		skip--;
 		staff[1] = '-';
 	    }
 
 	rest:
+
+	    //	    printf("a_ornament at 403: %s\n", a_ornament);
+	    
 	    for (i = 0; i < STAFF ; i++) {
 		ornament[i] = ' ';
-		a_ornament[i] = ' ';
+		//	a_ornament[i] = ' ';
 		t_ornament[i] = ' ';
 		finger[i] = ' ';
 	    }
 	    ornament[1] = '-';
-	    a_ornament[1] = '-';
+	    // a_ornament[1] = '-';
 	    t_ornament[1] = '-';
 	    finger[1] = '-';
 	    for (i = 2; i < STAFF; i++) {
@@ -670,6 +687,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		}
 		/*  after ornaments */
 		if ((cc = buf[i + skip + 1]) == '&' ) {
+		  // printf("getsys.cc:line 690 got &\n");
 		  char ccc;
 		  cc = buf[i + (skip += 2)];
 		  if (cc == '*' ) cc = '.'; /* was Z */
@@ -718,9 +736,13 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		}
 	    Mstore( ib,l_p, staff, f);
 
-	    for ( i=2; i< STAFF; i++) 
-		if (a_ornament[i] != ' ') {
+	    for ( i=1; i< STAFF; i++) // was i=2 wbc sept 2015
+	      //printf ("a_ornament at 740: %2d %c %s\n", i, a_ornament[i], a_ornament);
+	      if ((i == 1 && a_ornament[i] != '-' )
+		  || a_ornament[i] != ' ') {
+		  
 		    a_ornament[0] = '&';
+		    //printf ("a_ornament at 744: %d %c %s\n", i, a_ornament[i], a_ornament);
 		    Mstore( ib, l_p, a_ornament, f);
 		    break;
 		}

@@ -702,7 +702,8 @@ struct list *l)			/* data */
 	       -f_a[0]->fnt->get_height(
 		   f->flag_flag == ITAL_FLAGS ? 217 : 195));
       for (i=1; i< 15 && ch[i] != '\0' && ch[i] != '}'; i++ )
-	p->set_a_char(ch[i]);   
+	p->set_a_char(ch[i]);
+      printf("FIX ME line 786\n");
       p->use_font(0);
     }
     p->pop();
@@ -711,7 +712,43 @@ struct list *l)			/* data */
     p->moveh(-1.0 * last_move);
     p->moveh(0.75 * EM);
     if (baroque && l->prev && l->prev->dat[0] != '2' ) p->moveh(.05);
-    if (f->flags & MARKS) p->put_rule(0.01, 0.17);  
+    if (f->flags & MARKS) p->put_rule(0.01, 0.17);
+    if (ch[1] != '-') {
+      //printf("dvi_f.cc: HERE flag ornament on first line\n"); // wbc sept 2015 adjust ornament
+      p->moveh(2 * f_a[0]->fnt->get_width( l->prev->dat[0]));
+      switch (ch[1]) {
+      case '{':
+	//printf ("HERE dvi_f.cc line 721\n");
+	skip_spaces = 0;
+	p->push();
+	my_underline(p, f_a,  &skip_spaces, 11, i);
+	p->pop();
+	break;
+      case '[':
+	//printf ("HERE dvi_f.cc line 728 \n");
+	skip_spaces = 0;
+	i = 1;
+	p->push();
+	my_underline(p, f_a,  &skip_spaces, 7, i);
+	p->pop();
+	break;
+      case ']':
+	//printf ("HERE dvi_f.cc line 736\n");
+	skip_spaces = 0;
+	i = 1;
+	p->push();
+	//printf("dvi_f.cc: 739: end of [] \n");
+	do_r_uline(p, &skip_spaces, 7, 8, i);
+	p->pop();
+	break;
+      default:
+	p->push();
+	if (f->line_flag == ON_LINE)
+	  p->p_movev((int)(-0.5 * i_space));
+	p->put_a_char(ch[1]);
+	p->pop();
+      }
+    }
     /* fall through */
   default:                  /* GRIDS and FLAGS HERE*/
     p->push();			/* this is for whole chord */
