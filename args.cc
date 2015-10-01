@@ -231,6 +231,7 @@ void set_pdf(const char *value, struct file_info *f) {
   f->flags |= PDF;}
 void set_2(const char *value, struct file_info *f) {
   f->m_flags |= DPI1200;
+  f->flags &= ~DPI600;
   red = 1.0;}
 void set_6(const char *value, struct file_info *f) {
   f->flags |= DPI600;
@@ -240,6 +241,7 @@ void set_300(const char *value, struct file_info *f) {
 }
 void set_24(const char *value, struct file_info *f) {
   f->m_flags |= DPI2400;
+  f->flags &= ~DPI600;
   red = 1.0;}
 void set_7(const char *value, struct file_info *f) {
   f->m_flags |= SEVEN;

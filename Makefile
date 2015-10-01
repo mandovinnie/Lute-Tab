@@ -98,6 +98,8 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	lute9.600pk lute8.600pk lute7.600pk lute6.600pk \
 	lute9.tfm lute8.tfm lute7.tfm lute6.tfm \
 	blute9.tfm blute8.tfm blute85.tfm \
+	blute6.2400pk blute8.2400pk  blute9.2400pk lute7.2400pk lute85.2400pk \
+	blute7.2400pk blute85.2400pk lute6.2400pk  lute8.2400pk lute9.2400pk \
 	cmr10.tfm cmr12.tfm cmti10.tfm cmti12.tfm \
 	ptmr.tfm ptmri.tfm psyr.tfm \
 	pbkd.tfm  pbkdi.tfm pbkl.tfm pbkli.tfm \
@@ -110,6 +112,7 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	sample.tab demo.tab c.tab t.tab AboutTab.txt  mkdep \
 	version.pl makedepend CHANGELOG \
 	midi-docs/midi-dump.c midi-docs/Makefile \
+	midi-docs/tftopl.web \
 	tlute.mf tlute9.mf tlute8.mf tlute7.mf tlute6.mf mk_600_t \
 	tlute9.300pk tlute8.300pk tlute7.300pk tlute6.300pk \
 	tlute9.600pk tlute8.600pk tlute7.600pk tlute6.600pk \

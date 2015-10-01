@@ -117,7 +117,7 @@ Options:
     -j when translating italian between line to french
        is a correction.
     -K cancels automatic end of page detection.  You will have
-       to insert page breaks yourself.
+       to insert page breaks yourself with the p flag.
     -l "n units"  sets line length to n units, where n
 	   is a floating point number, eg 3.25, and units is one
 	   of mm, in or pt.  The default is "6.5 in". The double

@@ -351,10 +351,19 @@ void ps_print::make_ps_font(i_buf *ps_header)
     double dvi_to_dots = 72.0 / 300.0;
     PKBit *b;
     extern PKBit bits[];
-
-    if (f_i->flags & DPI600) dvi_to_dots /= 2.0;
-    else if (f_i->m_flags & DPI1200) dvi_to_dots /= 4.0;             //adS
-    else if (f_i->m_flags & DPI2400) dvi_to_dots /= 8.0;         
+    //printf ("ps_print.cc: 354: dvi_to_dots %f\n", dvi_to_dots);
+    if (f_i->flags & DPI600) {
+      dvi_to_dots /= 2.0;
+      //printf ("ps_print.cc: 357: dvi_to_dots %f\n", dvi_to_dots);
+    }
+    else if (f_i->m_flags & DPI1200) {
+      dvi_to_dots /= 4.0;             //adS
+      //printf ("ps_print.cc: 361: dvi_to_dots %f\n", dvi_to_dots);
+    }
+    else if (f_i->m_flags & DPI2400) {
+      dvi_to_dots /= 8.0;
+      //     printf ("ps_print.cc: 365: dvi_to_dots %f\n", dvi_to_dots);
+    }
 
     ps_header->PutString("10 dict begin\n");
     ps_header->PutString("/FontType 3 def\n");
