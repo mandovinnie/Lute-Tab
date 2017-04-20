@@ -61,7 +61,8 @@ format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
     int italic = 1;		/* for wallace titles */
     static char *tp;			// title pointer
     static char title_done=0;		// this seems to be for midi titles
-
+    double font_scale = f->font_sizes[font]/12.0;  // wbc apr 17
+    
     centerline = 0;
     bzero(bbuf, LLINE);
 
@@ -104,6 +105,7 @@ format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
 	    title_font = font = atoi(c);
 	    //		dbg1(Warning, "title %d\n", (void*)font);
 	    p->use_font(font);
+	    font_scale = f->font_sizes[font]/12.0;  //apr 17
 	    *b_bp--; // wbc sept 2015
 	  }
 	  break;
@@ -124,7 +126,7 @@ format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
 	case '?':		/* replace with upside down ?? */
 	  {
 	    char cc = i_b->GetByte();
-	    cur += f_a[font]->fnt->get_width(*b_bp);
+	    cur += font_scale * f_a[font]->fnt->get_width(*b_bp);
 	    if ( cc == '`') *b_bp = 0076; //0277 is upside down question 	    
 	    else { i_b->unGet(cc);}
 	  }
@@ -132,7 +134,7 @@ format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
 	case '!':		/* replace with upside down !! */
 	  {
 	    char cc = i_b->GetByte();
-	    cur += f_a[font]->fnt->get_width(*b_bp);
+	    cur += font_scale * f_a[font]->fnt->get_width(*b_bp);
 	    if ( cc == '`') *b_bp = 0074; //  0241 is exclaimation
 	    else { i_b->unGet(cc); }
 	  }
@@ -154,15 +156,15 @@ format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
 	    else 
 	      i_b->unGet(cf);
 	    cur += 
-	      f_a[font]->fnt->get_width(*b_bp);
+	      font_scale * f_a[font]->fnt->get_width(*b_bp);
 	  }
 	  break;
 	case '\\':		// special escape
 	  {
 	    char *tl;
 	    double temp;
-	    temp = get_special_width(&b_bp, i_b, f_a, font,  f);
-	    //	    printf("temp is %f\n", temp);
+	    temp = font_scale * get_special_width(&b_bp, i_b, f_a, font,  f);
+	    //	    	    printf("temp is %f\n", temp);
 	    // printf("case 2 %c  %s\n", *b_bp, bbuf);
 	    cur += temp;
 	    //	    b_bp--;
@@ -172,11 +174,11 @@ format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
 	case ']':		/* word tie - this swallows the next chracter */
 	  cc=i_b->GetByte();	  
 	  if (cc == '}' || cc == '/' || cc == ' ') {
-	    cur += f_a[font]->fnt->get_width(c);
+	    cur += font_scale * f_a[font]->fnt->get_width(c);
 	    i_b->unGet(cc);
 	  }
 	  else {
-	    cur += f_a[0]->fnt->get_width(0201);
+	    cur += font_scale * f_a[0]->fnt->get_width(0201);
 	    cur += 0.005;	// this is sheer voodo!!
 	    i_b->unGet(cc);
 	  }
@@ -190,12 +192,16 @@ format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
 	  }
 	  break;
 	default:
-	  cur += f_a[font]->fnt->get_width(c);
-	  break;
+	  {
+	    cur += font_scale * (f_a[font]->fnt->get_width(c));
+	    //	    printf ("title width %f\n",
+	    //		   font_scale * (f_a[font]->fnt->get_width(c)));
+	    break;
+	  }
 	}
 	b_bp++;
       }
-      //      printf("title cur %f\n", cur);
+      //            printf("title cur %f\n", cur);
     }
   done:
     b_bp++;
@@ -303,7 +309,8 @@ double special(char **pp, /* buffer of title */
   unsigned char c, d;
   int dontset=0;
   font_list *f_a = f_a_in[font];
-  
+  double font_scale  = f->font_sizes[font]/12.0;
+    
   if (**pp != '\\')  {
     dbg0(Error, "tab: special: called without backslash\n");
     return (0.0);
@@ -382,11 +389,12 @@ double special(char **pp, /* buffer of title */
 
 
     if (print) {
-      p->push();
+      //      p->push();
+      /*
       if (c == '`' ) {
 	if (isupper(d))
-	  p->movev(f_a->fnt->get_width('e') 
-		   - f_a->fnt->get_width('E'));
+	  p->movev(f_a->fnt->get_height('e') 
+		   - f_a->fnt->get_height('E'));
 	if (f->flags & PS) {
 	  p->moveh ((f_a->fnt->get_width(d)
 		     - f_a->fnt->get_width(022))/2.5);
@@ -398,12 +406,14 @@ double special(char **pp, /* buffer of title */
 	  p->put_a_char(0022);
 	}
       }
+      */
+      /*
       else if (c == '\'' ) {
 	if (isupper(d))
-	  p->movev(f_a->fnt->get_width('e') 
-		   - f_a->fnt->get_width('E'));
+	  p->movev(font_scale * (f_a->fnt->get_width('e') 
+				 - f_a->fnt->get_height('E')));
 	if (f->flags & PS) {
-	  p->moveh ((f_a->fnt->get_width(d)
+	  p->moveh (font_scale * (f_a->fnt->get_width(d)
 		     - f_a->fnt->get_width(023))/2.5);
 	  p->put_a_char(0302);
 	}
@@ -413,6 +423,8 @@ double special(char **pp, /* buffer of title */
 	  p->put_a_char(0023);
 	}
       }
+      */
+      /*
       else if (c == '^' ) {
 	if (isupper(d))
 	  p->movev(f_a->fnt->get_width('e') 
@@ -431,22 +443,82 @@ double special(char **pp, /* buffer of title */
 	  p->put_a_char(0136);
 	}
       }
-      else if (c == '"' ) {
-	if (isupper(d))
-	  p->movev(f_a->fnt->get_height('e') 
-		   - f_a->fnt->get_height('E'));
+      */
+      if (c == '"' || c == '^' || c == '\'' ||
+	  c == '`' || c == '~' || c == '='  ||
+	  c == '.' || c == 'u' || c == 'v'  ||
+	  c == 'H' ) {
+	int printing;
+	switch (c) {
+	case '"':
+	  if (f->flags & PS) printing = 0310;
+	  else printing = 0177;
+	  break;
+	case '^':
+	  if (f->flags & PS) printing = 0303;
+	  else printing = 0136;
+	  break;
+	case '\'':
+	  if (f->flags & PS) printing = 0302;
+	  else printing = 0023;
+	  break;
+	case '`':
+	  if (f->flags & PS) printing = 0301;
+	  else printing = 0022;
+	  break;
+	case '~':
+	  if (f->flags & PS) printing = 0304;
+	  else printing = 0176;
+	  break;
+	case '=':
+	  if (f->flags & PS) printing = 0305;
+	  else printing = 0026;
+	  break;
+	case '.':
+	  if (f->flags & PS) printing = 0307;
+	  else printing = 0137;
+	  break;
+	case 'u':
+	  if (f->flags & PS) printing = 0306;
+	  else printing = 0025;
+	  break;
+	case 'v':
+	  if (f->flags & PS) printing = 0317;
+	  else printing = 0024;
+	  break;
+	case 'H':
+	  if (f->flags & PS) printing = 0315;
+	  else printing = 0175;
+	  break;
+	}
 	if (f->flags & PS) {
-	  p->moveh ((f_a->fnt->get_width(d)
-		     - f_a->fnt->get_width(0022))/2.5);
-	  p->put_a_char(0310);
+	  if (isupper(d))
+	    p->movev(font_scale * (f_a->fnt->get_height('e') 
+				   - f_a->fnt->get_height('E')));
+	  p->moveh (font_scale * (f_a->fnt->get_width(d)
+				  - f_a->fnt->get_width(0022))/2.0); // was 2.5
+	  p->put_a_char(printing);
+	  
+	  p->moveh (-1 * font_scale * (f_a->fnt->get_width(d)
+				       - f_a->fnt->get_width(0022))/2.0);
+	  if (isupper(d))
+	    p->movev(-1 * font_scale * (f_a->fnt->get_height('e') 
+					- f_a->fnt->get_height('E')));
 	}
 	else {
+	  if (isupper(d))
+	    p->movev( (f_a->fnt->get_height('e') 
+		       - f_a->fnt->get_height('E')));
 	  p->moveh ((f_a->fnt->get_width(d)
 		     - f_a->fnt->get_width('e'))/2);
-	  p->put_a_char(0177);
+	  p->put_a_char(printing);
+	  if (isupper(d))
+	    p->movev( -1 * (f_a->fnt->get_height('e') 
+			    - f_a->fnt->get_height('E')));
 	}
+	
       }
-      else if (c == '~' ) {
+      /*      else if (c == '~' ) {
 	if (isupper(d))
 	  p->movev(f_a->fnt->get_height('e') 
 		   - f_a->fnt->get_height('E'));
@@ -461,7 +533,8 @@ double special(char **pp, /* buffer of title */
 	  p->put_a_char(0176);
 	}
       }
-      else if (c == '=' ) {
+      */
+      /*     else if (c == '=' ) {
 	if (isupper(d))
 	  p->movev(f_a->fnt->get_height('e') 
 		   - f_a->fnt->get_height('E'));
@@ -475,8 +548,8 @@ double special(char **pp, /* buffer of title */
 		     - f_a->fnt->get_width('e'))/2);
 	  p->put_a_char(0026);
 	}
-      }
-      else if (c == '.' ) {
+	} */
+      /*      else if (c == '.' ) {
 	if (isupper(d))
 	  p->movev(f_a->fnt->get_width('e') 
 		   - f_a->fnt->get_width('E'));
@@ -490,8 +563,8 @@ double special(char **pp, /* buffer of title */
 		     - f_a->fnt->get_width('e'))/2);
 	  p->put_a_char(0137);
 	}
-      }
-      else if (c == 'u' ) {
+	} */
+      /*      else if (c == 'u' ) {
 	if (isupper(d))
 	  p->movev(f_a->fnt->get_width('e') 
 		   - f_a->fnt->get_width('E'));
@@ -505,8 +578,8 @@ double special(char **pp, /* buffer of title */
 		     - f_a->fnt->get_width('e'))/2);
 	  p->put_a_char(0025);
 	}
-      }
-      else if (c == 'v' ) {
+	} */
+      /*     else if (c == 'v' ) {
 	if (isupper(d))
 	  p->movev(f_a->fnt->get_width('e') 
 		   - f_a->fnt->get_width('E'));
@@ -520,8 +593,8 @@ double special(char **pp, /* buffer of title */
 		     - f_a->fnt->get_width('e'))/2);
 	  p->put_a_char(0024);
 	}
-      }
-      else if (c == 'H' ) {
+	}*/
+      /*      else if (c == 'H' ) {
 	if (isupper(d))
 	  p->movev(f_a->fnt->get_width('e') 
 		   - f_a->fnt->get_width('E'));
@@ -535,13 +608,14 @@ double special(char **pp, /* buffer of title */
 		     - f_a->fnt->get_width('e'))/2);
 	  p->put_a_char(0175);
 	}
-      }
+	}*/
       else if (c == 'c' ) {    	/* cedilla */
 	if (f->flags & PS) {
-	  p->push();
-	  p->moveh ((f_a->fnt->get_width(d))/4.1);
+	  //	  p->push();
+	  p->moveh ((f_a->fnt->get_width(d))/3.1);
 	  p->put_a_char(0313);
-	  p->pop();
+	  p->moveh (-1 * (f_a->fnt->get_width(d))/3.1);
+	  //	  p->pop();
 	  p->put_a_char(d);
 	  c = d; /* this fixes the width, which is set below */
 	}
@@ -549,6 +623,8 @@ double special(char **pp, /* buffer of title */
 	  p->moveh ((f_a->fnt->get_width(d)
 		     - f_a->fnt->get_width('e'))/2);
 	  p->put_a_char(0030);
+	  p->moveh (-1 * (f_a->fnt->get_width(d)
+		     - f_a->fnt->get_width('e'))/2);
 	}
 	dontset++;
       }
@@ -598,11 +674,11 @@ double special(char **pp, /* buffer of title */
 	p->set_a_char(c);
 	dontset++;
       }
-      p->pop();
+      //      p->pop();
       //      if (c == ']' || c == '[' || c == '{' || c == '}')
       if (dontset) { /* single code characters */
-	if ( d == 0201) p->moveh (f_a_in[0]->fnt->get_width(0201));
-	else p->moveh (f_a->fnt->get_width(c));
+	if ( d == 0201) p->moveh (font_scale * f_a_in[0]->fnt->get_width(0201));
+	else p->moveh (font_scale * f_a->fnt->get_width(c));
 
       }
       /* the tex to ps char substitution is now in set_a_char */

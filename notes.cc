@@ -681,7 +681,8 @@ do_text(print *p, i_buf *i_b, font_list *f_a[],
 	p->use_font(font);
 	break;
       case '\\':	/* escape the next character */
-	text_used += 
+	text_used +=
+	  f->font_sizes[font]/12.0 * 
 	  print_special_char(&pp, p, i_b, f_a, font, f, 0);
 	i++;
 	i++;
@@ -722,7 +723,8 @@ do_text(print *p, i_buf *i_b, font_list *f_a[],
 	if (*pp == 014 && f->flags & PS) *pp = (char)0256; /* fi */
 	if (*pp == 015 && f->flags & PS) *pp = (char)0257; /* fl */
 	if (*pp == 031 && f->flags & PS) *pp = (char)0373; /* fs */
-	text_used += f_a[font]->fnt->get_width(*pp);
+	text_used += f->font_sizes[font]/12.0 *
+	  f_a[font]->fnt->get_width(*pp);
 	if (f->flags & MARKS) p->put_rule(.002, .15);
 	break;
       }

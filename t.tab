@@ -1,15 +1,43 @@
 %-b
--5
--i
--K
+%-5
+% $alttitlefont=pncr
+$alttitlefont=pbkl
+$alttitlesize=18
+$textsize=18
+%-i
+%-K
 %-l "4.9 in"
 %$midi-volume=94
 %{title}
+F3
+{ee\"ee\^ee\'ee\`ee\=ee\~ee\.ee\uee\vee\Hee\cee/e}
+{EE\"EE\^EE\'EE\`EE\=EE\~EE\.EE\uEE\vEE\HEE\cEE/e}
+{ee\^ee/e}
+
+{aaadeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/e}
+{eeeeeeeeeg\"oeeeeeeeee/e}
+{eeeeeeeeegoeeeeeeeee/e}
+F2
+{eeeeeeeeeg\"oeeeeeeeee/e}
 
 b
-1- a  a&{
-1- b}
+SO
+1- a  a&{	wf0	t\"ext-
+1- b}	wf0	ee\"ee
+1 d	wf0	ee|
+1 d	wf0	eee
+1 d	wf0	effeflefie
+1 d	wf0	e\!e\?e
+1 d	wf0	ee]ee
 b
+
+b
+1 d	wf0	i\"i\^i\~i
+1 d	wf0     i\!i\?i
+1 d	wf0     ee]ee
+1  d	wf0     ee
+
+e
 
 p
 

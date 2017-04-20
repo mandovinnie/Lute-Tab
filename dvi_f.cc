@@ -685,9 +685,7 @@ struct list *l)			/* data */
   case '*':			/* a mark, as in AA BB */
     p->push();
     p->use_font(2);
-    p->movev(-f_a[0]->fnt->get_height(
-				      f->flag_flag == ITAL_FLAGS ? 217 : 195)
-	     /* -f_a[2]->fnt->get_height(ch[1]) */);
+    p->movev(-f_a[0]->fnt->get_height(f->flag_flag == ITAL_FLAGS ? 217 : 195));
     p->put_a_char(ch[1]);
     p->use_font(0);
     p->pop();
@@ -2081,24 +2079,20 @@ void do_time_sig( char ch[], int j, int font,
 	//
 	p->movev((8.25 * d_i_space 
 		   + f_a[0]->fnt->get_height('G')) / 2.0 );
-	if (ch[1] == 'O' ) { 
-	  if (f->flags & FOUR || f->flags & FIVE) {
-	    if (f->line_flag == ON_LINE)  
-	      p->movev(-.5 * d_i_space);
-	    p->movev(-.62 * d_i_space);  
-	  }
-	  else
-	    p->movev(-1.85 * d_i_space);
 
+	if (ch[1] == 'O' || ch[1] == 'o' ) { 
+	  p->push();
+	  if (f->flags & FOUR )	     p->movev(1.0 * d_i_space);  
+	  else if ( f->flags & FIVE) p->movev(0.5 * d_i_space);
+	  
+	  // was -1.85 * d_i_space
+	  p->movev(-3.120 * d_i_space);
+	  
 	  if (f->line_flag == BETWEEN_LINE)  
 	    p->movev(.5 * d_i_space);
-	  p->put_a_char(18); // special O time signature
-	}
-	else if  (ch[1] == 'o' ) { 
-	  p->movev(-1.85 * d_i_space);
-	  if (f->line_flag == BETWEEN_LINE)  
-	    p->movev(.5 * d_i_space);
-	  p->put_a_char(17); // special O time signature
+	  if (ch[1] == 'O' ) p->put_a_char(18); // special O time signature
+	  else if (ch[1] == 'o' ) p->put_a_char(17); // special o cut time signature
+	  p->pop();
 	}
 	else {
 	  p->push();

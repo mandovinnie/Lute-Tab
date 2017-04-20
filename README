@@ -597,6 +597,20 @@ Fonts:
 mk_font_local is a script which builds fonts
 in your current directory.
 
+as of 2015 TeXLive doesn't do a good job with MetaFont .. here are some tips.
+
+1 - make plain.base
+> inimf
+**plain
+*input local
+*dump
+
+2 - mf \&plain
+*\mode=supre
+*\mag=1.0
+
+
+
 
 this runs on 
 	sun-3 running 4.1.0 and 3.5

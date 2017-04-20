@@ -113,10 +113,12 @@ void ps_print::file_head()
 	int val;
 	if ( ! (f_i->m_flags & NOBOX) ) {
 	  ps_header.PutString("%%BoundingBox:");
+	  /* */
 	  ps_header.Put10(55 - (72 - left_margin));
 	  ps_header.PutString(" ");
 	  val = (int)((dvi_to_inch(dvi_v) - 2.75 ) * 72.27 * red);
 	  ps_header.Put10(val);
+	  /* */
 	  ps_header.PutString(" 555 735\n"); 
 	}
     }
@@ -163,8 +165,10 @@ void ps_print::file_head()
     ps_header.PutString("%%BeginProlog\n");
     ps_header.PutString("%%EndProlog\n");
     ps_header.PutString("%%BeginSetup\n");
-    if (f_i->flags & DPI600) 
+    if (f_i->flags & DPI600)  {
 	ps_header.PutString("%%Feature: *Resolution 600\n");
+        //printf ("ps_print.cc: 1386: 600 \n");
+    }
     else if (f_i->m_flags & DPI1200) 
 	ps_header.PutString("%%Feature: *Resolution 1200\n");
     else if (f_i->m_flags & DPI2400) 

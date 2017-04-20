@@ -1,3 +1,6 @@
+VERSION "4.3.88"
+fix lute.mf to make spanish "perfect" time sig work again
+
 VERSION "4.3.87"
 add  after-ornaments to the flag line
 fixed a bug in the print size of 1200dpi PS 

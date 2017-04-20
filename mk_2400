@@ -1,36 +1,49 @@
-#!/bin/csh
+#!/bin/perl
 #
-#  make the lute8 font
+#  make the lute font
 #
-# virmf means run mf with the "plain" base which is the same as the "mf" base
+# some 2400 modes are supre and vtftzzhi
+# some 1200 modes are vtftzzlo laserwriter lexmarkr ljfzzzfr
+# some 600 modes are  canonex ljfzzzfr ljfive docutech
+# some 300 modes are cx
 #
+my $bpi = $ARGV[0];
 #
-set FMT = plain
+#$bpi = "600";
 #
-set MFINPUTS = "/usr/share/texlive/texmf-dist/metafont/base/"
+$mode = "vtftzzhi";    #2400
+if ($bpi eq "2400") {$mode = "vtftzzhi";}    #2400
+elsif ($bpi eq "1200") {$mode = "vtftzzlo";}    #1200
+elsif ($bpi eq "600")  {$mode = "docutech";}    # 600
+elsif ($bpi eq "300")  {$mode = "cx";}          # 300
+else {
+    printf("size must be one of 300 600 1200 2400\n");
+    exit;
+}
+						
 #
+$fmt = "plain";
+$pk = $bpi . "pk";
+$gf = $bpi . "gf";
 #
-# some 2400 modes are
-# supre and vtftzzh
-#
-# mf \&$FMT "\mode:=supre; \mag:=1.0; input lute9; bye;"
-mf \&plain "\mode:=CanonCX; \mag:=1.0; input  lute9; bye;"
+#  "85" doesn't work 
+# foreach $size ("9", "85", "8", "7", "6") {
+foreach $size ("9", "85",  "8", "7", "6") {
+    foreach $lute ( "lute", "blute") {
+	print "SIZE is $size \n";
+	$command = "mf \\&${fmt} ";
+	$command = "mf ";
+	$command = $command . "\"\\mode:=" . $mode . "; \\mag:=1.0; input ${lute}${size}" .  "; bye;\"";
+	print  "$command\n";
+	system "$command\n";
+	print  ("gftopk ./${lute}${size}.$gf > ./${lute}${size}.$pk \n");
+	system ("gftopk ./${lute}${size}.$gf > ./${lute}${size}.$pk \n");
+    }
+}
 
-gftopk ./lute9.2400gf > ./lute9.2400pk
+#system ("mf \\&$FMT \"\mode:=$mode; \mag:=1.0; input lute9; bye;\");
+#system ("gftopk ./lute9.$bpi > ./lute9.$pk");
 #
-# mf \&$FMT "\mode:=ultre; \mag:=1.0; input blute9; bye;"
+# virmf \&$FMT "\mode:=ultre; \mag:=1.0; input blute9; bye;"
 # gftopk ./blute9.2400gf > ./blute9.2400pk
 #
-#rm -f lute9*gf lute9*bdf lute9.log
-#
-if ($#argv > 0 ) then
-	echo foo
-  mf \&$FMT "\mode:=CanonCX; \mag:=1.0; input blute85; bye;"
-  gftopk ./blute85.300gf > ./blute85.300pk
-  mf \&$FMT "\mode:=CanonCX; \mag:=1.0; input blute8; bye;"
-  gftopk ./blute8.300gf > ./blute8.300pk
-  mf \&$FMT "\mode:=CanonCX; \mag:=1.0; input blute7; bye;"
-  gftopk ./blute7.300gf > ./blute7.300pk
-  mf \&$FMT "\mode:=CanonCX; \mag:=1.0; input blute6; bye;"
-  gftopk ./blute6.300gf > ./blute6.300pk
-endif

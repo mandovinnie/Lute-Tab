@@ -343,7 +343,7 @@ int format_page(print *p, i_buf *i_b,
 	    cc[1] = '\0';
 	    fontnum = atoi(cc);
 	    if ( ! (f->m_flags & QUIET))
-	      printf("tab_p: fontnum %s %d\n", cc, fontnum);
+	      //	      printf("tab_p: fontnum %s %d\n", cc, fontnum);
 	    switch (fontnum) {
 	      case 1:
 	      case 5:
@@ -889,13 +889,15 @@ int get_text(struct list *l, struct text **textt,
 		*p = '\0'; /*  end of this chord */
 		if (pp && *pp == '|' ) {
 		    tp->nospace = 1;
-		    tmp_text -= 
-			f_a[font]->fnt->get_width('|');
+		    tmp_text -=
+		      f->font_sizes[font]/12.0 * 0.5 *
+		      f_a[font]->fnt->get_width('|');
 		    *pp = ' ';
 		}
 		else if (pp && *pp != '-') {
-		    tmp_text += 
-			f_a[font]->fnt->get_width('-');	// was '-'
+		    tmp_text +=
+		      f->font_sizes[font]/12.0 *
+		      f_a[font]->fnt->get_width('-');	// was '-'
 		}
 		break;
 	    }
@@ -903,11 +905,13 @@ int get_text(struct list *l, struct text **textt,
 		got_text++;
 		*p = '\0'; /* erase tab */
 		if (pp && *pp == '|' ) {
-		    tmp_text -= f_a[font]->fnt->get_width('|');
+		    tmp_text -= f->font_sizes[font]/12.0 *
+		      f_a[font]->fnt->get_width('|');
 		    tp->nospace = 1;
 		}
-		else if (pp && *pp != '-') {
-		    tmp_text += f_a[font]->fnt->get_width('-');
+		else if (pp && *pp != '-') {		  
+		  tmp_text += f->font_sizes[font]/12.0 *
+		    f_a[font]->fnt->get_width('-');
 		}
 		p++;
 
@@ -931,16 +935,17 @@ int get_text(struct list *l, struct text **textt,
 			    f_a[0]->fnt->get_width(0201);
 		    break;
 		case '\\': /* do nothing */
-		    tmp_text += 
-			get_special_width(&p, i_b, 
-					  f_a, font, f);
+		    tmp_text +=
+		      f->font_sizes[font]/12.0 *
+		      get_special_width(&p, i_b, f_a, font, f);
 		    //p++;p++;
 		    n++;n++;
 		    break;
 		case '?': /* replace with upside down ?? */
 		{
-		    tmp_text += 
-			f_a[font]->fnt->get_width(*p);
+		    tmp_text +=
+		      f->font_sizes[font]/12.0 *
+		      f_a[font]->fnt->get_width(*p);
 		    char c = i_b->GetByte();
 		    if ( c == '`') *p = 0076;
 		    else i_b->unGet(c);
@@ -948,8 +953,9 @@ int get_text(struct list *l, struct text **textt,
 		break;
 		case '!': /* replace with upside down ?? */
 		{
-		    tmp_text += 
-			f_a[font]->fnt->get_width(*p);
+		    tmp_text +=
+		      f->font_sizes[font]/12.0 *
+		      f_a[font]->fnt->get_width(*p);
 		    char c = i_b->GetByte();
 		    if ( c == '`') *p = 0074;
 		    else i_b->unGet(c);
@@ -963,22 +969,26 @@ int get_text(struct list *l, struct text **textt,
 		    else if ( c == 'i') { /* fi */
 			*p = 0014; 
 			tmp_text += 
-			    f_a[font]->fnt->get_width(0015);
+			  f->font_sizes[font]/12.0 *
+			  f_a[font]->fnt->get_width(0015);
 		    }
 		    else if ( c == 'l') { /* fl */
 			*p = 0015;
-			tmp_text += 
-			    f_a[font]->fnt->get_width(*p);
+			tmp_text +=
+			  f->font_sizes[font]/12.0 *
+			  f_a[font]->fnt->get_width(*p);
 		    }
 		    else {
 			i_b->unGet(c);
-			tmp_text += 
-			    f_a[font]->fnt->get_width(*p);
+			tmp_text +=
+			  f->font_sizes[font]/12.0 *
+			  f_a[font]->fnt->get_width(*p);
 		    }
 		}
 		break;
 		default:
-		    tmp_text += f_a[font]->fnt->get_width(*p);
+		    tmp_text += f->font_sizes[font]/12.0 *
+		      f_a[font]->fnt->get_width(*p);
 		    break;
 		}
 	    }
