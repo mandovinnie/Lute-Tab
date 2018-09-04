@@ -283,6 +283,7 @@ k		- key signature kg is key of G, also d, a, f, c, b, e
 K		- move to next column, 3.5 in hardcoded
 L		- longa
 I filename	- include filename
+@               - print just a dot for a dotted note in the previous bar, used in Cosens ms.
 i		- indent a bit (used at the beginning of a line
 	          that doesn't start with a bar)
 j		- the same as i but less padding when the line is justified

@@ -20,14 +20,16 @@
 
 unsigned long readVarLen();
 int event ();
+char * note_to_text();
 static char *fp;
 static int brief=0;
 static char on[100];
 static int count=0;
 
+int
 main(int argc, char *argv[]) {
-  char fname[80];
-  char b[80];
+  char fname[256];
+  char b[256];
   int i;
   int f;
   struct stat statbuf;
@@ -59,6 +61,7 @@ main(int argc, char *argv[]) {
   f = open(fname, O_RDONLY );
   if (f == -1) {
     fprintf(stderr, "can't open %s\n", fname);
+    exit (-1);
   }
   stat (fname, &statbuf);
   printf("File size is %d\n", statbuf.st_size);
@@ -171,7 +174,7 @@ int event () {
     if (brief) 
       printf("OFF %2x ", data);
     else
-      printf("Note OFF  note %2x velocity %x \n", data, velocity);
+      printf("Note OFF  note %2x %s velocity %x \n", data, note_to_text(data), velocity);
     on[data]= 0;
     break;
   case 0x90:
@@ -179,7 +182,7 @@ int event () {
     if (brief) 
       printf("On  %2x ", data);
     else
-    printf("Note ON   note %2x velocity %x \n", data, velocity);
+      printf("Note ON   note %2x %s velocity %x \n", data, note_to_text(data), velocity);
     on[data]= 1;
     break; 
   case 0xa0: /* AFTERTOUCH */
@@ -397,4 +400,48 @@ unsigned long readVarLen()
 
   /*  fprintf(stderr, "final val %x \n", val); */
   return(val);
+}
+
+char* note_to_text(int note) {
+  if (note == 0xa0)     return "ERR";
+  if (note == 0x60)     return "c\'\'";
+  if (note == 0x54)     return "c\' ";
+  if (note == 0x53)     return "b\' ";
+  if (note == 0x52)     return "bb\'";
+  if (note == 0x51)     return "a\' ";
+  if (note == 0x50)     return "ab\'";
+  if (note == 0x4f)     return "g\' ";
+  if (note == 0x4e)     return "f#\'";
+  if (note == 0x4d)     return "f\' ";
+  if (note == 0x4c)     return "e\' ";
+  if (note == 0x4b)     return "eb\'";
+  if (note == 0x4a)     return "d\' ";
+  if (note == 0x49)     return "c#\'";
+  if (note == 0x48)     return "c\' ";
+  if (note == 0x47)     return "b  ";
+  if (note == 0x46)     return "bb ";
+  if (note == 0x45)     return "a  ";
+  if (note == 0x44)     return "g# ";
+  if (note == 0x43)     return "g  ";
+  if (note == 0x42)     return "f# ";
+  if (note == 0x40)     return "e  ";
+  if (note == 0x41)     return "f  ";
+  if (note == 0x3f)     return "eb ";
+  if (note == 0x3e)     return "d  ";
+  if (note == 0x3d)     return "c# ";
+  if (note == 0x3c)     return "c  ";
+  if (note == 0x3b)     return "B  ";
+  if (note == 0x3a)     return "Bb ";
+  if (note == 0x39)     return "A  ";
+  if (note == 0x38)     return "Ab ";
+  if (note == 0x37)     return "G  ";
+  if (note == 0x36)     return "F# ";
+  if (note == 0x35)     return "F  ";
+  if (note == 0x34)     return "E  ";
+  if (note == 0x33)     return "Eb ";
+  if (note == 0x32)     return "D  ";
+  if (note == 0x31)     return "C# ";
+  if (note == 0x30)     return "C  ";
+  if (note == 0x24)     return "C, ";
+  if (note == 0x18)     return "C,,";
 }

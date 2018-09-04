@@ -1,3 +1,10 @@
+
+VERSION "4.3.90"
+
+added note name output to midi-dump.
+
+VERSION "5.3.89"
+
 VERSION "4.3.88"
 fix lute.mf to make spanish "perfect" time sig work again
 

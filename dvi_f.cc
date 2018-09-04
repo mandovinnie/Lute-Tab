@@ -69,7 +69,7 @@ struct file_info *f,		/* general flags, etc */
 struct list *l)			/* data */
 {
   unsigned int c;
-  int i, cc, ccc;
+  int i=0, cc, ccc;
   int skip_spaces;		/* spaces to skip */
   static double last_move;	/* last interchar space, for post orn. */
   double staff_h = str_to_inch(staff_height);
@@ -707,6 +707,7 @@ struct list *l)			/* data */
     p->pop();
     break;
   case '&':			/* for after ornaments */
+    // printf ("HERE dvi_f.cc line 710  i is %d\n", i);
     p->moveh(-1.0 * last_move);
     p->moveh(0.75 * EM);
     if (baroque && l->prev && l->prev->dat[0] != '2' ) p->moveh(.05);
@@ -716,7 +717,7 @@ struct list *l)			/* data */
       p->moveh(2 * f_a[0]->fnt->get_width( l->prev->dat[0]));
       switch (ch[1]) {
       case '{':
-	//printf ("HERE dvi_f.cc line 721\n");
+	// printf ("HERE dvi_f.cc line 721  i is %d\n", i);
 	skip_spaces = 0;
 	p->push();
 	my_underline(p, f_a,  &skip_spaces, 11, i);

@@ -160,6 +160,10 @@ void mapflag(print *p, font_list *f_a[], char c, struct file_info *f)
     case '~':
       p->put_a_char(067);
       break;
+    case '@':
+      p->movev("0.061 in");
+      p->put_a_char('.');
+      break;
     case '6':
     case 'x':
       break;

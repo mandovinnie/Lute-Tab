@@ -319,6 +319,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	  /*
 	case '$': this is only used in Straloch MS
 	*/
+	case '@':  // a dot after a bar line after a flag from Cosens
 	case '~':
 	    /* new staff */
 	    staff[0] = c;

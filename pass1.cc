@@ -508,6 +508,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       weight = W_NONE;
       break;
     case 'x':
+    case '@':  // a dot after a bar line after a flag  from Cosens
       l->padding = old_width;
       switch (old_flag) {
       case 'L':
@@ -528,6 +529,10 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       case 'd':
       case '$':
 	weight = old_weight;
+	if (d[0] == '@') {
+	  l->padding = l->padding * 0.6;
+	  weight = weight * 0.6;
+	}
 	break;
       default:
 	if ( ! (f->m_flags & QUIET ))
@@ -750,7 +755,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       //      dbg0(Warning, " [pass1: not implemented\n");
       l->padding = 0;
       weight = 0;
-      break;
+      break; 
     default:
       dbg3(Warning, "tab: pass1: unknown flag %d %s at index %d\n", 
 	   (void *)(int)c, (void *)l->dat, (void *)j );

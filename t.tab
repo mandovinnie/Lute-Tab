@@ -3,11 +3,43 @@
 % $alttitlefont=pncr
 $alttitlefont=pbkl
 $alttitlesize=18
-$textsize=18
+% $textsize=18
+-l "5.0 in"
 %-i
 %-K
 %-l "4.9 in"
 %$midi-volume=94
+
+b
+@
+1
+1.
+1 cdc
+b
+@
+1.cdc
+1
+1
+b
+
+e
+
+b
+1  d  &{	0f0	te-
+1  d}	0f0	xt
+1&{  a
+x} a
+1
+b
+@
+1
+1
+1
+b
+i
+b
+e
+
 %{title}
 F3
 {ee\"ee\^ee\'ee\`ee\=ee\~ee\.ee\uee\vee\Hee\cee/e}
@@ -21,7 +53,7 @@ F2
 {eeeeeeeeeg\"oeeeeeeeee/e}
 
 b
-SO
+S3-4
 1- a  a&{	wf0	t\"ext-
 1- b}	wf0	ee\"ee
 1 d	wf0	ee|

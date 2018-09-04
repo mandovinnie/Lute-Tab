@@ -691,10 +691,16 @@ do_text(print *p, i_buf *i_b, font_list *f_a[],
 	do_sp(*pp, font, p /* , f */);
 	break;
       case '-':
+	p->put_rule("0.002 in", "0.6 in" );
 	p->moveh (l->space /2.0);
+	p->put_rule("0.002 in", "0.5 in" );
 	p->moveh (l->padding/2.0);
-	p->moveh (text_used / -2.0);
-	p->moveh (f_a[font]->fnt->get_width ('-')/ -2.0);
+	p->put_rule("0.002 in", "0.4 in" );
+	//	p->moveh (text_used / -2.0);
+	p->put_rule("0.002 in", "0.3 in" );
+	p->moveh (f->font_sizes[font]/12.0 *
+		  f_a[font]->fnt->get_width ('-')/ -2.0); // was -2.0
+	p->put_rule("0.002 in", "0.2 in" );
 	/* here we use ll which is specific to l, not text line */
 	ll = l;
 	if (staff == 1) {
@@ -707,6 +713,7 @@ do_text(print *p, i_buf *i_b, font_list *f_a[],
 		 && (int)text_pt(p, f_a, ll->text2, level)) 
 	    p->moveh ((ll->space + ll->padding)/2.0);
 	}
+	p->put_rule("0.002 in", "0.1 in" );
 	p->set_a_char(*pp);
 	break;
       case '"':
