@@ -628,7 +628,7 @@ void nmidi::do_file_head()
     nmidi_head(pulses);
 }
 
- static char nt[2];
+ static char nt[3];
 
 char *numtonote(int n) {
   char c;
