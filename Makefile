@@ -39,7 +39,7 @@ TLOC='"."'
 #
 #
 #
-WARNS = -Wtraditional -Wpointer-arith -Wcast-align -Wconversion -Waggregate-return  -Wstrict-prototypes  -Wmissing-declarations   -Wnested-externs -Woverloaded-virtual -Winline -Wunused
+WARNS = -Wtraditional -Wpointer-arith -Wcast-align -Wconversion -Waggregate-return  -Wstrict-prototypes  -Wmissing-declarations   -Wnested-externs -Woverloaded-virtual -Winline -Wunused  -Wno-format-security -Wno-invalid-source-encoding  -Wno-stringop-overflow
 CXXFLAGS = ${OPTIM} -DTFM_PATH=${TLOC}  
 #
 
@@ -119,7 +119,7 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	tlute9.600pk tlute8.600pk tlute7.600pk tlute6.600pk \
 	simple.tab 
 
-DISTFILE = lute_tab4.3.90.tar
+DISTFILE = lute_tab4.3.91.tar
 
 distrib:	 ${DISTFILE}
 

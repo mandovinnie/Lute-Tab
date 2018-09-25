@@ -316,15 +316,15 @@ void set_o(const char *value, struct file_info *f)  {
   }
 #ifndef NO_STDOUT
   if (f->m_flags & SOUND ) {
-    strncat (f->out_file, ".mid", 4);
+    strncat (f->out_file, ".mid ", 4);
   }
   else if (f->flags & PS ) { 
     if ( strcmp (f->out_file, "stdout")) {
-      strncat (f->out_file, ".ps", 3);
+      strncat (f->out_file, ".ps ", 3);
     }
   }
 #endif /* NO_STDOUT */
-  else strncat (f->out_file, ".dvi", 4);
+  else strncat (f->out_file, ".dvi ", 4);
   if ( ! (f->m_flags & QUIET)) {
       dbg1 (Warning, "tab: sending output to %s\n", (void *)f->out_file);
   }
@@ -364,7 +364,7 @@ void set_sound(const char *value, struct file_info *f)
 	f->flags |= MANUSCRIPT;
 	f->m_flags |= QUIET;
 #ifndef NO_STDOUT
-	strncat (f->out_file, "stdout", 6);	//  was /dev/null
+	strncat (f->out_file, "stdout ", 6);	//  was /dev/null
 #endif
 }
 

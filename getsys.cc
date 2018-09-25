@@ -986,6 +986,7 @@ Mstore(i_buf *ib, int *l_p, unsigned char *staff, struct file_info *f)
 #endif /* linux */
     i = 2;
     if (f->flags & CONV_COR) i = 1;
+    // if (f->m_flags & SPANISH) printf ("SPANISH\n");
 
     for (; i < n_lines; i++) {
       int j = n_lines + 1 - i;
@@ -1010,7 +1011,8 @@ Mstore(i_buf *ib, int *l_p, unsigned char *staff, struct file_info *f)
       else if ( c == 232 ) c = 'n'; // N12
       else if ( c == 233 ) c = 'o'; // N13
       else if ( c == 234 ) c = 'p'; // N14
-      else if ( c >= '0' && c <= '9' && (0 && (!(f->m_flags & SPANISH)))) {
+      // wbc sep 2018       else if ( c >= '0' && c <= '9' && (0 && (!(f->m_flags & SPANISH)))) {
+      else if ( c >= '0' && c <= '9' ) {
 	if (i == 8 && f->line_flag == ON_LINE 
 	    && f->flags & CONV_COR ) {
 	  if ( c < '7' ) c = 'a' + c - '0';
