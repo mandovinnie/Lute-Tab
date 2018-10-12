@@ -544,7 +544,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       break;
 
     case 'U':
-      if (l->next->dat[0] == 'G' && (l->next->dat[1] == '2' || l->next->dat[1] == '3')) {
+      if (l->next && l->next->dat[0] == 'G' && (l->next->dat[1] == '2' || l->next->dat[1] == '3')) {
 	l->padding = 1.27 * 
 	  f_a[0]->fnt->get_width(19);
 	//	fprintf(stderr, "HERE 1\n");
@@ -557,7 +557,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       }
       break;
     case 'u':
-      if (l->next->dat[0] == 'G' && (l->next->dat[1] == '2' || l->next->dat[1] == '3')) {
+      if (l->next && l->next->dat[0] == 'G' && (l->next->dat[1] == '2' || l->next->dat[1] == '3')) {
 	l->padding = 1.27 * 
 	  f_a[0]->fnt->get_width(19);
 	//	fprintf(stderr, "HERE 2\n");

@@ -701,7 +701,7 @@ struct list *l)			/* data */
 		   f->flag_flag == ITAL_FLAGS ? 217 : 195));
       for (i=1; i< 15 && ch[i] != '\0' && ch[i] != '}'; i++ )
 	p->set_a_char(ch[i]);
-      printf("FIX ME line 786\n");
+      // printf("FIX ME line 786\n");
       p->use_font(0);
     }
     p->pop();

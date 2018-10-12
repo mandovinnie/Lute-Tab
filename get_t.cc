@@ -60,11 +60,29 @@ void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
 
     // test to see if this is valid tab file stuff
 	
+    // printf("buf %s", buf );
+    
     if ( badchar((unsigned char)*p) ) {
       dbg2(Error, "Bad character-%c-%x, this may not be a valid tab file\n", 
 	   (void *)*p, (void *)*p);
     }
-
+    if (! strncmp(buf, "Content-Type: text/plain", 24 )) {
+      printf("get_t: get_tab_file: Content-Type: text/plain\n", buf);
+      continue;
+    }
+    if (! strncmp(buf, "Content-Type: text/html", 22 )) {
+      // we should not get text/html stuff
+      // we should exit here
+      printf("get_t: get_tab_file: Content-Type: text/html\n");
+      ib->PutByte(NEWLINE);
+      return;
+    }
+    if (! strncmp(buf, "Content-Transfer-Encoding: quoted-printable", 43 )) {
+      printf(
+        "get_t: get_tab_file: Content-Transfer-Encoding: quoted-printable\n",
+	buf);
+      continue;
+    }
     switch (*p) {
     case '-':		/* these flags are set before inter file */
       switch (buf[1]) {	/* these flags are set for the whole */

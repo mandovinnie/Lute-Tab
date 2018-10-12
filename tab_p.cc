@@ -841,6 +841,13 @@ int setflag(file_info *f, char * string, pass pass)
 
     arg[i] = '\0';
     p++;
+    // wbc oct 9 2018
+    // =3D is the quoted printable for = 
+    // if ((*p == '3') && ((*p+1) == 'D' )) {
+    if ((*p == '3') && ((*(p+1)) == 'D' )) {
+	    // printf ("HERE in tab_p.cc setflag\n");
+	    p++;p++;
+    }
     //    dbg1 (Warning, "setflag: %s = ", (void *)arg);
 
     for (i=0 ;*p != '\0' && *p != NEWLINE; p++, i++) {

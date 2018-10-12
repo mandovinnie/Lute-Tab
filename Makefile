@@ -8,7 +8,7 @@
 #  where the lute9.tfm file resides
 #
 # OPTIM = -O2
-OPTIM = -g -O0 -Wno-int-to-pointer-cast -Wno-unused-value
+OPTIM = -g -O0 -Wno-int-to-pointer-cast -Wno-unused-value  -Wno-format-security -Wno-invalid-source-encoding
 CC = g++ -wuninitilized
 LD = g++
 # LD = g++ -m64
