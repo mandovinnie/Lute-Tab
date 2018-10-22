@@ -8,7 +8,8 @@
 #  where the lute9.tfm file resides
 #
 # OPTIM = -O2
-OPTIM = -g -O0 -Wno-int-to-pointer-cast -Wno-unused-value  -Wno-format-security -Wno-invalid-source-encoding
+OPTIM = -g -O0 -Wno-int-to-pointer-cast -Wno-unused-value  -Wno-format-security 
+# -Wno-invalid-source-encoding
 CC = g++ -wuninitilized
 LD = g++
 # LD = g++ -m64
@@ -119,7 +120,7 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	tlute9.600pk tlute8.600pk tlute7.600pk tlute6.600pk \
 	simple.tab 
 
-DISTFILE = lute_tab4.3.91.tar
+DISTFILE = lute_tab4.3.92.tar
 
 distrib:	 ${DISTFILE}
 

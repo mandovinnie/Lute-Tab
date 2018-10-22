@@ -248,5 +248,7 @@ struct list {
  #define TWELVEDOTS             0x1000000
  #define BAROQUE_E		0x2000000
  #define SPANISH		0x4000000
+ #define NOSPACE		0x8000000
+ #define NOSPACEBEFORE		0x10000000
  /* variables defined in sizes.c */
 

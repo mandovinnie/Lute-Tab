@@ -492,6 +492,16 @@ void set_spanish(const char *value, struct file_info *f)
   f->m_flags |= SPANISH;
 }
 
+void set_no_space_after_note(const char *value, struct file_info *f)
+{
+  f->m_flags |=NOSPACE;
+}
+
+void set_no_space_before_note(const char *value, struct file_info *f)
+{
+  f->m_flags |=NOSPACEBEFORE;
+}
+
 void args(int argc, char ** argv, struct file_info *f)
 {
     char *aa=0;
@@ -599,6 +609,8 @@ void args(int argc, char ** argv, struct file_info *f)
       {(char*)"twelvedots", (void*) set_twelvedots},
       {(char*)"curly-e", (void*) set_curly_e},
       {(char*)"spanish", (void*) set_spanish},
+      {(char*)"no_space_after_note", (void*) set_no_space_after_note},
+      {(char*)"no_space_before_note", (void*) set_no_space_before_note},
       {(char *)0, (void*)0}
     };
 

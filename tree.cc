@@ -532,7 +532,6 @@ void set_extended_character_set(const char *value, struct file_info *f)
   f->extended_character_set = 1;
 }
 
-
 /*
 void setit(void *r, const char *flag, struct file_info *f)
 {

@@ -257,11 +257,15 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	      l->padding += b_d_pad;
 	    break;
 	  }
-
 	}
 	if (!orn_found && Q_found) l->padding = 0.0;
       }
       weight = W_NONE;
+      if (f->m_flags & NOSPACEBEFORE ) {
+	l->padding = 0;
+	l->padding = 0.10;
+	l->prev->padding -= 0.10;
+      }
       break;
     case ':':		/* ornaments above the note */
       l->padding = 0;
@@ -272,8 +276,9 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       {
 	for (i = 2; i < STAFF; i++ ) {
 	  if (d[i] != ' ' && d[i] != '{' && d[i] != '}' 
-	      && d[i] != '(' && d[i] != ')' ) {
+	      && d[i] != '(' && d[i] != ')' && (!(f->m_flags & NOSPACE )) ) {
 	    l->padding = str_to_inch(min_O_w);
+	    
 	    //	if ( 1 && l->prev && l->prev->dat[i] == 'e') { 
 	    //  printf ("HERE  ornament is %c\n", d[i]);
 	    //  l->prev->padding += 0.5;
@@ -952,16 +957,21 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
     dbg0(Warning, "pass1: total_weight is zero\n");
     *extra = 0.0;
   }
+  if (staff_len - total_width < 0.0) {
+    float v = staff_len - total_width;
+    dbg0(Warning, "tab: pass1: total width greater than staff length\n");
+    //    fprintf (stderr, "by %f\n", v);
+  }
   else
     *extra = (staff_len - total_width) / total_weight;
-  /*
-    fprintf (stderr, "tab: pass1: extra is %f t_width %f tot_weight %f\n",
-    *extra, total_width, total_weight);
-    */
+  /* 
+    fprintf (stderr, "tab: pass1: extra is %f staff_len %f t_width %f tot_weight %f\n",
+	     *extra, staff_len, total_width, total_weight);
+     */
   if (*extra < 0.0) {
     /*	printf ("tab: extra %f\n", *extra); */
     if (! (f->m_flags & QUIET ) )
-      dbg1(Warning,"too many notes on one line, system %d\n", 
+      dbg1(Warning,"too many notes on one line, system %d \n", 
 	   (void *)n_system );
   }
 

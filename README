@@ -148,6 +148,9 @@ Options:
        tablature right now.  This option only works on the command
        line, you can not specify it within the file.
     -nobox  Do not set a bounding box - for postscript debugging
+       the next two commands help keep grid flags even
+    -no_space_before_note - print the ornament in the space of the previous character
+    -no_space_after_note - don't add space for ornaments after notes
     -O uses thin line flags, like dalza. 
        and shifts the lines to the middle of the numbers
        you can use -i -T instead.
@@ -437,10 +440,16 @@ of tablature, as the second to tenth character.
                           two in a row give two side by side strokes 
 	-		- vertical bar - play similtaneously
 	+ * # x $ < 	- an ornament before the next note
+	                  + makes a cross
+			  * makes a dot
+			  # makes a hash sign
+			  x makes an x
+			  $ makes four small dots in a rectangle
+			  < makes a short horizontal lain - a dash
 		'	- a comma above the line
 		`	- a comma on the line
 		Q	- character is highlighted
-	%		- two dots (colon )preceeding next note`
+	%		- two dots (colon )preceeding next note
 	?		- a flat
 	>		- something like a flat but different
 	@		- an asterix
