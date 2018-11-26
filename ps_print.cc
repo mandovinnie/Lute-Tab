@@ -1333,7 +1333,7 @@ void bit_char(i_buf *ps, int char_num, int sixh)
       // ps->PutString("stroke\n");
     }
     else if (char_num == 033 && 0 ) {  /* 27  Perfect circle */
-      fprintf(stderr, "HERE\n");
+      // fprintf(stderr, "HERE\n");
       ps->PutString("\n/P {");
       ps->PutF(red, 5);
       ps->PutString(" mul } def\n");

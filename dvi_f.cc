@@ -1467,10 +1467,15 @@ struct list *l)			/* data */
 	  p->push();
 	  if (f->line_flag == ON_LINE)
 	    p->movev (italian_offset);
-	  if ((f->m_flags & DSUP ))
-	    p->put_a_char('d'); 
-	  else
-	    p->put_a_char('D'); /* should be in getsystem */
+	  // printf ("HERE\n");
+	  if ((f->m_flags & DSUP )) {
+	    mapchar(p, f_a, 'd', f);
+	    //	    p->put_a_char('d');
+	  }
+	  else {
+	    mapchar(p, f_a, 'D', f);
+	    // p->put_a_char('D'); /* should be in getsystem */
+	  }
 	  last_line_in_grid = 0;
 	  p->pop();
 	}
