@@ -17,6 +17,7 @@
 
  */
 
+#include "win.h"
 #include "tab.h"
 #include "system.h"
 #include "tree.h"

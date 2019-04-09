@@ -37,6 +37,7 @@ TLOC='"."'
 # TLOC = '"/net/tahoe4/wbc/src/nnt"'
 # TLOC = '"/usr/aeolus1/wbc/src/nnt"'
 # TLOC = '"/home/wbc/nnt"'
+# TLOC = '"/home/wbc/src/nnt"'
 #
 #
 #
@@ -63,7 +64,7 @@ SOURCES = main.cc file_in.cc tfm.cc dvi.cc buffer.cc i_buf.cc \
 HEADERS = buffer.h dbg.h file_in.h print.h system.h tfm.h pkfile.h\
 	dvi.h i_buf.h sizes.h tab.h dviprint.h ps.h pk_bit.h pk_input.h \
 	ps_print.h mac.h tree.h sound.h beam.h version.h raw_snd.h \
-	midi_snd.h pdf_print.h pdf.h ascii.h nmidi.h
+	midi_snd.h pdf_print.h pdf.h ascii.h nmidi.h win.h
 
 all:	tab
 
@@ -120,7 +121,7 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	tlute9.600pk tlute8.600pk tlute7.600pk tlute6.600pk \
 	simple.tab 
 
-DISTFILE = lute_tab4.3.92.tar
+DISTFILE = lute_tab4.3.94.tar
 
 distrib:	 ${DISTFILE}
 

@@ -3,7 +3,7 @@
  * default sizes for various formatting satuff
  *
  */
-
+#include "win.h"
 #include "tab.h"
 #include <string.h>
 

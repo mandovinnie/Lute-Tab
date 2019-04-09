@@ -22,7 +22,7 @@
  * note that we use dvi units, and we use the tfm file for font
  * widths
  */
-
+#include "win.h"
 #include "dvi.h"
 #include "tab.h"
 #include <errno.h>
@@ -167,11 +167,7 @@ int pt_to_dvi(double pt)
     return((int) (
 	   (red * 
 	    (pt * 254000) * 
-	    ( 
-	     (double)DENOM / (double)NUM
-	     )
-	    ) / 72.27)
-	   );
+	    ((double)DENOM / (double)NUM) ) / 72.27));
 }
 
 double dvi_to_inch(int dvi)

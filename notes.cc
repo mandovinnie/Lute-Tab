@@ -3,7 +3,7 @@
  * wbc Aug 93
  *
  */
-
+#include "win.h"
 #include "tab.h"
 #include "print.h"
 #include "tfm.h"

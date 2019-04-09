@@ -3,7 +3,7 @@
  and put it
 
  */
-
+#include "win.h"
 #include "tab.h"
 #include "sizes.h"
 #include "tfm.h"

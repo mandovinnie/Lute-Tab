@@ -21,7 +21,7 @@
  *  wbc June 7 1991
  *
  */
-
+#include "win.h"
 #include "tab.h"
 #include "file_in.h"
 #include "i_buf.h"

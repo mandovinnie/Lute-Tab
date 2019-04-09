@@ -20,6 +20,7 @@
 /*
  * 
  */
+#include "win.h"
 #include "tab.h"
 // #include "dviprint.h"
 #include "print.h"

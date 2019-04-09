@@ -2,6 +2,7 @@
    april 16 98
    */
 
+#include "win.h"
 #include "beam.h"
 #include "print.h"
 #include "tfm.h"

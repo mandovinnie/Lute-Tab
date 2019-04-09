@@ -2,7 +2,7 @@
  *
  *
  */
-
+#include "win.h"
 #include "tab.h"
 #include "print.h"
 #include "dviprint.h"

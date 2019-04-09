@@ -3,7 +3,7 @@
  * by Wayne Cripps
  * Jan 22 1997
  */
-
+#include "win.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -515,13 +515,17 @@ void set_scribe(const char *value, struct file_info *f)
 }
 void set_left_margin(const char *value, struct file_info *f)
 {
-  int i = atoi(value);
+  int i;
+  i = atoi(value);
   f->left_margin = i;
+  //  printf("tree.cc: set_left_margin: %s %d\n", value, i);
 }
 void set_top_margin(const char *value, struct file_info *f)
 {
-  int i = atoi(value);
-  f->top_margin = i;
+   int i;
+   i = atoi(value);
+   f->top_margin = i;
+   //   printf("tree.cc: set_top_margin: %s %d\n", value, i);
 }
 void set_midi_volume(const char *value, struct file_info *f)
 {

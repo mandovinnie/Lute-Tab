@@ -20,6 +20,7 @@
  * drawing and typesetting stuff
  *
  */
+#include "win.h"
 #include "tfm.h"
 #include "tab.h"
 #include "print.h"

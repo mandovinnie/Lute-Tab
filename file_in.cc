@@ -17,7 +17,7 @@
    to wbc@sunapee.dartmouth.edu.
 
  */
-
+#include "win.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>

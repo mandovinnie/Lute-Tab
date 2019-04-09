@@ -19,7 +19,7 @@
 #ifdef sgi
 #include <bstring.h>
 #endif
-
+#include "win.h"
 #include "tab.h"
 #include "i_buf.h"
 #include "file_in.h"

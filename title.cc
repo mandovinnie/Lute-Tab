@@ -16,7 +16,7 @@
    to wbc@sunapee.dartmouth.edu.
 
  */
-
+#include "win.h"
 #include "tab.h" 
 #include "system.h"
 #include "print.h"

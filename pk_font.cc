@@ -1,6 +1,7 @@
 /*
 
- */
+*/
+#include "win.h"
 #include "tab.h"
 #include "pk_bit.h"
 #include "pkfile.h"

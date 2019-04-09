@@ -2,7 +2,7 @@
  */
 
 
-
+#include "win.h"
 #include "tab.h"
 #include "print.h"
 #include "tfm.h"
@@ -156,7 +156,9 @@ int format_page(print *p, i_buf *i_b,
 	sprintf(num, "%d", p->get_page_number());
 	format_pagenum (p, f_a, num, f);
     }
-
+// printf("tab_p.cc: format_page: first flag_h: %f %d\n", flag_h, inch_to_dvi(flag_h)); // wbc Dec 27 2018
+// BUG - the next bit does not set flags on the first page because the first page has already been started!
+// wbc dec 27 2018
     switch (f->flag_flag) {
     case S_ITAL_FLAGS:
 	flag_h = f_a[0]->fnt->get_height(0350);
@@ -301,9 +303,37 @@ int format_page(print *p, i_buf *i_b,
 	    }
 	    *bp='\n';
 	    (void)setflag(f, &buf[1], second);
+	    // wbc dec 2018 should we set flag height here? yes for $ args set at beginning of page
+	    switch (f->flag_flag) {
+	    case S_ITAL_FLAGS:
+	      //        printf ("S_ITAL\n");
+	      flag_h = f_a[0]->fnt->get_height(0350);
+	      break;
+	    case ITAL_FLAGS:
+	      //        printf ("ITAL\n");
+	      flag_h = f_a[0]->fnt->get_height(0332);
+	      break;
+	    case THIN_FLAGS:
+	      //        printf ("THIN\n");
+	      flag_h = f_a[0]->fnt->get_height(0363);
+	      break;
+	    case CONTEMP_FLAGS:
+	      //        printf ("CONTEMP\n");
+	      flag_h = f_a[0]->fnt->get_height(0312);
+	      break;
+	    case BOARD_FLAGS:
+	      //        printf ("BOARD\n");
+	      flag_h = f_a[0]->fnt->get_height(0356);
+	      break;
+	    default:
+	      //        printf ("DEFAULT\n");
+	      flag_h = f_a[0]->fnt->get_height(0302);
+	      break;
+	    }
+	    // end wbc dec 2018
 	    break;
 	}
-
+	
 	case 'P':
 	    tit_last=0;
 	    {
@@ -485,7 +515,7 @@ int format_page(print *p, i_buf *i_b,
 	      else {		/* compensate for flag height here */
 		p->movev(flag_h + str_to_inch(flag_to_staff));
 	      }
-   	      
+	 //     printf("tab_p.cc: format_page: flag_h: %f %d\n", flag_h, inch_to_dvi(flag_h)); // wbc Dec 27 2018   	      
 	      if (!(f->m_flags & QUIET)) 
 		dbg1(Warning, "tab: tab_p: sys_count: %d\n", (void *)(sys_count+1));
 	      printsystem(p, i_b, f_a, &l_p[sys_count], f);

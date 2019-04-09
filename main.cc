@@ -1,4 +1,5 @@
 
+#include "win.h"
 #include "version.h"
 #include "tab.h"
 #include "i_buf.h"

@@ -16,7 +16,7 @@
    to wbc@sunapee.dartmouth.edu.
 
  */
-
+#include "win.h"
 #if defined WIN32
 #include <windows.h>
 #endif /* WIN32*/

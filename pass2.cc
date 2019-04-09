@@ -2,7 +2,7 @@
  */
 
     /* second pass which adds in padding and outputs the characters */
-
+#include "win.h"
 #include "tab.h"
 #include "print.h"
 #include "tfm.h"

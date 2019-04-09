@@ -23,7 +23,7 @@
  * gets to the endpoint do_uline is called, and the line is 
  * drawn from the saved beginning to the current point
  */
-
+#include "win.h"
 #include "tab.h"
 #include "print.h"
 #include "system.h"

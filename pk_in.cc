@@ -1,6 +1,7 @@
 /* pk_input.c	Samuel W. Bent		1/23/91 */
 
 /* routines for reading PK files */
+#include "win.h"
 #ifndef __cplusplus
 #ifndef lint
 static char *rcsid = "$Header: /usr/everest/wbc/src/lute/RCS/pk_input.c,v 1.5 93/03/19 21:00:46 wbc Exp $";

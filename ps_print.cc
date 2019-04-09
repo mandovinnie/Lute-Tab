@@ -2,7 +2,7 @@
  *
  *
  */
-
+#include "win.h"
 #if defined _WIN32
 #include <io.h>
 #endif /* WIN32 */
@@ -40,6 +40,7 @@ extern char *font_path;
 ps_print::ps_print(font_list *font_array[], file_info *f)
 {
     int j;
+    int tmp;
 
     //    printf ("val %d\n", inch_to_dvi(0.4218));
     //    printf ("val %d\n", mm_to_dvi(17.6));
@@ -53,14 +54,20 @@ ps_print::ps_print(font_list *font_array[], file_info *f)
     }
     else
       ps_top_of_page = 98670000;
-    /*    printf("top of page %f %f %u %u\n",  
+    /* printf("ps_print: top of page %f in  %f mm  %u dvi-units \t%u=32.42mm\n",  
     	   dvi_to_inch(ps_top_of_page),
 	   dvi_to_mm(ps_top_of_page),
 	   ps_top_of_page,
 	   mm_to_dvi(32.42)); */
     /*     for (int i=0; i< 256; i++) ps_used[i] = 0; */
-//    printf("ps_print: top: %d %d\n", f->top_margin, pt_to_dvi(f->top_margin));
-    ps_top_of_page += pt_to_dvi(72 - f->top_margin);
+    // int pt_to_dvi(double pt)
+    tmp = (72 - f->top_margin);
+    // printf("ps_print: tmp %d\n", tmp);
+    tmp = pt_to_dvi((double)tmp);
+    // tmp = -2;
+    // printf("ps_print: f->top_margin: %d %d tmp: %d %d\n", f->top_margin, pt_to_dvi(f->top_margin), (72 - f->top_margin), tmp);
+    ps_top_of_page += tmp;
+    // printf("ps_print: top of page %d\n", ps_top_of_page);
     f_i = f;
     f_a = font_array;
     f_name[0] = '\0';

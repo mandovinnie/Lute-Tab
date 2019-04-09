@@ -397,7 +397,10 @@ $		- used to set these values. This flag must be
 		  $transpose=n			transposes midi or mensural 
                                                 notation n half steps
     		  $left-margin=nn               sets the left margin in 1/72 inch (points)
-    		  $top-margin=nn                sets the top margin in 1/72 inch (points)
+    		  $top-margin=nn                sets the top margin in 1/72 inch (points).
+		                                the default is 72 so setting this to 72
+						does not make any difference!  Any title will extend
+						a little above this margin.
 		  $extended_character_set	Normally q is an ornament, 
 						if you need q-v to be letters use this
 
@@ -405,7 +408,7 @@ the following characters have special significance as the
 second letter on a line - in most cases, if not needed
 they can be ignored:
 
- - 	a place marker, techicnally should be the default second character
+ - 	a place marker, technically should be the default second character
 	but usually can be left out - it helps when you want to use a
 	*, # or - ornament on the character on the top line.
  .	a dotted flag
