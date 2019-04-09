@@ -119,7 +119,7 @@ void ascii::set_print_width(const int w) {
 void
 do_ascii(struct list *l, struct file_info *f, i_buf *i_b)
 {
-  char c;
+  // char c;
   char *ch = l->dat;
   char cc = *ch;
   ascii *ap = (ascii*)f->utility;

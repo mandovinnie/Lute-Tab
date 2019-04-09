@@ -45,7 +45,9 @@ void buffer::PutByte(const char c)
 char * buffer::GetLine(char *buf, int buflen)
 {
   char *p;
+#ifndef _WIN32
   char q;
+#endif
 
   p = buf;
   while ((*p = GetByte()) != NEWLINE) {
