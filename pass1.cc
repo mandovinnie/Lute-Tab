@@ -498,7 +498,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       }
       // this is sort of a test Oct 2003
       else if (l->next && l->next->dat[0] == '&') { // pad after ornaments
-	char jjj;
+	// char jjj;
 	for (i=2; i<8; i++ ){
 	  if (l->next->dat[i] == 'x') {
 	    ;
@@ -958,7 +958,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
     *extra = 0.0;
   }
   if (staff_len - total_width < 0.0) {
-    float v = staff_len - total_width;
+    double v = staff_len - total_width;
     dbg0(Warning, "tab: pass1: total width greater than staff length\n");
     //    fprintf (stderr, "by %f\n", v);
   }
