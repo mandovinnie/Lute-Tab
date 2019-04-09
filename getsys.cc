@@ -698,9 +698,9 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    ccc = buf[i + (skip += 1)];
 		    
 		    if ( ccc == 'v' ) 
-		      cc = 133;
+		      cc = (char)133;
 		    else if ( ccc == 'w' ) 
-		      cc = 134;
+		      cc = (char)134;
 		    else
 		      skip -= 1;
 		  }

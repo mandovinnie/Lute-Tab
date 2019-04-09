@@ -93,7 +93,7 @@ pdf_print::~pdf_print()
 void pdf_print::file_head()
 {
     i_buf pdf_header;
-    time_t t;
+    // time_t t;
     char pk_name[300];
     char *p = NULL;
 

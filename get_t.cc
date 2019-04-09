@@ -67,7 +67,7 @@ void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
 	   (void *)*p, (void *)*p);
     }
     if (! strncmp(buf, "Content-Type: text/plain", 24 )) {
-      printf("get_t: get_tab_file: Content-Type: text/plain\n", buf);
+      printf("get_t: get_tab_file: Content-Type: text/plain\n"/* , buf */);
       continue;
     }
     if (! strncmp(buf, "Content-Type: text/html", 22 )) {
@@ -79,8 +79,7 @@ void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
     }
     if (! strncmp(buf, "Content-Transfer-Encoding: quoted-printable", 43 )) {
       printf(
-        "get_t: get_tab_file: Content-Transfer-Encoding: quoted-printable\n",
-	buf);
+        "get_t: get_tab_file: Content-Transfer-Encoding: quoted-printable\n" /*, buf */ );
       continue;
     }
     switch (*p) {

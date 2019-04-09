@@ -161,7 +161,7 @@ format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
 	  break;
 	case '\\':		// special escape
 	  {
-	    char *tl;
+	    // char *tl;
 	    double temp;
 	    temp = font_scale * get_special_width(&b_bp, i_b, f_a, font,  f);
 	    //	    	    printf("temp is %f\n", temp);

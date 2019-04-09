@@ -245,7 +245,11 @@ void i_buf::dump(const char *fname, const mode mode)	// dump to a file
 
     if (!strcmp(fname, "stdout")) {
       if (mode == Creat) 
+#ifdef BUILD_FOR_WINDOWS
+	fp = _fdopen(1, "wb");
+#else
 	fp = fdopen(1, "wb");
+#endif
       //      else if (mode == Append) {
       //	fp = fdopen(1, "ab");
       //      }

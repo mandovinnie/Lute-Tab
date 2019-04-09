@@ -202,9 +202,17 @@ void ps_print::file_head()
       char ffd_name[300];
 
       if (!stat(font_file, &buf)) { // stat returns 0 on success
+#ifdef BUILD_FOR_WINDOWS
+	ffd = _open(font_file, O_RDONLY);
+#else
 	ffd = open(font_file, O_RDONLY);
+#endif
 	if (ffd != -1 ) {
+#ifdef BUILD_FOR_WINDOWS
+	  nr = _read(ffd, ffd_name, sizeof(ffd_name));
+#else
 	  nr = read(ffd, ffd_name, sizeof(ffd_name));
+#endif
 	  if (nr < sizeof(ffd_name)) 
 	    ffd_name[nr] = 0;
 	  c = strchr(ffd_name, '\n');
