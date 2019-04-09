@@ -1,6 +1,3 @@
-VERSION "4.3.94"
-fix top margins - add win.h to include stuff to quiet Visual Studio compiler
-
 VERSION "4.3.93"
 in tab_p.cc duplicated f->flag_flag to inside big loop when line starts with $
 because flag style was not being set in time to affect inter system spacing
