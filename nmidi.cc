@@ -632,7 +632,8 @@ void nmidi::do_file_head()
  static char nt[3];
 
 char *numtonote(int n) {
-  char c;
+  // char c;
+
 
   nt[0] = 0;
 
