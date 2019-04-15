@@ -574,13 +574,25 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    break;
 		  }
 		  */
+		case '<':
+		  { // wbc april 2019 check for php header
+		    if (buf[i+skip+1] == '?' && buf[i+skip+2] == 'p' 
+		      && buf[i+skip+3] == 'h' && buf[i+skip+4] == 'p'){
+		      printf("getsys: getsystem: php header\n");
+		      dbg0(Error,
+			   "php header detected, this may not be a valid tab file\n");
+		    }
+		  }
+		  ornament[i] = buf[i+skip];
+		  skip++;
+		  i--;
+		  break;
 		case 'Q':
 		case '#':
 		case '+':
 		case '$':
 		case '`':	/* comma on line */
 		case ',':	/* comma on line */
-		case '<':
 		case '=':
 		case '\'':	/* comma above line */
 		case '^':	/* hat */

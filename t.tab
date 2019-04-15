@@ -2,17 +2,17 @@
 -allDsdown
 
 b
-2#d  dd
-x-d  dd
-x-d  dd
-x-d  dd
+2#d  <dd
+x-d  >dd
+x-d  Qdd
+x-d  =dd
 b
 
 -N
 
 b
-2#d  dd
-x-d  dd
+2#d  ,dd
+x-d  <?php dd
 x-d  dd
 x-d  dd
 b
