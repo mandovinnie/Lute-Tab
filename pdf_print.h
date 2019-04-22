@@ -10,6 +10,10 @@ int str_to_dvi(const char *string);
 int inch_to_dvi(const double inch);
 double str_to_inch(const char *string);
 
+#ifndef STREAM
+#define STREAM 20480
+#endif
+
 class pdf_print : public print {
     char tag[35];
     int last_bop;
@@ -34,6 +38,7 @@ class pdf_print : public print {
     unsigned int generation;
 
     int page_retval;
+    char pdf_stream_b[STREAM];
     
   public:
     char pdf_used[256];
@@ -54,7 +59,9 @@ class pdf_print : public print {
     unsigned int  do_page_leaf();
     unsigned int  do_page_content(i_buf *i_b,  struct font_list *f_a[]);
     unsigned int  do_page_resource();
-    unsigned int  do_stream(i_buf *i_b,  struct font_list *f_a[], char * s_buf);
+    unsigned int  pdf_fontdef();
+    unsigned int  do_rule_stream(i_buf *i_b,  struct font_list *f_a[], char * s_buf);
+    unsigned int  do_text_stream(i_buf *i_b,  struct font_list *f_a[], char * s_buf);
     void print_stream();
     void put_rule(char *w, char *h);
     void p_moveh(const int hor);

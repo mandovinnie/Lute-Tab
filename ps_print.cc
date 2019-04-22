@@ -1372,7 +1372,7 @@ void bit_char(i_buf *ps, int char_num, int sixh)
 }
 
 
-void ps_print::glp(int reg,int h[], int v[])
+void ps_print::glp(int reg, int h[], int v[])
 {
     if (reg >= REGS) 
       dbg1 (Error, "tab: getloc: illegal register %d\n", (void *)reg);

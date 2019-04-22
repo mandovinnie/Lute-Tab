@@ -130,6 +130,7 @@ struct list *l)			/* data */
 	  p->gray_highlight();
       }
       if (j == 0 || j == (*l_p - 1)) {
+//	printf ("dvi_f.cc: 133: %f %f\n", 1.3 * staff_h, val * d_i_space + staff_h);
 	p->put_rule (1.3 * staff_h,
 		     val * d_i_space 
 		     + staff_h);

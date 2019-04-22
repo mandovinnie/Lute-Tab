@@ -57,7 +57,7 @@ void print::slp(int reg,int h[], int v[])
       dbg1 (Error, "tab: slp: illegal register %d\n", (void *)reg);
     h[reg] = dvi_h;
     v[reg] = dvi_v;
-    dbg3(Stack, "print: slp: reg %d dvi_v %d dvi_h %d\n", 
+    dbg3(Stack, "print: slp: reg %d dvi_v %u dvi_h %u\n", 
 	   (void *)reg, (void *)dvi_v, (void *)dvi_h);
 
 } 

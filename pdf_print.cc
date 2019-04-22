@@ -46,6 +46,7 @@ pdf_print::pdf_print(font_list *font_array[], file_info *f)
     byte_count = 0;
     xref_offset = 0;
     generation = 0;
+    memset (pdf_stream_b, 0, sizeof(pdf_stream_b));
     new_xref_list();
 
     if (f->m_flags & A4 ) { // a4 is  297mm*210mm
@@ -103,6 +104,7 @@ void pdf_print::file_head()
     byte_count =  pdf_header.PutStringC("%PDF-1.4\n");
     byte_count += pdf_header.PutStringC("%’");
     byte_count += pdf_header.PutStringC("\n");
+    /* byte_count += 1; */ /* wbc april test */
     fprintf(stderr, "file_head: byte count is %d\n", byte_count);
     byte_count += do_catalog();
     fprintf(stderr, "file_head: byte count is %d\n", byte_count);
@@ -111,7 +113,7 @@ void pdf_print::file_head()
     //    byte_count += do_page_leaf();
     //    byte_count += do_page_content();
     //    byte_count += do_page_resource();
-
+    byte_count += pdf_fontdef();
 
     if (font_path) {
       //fprintf (stderr, "pdf_print - setting font path %s from command line\n", 
@@ -426,7 +428,7 @@ void pdf_print::make_pdf_font(i_buf *pdf_header)
 void pdf_print::p_movev(const int ver)
 {
     if (ver == 0) return;
-    pdf_command(MOVEV, 0, ver, 0, 0);
+    pdf_command(MOVEV, 0, ver, 0, 0); /* april 2019 wbc put a minus here */
     dvi_v -= ver;
 }
 
@@ -747,11 +749,12 @@ void pdf_print::pdf_command(int com, int h_n, int v_n, int hh_n, int vv_n)
   time_t timeval;
   int places=4;			// digits of floating pt numbers
   double currentgray =0.0;
+  char ctemp[STREAM];
 
   //    printf("pdf_command com %d h %03.2f v %03.2f\n", 
   //	   com, d_to_p (h_n), d_to_p(v_n));
 
-  //    if (com == MOVE) printf("com - move h_n %d %f\n", h_n, d_to_p(h_n));
+  //    if (com == MOVE  printf("com - move h_n %d %f\n", h_n, d_to_p(h_n));
   //#define OPTI
 #ifdef OPTI    
   last_last_com = last_com;
@@ -831,31 +834,40 @@ void pdf_print::pdf_command(int com, int h_n, int v_n, int hh_n, int vv_n)
   }
 #endif /* OPTI */
 
+  // printf ("  pdf_print.cc: 837: pdf_command %x\n", last_com);
   switch (last_com) {
   case MOVE:
-    pr_out->PutF(d_to_p(h), places);
-    pr_out->PutF(d_to_p(-v), places);
-    pr_out->PutString(" m\n");
+    {
+      double ttt=d_to_p(h); double tttt=d_to_p(-v);
+      sprintf  (ctemp, "%.1f %.1f m \n", ttt, tttt);
+      // printf ("     MOVE %.4f  %.4f\n",  ttt, tttt);
+    }
+    // printf ("     MOVE: %.4f %.4f\n",  d_to_p(h), d_to_p( -v));
+    strcat (pdf_stream_b, ctemp);
     break;
-  case RULE:		// now takes x, y
-    pr_out->PutF(d_to_p(h), places);
-    pr_out->PutF(d_to_p(v), places); //negate the v ???
-    pr_out->PutString(" l\n"); // v, h
-    //    pr_out->PutString(" Rule%%reg\n"); // v, h
+  case RULE:		// now takes x, y to draw a box 0, 0, x, y
+    // printf("pdf_print: RULE 847: %d %d\n", dvi_h, h);
+    // 
+    sprintf (ctemp, "q %.1f %.1f %.1f %.1f re s Q \n",
+		    d_to_p(dvi_h), d_to_p(dvi_v),
+		    d_to_p(h), d_to_p(-v));
+    strcat (pdf_stream_b, ctemp);
     break;
   case MOVEH:
-    pr_out->PutF(d_to_p(h), places);
-    pr_out->PutString(" 0 RM%%MoveH\n");
+    sprintf  (ctemp, "%.1f 0 m \n", d_to_p(h));
+    // printf ("     MOVEH %.4f\n",  d_to_p(h));
+    strcat (pdf_stream_b, ctemp);
     break;
   case MOVEV:
-    pr_out->PutString("0 ");
-    pr_out->PutF(d_to_p(-v), places);
-    pr_out->PutString(" RM%%MoveV\n");
+    // if (d_to_p(dvi_v -v) < 610.0 ) { printf("HERE HERE\n");}
+    sprintf (ctemp, "0 %.1f m \n", d_to_p(dvi_v -v));
+    // printf ("     MOVEV: %.4f\n",  d_to_p(dvi_v -v));
+    strcat (pdf_stream_b, ctemp);
     break;
   case MOVEVH:
     pr_out->PutF(d_to_p(h), places);
     pr_out->PutF(d_to_p(-v), places);
-    pr_out->PutString(" RM%%MoveVH\n");
+    pr_out->PutString(" RM %%MoveVH\n");
     break;
 
   case LINE:
@@ -900,9 +912,10 @@ void pdf_print::pdf_command(int com, int h_n, int v_n, int hh_n, int vv_n)
       */;
     }
     else {
-      //      pr_out->PutString("<");
-      //      pr_out->Put16(h);
-      //      pr_out->PutString(">");
+      printf ("pdf_print.cc: 918: printing letters\n");
+      pr_out->PutString("<");
+      pr_out->Put16(h);
+      pr_out->PutString(">");
       ; 
     }
     if ( last_com == CHAR) 
@@ -912,7 +925,6 @@ void pdf_print::pdf_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     break;
   case LUTE:
     if ( last_font != LUTE ) {
-      //      pr_out->PutString("/LuteFont FF setfont\n"); 
       last_font = LUTE;
     }
     break;
@@ -1187,7 +1199,8 @@ void new_xref_entry(const int offset)
   fprintf(stderr, "adding xref entry offset %u\n", offset);
 
   t = (xref_entry *) malloc (sizeof (xref_entry));
-  
+  if ( ! t ) { fprintf(stderr, "new_xref_entry: malloc failed\n");}
+
   t->byte_offset = offset;
   t->generation = 0;
   t->use = 'n';
@@ -1196,6 +1209,7 @@ void new_xref_entry(const int offset)
   xref_count += 1;
   
   u = xref_root;
+  
   while (u->next) {
     //    fprintf(stderr, "increment xref list\n");
     u = u->next;
@@ -1268,35 +1282,41 @@ unsigned int pdf_print::do_page_leaf()
   bytes += pr_out->PutStringC("  << /Type /Page\n");
   bytes += pr_out->PutStringC("     /Parent 2 0 R\n");
   bytes += pr_out->PutStringC("     /MediaBox [0 0 621 792]\n");
-  bytes += pr_out->PutStringC("     /Contents 4 0 R\n");
+  //bytes += pr_out->PutStringC("     /Contents 4 0 R\n");
+  bytes += pr_out->PutStringC("     /Contents 6 0 R\n");
   bytes += pr_out->PutStringC("     /ProcSet 5 0 R\n");
+  bytes += pr_out->PutStringC("     /Resources << /Font  << /F13 21 0 R >> >> \n");
   bytes += pr_out->PutStringC("  >>\nendobj\n"); 
   return (bytes);
 }
 unsigned int pdf_print::do_page_content(i_buf *i_b,  struct font_list *f_a[])
 {
   unsigned int bytes = 0;
-  char b[80];
+  char b[128];
   unsigned int scount ;
-  char s_buf[2048];
-  
+  char s_buf[STREAM];
+
+  memset (s_buf, 0, sizeof(s_buf));
   fprintf (stderr, "Page Content\n");
   new_xref_entry( byte_count /* offset */);
   bytes += pr_out->PutStringC("4 0 obj\n");
-  scount = do_stream(i_b,  f_a, s_buf);
+  scount = do_rule_stream(i_b,  f_a, s_buf);
 
   // we need to know byte count of content stream here
   // count includes trailing newline
-  
-  sprintf (b, "  << /Length %u >>\n", scount);
+    
+  sprintf (b, "<</Length %u>>\n", scount);
   bytes += pr_out->PutStringC(b);
 
   bytes += pr_out->PutStringC("stream\n");
+  
   bytes += pr_out->PutStringC(s_buf);
   //  print_stream();
   // we go byte count in scount above
   bytes += pr_out->PutStringC("endstream\n");
-  bytes += pr_out->PutStringC("endobj\n");   
+  bytes += pr_out->PutStringC("endobj\n");
+
+  bytes += do_text_stream(i_b, f_a, s_buf);
   return(bytes);
 }
 
@@ -1306,32 +1326,65 @@ unsigned int pdf_print::do_page_resource()
 
   fprintf (stderr, "Page Resource\n");
   new_xref_entry( byte_count /* offset */);
-  bytes += pr_out->PutStringC("5 0 obj\n");
-  bytes += pr_out->PutStringC("[/PDF]\nendobj\n");   
+  bytes += pr_out->PutStringC("5 0 obj \n");
+  bytes += pr_out->PutStringC("<<  /ProcSet [/PDF] \n");
+ // bytes += pr_out->PutStringC("    /Font << /F13 21 0 R >> \n");
+  bytes += pr_out->PutStringC(">> \n endobj \n");   
   return(bytes);
 }
 
-// static char s_buf[1024];
+unsigned int pdf_print::pdf_fontdef()
+{
+  unsigned int bytes = 0;
+   fprintf (stderr, "Define Font\n");
+   new_xref_entry( byte_count /* offset */);
+   bytes += pr_out->PutStringC("21 0 obj\n");
+   bytes += pr_out->PutStringC("<<  /Type /Font \n   /Suntype /Type1 \n   /BaseFont /Helvetica \n >> \n");
+   bytes += pr_out->PutStringC("endobj\n"); 
+  return(bytes);
+}
 
-unsigned int pdf_print::do_stream(i_buf *i_b,  struct font_list *f_a[],
+unsigned int pdf_print::do_rule_stream(i_buf *i_b,  struct font_list *f_a[],
 				  char *s_buf) {
   unsigned int bytes = 0;
 
-  strcpy (s_buf, "100 100 m 100 200 l S \n");
-  bytes = strlen(s_buf);
-  fprintf(stderr,"pdf_print: do_stream: bytes dec %d oct %o\n", bytes, bytes);
+  fprintf(stderr,"pdf_print: do_rule_stream: bytes dec %d oct %o\n", bytes, bytes);
  
   //  pdf_print *page_buf;
   
-  //  page_buf = new pdf_print();
-  // "this" must be a new temporary output buffer that I can count when done
   page_retval = (format_page(this, i_b, f_a, f_i));
   
+  strcat (s_buf,  pdf_stream_b );
+  
+  bytes = strlen(s_buf);
+  printf("do_rule_stream: bytes %u \n", bytes);
+  if (bytes > STREAM) { dbg1(Error, 
+     "tab: pdf_print.cc: do_rule_stream: bytes greater than STREAM %d\n", (void *)bytes); }
   return (bytes);
 }
 
-// we don't need this anymore, I hope
+unsigned int pdf_print::do_text_stream(i_buf *i_b,  struct font_list *f_a[],
+				  char *s_buf) {
+  unsigned int bytes = 0;
+  unsigned int scount = 0;
+  char b[16];
+  
+  fprintf(stderr,"pdf_print: do_text_stream: bytes dec %d oct %o\n", bytes, bytes);
+  
+  memset (s_buf, 0, sizeof(s_buf));
+  strcpy (s_buf, "BT\n/F13 12 Tf\n 288 520 Tda\n (ABC) Tj\nET \n");
+  scount = strlen(s_buf);
+  bytes += pr_out->PutStringC("6 0 obj\n<</Length ");
+  sprintf (b, "%d", scount);
+  bytes += pr_out->PutStringC(b);
+  bytes += pr_out->PutStringC(">>\nstream\n");
+  bytes += pr_out->PutStringC(s_buf);
+  bytes += pr_out->PutStringC("endstream\nendobj\n");
+  return (bytes);
+}
 
+
+// we don't need this anymore, I hope
 void pdf_print::print_stream() {
 }
 
