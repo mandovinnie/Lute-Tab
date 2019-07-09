@@ -83,6 +83,7 @@ struct file_info {
   unsigned int top_margin;	/* the top margin in PostScript units for PS output only */
   unsigned int midi_volume;     /* the volume or velocity for a midi file*/
   unsigned int extended_character_set; /* is q a character or ornament? */
+  int 	bar_number_font;	/* font number (1-5) to use for bar numbers */
 };
 
 struct font_list {
@@ -250,5 +251,6 @@ struct list {
  #define SPANISH		0x4000000
  #define NOSPACE		0x8000000
  #define NOSPACEBEFORE		0x10000000
+ #define COUNT_DOTS		0x20000000
  /* variables defined in sizes.c */
 

@@ -36,6 +36,7 @@ int max_off_w=0;                /* max bitap width offset for ps */
 int max_off_h=0;                /* max bitmap height offset for ps */
 
 extern char *font_path;
+int bar_number_font=1;		/* number of font to use numbering bars */
 
 ps_print::ps_print(font_list *font_array[], file_info *f)
 {
@@ -81,6 +82,7 @@ ps_print::ps_print(font_list *font_array[], file_info *f)
       nodump = 1;
     else nodump = 0;
     left_margin = f->left_margin;
+    bar_number_font= f->bar_number_font;
 }
 
 ps_print::~ps_print()
@@ -871,7 +873,7 @@ void ps_print::p_num(int n)
     push();
     movev("0.18 in");
 
-    use_font(1);
+    use_font(bar_number_font);  /* was 1 wbc july 2019 */
     for (i=0; i < N_S && string[i]; i++)
       total_width += f_a[curfont]->fnt->get_width(string[i]);
 

@@ -1348,7 +1348,8 @@ unsigned int pdf_print::do_rule_stream(i_buf *i_b,  struct font_list *f_a[],
 				  char *s_buf) {
   unsigned int bytes = 0;
 
-  fprintf(stderr,"pdf_print: do_rule_stream: bytes dec %d oct %o\n", bytes, bytes);
+  fprintf(stderr,"pdf_print: do_rule_stream: bytes dec %d oct %o\n",
+	  bytes, bytes);
  
   //  pdf_print *page_buf;
   
@@ -1359,7 +1360,8 @@ unsigned int pdf_print::do_rule_stream(i_buf *i_b,  struct font_list *f_a[],
   bytes = strlen(s_buf);
   printf("do_rule_stream: bytes %u \n", bytes);
   if (bytes > STREAM) { dbg1(Error, 
-     "tab: pdf_print.cc: do_rule_stream: bytes greater than STREAM %d\n", (void *)bytes); }
+     "tab: pdf_print.cc: do_rule_stream: bytes greater than STREAM %d\n",
+			     (void *)bytes); }
   return (bytes);
 }
 
@@ -1369,7 +1371,8 @@ unsigned int pdf_print::do_text_stream(i_buf *i_b,  struct font_list *f_a[],
   unsigned int scount = 0;
   char b[16];
   
-  fprintf(stderr,"pdf_print: do_text_stream: bytes dec %d oct %o\n", bytes, bytes);
+  fprintf(stderr,"pdf_print: do_text_stream: bytes dec %d oct %o\n",
+	  bytes, bytes);
   
   memset (s_buf, 0, sizeof(s_buf));
   strcpy (s_buf, "BT\n/F13 12 Tf\n 288 520 Tda\n (ABC) Tj\nET \n");

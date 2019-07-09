@@ -503,6 +503,11 @@ void set_no_space_before_note(const char *value, struct file_info *f)
   f->m_flags |=NOSPACEBEFORE;
 }
 
+void set_count_dots(const char *value, struct file_info *f)
+{
+  f->m_flags |=COUNT_DOTS;
+}
+
 void args(int argc, char ** argv, struct file_info *f)
 {
     char *aa=0;
@@ -612,6 +617,7 @@ void args(int argc, char ** argv, struct file_info *f)
       {(char*)"spanish", (void*) set_spanish},
       {(char*)"no_space_after_note", (void*) set_no_space_after_note},
       {(char*)"no_space_before_note", (void*) set_no_space_before_note},
+      {(char*)"count_dots", (void*) set_count_dots},
       {(char *)0, (void*)0}
     };
 

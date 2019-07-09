@@ -774,7 +774,9 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 
 	case '.':		/* this does not acutally determine */
 	    staff[0] = '.';	/* the number of dots printed */
-	    staff[1] = '-'; staff[2] = staff[8] = ' ';
+	    if (buf[1] == 'X') staff[1] = 'X';
+	    else staff[1] = '-';
+	    staff[2] = staff[8] = ' ';
 	    for (i=3; i < 8; i++)
 	      staff[i] = 'Z';
 	    for (;i < STAFF; i++) 

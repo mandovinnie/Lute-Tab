@@ -92,6 +92,7 @@ void init(file_info *f)
     f->left_margin=72;
     f->top_margin=72;
     f->extended_character_set = 0;
+    f->bar_number_font = 1;
 }
 
 char *

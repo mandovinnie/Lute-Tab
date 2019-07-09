@@ -23,7 +23,7 @@ char staff_height[120];
 
 double text_sp = /* 0.17 */ 0.17;/* in */  /* padding for text below music  */
 char mus_space[] = "7 pt";  /* interline space for tab transcribed to music */
-int n_measures=0;
+int n_measures=50;
 char thick_bar[] = "0.024 in"; 
 char baselinespace[] = "-0.02 in";          /* was .020 char above the line */
 char grid_indent[] = "0.033 in";	       /* hor. offset of grid staff */

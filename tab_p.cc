@@ -248,7 +248,7 @@ int format_page(print *p, i_buf *i_b,
 		p->movev(pt_to_dvi(f->font_sizes[2] - 12.0));
 	    }
 	    /* we presume a new song here, so reset the bar count */
-	    n_measures=0;
+	    n_measures=0;  /* this seems tp be overwritten in sizes.cc */
 	    dotitle(p, i_b, f_a, f);
 	    title_done++;
 	    if (f->flags & MARKS) p->put_rule("0.5 in", "0.01 in");

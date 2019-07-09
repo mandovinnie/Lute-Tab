@@ -32,6 +32,7 @@ TLOC='"."'
 # TLOC = '"/Users/wbc/nnt"'
 # TLOC = '"/net/wbc/src/nnt"'
 # TLOC = '"/net/ifs-users/wbc/src/nnt"'
+# TLOC = '"/net/syno-fs/wbc/src/nnt"'
 # TLOC = '"/net/quimby/wbc/src/nnt"'
 # TLOC = '"/net/wbc/src/old-nnt"'
 # TLOC = '"/net/tahoe4/wbc/src/nnt"'
@@ -121,7 +122,7 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	tlute9.600pk tlute8.600pk tlute7.600pk tlute6.600pk \
 	simple.tab 
 
-DISTFILE = lute_tab4.3.94.tar
+DISTFILE = lute_tab4.3.95.tar
 
 distrib:	 ${DISTFILE}
 

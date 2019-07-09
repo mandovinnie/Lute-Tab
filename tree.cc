@@ -535,6 +535,17 @@ void set_extended_character_set(const char *value, struct file_info *f)
 {
   f->extended_character_set = 1;
 }
+void set_bar_number_font(const char *value, struct file_info *f)
+{
+	f->bar_number_font = atoi(value);
+}
+
+void set_first_bar(const char *value, struct file_info *f)
+{
+  extern int  n_measures;
+  // printf ("setting first bar number %d\n", atoi(value));
+  n_measures =  atoi(value)-1;
+}
 
 /*
 void setit(void *r, const char *flag, struct file_info *f)
@@ -586,6 +597,8 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {(char*)"left-margin", (void *)set_left_margin},
     {(char*)"top-margin", (void *)set_top_margin},
     {(char*)"extended_character_set", (void *)set_extended_character_set},
+    {(char*)"barnumberfont", (void *)set_bar_number_font},
+    {(char*)"first_bar", (void*) set_first_bar},
     {0,0}
   };
 
@@ -620,6 +633,8 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {(char*)"left-margin", (void *)first},
     {(char*)"top-margin", (void *)first},
     {(char*)"extended_character_set", (void *)first},
+    {(char*)"barnumberfont", (void *)first},
+    {(char*)"first_bar", (void*)first},
     {0,0}
   };
   

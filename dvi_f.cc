@@ -340,6 +340,7 @@ struct list *l)			/* data */
     p->pop();
     break;
   case '.':
+    p->push();
     p->movev(baselinespace);
     if (f->flags & CON_SEV ) 
       p->p_movev (i_space);
@@ -351,6 +352,18 @@ struct list *l)			/* data */
       mapchar(p, f_a, /* ch[i+3] */'Z', f);
       p->p_movev(i_space);
     }
+    p->pop();
+    p->push();
+
+    if (f->m_flags & COUNT_DOTS) {
+      p->movev(6.0 * d_i_space);
+      // printf ("check a dot %s\n", ch);
+      if (ch[1] == 'X' )
+         ;
+      else check_bar(p, j, l_p, l);
+    }
+    p->pop();
+
     if (f->flags & NOTES ) {
 
       if (f->line_flag == ON_LINE) p->movev( -5.5 * d_i_space);
@@ -1740,43 +1753,87 @@ int rev_bdot(struct list* l)
 // print the bar count if appropriate and increment n_measures
 // -C bar_count means number every 5th bar, 
 // -c barCount means number every first bar on every line
+// -CC means number every bar
 //
 
 void check_bar(print * p, int j, int *l_p, struct list* l)
 {
-    if (bar_count || barCount || barCCount) {
-	char *ch=0, *nxt=0;
+  char *ch=0, *nxt=0, *prev=0;
 
-	if (l) ch = l->dat;
-	if (l->next) nxt = l->next->dat;
-
-	if (( *ch == 'b' || *ch == 'B' || *ch == 'A')
-	    && j+1 != *l_p 
-	    && j != *l_p
-	    && bdot(l)              // check for b..b
-	    && *nxt != 'Q'
-	    && *nxt != 'q') {	
-	    n_measures++;
-//	    printf ("measures %d\n", n_measures);
-	    if (bar_count && ! (n_measures % 5))  
-	      p->p_num(n_measures);
-	    else if (barCCount) {
-	      if (j > 4 )
-		p->p_num(n_measures);
-	      else if ( rev_bdot(l) )
-		p->p_num(n_measures);
-	      else 
-		;
-	    }
-	}
-	if ((barCount || barCCount) && j==0) {
-	  if (bdot(l)) p->p_num(n_measures);
-	      else p->p_num(n_measures+1);
-	}
+  if (bar_count || barCount || barCCount) {
+    
+    if (l) {
+      ch = l->dat;
+      //      printf ("entering check_bar: ch %c\n", *ch);
     }
+    //    else printf ("in check_bar, l not defined\n");
+
+    if (l->next) nxt = l->next->dat;
+    //    else printf ("in check_bar, ch %c nxt not defined\n", *ch);
+    if (l->prev) prev = l->prev->dat;
+    //    else printf ("in check_bar, ch %c prev not defined\n", *ch);
+    
+    if (( *ch == 'b' || *ch == 'B' || *ch == 'A')
+	&& j+1 != *l_p 
+	&& j != *l_p
+	&& bdot(l)              // check for b..b
+	&& *nxt != 'Q'
+	&& *nxt != 'q') {	
+      n_measures++;
+      //      printf ("check bar b measures %d\n", n_measures);
+    }
+
+    else if ( *ch == '.' ) {
+      //      printf ("dvi_f: check_bar: dot: ch %c\n", *ch);
+      
+      if ( prev ) {
+	//	printf ("dvi_f: check_bar: dot: ch %c prev %c\n", *ch, *prev);
+	if ( *prev == 'b'
+	     || *prev == 'B'
+	     || *prev == '.'){
+	  //	  printf ("dot - prev is a b of some sort - exiting\n");
+	  return;
+	}
+      }
+      
+      if ( nxt ) {
+	//	printf ("dvi_f: check_bar: dot: ch %c nxt %c\n", *ch, *nxt);
+	if ( *nxt == 'b'
+	     || *nxt == 'B'
+	     || *nxt == '.'
+	     ) {
+	  //  printf ("dot - nxt is a b of some sort - exiting\n");
+	  return;
+	}
+	n_measures++;
+      }
+      //printf ("dot measures %d\n", n_measures);
+    }
+  }
+
+  // printf ("  j %d  l_p %d measures %d \n", j, *l_p, n_measures);
+
+  if (j+1 == *l_p || j+2 == *l_p ) return;
+  /* choose one of these below to put number under first or second bar */
+  /* the first one gives wht wrong number */
+  //if (prev && *prev == 'b') return;
+  if (nxt && ( *nxt == 'b' || *nxt == 'B')) return;
+
+  if (bar_count && ! (n_measures % 5))  
+    p->p_num(n_measures);
+  else if (barCCount) {
+    if (j > 4 )
+      p->p_num(n_measures);
+    else if ( rev_bdot(l) )
+      p->p_num(n_measures);
+  }
+  else if ((barCount) && j==0) {
+    if (n_measures != 1 ) {
+      if (bdot(l)) p->p_num(n_measures);
+      else p->p_num(n_measures+1);
+    }
+  }
 }
-
-
 
 
 void do_key_s( char ch[], print *p, font_list *f_a[], struct file_info *f)

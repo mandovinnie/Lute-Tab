@@ -263,8 +263,11 @@ bb 		- two barlines
   (blank line)  - break line here - you must specify line
 	 	  breaks yourself!
 . 		- column of 5 dots (for a repeat) as in .bb.
+                - with the "-count_dots" this will increment the bar count
+                  unless followed by an "X"
 C 		- a big C
 c		- cut time in both staves if necessary
+count_dots	- count dots as barline for measure numbering
 d		- the del signe sign
 D		- a D.C. - for Da Capo
 e		- end of document -tab will work but will complain
@@ -352,6 +355,9 @@ $		- used to set these values. This flag must be
 		  $alttextfont= the italic text font
 		  $pstitlefont, $pstextfont, $psalttitlefont, $psalttextfont
 		  $dvititlefont, $dvitextfont, $dvialttitlefont, $dvialttextfont
+		  $barnumberfont=<number 1-5> the number of the font to use for bar numbers
+			hint - smaller italic = 5
+		  $first_bar= the number of the first bar on a page
 		  $line=o or $line=b (characters in music on or between lines)
 		  $description=text = a no-op for compatibility
 
