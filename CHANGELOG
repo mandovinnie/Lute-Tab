@@ -1,3 +1,10 @@
+VERSION "4.3.95"
+for Jan - improved bar numbers, including changing them and letting the user
+select a number font to use.
+use of dot . as a barline that is counted by bar numbering (unless the dot 
+is followed by an X)
+
+
 VERSION "4.3.94"
 fix top margins - add win.h to include stuff to quiet Visual Studio compiler
 
