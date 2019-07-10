@@ -2000,7 +2000,8 @@ beginchar (254, 2.4em#, 2.2cap#, 0); "a repeat";
 endchar;enddef;
 %
 def rep_two =
-beginchar (255, 1.8em#, 2.0cap#, 0); "a repeat";
+%  beginchar (255, 1.8em#, 2.0cap#, 0); "a repeat";
+  beginchar (255, 1.35em#, 1.5cap#, 0); "a repeat";
  pickup pencircle xscaled 1.2wid yscaled .4wid rotated 30;
  x1=.5w;top y1=h;
  x2=.5w;y2=.75h;

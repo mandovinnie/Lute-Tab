@@ -1187,13 +1187,16 @@ struct list *l)			/* data */
       case 'Q':
 	skip_spaces++; 
 	break;
-      case 'r':         /* return to earlier part sign */
+      case 'r':         /* return to earlier part sign repeat */
 	// mapchar(p, f_a, (unsigned char)0xff, f);
 	if (i > 6) {
 	  p->push();
-	  // printf ( "case r: i is %d skip %d\n", i, skip_spaces);
+	  // printf ( "case r: i is %d skip %d ch %s\n", i, skip_spaces, ch);
 	  /* was 9.3 to allow space for 7th line */
-	  p->p_movev((8.3 - (i - skip_spaces)) * i_space);
+	  p->p_movev((7.7 - (i - skip_spaces)) * i_space);
+	  if (ch[8] && ch[8] != ' ' && ch[8] != 'r') {
+	    p->p_movev(i_space);
+	  }
 	  mapchar(p, f_a, (unsigned char)0xff, f);
 	  p->pop();
 	}
