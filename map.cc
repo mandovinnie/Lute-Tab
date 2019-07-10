@@ -218,6 +218,10 @@ void mapchar(print *p, font_list *f_a[], unsigned char c, struct file_info *f)
 	    p->movev(0.15);
 	    p->put_a_char(c);	/* the del signe character  */
 	}
+	else if ( c == 255) {
+	    p->movev(0.15);
+	    p->put_a_char(c);	/* another repeat character  */
+	}
 	else {
 	    c -= 220;
 	    //	    dbg1 (Warning, "map: number over 9 is %d  \n", (void *)c);

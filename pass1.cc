@@ -188,10 +188,14 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  dbg0 ( Inter, "  Z"); 
 	else if (dd == '^') 
 	  dbg0 ( Inter, "  ^"); 
+	else if (dd == 'r') 
+	  dbg0 ( Inter, "  r"); 
 	else if (dd == 's') 
 	  dbg0 ( Inter, " //"); 
 	else if (dd == 254) 
 	  dbg0 ( Inter, "254"); 
+	else if (dd == 255) 
+	  dbg0 ( Inter, "255"); 
 	else if (dd == 't') 
 	  dbg0 ( Inter, "///"); 
 	else if (dd == ' ') 

@@ -74,6 +74,7 @@ Options:
         a baroque font (blute9) to set the music
     -B uses flags and f,h, and i like those used by
        M. Board and other english writers.
+    -count_dots	- count dots as barline for measure numbering
     -C prints every fifth measure number below the staff.
     -CC prints every measure number below the staff.
     -c prints measure numbers only at the start of a line
@@ -226,8 +227,8 @@ start of line:
 		  as in ^05, italic and ^02 regular
 	 	  ^01 10 pt regular words to songs
 		  ^02 12 point regular titles
-		  ^03 12 pt bold  ^04  24 point large regular
-		  ^05 10 pst italic ^06 18 point regular music time sig
+		  ^03 12 point bold  ^04  24 point large regular
+		  ^05 10 point italic ^06 18 point regular music time sig
 		  ^07 12 point regular for page numbers
 		  you can use $textsize to change the point size of ^01
 		  you can use $alttextsize to change the point size of ^05
@@ -267,8 +268,7 @@ bb 		- two barlines
                   unless followed by an "X"
 C 		- a big C
 c		- cut time in both staves if necessary
-count_dots	- count dots as barline for measure numbering
-d		- the del signe sign
+d		- the del signe sign, for repeats
 D		- a D.C. - for Da Capo
 e		- end of document -tab will work but will complain
 		  without it.
@@ -484,6 +484,7 @@ of tablature, as the second to tenth character.
 	Nxx		- print number xx -as in 10 through 30 for
 			- high frets in Italian tab or modern guitar tab.
 	q		- a '/. sign for Kapsberger
+        r               - a repeat sign under the staff
 	R		- a rest
 	R!		- a rest, with no flag
 	U		- begins a horizontal underline to indicate a held 

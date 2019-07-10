@@ -1121,7 +1121,7 @@ struct list *l)			/* data */
       p->pop();
     }
 	
-    /* LETTERS HERE ! */
+    /* LETTERS HERE ! letters here */
 
     if (f->line_flag == ON_LINE)
       p->p_movev (i_space/2);
@@ -1186,6 +1186,18 @@ struct list *l)			/* data */
 	break;		/* dont print the blanks */
       case 'Q':
 	skip_spaces++; 
+	break;
+      case 'r':         /* return to earlier part sign */
+	// mapchar(p, f_a, (unsigned char)0xff, f);
+	if (i > 6) {
+	  p->push();
+	  // printf ( "case r: i is %d skip %d\n", i, skip_spaces);
+	  /* was 9.3 to allow space for 7th line */
+	  p->p_movev((8.3 - (i - skip_spaces)) * i_space);
+	  mapchar(p, f_a, (unsigned char)0xff, f);
+	  p->pop();
+	}
+	/* else  p->put_a_char(0xff);  */
 	break;
 	/* this has been removed - it is for debugging
 	   case 'r':
