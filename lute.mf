@@ -1962,7 +1962,9 @@ endchar;enddef;
 % some fancy repeats
 %
 def rep_one =
-beginchar (254, 2.4em#, 2.2cap#, 0); "a repeat";
+%  beginchar (254, 2.4em#, 2.2cap#, 0); "a repeat";
+  beginchar (254, 1.8em#, 1.65cap#, 0); "a repeat";
+
  pickup pencircle xscaled .5wid yscaled .1wid;
  x11=.576w; y11=.88h;
  penpos10(.3wid,180); penpos11(.3wid,0);

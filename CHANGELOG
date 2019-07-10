@@ -5,7 +5,8 @@ use of dot . as a barline that is counted by bar numbering (unless the dot
 is followed by an X)
 also added way to set first measure number
 
-added r for *L* character for repeat
+added r for *L* character for repeat and made it and the other repeat character 
+a bit smaller
 
 VERSION "4.3.94"
 fix top margins - add win.h to include stuff to quiet Visual Studio compiler
