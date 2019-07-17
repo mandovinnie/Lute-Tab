@@ -1,8 +1,20 @@
 
+-b
+% $flagstyle=thin
+$flagstyle=contemp
+% $flagstyle=italian
+% $flagstyle=standard
+
 b
-2!
+W cdc
+w cdc
+0 cdc
+1 cdc
+2 cdc
+3 cdc
+4 cdc
 b
-2!
+2
 b
 e
 

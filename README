@@ -405,7 +405,8 @@ $		- used to set these values. This flag must be
     		  $left-margin=nn               sets the left margin in 1/72 inch (points)
     		  $top-margin=nn                sets the top margin in 1/72 inch (points).
 		                                the default is 72 so setting this to 72
-						does not make any difference!  Any title will extend
+						does not make any difference!  Any title
+						will extend
 						a little above this margin.
 		  $extended_character_set	Normally q is an ornament, 
 						if you need q-v to be letters use this

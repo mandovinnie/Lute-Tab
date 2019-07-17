@@ -375,6 +375,20 @@ beginchar ("F", em#, 1.0cap#, 2cap#);"letter F";
  draw z1..z5;
 endchar;enddef;
 %
+def do_short_f =
+beginchar (213, 1.2em#, cap#, .6cap#);"letter squat f";
+pickup lute_pen;
+ x1=0w;y1=.65h;
+ x2=.8w;y2=y1-.35h;
+%  x5=-.5w;y3=y5=-.87d;  
+ x5=-.7w;y3=y5=-.07d;  
+ x3=-.1w;
+% rt x4=1.1w;y4=1.685h;
+ rt x4=1.17w;y4=0.960h;
+ x6=x4+.4w;y6=y4;
+ draw z1..tension 2.5..z2;draw z5..z3..tension 3.0..z4..z6;
+endchar;enddef;
+%
 def do_G =
 beginchar ("G", .9em#, 1.0cap#, 1.0cap#);"letter G slanted";
  pickup lute_pen;
@@ -995,10 +1009,11 @@ beginchar ("@", .7cap#, 1.0cap#, 0); " a star";
 endchar;enddef;%
 %
 %
-def do_smile =
-beginchar ("_", 1.4em#, 1.0cap#, 0); " a smile";
-%   pickup pencircle xscaled 1.0 wid yscaled .5 wid;
-   pickup lute_pen;
+def do_smile =   % underbar, ornament from below
+% beginchar ("_", 1.4em#, 1.0cap#, 0); " a smile";
+beginchar ("_", 2.7em#, 1.0cap#, 0); " a smile";
+   pickup pencircle xscaled 1.3 wid yscaled .6 wid rotated 45;
+%   pickup lute_pen;
    x0=0w;x1=.5w;x2=w;
    y0=0h;y1=y0-.4h;y2=y0;
    draw z0..z1..z2;
@@ -1821,6 +1836,7 @@ def do_all =
   do_line;do_one;do_two;do_three;do_four;do_five;
   do_a;do_b;do_c;do_d;do_D;do_DD;do_e;do_E;do_f;do_g;do_h;
   do_F;do_G;;do_H;
+  do_short_f;
   do_i;do_j;do_k;do_l;do_m;
   do_n;do_o;do_p;
   do_dot;do_c_dot;do_C;do_cut_C;do_big_C;do_big_cut_C;

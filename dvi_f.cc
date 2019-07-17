@@ -1240,7 +1240,7 @@ struct list *l)			/* data */
 	do_uline(p, &skip_spaces, 9, 10, i);
 	break;
       case '[':		/* rags wants this to stack */
-	if (skip_spaces) {
+ 	if (skip_spaces) {
 	  p->p_movev(skip_spaces * i_space);
 	  skip_spaces = 0;
 	}
@@ -1427,7 +1427,9 @@ struct list *l)			/* data */
 	  p->moveh(0.76 * EM);
 	  p->movev(-.025);
 	  if (baroque) {
-	    p->moveh(-.02);
+	    p->moveh(-.06);
+	    if (l->next->dat[i] == ' ')
+	      p->movev(-.02); /* wbc July july 2019 fix up the underbar */
 	    if (l->next->dat[i] == 'D') p->moveh(.096);
 	    if (l->next->dat[i] == 'e') { p->moveh(.036); p->movev(.026);} 
 	  }
@@ -1517,6 +1519,12 @@ struct list *l)			/* data */
 	  //   p->put_a_char('D');
 	  mapchar(p, f_a, 'D', f);
 	}
+        else if (baroque && cc == 'f'
+                 && i > 2
+		 && (ch[i-1] != ' ' || ch[i+1] != ' '))
+		 {
+          mapchar(p, f_a, 213, f);
+        }
 	else if (baroque && cc == 'h'
 		 && i > 3 
 		 && (ch[i-1] == 'f' ||  ch[i-1] == 'h')) {

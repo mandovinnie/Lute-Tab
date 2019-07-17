@@ -54,9 +54,14 @@ void mapflag(print *p, font_list *f_a[], char c, struct file_info *f)
 	case S_ITAL_FLAGS:
 	case THIN_FLAGS:
 	case CAP_FLAGS:
-	    p->moveh(i_flag_indent);
-	    p->put_a_char(216);	/* an italian whole note */
-	    break;
+	  if (baroque) {  /* wbc july 2019 */
+            p->moveh(flag_indent);
+            p->put_a_char(c  /*+ 146 */);
+            break;
+	  }
+	  p->moveh(i_flag_indent);
+	  p->put_a_char(216);	/* an italian whole note */
+	  break;
 	default:
 	    p->moveh(i_flag_indent);
 	    p->put_a_char(c); 
@@ -76,35 +81,66 @@ void mapflag(print *p, font_list *f_a[], char c, struct file_info *f)
 	    break;
 	case ITAL_FLAGS:
 	case THIN_FLAGS:
-	    p->moveh(i_flag_indent);
-	    p->put_a_char(217);
-	    break;
+	  if (baroque) {  /* wbc july 2019 */
+            p->moveh(flag_indent);
+            p->put_a_char(c);
+            break;
+	  }
+	  p->moveh(i_flag_indent);
+	  p->put_a_char(217);
+	  break;
 	case CAP_FLAGS:
 	case S_ITAL_FLAGS:
-	    p->moveh(i_flag_indent);
-	    p->put_a_char(231);
-	    break;
+	  if (baroque) {  /* wbc july 2019 */
+            p->moveh(flag_indent);
+            p->put_a_char(c);
+            break;
+	  }
+	  p->moveh(i_flag_indent);
+	  p->put_a_char(231);
+	  break;
 	default:
-	    p->moveh(i_flag_indent);
-	    p->put_a_char(c); 
-	    break;
+	  p->moveh(i_flag_indent);
+	  p->put_a_char(c); 
+	  break;
 	}
 	break;
     case '0':
+      /*
+	if (baroque) {  // wbc july 2019 
+            p->moveh(flag_indent);
+            p->put_a_char(c + 146);
+            break;
+	} */
 	switch (flags) {
 	case ITAL_FLAGS:
-	    p->moveh(i_flag_indent);
-	    p->put_a_char(218);
-	    break;
+	  if ( baroque) {  /* wbc july 2019 */
+            p->moveh(flag_indent);
+            p->put_a_char(c + 146);
+            break;
+	  }
+	  p->moveh(i_flag_indent);
+	  p->put_a_char(218);
+	  break;
 	case CAP_FLAGS:
 	case S_ITAL_FLAGS:
-	    p->moveh(i_flag_indent);
-	    p->put_a_char(232);	    
-	    break;
+	  if ( baroque) {  /* wbc july 2019 */
+            p->moveh(flag_indent);
+            p->put_a_char(c + 146);
+            break;
+	  }
+	  p->moveh(i_flag_indent);
+	  p->put_a_char(232);	    
+	  break;
 	case THIN_FLAGS:
-	    p->moveh(i_flag_indent);
-	    p->put_a_char(242); 
-	    break;
+	  if (baroque) {  /* wbc july 2019 */
+            p->moveh(flag_indent);
+            p->put_a_char(c + 146);
+            break;
+	  }
+	  p->moveh(i_flag_indent);
+	  p->put_a_char(242); 
+	  break;
 	case CONTEMP_FLAGS:
 	    p->moveh(i_flag_indent);
 	    p->put_a_char(c - '0' + 202); 
@@ -127,34 +163,49 @@ void mapflag(print *p, font_list *f_a[], char c, struct file_info *f)
     case '5':
 	switch (flags) {
 	case ITAL_FLAGS:
-	    p->moveh(i_flag_indent);
-	    p->put_a_char(c - '0' + 218);
-	    break;
+	  if (baroque) {  /* wbc july 2019 */
+            p->moveh(flag_indent);
+            p->put_a_char(c + 146);
+            break;
+	  }
+	  p->moveh(i_flag_indent);
+	  p->put_a_char(c - '0' + 218);
+	  break;
 	case S_ITAL_FLAGS:
-	    p->moveh(i_flag_indent);
-	    p->put_a_char( c - '0' + 232);	    
-	    break;
+	  p->moveh(i_flag_indent);
+	  p->put_a_char( c - '0' + 232);	    
+	  break;
 	case THIN_FLAGS:
 	case CAP_FLAGS:
-	    p->moveh(i_flag_indent);
-	    p->put_a_char(c - '0' + 242); 
-	    break;
+	  if (baroque) {  /* wbc july 2019 */
+            p->moveh(flag_indent);
+            p->put_a_char(c + 146);
+            break;
+	  }
+	  p->moveh(i_flag_indent);
+	  p->put_a_char(c - '0' + 242); 
+	  break;
 	case CONTEMP_FLAGS:
-	    p->moveh(i_flag_indent);
-	    p->put_a_char(c - '0' + 202); 
-	    break;
+	  if (0 && baroque) {  /* wbc july 2019 baroque contemp flags exist */
+            p->moveh(flag_indent);
+            p->put_a_char(c + 146);
+            break;
+	  }
+	  p->moveh(i_flag_indent);
+	  p->put_a_char(c - '0' + 202); 
+	  break;
 	case BOARD_FLAGS:
-	    p->moveh(flag_indent);
-	    p->put_a_char(c - '0' + 0354);
-	    break;
+	  p->moveh(flag_indent);
+	  p->put_a_char(c - '0' + 0354);
+	  break;
 	case STAND_FLAGS:
-	    p->moveh(flag_indent);
-	    p->put_a_char(c + 146);
-	    break;
+	  p->moveh(flag_indent);
+	  p->put_a_char(c + 146);
+	  break;
 	default:
-	    p->moveh(flag_indent);
-	    p->put_a_char(c + 146);
-	    break;
+	  p->moveh(flag_indent);
+	  p->put_a_char(c + 146);
+	  break;
 	}	
 	break;
     case '~':
