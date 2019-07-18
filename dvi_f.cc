@@ -1480,11 +1480,15 @@ struct list *l)			/* data */
 	    if (c == '+' && baroque) {
 	      p->movev (italian_offset);
 	      p->movev (.35 * d_i_space);
+	      p->movev(-0.08);  // wbc July 2019 fudge factor
 	    }
 	    else {
 	      p->movev (italian_offset);
 	      p->movev (-.2 * d_i_space);
 	    }
+	  }
+	  else { // not ON LINE
+	    if (baroque) p->movev(0.017);
 	  }
 	  p->put_a_char(cc);  /* draw dot */
 	  p->pop();
