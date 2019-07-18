@@ -83,7 +83,7 @@ do_uline(print *p, int *skip_spaces, int s1, int s2, int line)
     if (s1 < 9) s1a = 15 + (((s1-3) / 2) * line);
     else (s1a = s1);
 
-    //    printf ("do_uline: line %d s1 %d sa-current-location 2 %d s1a-start %d\n",
+    //      printf ("do_uline: line %d s1 %d sa-current-location 2 %d s1a-start %d\n",
     //	    line, s1, s2, s1a);
 
     if (*skip_spaces) {

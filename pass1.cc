@@ -965,6 +965,8 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
     double v = staff_len - total_width;
     dbg0(Warning, "tab: pass1: total width greater than staff length\n");
     //    fprintf (stderr, "by %f\n", v);
+    // wbc July 2019 added the below line to handle too much stuff in line
+    *extra = (staff_len - total_width) / total_weight;
   }
   else
     *extra = (staff_len - total_width) / total_weight;

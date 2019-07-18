@@ -1,6 +1,7 @@
 VERSION "4.3.96"
 added short squat baroque f for Probert
 fixed flags where thin or other flag is specified for baroque, might need more work
+also worked on underbars and multiple f characters and brisee sign
 
 VERSION "4.3.95"
 for Jan - improved bar numbers, including changing them and letting the user

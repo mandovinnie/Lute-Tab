@@ -362,8 +362,9 @@ pickup lute_pen;
 endchar;enddef;
 %
 def do_F =
-beginchar ("F", em#, 1.0cap#, 2cap#);"letter F";
- pickup pencircle xscaled 1.4wid yscaled.4wid rotated 40;
+%  beginchar ("F", em#, 1.0cap#, 2cap#);"letter F";
+  beginchar ("F", em#, 1.0cap#, 2cap#);"letter F";
+  pickup pencircle xscaled 1.4wid yscaled.4wid rotated 40;
  x1=-.15w;y1=.95h;
  x2=.6w;y2=.68h;
  x3=.4w; y3=.325h;
@@ -373,10 +374,25 @@ beginchar ("F", em#, 1.0cap#, 2cap#);"letter F";
  draw z1..tension 3..z2..z3..tension 3..z6..z4;
  pickup pencircle xscaled .8wid yscaled .3wid rotated 30;
  draw z1..z5;
-endchar;enddef;
+  endchar;enddef;
+%
+def do_med_f =
+  beginchar (214, 1.3em#, cap#, .4cap#);"letter medium f";
+    pickup lute_pen;
+  % crossbar
+    x1=0w;y1=.65h;
+    x2=.8w;y2=y1-.35h;
+  % body
+    x5=-.57w;y3=y5=-.87d;  
+    x3=-.1w;
+    rt x4=1.1w;y4=1.21h;
+    x6=x4+.4w;y6=y4;
+    draw z1..tension 2.5..z2;draw z5..z3..tension 3.0..z4..z6;
+  endchar;enddef;
+%
 %
 def do_short_f =
-beginchar (213, 1.2em#, cap#, .6cap#);"letter squat f";
+beginchar (213, 1.4em#, cap#, .6cap#);"letter squat f";
 pickup lute_pen;
  x1=0w;y1=.65h;
  x2=.8w;y2=y1-.35h;
@@ -939,7 +955,17 @@ endchar;enddef;
 % 
 %
 def do_slash =
-beginchar ("/", em#, 1.0cap#, 0);"a slash";
+% beginchar ("/", em#, 1.0cap#, 0);"a slash";
+beginchar ("/", 3.1 em#, 1.0cap#, 0);"a slash";
+% wbc July 2019
+  pickup pencircle xscaled 1.2wid yscaled .4wid rotated -29;
+  x1=0w;x2=w;
+  y1=-0.1h;y2=.9h;
+  draw z1{dir 18}..{dir 18}z2;
+endchar;enddef;
+%
+def do_one_slash =
+beginchar (114, em#, 1.0cap#, 0);"a slash"; % "r"
   pickup pencircle xscaled 1.wid yscaled .3wid rotated -15;
   x1=0w;x2=w;
   y1=-0.1h;y2=.9h;
@@ -1836,7 +1862,7 @@ def do_all =
   do_line;do_one;do_two;do_three;do_four;do_five;
   do_a;do_b;do_c;do_d;do_D;do_DD;do_e;do_E;do_f;do_g;do_h;
   do_F;do_G;;do_H;
-  do_short_f;
+  do_short_f;do_med_f;
   do_i;do_j;do_k;do_l;do_m;
   do_n;do_o;do_p;
   do_dot;do_c_dot;do_C;do_cut_C;do_big_C;do_big_cut_C;
@@ -1845,7 +1871,7 @@ def do_all =
   do_waves; do_hat;do_star;do_smile;do_slant;do_slant_a;do_slant_b;
   do_slant_c;do_slant_d;
   do_fermata;do_b_fermata;
-  do_slash;do_two_slash;do_three_slash;
+  do_slash;do_one_slash;do_two_slash;do_three_slash;
   do_tail;do_another_tail;do_mes_tail;do_box;do_minus;do_colon;
 % huge numbers
    do_BIG_two;do_BIG_three;do_BIG_four;do_BIG_five;do_BIG_six;

@@ -1422,16 +1422,17 @@ struct list *l)			/* data */
 	  p->put_a_char('\'');
 	  p->pop();
 	}
-	else if (c == '+' && cc == '_' ) { /* special my_underline */
-	  p->push();
+	else if (c == '+' && cc == '_' ) { /* special my_underline ornament */
+	  p->push();                       // the underbar is always a pre ornament
 	  p->moveh(0.76 * EM);
 	  p->movev(-.025);
 	  if (baroque) {
 	    p->moveh(-.06);
 	    if (l->next->dat[i] == ' ')
 	      p->movev(-.02); /* wbc July july 2019 fix up the underbar */
-	    if (l->next->dat[i] == 'D') p->moveh(.096);
-	    if (l->next->dat[i] == 'e') { p->moveh(.036); p->movev(.026);} 
+	    else if (l->next->dat[i] == 'D') p->moveh(.096);
+	    else if (l->next->dat[i] == 'e') { p->moveh(.036); p->movev(.026);}
+	    if (i > 2 && l->next && l->next->dat[i-1] == 'D') p->movev(-0.094);
 	  }
 	  if (f->line_flag == ON_LINE)
 	    p->movev(0.5 * d_i_space);
@@ -1517,14 +1518,42 @@ struct list *l)			/* data */
 		 && l->prev->dat[i - 1] == ','
 		 && l->prev->prev->space < 0.065 ) {
 	  //   p->put_a_char('D');
+	  p->push();
 	  mapchar(p, f_a, 'D', f);
+	  p->pop();
 	}
-        else if (baroque && cc == 'f'
-                 && i > 2
-		 && (ch[i-1] != ' ' || ch[i+1] != ' '))
-		 {
-          mapchar(p, f_a, 213, f);
-        }
+        else if (baroque && cc == 'f' && i > 1 ) {
+	  //above
+	  if  (ch[i-1] == 'a' // squat
+	       || ch[i-1] == 'G'
+	       // below
+	       || ( ch[i+1] == 'g' && ch[i-1] != 'f' )
+	       || ( ch[i+1] == 'h' && ch[i-1] != 'f' )
+	       ) {
+	    p->push();
+	    // squat f
+	    mapchar(p, f_a, 213, f);
+	    p->pop();
+	  }
+	  else if (ch[i-1] == 'f'  // medium`
+		   || ch[i+1] == 'b'
+		   || ch[i+1] == 'c'
+		   || ch[i-1] == 'c'
+		   || ( ch[i+1] == 'g' && ch[i-1] == 'f' )
+		   || ch[i+1] == 'f') {
+	    p->push();
+	    // medium
+	    //printf("Here found f \n");
+	    mapchar(p, f_a, 214, f);
+	    p->pop();
+	  }
+	  else {
+	    p->push();
+	    // full sized
+	    mapchar(p, f_a, cc, f);
+	    p->pop();
+	  }
+	}
 	else if (baroque && cc == 'h'
 		 && i > 3 
 		 && (ch[i-1] == 'f' ||  ch[i-1] == 'h')) {
@@ -1550,8 +1579,11 @@ struct list *l)			/* data */
 	}
 	else if (i == 8 && c == '+' && dot_ch(l)) {
 	  p->push();	// just for bourdons with an ornament and D
-	  p->moveh(b_d_pad);
-	  mapchar(p, f_a, cc, f);
+	  p->moveh(b_d_pad);  // because the / is at a different place
+	  if (baroque)
+	    mapchar(p, f_a, 114, f);
+	  else
+	    mapchar(p, f_a, cc, f);
 	  p->pop();
 	}
 	else if ( cc > 'p' && cc < 'x' && c != '+' ) {
@@ -1590,6 +1622,58 @@ struct list *l)			/* data */
 	  mapchar(p, f_a, cc, f);
 	  p->pop();
 	}
+	else if ( cc == '/') {  /* wbc July 2019 */
+	  p->push();
+	  if (baroque) {
+	    if ( i == 8) {
+	      mapchar(p, f_a, 114, f);  // wbc for bourdons
+	    }
+	    else if (c != '+' && c != '&') {  // the slash in note position
+	      p->moveh("-0.086 in");
+	      mapchar(p, f_a, cc, f);
+	    }
+	    else if (c == '&') {  // the slash after the note
+	      p->moveh("0.036 in");
+	      mapchar(p, f_a, 114, f);
+	    }
+	   
+	    else {  // a slash before the note is really between notes
+	      p->moveh("-0.002 in");
+	      p->movev(-0.061);
+	      if ( l->padding > 0.10) // this is a hack for the extra padding
+		                      // then the down curved D is used
+		p->moveh(0.06);
+	      // printf ("HERE - -  padding %f\n", l->padding);
+	      if (l->next && l->next->dat[i-1] == 'd') {
+		p->movev(-0.012);
+	      }
+	      if (l->next && l->next->dat[i] == 'D') {
+		// printf ("HERE D padding %f\n", l->padding);
+		p->movev(-0.012);
+	      }
+	      if (l->next && l->next->dat[i] == 'c') {
+		p->movev(-0.012);
+	      }
+	      // mapchar(p, f_a, 114, f);
+	      mapchar(p, f_a, cc, f);
+	    }
+	  }
+	  else {  // the renaissance way
+	    p->moveh("-0.007 in");
+	    mapchar(p, f_a, cc, f);
+	  }
+	  p->pop();
+	}
+	else if ( cc == '_' && baroque && c != '&') { // wbc july 2019 for underbar, not pre ornament
+	  p->push();
+	  //if ( i > 2 && l->dat[i-1] == 'D') {
+	  p->movev(-0.051);
+	  p->moveh(-0.064);
+	  //}
+	  mapchar(p, f_a, cc, f);
+	  p->pop();
+	}
+	
 	else {
 	  p->push();
 	  mapchar(p, f_a, cc, f);

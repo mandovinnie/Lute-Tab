@@ -363,7 +363,7 @@ $		- used to set these values. This flag must be
 
 		  for the following, only the first few characters are 
 		  significant.
-			$flagstyle=con == $flagstyle=contemp
+		  $flagstyle=con == $flagstyle=contemp
 		  $flagstyle=board		english manuscript style
 		  $flagstyle=capirola		thin line flags
 		  $flagstyle=contemp		regular notes

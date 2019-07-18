@@ -1,14 +1,18 @@
 
--b
+%-b
 % $flagstyle=thin
 $flagstyle=contemp
 % $flagstyle=italian
 % $flagstyle=standard
+% a / is 47 
 
 b
-W cdc
-w cdc
-0 cdc
+w      /a
+x      //a
+b
+W c!/d!/c/a
+w c !/ c
+0 /c/d/c
 1 cdc
 2 cdc
 3 cdc
