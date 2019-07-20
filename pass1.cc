@@ -250,7 +250,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 // wbc July 2019  an x before an E baroque overlaps
       for (ii = 2; ii < 8; ii++) {
 	if (l->next && l->next->dat[ii] == 'E' ) {
-	  printf("pass1.cc: HERE \n");
+	  // printf("pass1.cc: HERE \n");
 	  l->padding += 0.093; // x before note
 	  // l->padding -= 0.03; // x after wing of E
 	}
