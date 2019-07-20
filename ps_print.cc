@@ -574,6 +574,23 @@ void ps_print::make_ps_font(i_buf *ps_header)
     ps_header->PutString("fill ");
     ps_header->PutString(" grestore } def\n");
 
+/* a general horizontal sur, takes delta x, delta y, and curve amount */
+/* a new routine added by wbc July 2019 */
+    ps_header->PutString("/uslur { /curve exch def /deltay exch def  /deltax exch def");
+    ps_header->PutString("gsave  1 setlinecap 0.5 setlinewidth");
+    ps_header->PutString("%%% /curve -15 def  % how much curvature the slur has");
+    ps_header->PutString("/thick 1.8 def");
+    ps_header->PutString("/et .8 def   % end thickness");
+    ps_header->PutString("currentpoint /cy exch def /cx exch def");
+    ps_header->PutString("/x3 cx deltax add def /y3 cy deltay add def");
+    ps_header->PutString("/y3a y3 et add def /y4a cy et add def");
+    ps_header->PutString("/x1 cx deltax 3.0 div add  def /y1 cy curve add deltay 3.0 div add def");
+    ps_header->PutString("/y1a y1  thick add def");
+    ps_header->PutString("/x2 cx deltax 1.5 div add  def /y2 y1 deltay 3.0 div add def");
+    ps_header->PutString("/y2a y2 thick add def x1 y1 x2 y2 x3 y3 curveto");
+    ps_header->PutString("x3 y3a lineto x2 y2a x1 y1a cx y4a curveto closepath");
+    ps_header->PutString("fill grestore } def");
+
 /* do a vertical slur, given heigth */
     ps_header->PutString("/dovslur { /delta exch def\n");
     ps_header->PutString("gsave 1 setlinecap 0.7 setlinewidth\n");
