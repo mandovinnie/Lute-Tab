@@ -589,7 +589,7 @@ void ps_print::make_ps_font(i_buf *ps_header)
     ps_header->PutString("/x2 cx deltax 1.5 div add  def /y2 y1 deltay 3.0 div add def");
     ps_header->PutString("/y2a y2 thick add def x1 y1 x2 y2 x3 y3 curveto");
     ps_header->PutString("x3 y3a lineto x2 y2a x1 y1a cx y4a curveto closepath");
-    ps_header->PutString("fill grestore } def");
+    ps_header->PutString("fill grestore } def  \n");
 
 /* do a vertical slur, given heigth */
     ps_header->PutString("/dovslur { /delta exch def\n");
