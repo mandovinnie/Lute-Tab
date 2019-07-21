@@ -574,7 +574,7 @@ void ps_print::make_ps_font(i_buf *ps_header)
     ps_header->PutString("fill ");
     ps_header->PutString(" grestore } def\n");
 
-/* a general horizontal sur, takes delta x, delta y, and curve amount */
+/* a general horizontal slur, takes delta x, delta y, and curve amount and returns to where it started */
 /* a new routine added by wbc July 2019 */
     ps_header->PutString("/uslur { /curve exch def /deltay exch def  /deltax exch def");
     ps_header->PutString("gsave  1 setlinecap 0.5 setlinewidth");

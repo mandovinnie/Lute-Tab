@@ -1526,16 +1526,19 @@ struct list *l)			/* data */
 	  mapchar(p, f_a, 'D', f);
 	  p->pop();
 	}
+	// baroque f madness  July 2019 wbc
         else if (baroque && cc == 'f' && i > 1 ) {
 	  //above
 	  if  (ch[i-1] == 'a' // squat
 	       || ch[i-1] == 'G'
+	       || ch[i-1] == 'h'
 	       // below
 	       || ( ch[i+1] == 'g' && ch[i-1] != 'f' )
 	       || ( ch[i+1] == 'h' && ch[i-1] != 'f' )
 	       ) {
 	    p->push();
 	    // squat f
+	    // printf("Here found f to be squat correctedi - %c + %c\n",  ch[i-1],  ch[i+1]);
 	    mapchar(p, f_a, 213, f);
 	    p->pop();
 	  }
@@ -1547,7 +1550,7 @@ struct list *l)			/* data */
 		   || ch[i+1] == 'f') {
 	    p->push();
 	    // medium
-	    //printf("Here found f \n");
+	    // printf("Here found f to be med   correctedi - %c + %c\n",  ch[i-1],  ch[i+1]);
 	    mapchar(p, f_a, 214, f);
 	    p->pop();
 	  }
