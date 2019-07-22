@@ -84,6 +84,7 @@ struct file_info {
   unsigned int midi_volume;     /* the volume or velocity for a midi file*/
   unsigned int extended_character_set; /* is q a character or ornament? */
   int 	bar_number_font;	/* font number (1-5) to use for bar numbers */
+  double slur_depth;	 	/* depth of slur in PostScript units for {} */
 };
 
 struct font_list {

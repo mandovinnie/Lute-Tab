@@ -577,10 +577,10 @@ void ps_print::make_ps_font(i_buf *ps_header)
 /* a general horizontal slur, takes delta x, delta y, and curve amount and returns to where it started */
 /* a new routine added by wbc July 2019 */
     ps_header->PutString("/uslur { /curve exch def /deltay exch def  /deltax exch def\n");
-    ps_header->PutString("gsave  1 setlinecap 0.5 setlinewidth\n");
+    ps_header->PutString("gsave  1 setlinecap 0.3 setlinewidth\n");
     ps_header->PutString("%%% /curve -15 def  % how much curvature the slur has\n");
-    ps_header->PutString("/thick 1.8 def\n");
-    ps_header->PutString("/et .8 def   % end thickness\n");
+    ps_header->PutString("/thick 0.9 def\n");
+    ps_header->PutString("/et .3 def   % end thickness\n");
     ps_header->PutString("currentpoint /cy exch def /cx exch def\n");
     ps_header->PutString("/x3 cx deltax add def /y3 cy deltay add def\n");
     ps_header->PutString("/y3a y3 et add def /y4a cy et add def\n");
@@ -817,6 +817,7 @@ void ps_print::put_slash
 void ps_print::put_uline(int bloc, int eloc)
 { 
     saveloc(REGS-1);
+    // printf ("HERE put_uline \n");
     ps_command ( PRTIE, save_h[eloc] - save_h[bloc], 0, 0, 0); // was PTIE2
     getloc(REGS-1);
 }
@@ -837,8 +838,9 @@ void ps_print::put_thick_slant(int bloc, int eloc)
   ps_command(TH_LINE, save_h[bloc], save_v[bloc], save_h[eloc], save_v[eloc]);
 }
 void ps_print::put_med_slant(int bloc, int eloc) 
-{ 
-   ps_command(MED_LINE, save_h[bloc], save_v[bloc], save_h[eloc], save_v[eloc]);
+{
+  // printf("put_med_slant \n");  
+  ps_command(MED_LINE, save_h[bloc], save_v[bloc], save_h[eloc], save_v[eloc]);
 }
 void ps_print::put_slant(int bloc, int eloc) 
 {
@@ -877,6 +879,14 @@ int  ps_print::more()
 void ps_print::showsave(int reg) 
    { dbg0(Error, "Undefined Proceedure showsave\n");}
 
+void ps_print::set_slur_depth(double depth)
+{
+  slur_depth = depth;
+}
+double ps_print::get_slur_depth()
+{
+  return slur_depth;
+}
 void ps_print::p_num(int n) 
 { 
 #define N_S 5
@@ -1091,6 +1101,15 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     pr_out->PutString("1.1 add lineto 0.0 -2.2 rlineto closepath fill\n");
     break;
   case MED_LINE:
+    // new system - draws arc July 2019 wbc
+    pr_out->PutF(d_to_p(hh - h), places);
+    pr_out->PutF(d_to_p(vv - v), places);
+    slur_depth = get_slur_depth();
+    printf("med line: slur depth %f\n", slur_depth);
+    pr_out->PutF(-0.0, places);
+    pr_out->PutString("uslur \n");
+    break;
+    // old system - draws PS line
     pr_out->PutF(d_to_p(h), places);
     pr_out->PutF(d_to_p(v), places);
     pr_out->PutString(" 0.3 sub moveto 0.0 .6\n");
@@ -1224,7 +1243,12 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     pr_out->PutString("doslur\n");
     break;
   case PRTIE:
+    
     pr_out->PutF(d_to_p(h), places);
+    //  wbc July 2019 new slurs!
+    // pr_out->PutF(0.0, places) ; // horizontal
+    // pr_out->PutF(10.0, places); // curvature
+    //pr_out->PutString("uslur\n");
     pr_out->PutString("dorslur\n");
     break;
   case PHRTIE:
@@ -1240,7 +1264,14 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     pr_out->PutF(d_to_p(h), places);
     pr_out->PutString("dowslur\n");
     break;
-  case PDRAFT :
+  case NTIE:
+    pr_out->PutF(d_to_p(h), places);  // x length of slur
+    pr_out->PutF(d_to_p(v), places);  // y how much higher or lower the end is
+    printf("\n");
+    pr_out->PutF(d_to_p(hh), places);  // depth of the curve 0 is a straight line
+    pr_out->PutString("uslur\n");
+    break;
+  case PDRAFT:
     pr_out->PutString("gsave\n");
     pr_out->PutString("/Times-Roman findfont dup 150 scalefont setfont\n");
     pr_out->PutString("0.70 setgray \n"); 

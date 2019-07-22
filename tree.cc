@@ -546,6 +546,12 @@ void set_first_bar(const char *value, struct file_info *f)
   // printf ("setting first bar number %d\n", atoi(value));
   n_measures =  atoi(value)-1;
 }
+void set_slur_depth(const char *value, struct file_info *f)
+{
+  extern int  n_measures;
+  // printf ("setting slur depth %f\n", atof(value));
+  f->slur_depth =  atof(value)-1;
+}
 
 /*
 void setit(void *r, const char *flag, struct file_info *f)
@@ -599,6 +605,7 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {(char*)"extended_character_set", (void *)set_extended_character_set},
     {(char*)"barnumberfont", (void *)set_bar_number_font},
     {(char*)"first_bar", (void*) set_first_bar},
+    {(char*)"slur_depth", (void*) set_slur_depth},
     {0,0}
   };
 
@@ -635,6 +642,7 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {(char*)"extended_character_set", (void *)first},
     {(char*)"barnumberfont", (void *)first},
     {(char*)"first_bar", (void*)first},
+    {(char*)"slur_depth", (void*)second},
     {0,0}
   };
   

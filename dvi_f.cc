@@ -1228,8 +1228,9 @@ struct list *l)			/* data */
 	my_underline(p, f_a, &skip_spaces, 11, i);
 	break;
       case '}':
-	if (baroque) 
+	if (baroque) {
 	  do_thick_uline(p, &skip_spaces, 11, 12, i);
+	}
 	else
 	  do_uline(p, &skip_spaces, 11, 12, i);
 	break;
@@ -1531,10 +1532,9 @@ struct list *l)			/* data */
 	  //above
 	  if  (ch[i-1] == 'a' // squat
 	       || ch[i-1] == 'G'
-	       || ch[i-1] == 'h'
 	       // below
 	       || ( ch[i+1] == 'g' && ch[i-1] != 'f' )
-	       || ( ch[i+1] == 'h' && ch[i-1] != 'f' )
+	       // || ( ch[i+1] == 'h' && ch[i-1] != 'f' )
 	       ) {
 	    p->push();
 	    // squat f
@@ -1546,6 +1546,8 @@ struct list *l)			/* data */
 		   || ch[i+1] == 'b'
 		   || ch[i+1] == 'c'
 		   || ch[i-1] == 'c'
+	       || ch[i-1] == 'h'
+	       || ch[i+1] == 'h'
 		   || ( ch[i+1] == 'g' && ch[i-1] == 'f' )
 		   || ch[i+1] == 'f') {
 	    p->push();
