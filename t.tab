@@ -11,6 +11,17 @@ $flagstyle=contemp
 % $slur_depth=-10.0
 
 b
+0. E/E/E!/a
+0.E/E/E/E!/a
+0.  d/d!/a
+b
+0.  E/E!/a
+0.  f/f!/a
+0.  a/a!/a
+0.  b/b!/a
+0.  c/c!/a
+0.  c/c!/a
+b
 1 c/c/c&,
 0 c{
 x   c}
@@ -23,19 +34,23 @@ b
 b
 1. c.
 b
+
+b
 x c/c/c&,
 0   c{
 x c}
 0   c(
 x c)
+0   c(
+x c  )
 0   c[
-x c]
+x c  ]
 x c  U
-x c X
+x c  X
 b
-1 a b c
+1 a b c[
 x d e f
-x g h i
+x g h i]v
 x j k
 e
 1-xE

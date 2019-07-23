@@ -1106,7 +1106,7 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     pr_out->PutF(d_to_p(hh - h), places);
     pr_out->PutF(d_to_p(vv - v), places);
     slur_depth = get_slur_depth();
-    printf("med line: slur depth %f\n", slur_depth);
+    // printf("med line: slur depth %f\n", slur_depth);
     pr_out->PutF(slur_depth, places);
     //pr_out->PutF(-0.0, places);
     pr_out->PutString("uslur \n");

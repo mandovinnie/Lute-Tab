@@ -498,12 +498,12 @@ of tablature, as the second to tenth character.
 	[ ]		- horizontal underline with a curve to it, a slur
 			- a ]v (a v after the ] ) draws an upside down slur
                         - a ]w (a w after the ] ) draws a wavy up-down slur
-	( )		- a straight horizontal underline, so you can use two.
+	( )		- a straight underline, so you can use two.
 			  the slope is determined by the position of
   			  the beginning and end parenthesis.
 			  you can use the & to start a line beside a note.
-	{ }		- a horizontal underline with no curve to it
-			  the above two must end on the same line they start on!
+	{ }		- a horizontal or slanting underline with a configurable curve to it
+			  the $slur_depth sets the curvature
 	/		- a slash for a bourdon if used on bottom line
 			  otherwise a light slash
 	//		- two slashes

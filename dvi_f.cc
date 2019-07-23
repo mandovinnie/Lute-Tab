@@ -1650,9 +1650,12 @@ struct list *l)			/* data */
 	      p->moveh("-0.002 in");
 	      p->movev(-0.061);
 	      if ( l->padding > 0.10) // this is a hack for the extra padding
-		                      // then the down curved D is used
-		p->moveh(0.06);
-	      // printf ("HERE - -  padding %f\n", l->padding);
+		                      // when the down curved D is used
+	                              // ouch - a kerning table
+                 if (l->next && l->next->dat[i] == 'D') p->moveh(0.06);
+                 else if (l->next && l->next->dat[i] == 'E') p->moveh(0.15);
+	         else  p->moveh(0.06);
+	      // printf ("dvi_f.cc: HERE - -  char %cc padding %f\n", c, l->padding);
 	      if (l->next && l->next->dat[i-1] == 'd') {
 		p->movev(-0.012);
 	      }

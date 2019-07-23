@@ -227,6 +227,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       break;
     case '+':		/* ornaments */
       l->padding = str_to_inch(min_O_w);
+      // printf("pass1.cc: HERE 0 %f\n", l->padding);
       if (strchr("Yy", l->next->dat[0])) 
 	l->padding = 0.01 /* str_to_inch(min_d_w) */;
       else if (strchr("{}[]()UX", c)) 
@@ -250,9 +251,9 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 // wbc July 2019  an x before an E baroque overlaps
       for (ii = 2; ii < 8; ii++) {
 	if (l->next && l->next->dat[ii] == 'E' ) {
-	  // printf("pass1.cc: HERE \n");
-	  l->padding += 0.093; // x before note
-	  // l->padding -= 0.03; // x after wing of E
+	  // printf("pass1.cc: HERE 2 %f\n", l->padding);
+	  l->padding += 0.2; // x before note
+	  break;
 	}
       }
       {
@@ -280,6 +281,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	l->padding = 0.10;
 	l->prev->padding -= 0.10;
       }
+      // printf("pass1: padding %f\n", l->padding);
       break;
     case ':':		/* ornaments above the note */
       l->padding = 0;
