@@ -836,7 +836,8 @@ endchar;enddef;
 %
 %
  if unknown dw: dw# = 1.5wid#;fi;
- define_blacker_pixels(dw);
+ define_blacker_pixels(dw);  
+%  define_pixels(dw);  %%% wbc Jult 2019
  def my_dot(suffix $)(expr wid)(expr hi) = 
  fill fullcircle scaled dw shifted (wid, hi);
 enddef;
