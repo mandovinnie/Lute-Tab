@@ -550,7 +550,7 @@ void set_slur_depth(const char *value, struct file_info *f)
 {
   extern int  n_measures;
   // printf ("setting slur depth %f\n", atof(value));
-  f->slur_depth =  atof(value)-1;
+  f->slur_depth =  atof(value);
 }
 
 /*
@@ -642,7 +642,7 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {(char*)"extended_character_set", (void *)first},
     {(char*)"barnumberfont", (void *)first},
     {(char*)"first_bar", (void*)first},
-    {(char*)"slur_depth", (void*)second},
+    {(char*)"slur_depth", (void*)first},
     {0,0}
   };
   

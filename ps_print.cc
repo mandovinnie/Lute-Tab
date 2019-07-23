@@ -353,6 +353,7 @@ void ps_print::page_trail()
 int ps_print::do_page(i_buf *i_b,  struct font_list *f_a[])
 {
     npages++;
+    set_slur_depth(f_i->slur_depth);
     return (format_page(this, i_b, f_a, f_i));
 }
 
@@ -1106,18 +1107,19 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     pr_out->PutF(d_to_p(vv - v), places);
     slur_depth = get_slur_depth();
     printf("med line: slur depth %f\n", slur_depth);
-    pr_out->PutF(-0.0, places);
+    pr_out->PutF(slur_depth, places);
+    //pr_out->PutF(-0.0, places);
     pr_out->PutString("uslur \n");
     break;
     // old system - draws PS line
-    pr_out->PutF(d_to_p(h), places);
-    pr_out->PutF(d_to_p(v), places);
-    pr_out->PutString(" 0.3 sub moveto 0.0 .6\n");
-    pr_out->PutString("rlineto ");
-    pr_out->PutF(d_to_p(hh), places);
-    pr_out->PutF(d_to_p(vv), places);
-    pr_out->PutString("0.3 add lineto 0.0 -.6 rlineto closepath fill\n");
-    break;
+    //pr_out->PutF(d_to_p(h), places);
+    //pr_out->PutF(d_to_p(v), places);
+    //pr_out->PutString(" 0.3 sub moveto 0.0 .6\n");
+    //pr_out->PutString("rlineto ");
+    //pr_out->PutF(d_to_p(hh), places);
+    //pr_out->PutF(d_to_p(vv), places);
+    //pr_out->PutString("0.3 add lineto 0.0 -.6 rlineto closepath fill\n");
+    //break;
 
   case CHAR:
   case PCHAR:

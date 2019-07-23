@@ -1,11 +1,45 @@
 
-%-b
+% -R7
+% -R9
+-300
+-b
 % $flagstyle=thin
 $flagstyle=contemp
 % $flagstyle=italian
 % $flagstyle=standard
 % a / is 47 
+% $slur_depth=-10.0
 
+b
+1 c/c/c&,
+0 c{
+x   c}
+0   c{
+x   c}
+x   c{
+x  c}
+x /b/a
+b
+b
+1. c.
+b
+x c/c/c&,
+0   c{
+x c}
+0   c(
+x c)
+0   c[
+x c]
+x c  U
+x c X
+b
+1 a b c
+x d e f
+x g h i
+x j k
+e
+1-xE
+x-E
 b
 w      /a
 x      //a

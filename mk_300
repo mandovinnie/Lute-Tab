@@ -2,15 +2,13 @@
 #
 #  make the lute9 font
 #
-#
 set FMT = plain
 #
 # 600 dpi ...
 # ljfour  canonex docutech lexmarku ljfive ljfzzzfr okifte qmsostf qmsoszz ricohsp vtszz
 # 
-# 
 set MODE=CanonCX
-mode=cx
+## mode=cx
 #set MODE=docutech
 # set MODE=cxnew
 #
@@ -21,8 +19,6 @@ mode=cx
 # but it is needed for the command line, don't know why.
 # but it means fixing the mode in lute9.mf for different dpi
 # mag:=1.0 is default, no need to specify
-#
-#
 #
 if ($#argv == 0  ) then
   mf "\mode:=$MODE; \mag:=1.0; input lute9; bye;"

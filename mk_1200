@@ -26,4 +26,14 @@ if ($#argv > 0 ) then
   gftopk ./blute7.1200gf > ./blute7.1200pk
   mf "\mode:=vtftzzlo; \mag:=1.0; input blute6; bye;"
   gftopk ./blute6.1200gf > ./blute6.1200pk
+  mf "\mode:=vtftzzlo; \mag:=1.0; input lute9; bye;"
+  gftopk ./lute9.1200gf > ./lute9.1200pk
+  mf "\mode:=vtftzzlo; \mag:=1.0; input lute85; bye;"
+  gftopk ./lute85.1200gf > ./lute85.1200pk
+  mf "\mode:=vtftzzlo; \mag:=1.0; input lute8; bye;"
+  gftopk ./lute8.1200gf > ./lute8.1200pk
+  mf "\mode:=vtftzzlo; \mag:=1.0; input lute7; bye;"
+  gftopk ./lute7.1200gf > ./lute7.1200pk
+  mf "\mode:=vtftzzlo; \mag:=1.0; input lute6; bye;"
+  gftopk ./lute6.1200gf > ./lute6.1200pk
 endif

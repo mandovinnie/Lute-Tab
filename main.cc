@@ -93,7 +93,7 @@ void init(file_info *f)
     f->top_margin=72;
     f->extended_character_set = 0;
     f->bar_number_font = 1;
-    f->slur_depth = 5.0;
+    f->slur_depth = 0.0;
 }
 
 char *
