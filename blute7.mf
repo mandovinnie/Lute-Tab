@@ -1,6 +1,5 @@
 %
-%  a new font 
-%
+%  a new baroque lute font 
 %
 mode_def cxnew =                       %\[ Canon CX, SX, LBP-LX (300dpi)
   mode_param (pixels_per_inch, 600);
@@ -9,9 +8,6 @@ mode_def cxnew =                       %\[ Canon CX, SX, LBP-LX (300dpi)
   mode_param (o_correction, .65);  % was .6
   mode_common_setup_;
 enddef;
-%
-%  a new font
-%
 % mode:=cxnew;
 
 mode_setup;
@@ -26,7 +22,6 @@ font_quad:=em#;font_normal_space:=0.7em#;font_normal_stretch:=0.24em#;
 font_normal_shrink:=0.2em#;
 font_identifier:="Lute7-wbc";
 font_size 7pt#;
-%
 %
 input blute.mf
 do_all;

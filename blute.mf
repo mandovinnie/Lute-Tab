@@ -1,10 +1,7 @@
 %
-%
 %  a new font 
 %  (well - actually an old ren. font hacked to baroque!)
 %  May 17 95
-%
-%
 %
 mid_bar#:=7/13cap#;
 define_good_y_pixels(mid_bar);

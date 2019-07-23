@@ -95,15 +95,15 @@ veryclean:	clean
 MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	blute6.mf blute6.tfm blute6.300pk  blute6.600pk \
 	blute7.mf blute7.tfm blute7.300pk blute7.600pk \
-	lute.mf lute9.mf lute8.mf lute7.mf lute6.mf \
+	lute.mf lute9.mf lute85.mf lute8.mf lute7.mf lute6.mf \
 	blute9.300pk blute8.300pk blute85.300pk \
-	lute9.300pk lute8.300pk lute7.300pk lute6.300pk \
-	blute9.600pk blute8.600pk blute85.600pk \
+	lute9.300pk  lute85.300pk lute8.300pk lute7.300pk lute6.300pk \
+	blute9.600pk blute85.300pk blute8.600pk blute85.600pk \
 	lute9.600pk lute8.600pk lute7.600pk lute6.600pk \
-	lute9.tfm lute8.tfm lute7.tfm lute6.tfm \
+	lute9.tfm lute8.tfm lute85.tfm lute7.tfm lute6.tfm \
 	blute9.tfm blute8.tfm blute85.tfm \
-	blute6.2400pk blute8.2400pk  blute9.2400pk lute7.2400pk lute85.2400pk \
-	blute7.2400pk blute85.2400pk lute6.2400pk  lute8.2400pk lute9.2400pk \
+	blute6.1200pk blute8.1200pk  blute9.1200pk lute7.1200pk lute85.1200pk \
+	blute7.1200pk blute85.1200pk lute6.1200pk  lute8.1200pk lute9.1200pk \
 	cmr10.tfm cmr12.tfm cmti10.tfm cmti12.tfm \
 	ptmr.tfm ptmri.tfm psyr.tfm \
 	pbkd.tfm  pbkdi.tfm pbkl.tfm pbkli.tfm \
@@ -117,12 +117,9 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	version.pl makedepend CHANGELOG \
 	midi-docs/midi-dump.c midi-docs/Makefile \
 	midi-docs/tftopl.web \
-	tlute.mf tlute9.mf tlute8.mf tlute7.mf tlute6.mf mk_600_t \
-	tlute9.300pk tlute8.300pk tlute7.300pk tlute6.300pk \
-	tlute9.600pk tlute8.600pk tlute7.600pk tlute6.600pk \
 	simple.tab 
 
-DISTFILE = lute_tab4.3.96.tar
+DISTFILE = lute_tab4.3.97.tar
 
 distrib:	 ${DISTFILE}
 
