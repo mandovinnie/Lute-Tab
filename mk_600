@@ -10,10 +10,12 @@
 # ljfour  canonex docutech lexmarku ljfive ljfzzzfr okifte qmsostf qmsoszz ricohsp vtszz
 # 
 # 
-set MODE=CanonCX
-set MODE=ljfzzzfr
-set MODE=ljfive
+# set MODE=CanonCX
+# set MODE=ljfzzzfr
+# set MODE=ljfive
+#  docutech has bee the one I use
 set MODE=docutech
+# set MODE=canonex
 # set MODE=cxnew
 #
 # if using precompiled modes set here, otherwise in lute9

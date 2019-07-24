@@ -1,16 +1,17 @@
 
 % -R7
 % -R9
--300
--b
+% -300
+%-b
 % $flagstyle=thin
-$flagstyle=contemp
+% $flagstyle=contemp
 % $flagstyle=italian
 % $flagstyle=standard
 % a / is 47 
-% $slur_depth=-10.0
+$slur_depth=-6.0
 
 b
+0. e/e/e!/a
 0. E/E/E!/a
 0.E/E/E/E!/a
 0.  d/d!/a
@@ -35,6 +36,10 @@ b
 1. c.
 b
 
+.
+b
+b
+.
 b
 x c/c/c&,
 0   c{

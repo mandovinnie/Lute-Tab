@@ -14,7 +14,8 @@ mode_setup;
 %
  em#:=14/3pt#; cap#:=6pt#;
  ptt#:=1.0pt#;
- wid#:=1.3pt#;
+% wid#:=1.3pt#;
+ wid#:=1.0pt#;
 define_pixels(em,cap);
 define_corrected_pixels(ptt,wid);
 %

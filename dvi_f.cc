@@ -379,9 +379,11 @@ struct list *l)			/* data */
       p->movev ( -st_text);
       p->movev ( -text_sp * f->n_text - f->c_space);
       p->movev ( -3 * m_space - .01 /* fudge */);
+/*
       mapchar(p, f_a, 'Z', f);
       p->movev( -m_space);
       mapchar(p, f_a, 'Z', f);
+  */ 
       if (f->m_flags & TWOSTAFF ) {
 	p->movev( -5 * m_space );
 	p->movev( -text_sp * f->n_text );
