@@ -366,8 +366,9 @@ struct list *l)			/* data */
 
     if (f->flags & NOTES ) {
 
-      if (f->line_flag == ON_LINE) p->movev( -5.5 * d_i_space);
-      else p->movev ( -6.0 * d_i_space);     /* to top of staff */
+//      if (f->line_flag == ON_LINE) p->movev( -5.5 * d_i_space);
+	if (f->line_flag == ON_LINE) p->movev( -.5 * d_i_space);
+// 2019      else p->movev ( -6.0 * d_i_space);     /* to top of staff */
 
       if (f->flags & FIVE) {
 	p->movev(i_space); 
@@ -376,14 +377,14 @@ struct list *l)			/* data */
 	p->movev(2 * i_space); 
       }
 
+// 	printf("dvi_f.cc: st_text %f text_sp %f  f->n_text %d f->c_space %f\n",st_text, text_sp, f->n_text, f->c_space);
       p->movev ( -st_text);
       p->movev ( -text_sp * f->n_text - f->c_space);
-      p->movev ( -3 * m_space - .01 /* fudge */);
-/*
+      p->movev ( -2 * m_space + .004 /* fudge */);  // was -2 July 2019 wbc  was -0.01
       mapchar(p, f_a, 'Z', f);
       p->movev( -m_space);
       mapchar(p, f_a, 'Z', f);
-  */ 
+   
       if (f->m_flags & TWOSTAFF ) {
 	p->movev( -5 * m_space );
 	p->movev( -text_sp * f->n_text );

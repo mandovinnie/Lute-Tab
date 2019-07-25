@@ -176,12 +176,16 @@ void ps_print::file_head()
     ps_header.PutString("%%BeginSetup\n");
     if (f_i->flags & DPI600)  {
 	ps_header.PutString("%%Feature: *Resolution 600\n");
-        //printf ("ps_print.cc: 1386: 600 \n");
+        printf ("ps_print.cc: 179: 600 \n");
     }
     else if (f_i->m_flags & DPI1200) 
 	ps_header.PutString("%%Feature: *Resolution 1200\n");
     else if (f_i->m_flags & DPI2400) 
 	ps_header.PutString("%%Feature: *Resolution 2400\n");
+    else if (f_i->m_flags & DPI360) {
+	ps_header.PutString("%%Feature: *Resolution 360\n");
+        printf ("ps_print.cc: 187: 360 \n"); 
+    }
     else ps_header.PutString("%%Feature: *Resolution 300\n");
 
 #ifdef MAC
@@ -265,6 +269,8 @@ void ps_print::file_head()
 	strcat (pk_name, ".2400pk");
     else if (f_i->flags & DPI600)
 	strcat (pk_name, ".600pk");
+    else if (f_i->flags & DPI360)
+	strcat (pk_name, ".360pk");
     else
 	strcat (pk_name, ".300pk");
 
@@ -846,7 +852,7 @@ void ps_print::put_med_slant(int bloc, int eloc)
 void ps_print::put_slant(int bloc, int eloc) 
 {
     saveloc(REGS-1);
-
+    // printf("put_slant \n");
     ps_command(LINE, save_h[bloc], save_v[bloc], save_h[eloc], save_v[eloc]);
     
     getloc(REGS-1);
@@ -1083,8 +1089,8 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     pr_out->PutString(" RM\n");
     break;
 
-  case LINE:
-    pr_out->PutString("0.2 setlinewidth ");
+  case LINE:  // the default line thickness set here July 2019 wbc
+    pr_out->PutString("0.27 setlinewidth ");
     pr_out->PutF(d_to_p(h), places);
     pr_out->PutF(d_to_p(v), places);
     pr_out->PutString("MT ");

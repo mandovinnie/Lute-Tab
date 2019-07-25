@@ -17,6 +17,7 @@ enddef;
 %
 %mode:=MyLaser;
 %mode:=cxnew;
+% mode:=canonex
 mode_setup;
 
 %

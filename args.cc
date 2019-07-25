@@ -240,6 +240,10 @@ void set_6(const char *value, struct file_info *f) {
 void set_300(const char *value, struct file_info *f) {
   f->flags &= ~DPI600;
 }
+void set_360(const char *value, struct file_info *f) {
+  f->flags &= ~DPI600;
+  f->m_flags |= DPI360;
+}
 void set_24(const char *value, struct file_info *f) {
   f->m_flags |= DPI2400;
   f->flags &= ~DPI600;
@@ -550,6 +554,7 @@ void args(int argc, char ** argv, struct file_info *f)
       {(char*)"1200", (void*)set_2},
       {(char*)"2400", (void*)set_24},
       {(char*)"300", (void*)set_300},
+      {(char*)"360", (void*)set_360},
       {(char*)"4", (void*)set_4},
       {(char*)"5", (void*)set_5},
       {(char*)"6", (void*)set_6},

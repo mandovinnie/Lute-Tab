@@ -14,15 +14,26 @@ define_good_y_pixels(flag_top);
 pickup pencircle scaled 0.5wid;
 tiny_circle := savepen;
 %
-pickup pencircle xscaled 1.8wid yscaled .9 wid rotated 45;
+% pickup pencircle xscaled 1.8wid yscaled .9 wid rotated 45;
+% pickup pencircle xscaled 1.62wid yscaled .81 wid rotated 45;
+% pickup pencircle xscaled 1.44wid yscaled .72 wid rotated 45;
+pickup pencircle xscaled 1.44wid yscaled .62 wid rotated 45;
 lute_pen := savepen;
-pickup pencircle xscaled .9wid yscaled .4 wid rotated 45;
+% pickup pencircle xscaled .9wid yscaled .4 wid rotated 45;
+% pickup pencircle xscaled .81wid yscaled .36 wid rotated 45;
+pickup pencircle xscaled .72wid yscaled .32 wid rotated 45;
 lute_test := savepen;
-pickup pencircle xscaled 2wid yscaled 1wid rotated 50;
+% pickup pencircle xscaled 2wid yscaled 1wid rotated 50;
+% pickup pencircle xscaled 1.8wid yscaled .9wid rotated 50;
+pickup pencircle xscaled 1.6wid yscaled .8wid rotated 50;
 bigger_lute_pen := savepen;
-pickup pencircle xscaled 1.5wid yscaled .7 wid rotated 45;
+% pickup pencircle xscaled 1.5wid yscaled .7 wid rotated 45;
+% pickup pencircle xscaled 1.35wid yscaled .63 wid rotated 45;
+pickup pencircle xscaled 1.20wid yscaled .56 wid rotated 45;
 flag_pen := savepen;
-pickup pencircle xscaled .3wid yscaled .1 rotated 50;
+% pickup pencircle xscaled .3wid yscaled .1 rotated 50;
+% pickup pencircle xscaled .27wid yscaled .09 rotated 50;
+pickup pencircle xscaled .24wid yscaled .08 rotated 50;
 stem_pen := savepen;
 %
 def do_v_bar = 

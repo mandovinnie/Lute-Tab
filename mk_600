@@ -17,6 +17,7 @@
 set MODE=docutech
 # set MODE=canonex
 # set MODE=cxnew
+# set MODE=MyLaser
 #
 # if using precompiled modes set here, otherwise in lute9
 #
@@ -43,7 +44,7 @@ if ($#argv == 0  ) then
   rm ./lute6.600gf
   rm lute*log lute*600gf
 else  
-  if ( $1 == 'b' ) then
+  if ( $1 == 'b'  || $1 == '-b') then
     echo baroque font
     mf "\mode:=$MODE; \mag:=1.0; input blute9; bye;"
     gftopk ./blute9.600gf > ./blute9.600pk

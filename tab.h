@@ -253,5 +253,6 @@ struct list {
  #define NOSPACE		0x8000000
  #define NOSPACEBEFORE		0x10000000
  #define COUNT_DOTS		0x20000000
+ #define DPI360			0x40000000
  /* variables defined in sizes.c */
 
