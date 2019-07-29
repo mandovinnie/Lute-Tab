@@ -176,7 +176,7 @@ void ps_print::file_head()
     ps_header.PutString("%%BeginSetup\n");
     if (f_i->flags & DPI600)  {
 	ps_header.PutString("%%Feature: *Resolution 600\n");
-        printf ("ps_print.cc: 179: 600 \n");
+        // printf ("ps_print.cc: 179: 600 \n");
     }
     else if (f_i->m_flags & DPI1200) 
 	ps_header.PutString("%%Feature: *Resolution 1200\n");
@@ -184,7 +184,7 @@ void ps_print::file_head()
 	ps_header.PutString("%%Feature: *Resolution 2400\n");
     else if (f_i->m_flags & DPI360) {
 	ps_header.PutString("%%Feature: *Resolution 360\n");
-        printf ("ps_print.cc: 187: 360 \n"); 
+        // printf ("ps_print.cc: 187: 360 \n"); 
     }
     else ps_header.PutString("%%Feature: *Resolution 300\n");
 
@@ -379,10 +379,14 @@ void ps_print::make_ps_font(i_buf *ps_header)
     double dvi_to_dots = 72.0 / 300.0;
     PKBit *b;
     extern PKBit bits[];
-    //printf ("ps_print.cc: 354: dvi_to_dots %f\n", dvi_to_dots);
+    //printf ("ps_print.cc: 382: dvi_to_dots %f\n", dvi_to_dots);
     if (f_i->flags & DPI600) {
       dvi_to_dots /= 2.0;
       //printf ("ps_print.cc: 357: dvi_to_dots %f\n", dvi_to_dots);
+    }
+    else if (f_i->m_flags & DPI360) {
+      // dvi_to_dots /= (5.0/6.0);             //adS
+      //printf ("ps_print.cc: 361: dvi_to_dots %f\n", dvi_to_dots);
     }
     else if (f_i->m_flags & DPI1200) {
       dvi_to_dots /= 4.0;             //adS

@@ -1695,6 +1695,7 @@ struct list *l)			/* data */
 	  p->pop();
 	}
 	p->p_movev(i_space);
+	// p->put_a_char (0); // wbc July 2019 debug - print a square a box
 	break;
       }
       p->clear_highlight();

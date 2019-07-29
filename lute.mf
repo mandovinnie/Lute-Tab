@@ -31,6 +31,7 @@ enddef;
 def do_box =
 beginchar (0, em#, 1.0cap#, .3cap#); "em quad";
   pickup pencircle xscaled .3wid yscaled .3wid;
+%   pickup pencircle xscaled 4.5pt# yscaled 4.5pt#;
   x1=x4=0w;x2=x3=w;
   y1=y2=0h;y3=y4=h;
   x5=x1;y5=-d;
