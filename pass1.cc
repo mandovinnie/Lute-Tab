@@ -250,10 +250,14 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       }
 // wbc July 2019  an x before an E baroque overlaps
       for (ii = 2; ii < 8; ii++) {
-	if (l->next && l->next->dat[ii] == 'E' ) {
+	if (
+	    (l->next && l->next->dat[ii] == 'E' )
+	    || (l->next && l->next->dat[ii] == 'D' )
+	  )
+	  {
 	  // printf("pass1.cc: HERE 2 %f\n", l->padding);
 	  // this should match line 1341 and 1721 in dvi_f.cc
-	  l->padding += 0.2; // x before note
+	  l->padding += 0.18; // x before note  was 0.2
 	  break;
 	}
       }

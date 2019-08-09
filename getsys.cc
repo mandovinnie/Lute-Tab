@@ -43,6 +43,7 @@ void do_music(i_buf *ib, unsigned char staff[], char buf[], int *l_p, int *skip,
 void Mstore(i_buf *ib, int *l_p, unsigned char staff[], struct file_info *f);
 void args_from_string(char *buf, struct file_info *f);
 int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[]);
+char get_special_ornament(char * string);
 
 int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 { 
@@ -589,19 +590,25 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		  }
 		  { // wbc August 2019 allow <! for extra things >
 		    if (buf[i+skip+1] == '!') {
-		      static char ebuf[32];
+		      static char *ebuf;
+		      ebuf = (char *)malloc(32);
+		      char *e = ebuf;
 		      int jj=0;
 		      // printf (" getsys.cc: <!\n");
 		      if  (buf[i+skip+2] == '<') break;
 		      while (skip < 32) {
-			ebuf[jj] = buf[i+skip];
+			e[jj] = buf[i+skip];
 			skip++;jj++;
 			if (buf[i+skip] == '>') {
+			  e[jj] = 0;
 			  skip++;
 			  break;
 			}
 		      }
-		      // printf("ebuf %s\n", ebuf);
+		      e += 2;
+		      printf("ebuf %s\n", e);
+		      ornament[i] = get_special_ornament(e);
+		      free (ebuf);
 		      i--;
 		      break;
 		    }
@@ -1284,3 +1291,13 @@ do_music(i_buf *ib, unsigned char staff[], char buf[], int *l_p, int *skip,
 }
 
 
+char get_special_ornament(char * str) {
+  printf("getsys.cc: get_special_ornament: %s\n", str);
+
+  if (!strcmp (str, "tilde"))
+    return ('~');
+  if (!strcmp (str, "mordent"))
+    return (240);
+  else
+    return ('*');
+}

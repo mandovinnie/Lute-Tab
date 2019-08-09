@@ -1096,7 +1096,8 @@ struct list *l)			/* data */
     if (c == '+') {
       int ii;
       for (ii=2; ii< 10; ii++) {
-	if (baroque && l->next && l->next->dat[ii] == 'E') {
+	if ((baroque && l->next && l->next->dat[ii] == 'E')
+	    || (baroque && l->next && l->next->dat[ii] == 'D')){
 	  wide_ornament = ii;
 	  // printf("HERE we got a plus with an E aug 2019 %d\n", wide_ornament);
 	}
@@ -1238,7 +1239,7 @@ struct list *l)			/* data */
 	}
 	do_uline(p, &skip_spaces, 5, 6, i);
 	if (baroque ) {
-	/* wbc aug 2019 */ p->put_a_char (240);
+	  /* wbc aug 2019 */ /* p->put_a_char (240); */
 	  // printf ("mordent HERE\n");
 	}
 	break;
@@ -1285,6 +1286,14 @@ struct list *l)			/* data */
 	  p->put_a_char(cc);
 	}
 	do_uline(p, &skip_spaces, 7, 8, i);
+	break;
+      case 240: /* wbc aug 2019 new <! special characters  here */
+	printf("dvi_f: case 240  %d  %s\n", i, ch);
+	if (skip_spaces) {
+	  p->p_movev(skip_spaces * i_space);
+	  skip_spaces = 0;
+	}
+	p->put_a_char (cc);
 	break;
       case 229:
 	// baroque, two parallel vertical strokes under
@@ -1639,7 +1648,7 @@ struct list *l)			/* data */
 	  p->push();
 	  
 	  if (baroque && wide_ornament && wide_ornament != i) {
-	    p->moveh (0.2);  // this should match line 256 in pass1.cc
+	    p->moveh (0.18);  // this should match line 256 in pass1.cc
 	  } 
 
 	  
