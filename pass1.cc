@@ -252,6 +252,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       for (ii = 2; ii < 8; ii++) {
 	if (l->next && l->next->dat[ii] == 'E' ) {
 	  // printf("pass1.cc: HERE 2 %f\n", l->padding);
+	  // this should match line 1341 and 1721 in dvi_f.cc
 	  l->padding += 0.2; // x before note
 	  break;
 	}
@@ -267,7 +268,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  if (d[i] != ' ' && d[i] != 'Q' 
 	      && l->next->dat[i] == 'D') {
 	    if ( d[i] == 'x' ) 
-	      l->padding += 0.019;
+	      l->padding += 0.019; 
 	    else
 	      l->padding += b_d_pad;
 	    break;

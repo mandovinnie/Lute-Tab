@@ -6,10 +6,10 @@
 # laserwriter
 # vtftzzlo
 #
-mf "\mode:=vtftzzlo; \mag:=1.0; input lute9; bye;"
-gftopk ./lute9.1200gf > ./lute9.1200pk
+## mf "\mode:=vtftzzlo; \mag:=1.0; input lute9; bye;"
+## gftopk ./lute9.1200gf > ./lute9.1200pk
 #
-mf "\mode:=vtftzzlo; \mag:=1.0; input blute9; bye;"
+mf "\mode:=vtftzzlo; \mag:=1.0; \wid#:=2.5pt#; input blute9; bye;"
 gftopk ./blute9.1200gf > ./blute9.1200pk
 #
 # virmf \&$FMT "\mode:=ultre; \mag:=1.0; input blute9; bye;"
@@ -19,8 +19,8 @@ gftopk ./blute9.1200gf > ./blute9.1200pk
 #
 if ($#argv > 0 ) then
 	echo foo
-  mf "\mode:=vtftzzlo; \mag:=1.0; input blute9; bye;"
-  gftopk ./blute9.1200gf > ./blute9.1200pk
+#  mf "\mode:=vtftzzlo; \mag:=1.0; input blute9; bye;"
+#  gftopk ./blute9.1200gf > ./blute9.1200pk
   mf "\mode:=vtftzzlo; \mag:=1.0; input blute85; bye;"
   gftopk ./blute85.1200gf > ./blute85.1200pk
   mf "\mode:=vtftzzlo; \mag:=1.0; input blute8; bye;"
@@ -29,8 +29,8 @@ if ($#argv > 0 ) then
   gftopk ./blute7.1200gf > ./blute7.1200pk
   mf "\mode:=vtftzzlo; \mag:=1.0; input blute6; bye;"
   gftopk ./blute6.1200gf > ./blute6.1200pk
-  mf "\mode:=vtftzzlo; \mag:=1.0; input lute9; bye;"
-  gftopk ./lute9.1200gf > ./lute9.1200pk
+#  mf "\mode:=vtftzzlo; \mag:=1.0; input lute9; bye;"
+#  gftopk ./lute9.1200gf > ./lute9.1200pk
   mf "\mode:=vtftzzlo; \mag:=1.0; input lute85; bye;"
   gftopk ./lute85.1200gf > ./lute85.1200pk
   mf "\mode:=vtftzzlo; \mag:=1.0; input lute8; bye;"

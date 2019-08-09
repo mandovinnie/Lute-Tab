@@ -1,8 +1,8 @@
-
+-600
 % -R7
 % -R9
 % -300
-%-b
+-b
 % $flagstyle=thin
 % $flagstyle=contemp
 % $flagstyle=italian
@@ -11,6 +11,22 @@
 $slur_depth=-6.0
 
 b
+1E xc+c  /a
+1E c+c  /a
+1E xcc  /a
+1E     /a
+1      /a
+b
+0 c<!tilde>dc
+0 cdc
+0 < <d !<
+b
+x
+0 <!<
+0 c~c"Xc
+x a!X &X
+b
+e
 0 c    (
 x c  )
 0 c  d (

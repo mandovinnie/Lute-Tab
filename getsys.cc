@@ -414,6 +414,9 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    // a_ornament[1] = '-';
 	    t_ornament[1] = '-';
 	    finger[1] = '-';
+	    
+	    // get the notes here  NOTES HERE
+	    
 	    for (i = 2; i < STAFF; i++) {
 		staff[i] = buf[i+skip];
 		switch (staff[i]) {
@@ -559,7 +562,8 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		      }
 		    }
 		    else if (ornament[i] == '\n') {
-		      dbg0 (Warning, "tab: getsys: double quote with no following character at end of line\n");
+		      dbg0 (Warning,
+			    "tab: getsys: double quote with no following character at end of line\n");
 		      skip--;
 //		      i = STAFF;
 		    }
@@ -581,6 +585,25 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		      printf("getsys: getsystem: php header\n");
 		      dbg0(Error,
 			   "php header detected, this may not be a valid tab file\n");
+		    }
+		  }
+		  { // wbc August 2019 allow <! for extra things >
+		    if (buf[i+skip+1] == '!') {
+		      static char ebuf[32];
+		      int jj=0;
+		      // printf (" getsys.cc: <!\n");
+		      if  (buf[i+skip+2] == '<') break;
+		      while (skip < 32) {
+			ebuf[jj] = buf[i+skip];
+			skip++;jj++;
+			if (buf[i+skip] == '>') {
+			  skip++;
+			  break;
+			}
+		      }
+		      // printf("ebuf %s\n", ebuf);
+		      i--;
+		      break;
 		    }
 		  }
 		  ornament[i] = buf[i+skip];

@@ -86,7 +86,8 @@ struct list *l)			/* data */
   double val;
   int font=0;
   double cap_dot_offset;
-
+  int wide_ornament = 0;
+  
   if (l) ch = l->dat;
   else return;
 
@@ -1092,6 +1093,15 @@ struct list *l)			/* data */
 	}
       }
     }
+    if (c == '+') {
+      int ii;
+      for (ii=2; ii< 10; ii++) {
+	if (baroque && l->next && l->next->dat[ii] == 'E') {
+	  wide_ornament = ii;
+	  // printf("HERE we got a plus with an E aug 2019 %d\n", wide_ornament);
+	}
+      }
+    }
     p->pop();			/* end flags */
 
     if (( ch[1] == 'W' ||  ch[1] == 'w')          /* wbc sept 2015 */
@@ -1152,7 +1162,8 @@ struct list *l)			/* data */
 	p->moveh ((f_a[0]->fnt->get_width(c) 
 		   - f_a[0]->fnt->get_width(0))/ 2.0);
     }
-    for (i=2; i < STAFF; i++) { 
+    for (i=2; i < STAFF; i++) { // the letter notes loop right here
+      
       /*	    printf ("ch[%d] is %d %c\n", i, ch[i], ch[i]);  */
       if (ch[0] == 'O' || (l->prev && l->prev->dat[0] != 'G' 
 			   && l->prev->dat[i] == 'Q')) {
@@ -1226,6 +1237,10 @@ struct list *l)			/* data */
 	  skip_spaces = 0;
 	}
 	do_uline(p, &skip_spaces, 5, 6, i);
+	if (baroque ) {
+	/* wbc aug 2019 */ p->put_a_char (240);
+	  // printf ("mordent HERE\n");
+	}
 	break;
       case '{':		/* slanting lines */
 	my_underline(p, f_a, &skip_spaces, 11, i);
@@ -1375,6 +1390,7 @@ struct list *l)			/* data */
 	else if (cc >= '0' && cc <= '9' ) { // numbers  bourdons
 	  p->push();
 	  if (baroque && i == 8 && (cc >= '1' && cc <= '9')) {
+	    
 	    if (f->m_flags & SEVEN ) 
 	      p->movev(d_i_space);
 	    p->movev(0.09);
@@ -1621,6 +1637,12 @@ struct list *l)			/* data */
 	else if ( (c == '+' || c == '&') && cc == 'x' ) {
 	  // this is for ornaments as opposed to ital ten (X)
 	  p->push();
+	  
+	  if (baroque && wide_ornament && wide_ornament != i) {
+	    p->moveh (0.2);  // this should match line 256 in pass1.cc
+	  } 
+
+	  
 	  if (f->line_flag == ON_LINE) /* wbc Dec 16 2002 */
 	    p->movev (str_to_inch(italian_offset));
 	  p->moveh("0.03 in");
@@ -1638,6 +1660,9 @@ struct list *l)			/* data */
 	  p->push();
 	  if (baroque) {
 	    if ( i == 8) {
+	      if (wide_ornament && wide_ornament != i) {
+		p->moveh (0.2);  // this should match line 256 in pass1.cc
+	      } 
 	      mapchar(p, f_a, 114, f);  // wbc for bourdons
 	    }
 	    else if (c != '+' && c != '&') {  // the slash in note position
@@ -1691,6 +1716,11 @@ struct list *l)			/* data */
 	
 	else {
 	  p->push();
+	  
+	  if (baroque && wide_ornament && wide_ornament != i) {
+	    p->moveh (0.2);  // this should match line 256 in pass1.cc
+	  } 
+	  
 	  mapchar(p, f_a, cc, f);
 	  p->pop();
 	}

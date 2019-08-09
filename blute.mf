@@ -910,6 +910,25 @@ beginchar ("~", 0.15 in#, 1.0cap#, 0);"a cadenza";
   draw z0{dir 80}..tension 3..z1..tension 3..z2..tension 3..z3..tension 3..{dir 80}z4;
 endchar;enddef;
 %
+% below contributed by Mark Probert Aug 4 2019
+% 
+def do_mordent =
+ beginchar (240, 2.8em#, 1.0cap#, 0);"a mordent";
+   pickup lute_pen;
+   neww = 0.75w;
+   %
+   z1 = (0.125neww, h);
+   z2 = (0, 0.6h);
+   z3 = (0.25neww, 0.42h);
+   z4 = (0.5neww, 0.6h);
+   z5 = (0.375neww, 0.2h);
+   z6 = (0.5neww, 0);
+   z7 = (0.75neww, 0);
+   z8 = (neww, 0.2h);
+   %
+   draw z1..z2..z3..z4;
+   draw z4..z5..z6..z7..z8;
+endchar;enddef;
 %
 def do_slant =
 beginchar (1, 2em#, .8cap#, 0);" a slanted line";
@@ -1878,6 +1897,7 @@ def do_all =
   do_thumb;do_two_dot;do_three_dot;do_four_dot;
   do_relish_a;do_relish_b;do_X;do_comma;
   do_waves; do_hat;do_star;do_smile;do_slant;do_slant_a;do_slant_b;
+  do_mordent;
   do_slant_c;do_slant_d;
   do_fermata;do_b_fermata;
   do_slash;do_one_slash;do_two_slash;do_three_slash;
