@@ -1288,7 +1288,17 @@ struct list *l)			/* data */
 	do_uline(p, &skip_spaces, 7, 8, i);
 	break;
       case 240: /* wbc aug 2019 new <! special characters  here */
+	/* 2mordent twomordent */
 	printf("dvi_f: case 240  %d  %s\n", i, ch);
+	if (skip_spaces) {
+	  p->p_movev(skip_spaces * i_space);
+	  skip_spaces = 0;
+	}
+	p->put_a_char (cc);
+	break;
+      case 241: /* wbc aug 2019 new <! special characters  here */
+	/* 2mordent twomordent */
+	printf("dvi_f: case 241  %d  %s\n", i, ch);
 	if (skip_spaces) {
 	  p->p_movev(skip_spaces * i_space);
 	  skip_spaces = 0;

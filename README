@@ -508,6 +508,9 @@ of tablature, as the second to tenth character.
 			  otherwise a light slash
 	//		- two slashes
  	///		- three slashes
+	<!tilde>	- the same as the ~ - looks like a sine wave
+	<!2mordent>     - a 2 lobed squiggle 
+	<!3mordent>     - a 3 lobed squiggle 
         1 3 4 5 6 7	- the number for bass string when you 
 			  run out of slashes
 	\1 \2 \3 \4	- left hand fingerings placed

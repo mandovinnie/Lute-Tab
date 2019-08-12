@@ -1296,8 +1296,10 @@ char get_special_ornament(char * str) {
 
   if (!strcmp (str, "tilde"))
     return ('~');
-  if (!strcmp (str, "mordent"))
-    return (240);
+  if (!strcmp (str, "2mordent"))
+    return ((char)240);
+  if (!strcmp (str, "3mordent"))
+    return ((char)241);
   else
     return ('*');
 }
