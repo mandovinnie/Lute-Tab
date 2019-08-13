@@ -1294,16 +1294,22 @@ struct list *l)			/* data */
 	  p->p_movev(skip_spaces * i_space);
 	  skip_spaces = 0;
 	}
+	p->push();
+	p->moveh(-0.097);
 	p->put_a_char (cc);
+	p->pop();
 	break;
       case 241: /* wbc aug 2019 new <! special characters  here */
-	/* 2mordent twomordent */
+	/* 3mordent threemordent */
 	printf("dvi_f: case 241  %d  %s\n", i, ch);
 	if (skip_spaces) {
 	  p->p_movev(skip_spaces * i_space);
 	  skip_spaces = 0;
 	}
+	p->push();
+	p->moveh(-0.1);
 	p->put_a_char (cc);
+	p->pop();
 	break;
       case 229:
 	// baroque, two parallel vertical strokes under

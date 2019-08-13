@@ -44,6 +44,7 @@ void Mstore(i_buf *ib, int *l_p, unsigned char staff[], struct file_info *f);
 void args_from_string(char *buf, struct file_info *f);
 int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[]);
 char get_special_ornament(char * string);
+char read_special_ornament (char *str, int * i, int * skip);
 
 int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 { 
@@ -533,6 +534,12 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		      staff[i] += (buf[i + skip + 1] - '0') * 64;
 		      skip += 3;
 		    }
+		    //		    printf ("-> %s  a -> %d %d\n", buf, i, skip);
+
+		    else if (buf[i + skip] == '<' && buf[i + skip + 1] == '!') {
+		    //  printf("Here %s \n", &buf[i+skip+2]); /* add <! here */
+		      staff[i] = read_special_ornament (buf, &i, &skip);
+		    }
 		    break;
 		case 0xe2:	// this is a three character apple
 		  if (buf[i+1+skip] == (char)0x80) {              // double quote
@@ -580,42 +587,25 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		  }
 		  */
 		case '<':
-		  { // wbc april 2019 check for php header
-		    if (buf[i+skip+1] == '?' && buf[i+skip+2] == 'p' 
+		  // wbc april 2019 check for php header
+		  if (buf[i+skip+1] == '?' && buf[i+skip+2] == 'p' 
 		      && buf[i+skip+3] == 'h' && buf[i+skip+4] == 'p'){
-		      printf("getsys: getsystem: php header\n");
-		      dbg0(Error,
-			   "php header detected, this may not be a valid tab file\n");
-		    }
+		    printf("getsys: getsystem: php header\n");
+		    dbg0(Error,
+			 "php header detected, this may not be a valid tab file\n");
 		  }
-		  { // wbc August 2019 allow <! for extra things >
-		    if (buf[i+skip+1] == '!') {
-		      static char *ebuf;
-		      ebuf = (char *)malloc(32);
-		      char *e = ebuf;
-		      int jj=0;
-		      // printf (" getsys.cc: <!\n");
-		      if  (buf[i+skip+2] == '<') break;
-		      while (skip < 32) {
-			e[jj] = buf[i+skip];
-			skip++;jj++;
-			if (buf[i+skip] == '>') {
-			  e[jj] = 0;
-			  skip++;
-			  break;
-			}
-		      }
-		      e += 2;
-		      printf("ebuf %s\n", e);
-		      ornament[i] = get_special_ornament(e);
-		      free (ebuf);
-		      i--;
-		      break;
-		    }
+		  
+		  // wbc August 2019 allow <! for extra things >
+		  else if (buf[i+skip+1] == '!') {
+		    ornament[i] = read_special_ornament(buf, &i, &skip);
+		    skip++;
+		    i--;
+		    printf("after read call line 607: %s  %d %d %s\n", &buf[i+skip], i, skip, buf );
+		    // break;
 		  }
-		  ornament[i] = buf[i+skip];
-		  skip++;
-		  i--;
+		  else { ornament[i] = buf[i+skip];
+		    skip++;
+		  }
 		  break;
 		case 'Q':
 		case '#':
@@ -1302,4 +1292,32 @@ char get_special_ornament(char * str) {
     return ((char)241);
   else
     return ('*');
+}
+
+char read_special_ornament (char *buf, int *i, int *skip) {
+  static char *ebuf;
+  ebuf = (char *)malloc(32);
+  char *e = ebuf;
+  int jj = 0;
+  char result;
+  
+  while (buf[*i + *skip] && *skip < 32) {
+    e[jj] = buf[*i + *skip];
+    (*skip)++;jj++;
+    if (buf[*i + *skip] == '>') {
+      e[jj] = 0;
+      *skip++;
+      break;
+    }
+  }
+  
+  e += 2;
+  printf("ebuf %s\n", e);
+
+  result = get_special_ornament(e);
+  free (ebuf);
+  // (*i)--;
+  printf("get special: result: %c\n", result);
+  return (result);
+  
 }
