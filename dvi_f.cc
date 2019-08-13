@@ -730,10 +730,11 @@ struct list *l)			/* data */
     p->moveh(-1.0 * last_move);
     p->moveh(0.75 * EM);
     if (baroque && l->prev && l->prev->dat[0] != '2' ) p->moveh(.05);
-    if (f->flags & MARKS) p->put_rule(0.01, 0.17);
+    if (f->flags & MARKS) p->put_rule(0.01, -0.17);
     if (ch[1] != '-') {
       //printf("dvi_f.cc: HERE flag ornament on first line\n"); // wbc sept 2015 adjust ornament
       p->moveh(2 * f_a[0]->fnt->get_width( l->prev->dat[0]));
+      // printf ("HERE dvi_f.cc: line 737  %c\n", ch[1]);
       switch (ch[1]) {
       case '{':
 	// printf ("HERE dvi_f.cc line 721  i is %d\n", i);
@@ -766,7 +767,7 @@ struct list *l)			/* data */
 	p->put_a_char(ch[1]);
 	p->pop();
       }
-    }
+    }  // end ch[1] != '-'
     /* fall through */
   default:                  /* GRIDS and FLAGS HERE*/
     p->push();			/* this is for whole chord */
@@ -1295,7 +1296,8 @@ struct list *l)			/* data */
 	  skip_spaces = 0;
 	}
 	p->push();
-	p->moveh(-0.097);
+	if (ch[0] != '+' && ch[0] != '&')
+	  p->moveh(-0.097);
 	p->put_a_char (cc);
 	p->pop();
 	break;
@@ -1460,7 +1462,8 @@ struct list *l)			/* data */
 	  p->put_a_char(cc);    /* draw number */
 	  p->pop();
 	}
-	else if (cc == '`' || cc == ',') { /* (back) comma on line*/
+	else if (/* cc == '`' || */ cc == ',') { /* (back) comma on line*/
+	  /* wbc aug 2019 removed the ` backquote for a comma */
 	  p->push();
 	  p->moveh("0.7 pt");
 	  p->movev("4.0 pt");
