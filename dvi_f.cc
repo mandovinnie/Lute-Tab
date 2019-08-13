@@ -1289,7 +1289,7 @@ struct list *l)			/* data */
 	break;
       case 240: /* wbc aug 2019 new <! special characters  here */
 	/* 2mordent twomordent */
-	printf("dvi_f: case 240  %d  %s\n", i, ch);
+	// printf("dvi_f: case 240  %d  %s\n", i, ch);
 	if (skip_spaces) {
 	  p->p_movev(skip_spaces * i_space);
 	  skip_spaces = 0;
@@ -1301,7 +1301,7 @@ struct list *l)			/* data */
 	break;
       case 241: /* wbc aug 2019 new <! special characters  here */
 	/* 3mordent threemordent */
-	printf("dvi_f: case 241  %d  %s\n", i, ch);
+	// printf("dvi_f: case 241  %d  %s\n", i, ch);
 	if (skip_spaces) {
 	  p->p_movev(skip_spaces * i_space);
 	  skip_spaces = 0;

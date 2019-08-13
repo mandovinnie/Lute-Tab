@@ -534,8 +534,6 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		      staff[i] += (buf[i + skip + 1] - '0') * 64;
 		      skip += 3;
 		    }
-		    //		    printf ("-> %s  a -> %d %d\n", buf, i, skip);
-
 		    else if (buf[i + skip] == '<' && buf[i + skip + 1] == '!') {
 		    //  printf("Here %s \n", &buf[i+skip+2]); /* add <! here */
 		      staff[i] = read_special_ornament (buf, &i, &skip);
@@ -600,8 +598,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    ornament[i] = read_special_ornament(buf, &i, &skip);
 		    skip++;
 		    i--;
-		    printf("after read call line 607: %s  %d %d %s\n", &buf[i+skip], i, skip, buf );
-		    // break;
+		    // printf("after read call line 607: %s  %d %d %s\n", &buf[i+skip], i, skip, buf );
 		  }
 		  else { ornament[i] = buf[i+skip];
 		    skip++;
@@ -1282,7 +1279,7 @@ do_music(i_buf *ib, unsigned char staff[], char buf[], int *l_p, int *skip,
 
 
 char get_special_ornament(char * str) {
-  printf("getsys.cc: get_special_ornament: %s\n", str);
+  // printf("getsys.cc: get_special_ornament: %s\n", str);
 
   if (!strcmp (str, "tilde"))
     return ('~');
@@ -1312,12 +1309,12 @@ char read_special_ornament (char *buf, int *i, int *skip) {
   }
   
   e += 2;
-  printf("ebuf %s\n", e);
+  // printf("ebuf %s\n", e);
 
   result = get_special_ornament(e);
   free (ebuf);
   // (*i)--;
-  printf("get special: result: %c\n", result);
+  // printf("get special: result: %c\n", result);
   return (result);
   
 }
