@@ -733,8 +733,12 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    else
 		      skip -= 1;
 		  }
-
-		  if (cc == '\n') {
+		  else if (cc == '<' && buf[i + (skip += 3) == '!']) {
+		    printf("HERE getsys.cc 737 \n");
+		    skip -= 3;
+		    cc = read_special_ornament (buf, &i, &skip);
+		  }
+		  else if (cc == '\n') {
 		    dbg2(Warning, 
        	 "tab: getsystem: & with no character after it line %d sys %d\n",
 			 (void*)cur_line,
@@ -1279,7 +1283,7 @@ do_music(i_buf *ib, unsigned char staff[], char buf[], int *l_p, int *skip,
 
 
 char get_special_ornament(char * str) {
-  // printf("getsys.cc: get_special_ornament: %s\n", str);
+   printf("getsys.cc: get_special_ornament: %s\n", str);
 
   if (!strcmp (str, "tilde"))
     return ('~');
