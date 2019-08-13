@@ -1283,7 +1283,7 @@ do_music(i_buf *ib, unsigned char staff[], char buf[], int *l_p, int *skip,
 
 
 char get_special_ornament(char * str) {
-   printf("getsys.cc: get_special_ornament: %s\n", str);
+  //   printf("getsys.cc: get_special_ornament: %s\n", str);
 
   if (!strcmp (str, "tilde"))
     return ('~');
