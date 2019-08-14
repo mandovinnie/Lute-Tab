@@ -1481,9 +1481,9 @@ struct list *l)			/* data */
 	    if (l->next &&
 		     (l->next->dat[i] == 'D'
 		      || l->next->dat[i-1] == 'D'
-		      || l->next->dat[i-2] == 'D' )) p->moveh(0.27);
+		      || l->next->dat[i-2] == 'D' )) p->moveh(0.05);
 	    else if (l->next && l->next->dat[i] == 'E') {
-	      p->moveh(.21);
+	      p->moveh(.04); /* was .21 */
 	      if  (l->next && l->next->dat[i+1] == ' ') p->movev(0.06);
 	    }
 	    else if (l->next && l->next->dat[i] == ' ')

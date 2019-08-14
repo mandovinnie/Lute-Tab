@@ -227,6 +227,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       break;
     case '+':		/* ornaments */
       l->padding = str_to_inch(min_O_w);
+      // printf("pass1: + initial padding %f\n", l->padding);
       // printf("pass1.cc: HERE 0 %f\n", l->padding);
       if (strchr("Yy", l->next->dat[0])) 
 	l->padding = 0.01 /* str_to_inch(min_d_w) */;
@@ -248,31 +249,15 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  //			printf ("tab: pass1: %s\n", l->dat); 
 	}
       }
-// wbc July 2019  an x before an E baroque overlaps
-//      {
-//	int found_wide_letter = 0;
-//	for (ii = 2; ii < 8; ii++) {
-//	  if (
-//	      (l->next && l->next->dat[ii] == 'E' )
-//	      || (l->next && l->next->dat[ii] == 'D' )
-//	      )
-//	    {
-//	      // printf("pass1.cc: HERE 2 %f\n", l->padding);
-//	      // this should match line 1341 and 1721 in dvi_f.cc
-//	      if (found_wide_letter == 0 ) {
-//		//		l->padding += 0.18; // x before note  was 0.2
-//		printf("pass1.cc found wide letter, increasing padding\n");
-//	      }
-//	      found_wide_letter = 1;
-//	      //  break;
-//	    }
-//	}
-//     }
+      // printf("pass1: + inter padding %f\n", l->padding);
+
+      // this is about ornaments before the notes
+      
       {
 	int Q_found=0;
 	int orn_found=0;
 	int found_wide_letter = 0;
-	for (i = 2; i < STAFF; i++ ) {
+	for (i = 2; i < STAFF; i++ ) {  // was for i=2; 
 	  if (d[i] == 'Q') 
 	    Q_found=1;
 	  if (d[i] != ' ')
@@ -283,13 +268,15 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  if (d[i] != ' ' && d[i] != 'Q') {
 	    if ( d[i] == 'x' ) {
 	      if (found_wide_letter) {
+		// printf("pass1.c: adding to padding 1 \n");
 		l->padding += 0.019;
 		break;
 	      }
 	    }
 	    else {
 	      if (found_wide_letter) {
-		l->padding += b_d_pad + 0.18; /* 0.18 see above */
+		l->padding += b_d_pad /* + 0.18 */; /* 0.18 see above */
+		// printf("adding to padding 2 padding %f  b_d_pad %f\n", l->padding, b_d_pad);
 		break;
 	      }
 	    }
@@ -300,13 +287,14 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	}
 	if (!orn_found && Q_found) l->padding = 0.0;
       }
+    DONE:
       weight = W_NONE;
       if (f->m_flags & NOSPACEBEFORE ) {
 	l->padding = 0;
 	l->padding = 0.10;
 	l->prev->padding -= 0.10;
       }
-      // printf("pass1: padding %f\n", l->padding);
+      //printf("pass1: + final padding %f\n", l->padding);
       break;
     case ':':		/* ornaments above the note */
       l->padding = 0;
