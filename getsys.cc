@@ -567,6 +567,10 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 			skip++;
 		      }
 		    }
+		    else if (buf[i + skip] == '<' && buf[i + skip + 1] == '!') {
+		    //  printf("Here %s \n", &buf[i+skip+2]); /* add <! here */
+		      ornament[i] = read_special_ornament (buf, &i, &skip);
+		    }
 		    else if (ornament[i] == '\n') {
 		      dbg0 (Warning,
 			    "tab: getsys: double quote with no following character at end of line\n");

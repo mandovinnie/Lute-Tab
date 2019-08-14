@@ -1309,7 +1309,8 @@ struct list *l)			/* data */
 	  skip_spaces = 0;
 	}
 	p->push();
-	p->moveh(-0.1);
+	if (ch[0] != '+' && ch[0] != '&')
+	  p->moveh(-0.1);
 	p->put_a_char (cc);
 	p->pop();
 	break;
