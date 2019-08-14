@@ -249,33 +249,53 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	}
       }
 // wbc July 2019  an x before an E baroque overlaps
-      for (ii = 2; ii < 8; ii++) {
-	if (
-	    (l->next && l->next->dat[ii] == 'E' )
-	    || (l->next && l->next->dat[ii] == 'D' )
-	  )
-	  {
-	  // printf("pass1.cc: HERE 2 %f\n", l->padding);
-	  // this should match line 1341 and 1721 in dvi_f.cc
-	  l->padding += 0.18; // x before note  was 0.2
-	  break;
-	}
-      }
+//      {
+//	int found_wide_letter = 0;
+//	for (ii = 2; ii < 8; ii++) {
+//	  if (
+//	      (l->next && l->next->dat[ii] == 'E' )
+//	      || (l->next && l->next->dat[ii] == 'D' )
+//	      )
+//	    {
+//	      // printf("pass1.cc: HERE 2 %f\n", l->padding);
+//	      // this should match line 1341 and 1721 in dvi_f.cc
+//	      if (found_wide_letter == 0 ) {
+//		//		l->padding += 0.18; // x before note  was 0.2
+//		printf("pass1.cc found wide letter, increasing padding\n");
+//	      }
+//	      found_wide_letter = 1;
+//	      //  break;
+//	    }
+//	}
+//     }
       {
 	int Q_found=0;
 	int orn_found=0;
+	int found_wide_letter = 0;
 	for (i = 2; i < STAFF; i++ ) {
 	  if (d[i] == 'Q') 
 	    Q_found=1;
 	  if (d[i] != ' ')
 	    orn_found=1;
-	  if (d[i] != ' ' && d[i] != 'Q' 
-	      && l->next->dat[i] == 'D') {
-	    if ( d[i] == 'x' ) 
-	      l->padding += 0.019; 
-	    else
-	      l->padding += b_d_pad;
-	    break;
+	  if ( l->next->dat[i] == 'D' || l->next->dat[i] == 'E') {
+	    found_wide_letter = l->next->dat[i];
+	  }
+	  if (d[i] != ' ' && d[i] != 'Q') {
+	    if ( d[i] == 'x' ) {
+	      if (found_wide_letter) {
+		l->padding += 0.019;
+		break;
+	      }
+	    }
+	    else {
+	      if (found_wide_letter) {
+		l->padding += b_d_pad + 0.18; /* 0.18 see above */
+		break;
+	      }
+	    }
+	    printf(" b_d_pad:  %f\n", b_d_pad);
+	    // found_wide_letter = 1;
+	    // break;
 	  }
 	}
 	if (!orn_found && Q_found) l->padding = 0.0;
