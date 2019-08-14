@@ -293,7 +293,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 		break;
 	      }
 	    }
-	    printf(" b_d_pad:  %f\n", b_d_pad);
+	    // printf(" b_d_pad:  %f\n", b_d_pad);
 	    // found_wide_letter = 1;
 	    // break;
 	  }
