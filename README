@@ -460,7 +460,7 @@ of tablature, as the second to tenth character.
 			  $ makes four small dots in a rectangle
 			  < makes a short horizontal lain - a dash
 		'	- a comma above the line
-		`	- a comma on the line
+		,	- a comma on the line
 		Q	- character is highlighted
 	%		- two dots (colon )preceeding next note
 	?		- a flat

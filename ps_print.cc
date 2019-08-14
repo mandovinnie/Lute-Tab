@@ -1383,7 +1383,7 @@ void bit_char(i_buf *ps, int char_num, int sixh)
     ps->Put10(char_num);
     ps->PutString(" {");  // char_name);
  
-    if (char_num == 81 && sixh ) {    /* vector char 0121 */    
+    if (char_num == 81 && sixh ) {    /* vector char 0121 81 decimal */    
 /* at 600 dpi scaled this character seems to be 331 412 */
 /* these dimensions are scaled -R9 */
 /*      ps->Put10(b->bm_w); ps->Put10(b->bm_h); */

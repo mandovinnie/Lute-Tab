@@ -1477,11 +1477,15 @@ struct list *l)			/* data */
 	  p->movev(-.025);
 	  if (baroque) {
 	    p->moveh(-.06);
+	    // printf ("under smile %c - \n", l->next->dat[i]);
 	    if (l->next->dat[i] == ' ')
 	      p->movev(-.02); /* wbc July july 2019 fix up the underbar */
-	    else if (l->next->dat[i] == 'D') p->moveh(.096);
-	    else if (l->next->dat[i] == 'e') { p->moveh(.036); p->movev(.026);}
-	    if (i > 2 && l->next && l->next->dat[i-1] == 'D') p->movev(-0.094);
+	    else if (l->next->dat[i] == 'D') p->moveh(0.27);
+	    else if (l->next->dat[i] == 'E') {
+	      p->moveh(.17);
+	      if  (l->next && l->next->dat[i+1] == ' ') p->movev(0.06);
+	    }
+	    // if (i > 2 && l->next && l->next->dat[i-1] == 'D') p->movev(-0.094);
 	  }
 	  if (f->line_flag == ON_LINE)
 	    p->movev(0.5 * d_i_space);
