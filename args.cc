@@ -512,6 +512,11 @@ void set_count_dots(const char *value, struct file_info *f)
   f->m_flags |=COUNT_DOTS;
 }
 
+void show_usage()
+{
+  dbg0(Warning, "Usage: tab [options] tab_file\n");
+}
+
 void args(int argc, char ** argv, struct file_info *f)
 {
     char *aa=0;
@@ -637,16 +642,17 @@ void args(int argc, char ** argv, struct file_info *f)
 	    r = (void(*)(const char*, file_info*))at.get(*argv);
 	    
 	    if (r) {
-	      aa = argv[1];
-	           (*r)(aa, f);
-	      //   setit(r, aa, f);
-	    }
-	    else {
-	      aa = argv[0];
-	      dbg1(Warning, "tab: args: unknown flag %s\n", (void*)aa);
-	    }
+            aa = argv[1];
+            (*r)(aa, f);
+            // setit(r, aa, f);
+        }
+        else {
+            aa = argv[0];
+            show_usage();
+            dbg1(Error, "tab: args: unknown flag %s\n", (void*)aa);
+        }
 
-	    //swallow argument values here
+	    // swallow argument values here
 
 	    switch (argv[0][0]){
 	    case 't':
@@ -655,7 +661,7 @@ void args(int argc, char ** argv, struct file_info *f)
 	      else {
 		*argv++;
 		argc--;
-		break;		
+		break;
 	      }
 	    case 'd':
 	      if ( strncmp(argv[0], "debug", 5 ))
@@ -663,7 +669,7 @@ void args(int argc, char ** argv, struct file_info *f)
 	      else {
 		*argv++;
 		argc--;
-		break;		
+		break;
 	      }
 	    case 'f':
 	      if ( strncmp(argv[0], "font", 4 ))
@@ -671,7 +677,7 @@ void args(int argc, char ** argv, struct file_info *f)
 	      else {
 		*argv++;
 		argc--;
-		break;		
+		break;
 	      }
 	    case 'a':
 	      if ( argv[0][1] != 'f') break;
@@ -699,23 +705,28 @@ void args(int argc, char ** argv, struct file_info *f)
 	  //	  dbg1(Warning, "tab: $ parameters not allowed on command line: %s\n", 
 	  //       *argv);
 	  *argv++;
-	  argc--;	}
+	  argc--;
+    }
 	/* assume what is left is filename */
-	else {			/* not - */
-	    strcpy (f->file, *argv);
+    else {      /* not - */
+        strcpy (f->file, *argv);
 #ifdef WIN32
-	    if (!strstr(f->file, ".")) {
+        if (!strstr(f->file, ".")) {
 #else
-	    if (!strstr(f->file, ".tab")) {
+        if (!strstr(f->file, ".tab")) {
 #endif /* WIN32 */
-		strcat (f->file, ".tab");
-	    }
-	    if ( ! (f->m_flags & QUIET))
-	      dbg1 (Warning, "setting filename to %s\n", f->file);
-	    *argv++;
-	    argc--;
-	}
-    } 
+            strcat (f->file, ".tab");
+        }
+        if ( ! (f->m_flags & QUIET))
+            dbg1(Warning, "setting filename to %s\n", f->file);
+        *argv++;
+        argc--;
+    }
+    }
+    if  (strlen(f->file) == 0) {
+        show_usage();
+        dbg1(Error, "tab: No file name given.\n", f->file);
+    }
 }
 
 #define ARG_LEN 120
@@ -774,7 +785,7 @@ void args_from_string(char *buf, struct file_info *f)
 
     memset(&argv[i], 0, ARG_LEN - i);
     for (j=argc; j < N_ARGS; j++ ) {
-	argp[j]=0;
+        argp[j]=0;
     }
     args(argc, argp, f);
 

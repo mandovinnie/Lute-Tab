@@ -344,7 +344,6 @@ int main(int argc, char **argv)
     struct file_info f;
     int i;
 
-
     for (i=0; i < FONT_NAMES; i++) f.font_names[i] = 0;
     
     init(&f);

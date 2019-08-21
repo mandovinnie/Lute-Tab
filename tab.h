@@ -1,3 +1,6 @@
+#ifndef TAB_H_INCLUDED
+#define TAB_H_INCLUDED
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -256,3 +259,5 @@ struct list {
  #define DPI360			0x40000000
  /* variables defined in sizes.c */
 
+
+#endif // TAB_H_INCLUDED

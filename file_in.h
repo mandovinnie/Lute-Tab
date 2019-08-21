@@ -2,6 +2,9 @@
 //  to input a file to memory, and hand out a byte at a time
 //
 
+#ifndef FILE_IN_H_INCLUDED
+#define FILE_IN_H_INCLUDED
+
 #include "buffer.h"
 
 class file_in : public buffer {
@@ -23,3 +26,5 @@ class file_in : public buffer {
     int Seek(const long offset, const int how);
 };
 
+
+#endif // FILE_IN_H_INCLUDED
