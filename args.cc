@@ -1,7 +1,7 @@
 /*
    This program is copyright 1991 by Wayne Cripps,
    P.O. Box 677 Hanover N.H. 03755.
-   All rights reserved.  It is supplied "as is" 
+   All rights reserved.  It is supplied "as is"
    without express or implied warranty.
 
    Permission is granted to use, copy, modify and distribute
@@ -35,20 +35,24 @@ extern int title_font, text_font;
 char *get_real_name(const char *short_name, int dump);
 int setflag(file_info *f, char * string, pass pass);
 
-void set_font_flag(const char *value, struct file_info *f) 
+void show_usage()
 {
-  // vals 1 2 3 4 
+  dbg0(Warning, "Usage:  tab [options] tab_file\n");
+}
+void set_font_flag(const char *value, struct file_info *f)
+{
+  // vals 1 2 3 4
   // this used to swap between italic and text
 }
 void set_C(const char *value, struct file_info *f) {  bar_count++; }
 void set_c(const char *value, struct file_info *f) {  barCount++; }
-void set_CC(const char *value, struct file_info *f) {  
-  barCCount++; 
+void set_CC(const char *value, struct file_info *f) {
+  barCCount++;
 }
-void set_b(const char *value, struct file_info *f) {  
+void set_b(const char *value, struct file_info *f) {
   if (thin_renaissance)
     dbg0(Error, "Args.cc: You can't use both -thin and -b at the same time \n");
-  baroque++; 
+  baroque++;
 }
 void set_d(const char *value, struct file_info *f) {
   if (! strncmp(value, "File", 4)) {
@@ -99,66 +103,66 @@ void set_d(const char *value, struct file_info *f) {
     dbg0(Warning, "Setting debug to Widths\n");
     dbg_set(Widths);
   }
-  f->flags |= DEBUG; 
+  f->flags |= DEBUG;
 }
-void set_B(const char *value, struct file_info *f) { 
+void set_B(const char *value, struct file_info *f) {
   f->line_flag = BETWEEN_LINE;
-  f->flag_flag = BOARD_FLAGS;	
+  f->flag_flag = BOARD_FLAGS;
   f->char_flag = BOARD_CHAR;
   f->num_flag  = STAND_NUM;
   f->note_conv = 0;
   f->note_flag = ITAL_NOTES;}
-void set_D(const char *value, struct file_info *f) { 
+void set_D(const char *value, struct file_info *f) {
   f->line_flag = BETWEEN_LINE;
-  f->flag_flag = THIN_FLAGS;	
+  f->flag_flag = THIN_FLAGS;
   f->char_flag = STAND_CHAR;
   f->num_flag  = STAND_NUM;
   f->note_conv = 0;
   f->note_flag = ITAL_NOTES;}
 void set_e(const char *value, struct file_info *f) {  f->flags |= ROTATE; }
 void set_E(const char *value, struct file_info *f) {  f->flags |= DRAFT; }
-void set_ff(const char *value, struct file_info *f) { 
+void set_ff(const char *value, struct file_info *f) {
   f->flag_flag = STAND_FLAGS; }
-void set_fc(const char *value, struct file_info *f) { 
+void set_fc(const char *value, struct file_info *f) {
   f->char_flag = STAND_CHAR;}
-void set_f(const char *value, struct file_info *f) { 
+void set_f(const char *value, struct file_info *f) {
   f->line_flag = BETWEEN_LINE;
   f->flag_flag = STAND_FLAGS;
   f->char_flag = STAND_CHAR;
   f->num_flag  = STAND_NUM;
   f->note_flag = ITAL_NOTES;}
-void set_F(const char *value, struct file_info *f) { 
-  f->line_flag = BETWEEN_LINE;	
+void set_F(const char *value, struct file_info *f) {
+  f->line_flag = BETWEEN_LINE;
   f->flag_flag = CONTEMP_FLAGS;
   f->char_flag = STAND_CHAR;
   f->num_flag  = STAND_NUM;
   f->note_flag = ITAL_NOTES;}
-void set_G(const char *value, struct file_info *f) 
+void set_G(const char *value, struct file_info *f)
 { f->flags |= COPYRIGHT;}
-void set_h(const char *value, struct file_info *f) { 
+void set_h(const char *value, struct file_info *f) {
   if ( f->flags & CONVERT ) f->flags &= ~CONVERT;
   else f->flags |= CONVERT;
   f->num_flag = ITAL_NUM;
   f->note_flag = ITAL_NOTES;
   f->flag_flag = S_ITAL_FLAGS;}
-void set_H(const char *value, struct file_info *f) { 
+void set_H(const char *value, struct file_info *f) {
   if ( f->flags & CON_SEV) f->flags &= ~CON_SEV;
   else f->flags |= CON_SEV;
   set_h(value, f);}
-void set_i(const char *value, struct file_info *f) {   
-  if (f->flags & MANUSCRIPT) { 
+void set_i(const char *value, struct file_info *f) {
+  if (f->flags & MANUSCRIPT) {
     f->line_flag = BETWEEN_LINE;
   }
-  else if ( f->flags & CONVERT) { 
+  else if ( f->flags & CONVERT) {
     if (f->line_flag == ON_LINE )
       f->line_flag = BETWEEN_LINE;
-    else 
+    else
       f->line_flag = ON_LINE;
   }
-  else 
+  else
     f->line_flag = ON_LINE;
-  if (!baroque) 
-      f->flag_flag = S_ITAL_FLAGS;
+  if (!baroque)
+    f->flag_flag = S_ITAL_FLAGS;
   f->char_flag = STAND_CHAR;
   f->num_flag = ITAL_NUM;
   f->note_flag = ITAL_NOTES;}
@@ -185,37 +189,37 @@ void set_s(const char *value, struct file_info *f) { f->flags |= CON_SEV;}
 void set_T(const char *value, struct file_info *f) {
   // f->line_flag = BETWEEN_LINE;
   f->flag_flag = THIN_FLAGS;
-//  f->char_flag = STAND_CHAR;
-//  f->num_flag = STAND_NUM;
-//  f->note_flag = ITAL_NOTES;}
+  //  f->char_flag = STAND_CHAR;
+  //  f->num_flag = STAND_NUM;
+  //  f->note_flag = ITAL_NOTES;}
 }
 void set_w(const char *value, struct file_info *f) {
   f->line_flag = ON_LINE;
-  f->flag_flag = S_ITAL_FLAGS; 
-  f->char_flag = STAND_CHAR; 
-  f->num_flag = ITAL_NUM; 
-  f->note_flag = ITAL_NOTES; 
-  f->flags |= WALLACE; 
-  f->flags |= NO_MUSIC_B; 
-  f->flags |= BIGNOTES; 
+  f->flag_flag = S_ITAL_FLAGS;
+  f->char_flag = STAND_CHAR;
+  f->num_flag = ITAL_NUM;
+  f->note_flag = ITAL_NOTES;
+  f->flags |= WALLACE;
+  f->flags |= NO_MUSIC_B;
+  f->flags |= BIGNOTES;
   f->flags |= ROTATE;
   f->flags |= SHARP_UP;
   f->note_conv = 0;}
 void set_Z(const char *value, struct file_info *f) {
   f->line_flag = ON_LINE;
-  f->flag_flag = S_ITAL_FLAGS; 
+  f->flag_flag = S_ITAL_FLAGS;
   f->char_flag = STAND_CHAR;
   f->note_flag = ITAL_NOTES;
-  f->num_flag = ITAL_NUM; 
-  f->flags |= NO_MUSIC_B; 
-  f->flags |= BIGNOTES; 
+  f->num_flag = ITAL_NUM;
+  f->flags |= NO_MUSIC_B;
+  f->flags |= BIGNOTES;
   f->note_conv = 0;}
 void set_j(const char *value, struct file_info *f) { f->flags |= CONV_COR;}
 void set_m(const char *value, struct file_info *f) { f->flags |= MANUSCRIPT;}
 void set_M(const char *value, struct file_info *f) { f->flags |= MARKS;}
-void set_n(const char *value, struct file_info *f) { 
+void set_n(const char *value, struct file_info *f) {
   f->char_flag = MACE_CHAR; }
-void set_N(const char *value, struct file_info *f) { 
+void set_N(const char *value, struct file_info *f) {
   f->char_flag = ROB_CHAR;}
 void set_p(const char *value, struct file_info *f) { f->flags |= PAGENUM;}
 void set_P(const char *value, struct file_info *f) {
@@ -265,13 +269,13 @@ void set_wide(const char *value, struct file_info *f) {
 }
 void set_W(const char *value, struct file_info *f) {
   f->line_flag = BETWEEN_LINE;
-  f->flag_flag = S_ITAL_FLAGS; 
-  f->char_flag = STAND_CHAR; 
-  f->num_flag = ITAL_NUM; 
-  f->note_flag = ITAL_NOTES; 
-  f->flags |= WALLACE; 
-  f->flags |= NO_MUSIC_B; 
-  f->flags |= BIGNOTES; 
+  f->flag_flag = S_ITAL_FLAGS;
+  f->char_flag = STAND_CHAR;
+  f->num_flag = ITAL_NUM;
+  f->note_flag = ITAL_NOTES;
+  f->flags |= WALLACE;
+  f->flags |= NO_MUSIC_B;
+  f->flags |= BIGNOTES;
   f->flags |= ROTATE;
   f->flags |= SHARP_UP;
   f->flags |= CONVERT;
@@ -280,10 +284,10 @@ void set_X(const char *value, struct file_info *f) { f->flags |= NO_EXPAND;}
 void set_Y(const char *value, struct file_info *f) { f->flags |= NO_WORD;}
 void set_y(const char *value, struct file_info *f) {}
 void set_z(const char *value, struct file_info *f) {}
-void set_4(const char *value, struct file_info *f) { 
-    f->flags |= FOUR;}
+void set_4(const char *value, struct file_info *f) {
+  f->flags |= FOUR;}
 void set_5(const char *value, struct file_info *f) { f->flags |= FIVE;}
-void set_0(const char *value, struct file_info *f) { 
+void set_0(const char *value, struct file_info *f) {
   f->flags &= ~FOUR;
   f->flags &= ~FIVE;}
 void set_l(const char *value, struct file_info *f) {
@@ -323,7 +327,7 @@ void set_o(const char *value, struct file_info *f)  {
   if (f->m_flags & SOUND ) {
     strncat (f->out_file, ".mid ", 4);
   }
-  else if (f->flags & PS ) { 
+  else if (f->flags & PS ) {
     if ( strcmp (f->out_file, "stdout")) {
       strncat (f->out_file, ".ps ", 3);
     }
@@ -331,12 +335,12 @@ void set_o(const char *value, struct file_info *f)  {
 #endif /* NO_STDOUT */
   else strncat (f->out_file, ".dvi ", 4);
   if ( ! (f->m_flags & QUIET)) {
-      dbg1 (Warning, "tab: sending output to %s\n", (void *)f->out_file);
+    dbg1 (Warning, "tab: sending output to %s\n", (void *)f->out_file);
   }
 #endif /* MAC */
 }
 
-void set_tuning(const char *value, struct file_info *f)  { 
+void set_tuning(const char *value, struct file_info *f)  {
   extern char *arg_str;
   // dbg1(Warning, "in set_tuning %s\n", (void *) value);
   arg_str=(char *)malloc(strlen(value)+1);
@@ -345,101 +349,101 @@ void set_tuning(const char *value, struct file_info *f)  {
 
 void set_sharp_up(const char *value, struct file_info *f)
 {
-   f->flags |= SHARP_UP;
+  f->flags |= SHARP_UP;
 }
 
 void set_sharp_normal(const char *value, struct file_info *f)
 {
-   f->flags &= ~SHARP_UP;
+  f->flags &= ~SHARP_UP;
 }
 
 void set_highlight_paren(const char *value, struct file_info *f)
 {
-	f->m_flags |= PAREN;
+  f->m_flags |= PAREN;
 }
 
 void set_highlight_red(const char *value, struct file_info *f)
 {
-	f->m_flags |= RED;
+  f->m_flags |= RED;
 }
 
 void set_sound(const char *value, struct file_info *f)
 {
-	f->m_flags |= SOUND;
-	f->flags |= MANUSCRIPT;
-	f->m_flags |= QUIET;
+  f->m_flags |= SOUND;
+  f->flags |= MANUSCRIPT;
+  f->m_flags |= QUIET;
 #ifndef NO_STDOUT
-	strncat (f->out_file, "stdout ", 6);	//  was /dev/null
+  strncat (f->out_file, "stdout ", 6);	//  was /dev/null
 #endif
 }
 
 void set_alttitle(const char *value, struct file_info *f)
 {
   //        printf("args: setting alt title\n");
-	f->m_flags |= ALTTITLE;
+  f->m_flags |= ALTTITLE;
 }
 void set_alttitle_off(const char *value, struct file_info *f)
 {
   //        printf("args: turning off alt title\n");
-	f->m_flags &= ~ALTTITLE;
+  f->m_flags &= ~ALTTITLE;
 }
 void set_a4(const char *value, struct file_info *f)
 {
-	f->m_flags |= A4;
+  f->m_flags |= A4;
 }
 void set_nobox(const char *value, struct file_info *f)
 {
-	f->m_flags |= NOBOX;
+  f->m_flags |= NOBOX;
 }
 void set_sItalNotes(const char *value, struct file_info *f)
 {
-        f->flag_flag = S_ITAL_FLAGS;   
+  f->flag_flag = S_ITAL_FLAGS;
 }
 void set_italFlags(const char *value, struct file_info *f)
 {
-        f->note_flag = ITAL_NOTES; 
+  f->note_flag = ITAL_NOTES;
 }
 
 void set_twostaff(const char *value, struct file_info *f)
 {
-        f->m_flags |= TWOSTAFF; 
+  f->m_flags |= TWOSTAFF;
 }
 
 void set_longbar(const char *value, struct file_info *f)
 {
-        f->m_flags |= LONGBAR; 
+  f->m_flags |= LONGBAR;
 }
 void set_comp_staff(const char *value, struct file_info *f)
 {
-        strcpy(interspace, "9.0 pt");
-	m_space = 0.068;
+  strcpy(interspace, "9.0 pt");
+  m_space = 0.068;
 }
 void set_autoKey(const char *value, struct file_info *f)
 {
-        f->m_flags |= AUTOKEY;
+  f->m_flags |= AUTOKEY;
 }
 void set_allDsup(const char *value, struct file_info *f)
 {
-        f->m_flags |= DSUP;
-	f->m_flags &= ~DSDOWN;
+  f->m_flags |= DSUP;
+  f->m_flags &= ~DSDOWN;
 }
 void set_allDsdown(const char *value, struct file_info *f)
 {
-        f->m_flags |= DSDOWN;
-	f->m_flags &= ~DSUP;
+  f->m_flags |= DSDOWN;
+  f->m_flags &= ~DSUP;
 }
 void set_ModNotes(const char *value, struct file_info *f)
 {
-        f->note_flag |= MOD_NOTES;
+  f->note_flag |= MOD_NOTES;
 }
 void set_EPSF(const char *value, struct file_info *f)
 {
-        f->m_flags |= EPSF;
+  f->m_flags |= EPSF;
 }
 
 void set_ascii(const char *value, struct file_info *f)
 {
-        f->m_flags |= ASCII;
+  f->m_flags |= ASCII;
 }
 void set_fontpath(const char *value, struct file_info *f)
 {
@@ -450,21 +454,21 @@ void set_fontpath(const char *value, struct file_info *f)
 }
 void set_milan(const char *value, struct file_info *f)
 {
-        f->m_flags |= MILAN;
+  f->m_flags |= MILAN;
 }
 void set_nmidi(const char *value, struct file_info *f)
 {
-        f->m_flags |= NMIDI;
-	f->m_flags |= QUIET;
+  f->m_flags |= NMIDI;
+  f->m_flags |= QUIET;
 }
 void set_amidi_patch(const char *value, struct file_info *f)
 {
-        f->midi_patch = atoi(value);
+  f->midi_patch = atoi(value);
 }
 void set_guitar(const char *value, struct file_info *f)
 {
-        f->m_flags |= GUIT;
-	f->flags |= MANUSCRIPT;
+  f->m_flags |= GUIT;
+  f->flags |= MANUSCRIPT;
 }
 
 void set_line_thickness(const char *value, struct file_info *f)
@@ -476,11 +480,11 @@ void set_thin_font(const char *value, struct file_info *f)
 {
   if (baroque)
     dbg0(Error, "Args.cc: You can't use both -thin and -b at the same time \n");
-  thin_renaissance=1;     
+  thin_renaissance=1;
 }
 void set_tfmdump(const char *value, struct file_info *f)
 {
-	dbg_set(TFM);
+  dbg_set(TFM);
 }
 void set_twelvedots(const char *value, struct file_info *f)
 {
@@ -514,224 +518,228 @@ void set_count_dots(const char *value, struct file_info *f)
 
 void args(int argc, char ** argv, struct file_info *f)
 {
-    char *aa=0;
-    //    void (*r) (const char *, struct file_info *f);
-    void (*r)(const char *, struct file_info *);
+  char *aa=0;
+  //    void (*r) (const char *, struct file_info *f);
+  void (*r)(const char *, struct file_info *);
+  
+  struct tuple arglist[] = {
+			    {(char*)"af", (void*)set_font_flag},
+			    {(char*)"C", (void*)set_C},
+			    {(char*)"c", (void*)set_c},
+			    {(char*)"CC", (void*)set_CC},
+			    {(char*)"b", (void*)set_b},
+			    {(char*)"B", (void*)set_B},
+			    {(char*)"D", (void*)set_D},
+			    {(char*)"debug", (void*)set_d},
+			    {(char*)"e", (void*)set_e},
+			    {(char*)"E", (void*)set_E},
+			    {(char*)"f", (void*)set_f},
+			    {(char*)"fc", (void*)set_fc},
+			    {(char*)"ff", (void*)set_ff},
+			    {(char*)"F", (void*)set_F},
+			    {(char*)"G", (void*)set_G},
+			    {(char*)"H", (void*)set_H},
+			    {(char*)"h", (void*)set_h},
+			    {(char*)"i", (void*)set_i},
+			    {(char*)"I", (void*)set_I},
+			    {(char*)"K", (void*)set_K},
+			    {(char*)"x", (void*)set_x},
+			    {(char*)"O", (void*)set_O},
+			    {(char*)"s", (void*)set_s},
+			    {(char*)"T", (void*)set_T},
+			    {(char*)"w", (void*)set_w},
+			    {(char*)"Z", (void*)set_Z},
+			    {(char*)"j", (void*)set_j},
+			    {(char*)"l", (void*)set_l},
+			    {(char*)"m", (void*)set_m},
+			    {(char*)"M", (void*)set_M},     //not used
+			    {(char*)"0", (void*)set_0},
+			    {(char*)"2", (void*)set_2},
+			    {(char*)"1200", (void*)set_2},
+			    {(char*)"2400", (void*)set_24},
+			    {(char*)"300", (void*)set_300},
+			    {(char*)"360", (void*)set_360},
+			    {(char*)"4", (void*)set_4},
+			    {(char*)"5", (void*)set_5},
+			    {(char*)"6", (void*)set_6},
+			    {(char*)"600", (void*)set_6},
+			    {(char*)"7", (void*)set_7},
+			    {(char*)"N", (void*)set_N},
+			    {(char*)"P", (void*)set_P},
+			    {(char*)"dvi", (void*)set_dvi},
+			    {(char*)"pdf", (void*)set_pdf},
+			    {(char*)"Q", (void*)set_Q},
+			    {(char*)"R7", (void*)set_R7},
+			    {(char*)"R8", (void*)set_R8},
+			    {(char*)"R8.5", (void*)set_R8},
+			    {(char*)"R9", (void*)set_R9},
+			    {(char*)"R95", (void*)set_R95},
+			    {(char*)"R9.5", (void*)set_R95},
+			    {(char*)"S", (void*)set_S},
+			    {(char*)"V", (void*)set_V},
+			    {(char*)"W", (void*)set_W},
+			    {(char*)"X", (void*)set_X},
+			    {(char*)"Y", (void*)set_Y},
+			    {(char*)"listfonts", (void*)set_listfonts},
+			    {(char*)"n", (void*)set_n},
+			    {(char*)"o", (void*)set_o},
+			    {(char*)"p", (void*)set_p},
+			    {(char*)"q", (void*)set_q},
+			    {(char*)"r", (void*)set_r},
+			    {(char*)"t", (void*)set_t},
+			    {(char*)"v", (void*)set_v},
+			    {(char*)"y", (void*)set_y},
+			    {(char*)"z", (void*)set_z},
+			    {(char*)"tuning", (void*)set_tuning},
+			    {(char*)"sharpUp",    (void*)set_sharp_up},
+			    {(char*)"sharpNorm",    (void*)set_sharp_normal},
+			    {(char*)"highlightparen", (void*)set_highlight_paren},
+			    {(char*)"highlightred", (void*)set_highlight_red},
+			    {(char*)"sound", (void*)set_sound},
+			    {(char*)"midi", (void*)set_sound},
+			    {(char*)"alttitle", (void*)set_alttitle},
+			    {(char*)"alttitle-off", (void*)set_alttitle_off},
+			    {(char*)"a4", (void*)set_a4},
+			    {(char*)"nobox", (void*)set_nobox},
+			    {(char*)"sItalNotes", (void*)set_sItalNotes},
+			    {(char*)"italFlags", (void*)set_italFlags},
+			    {(char*)"twostaff", (void*)set_twostaff},
+			    {(char*)"longbar", (void*)set_longbar},
+			    {(char*)"compressStaff", (void*)set_comp_staff},
+			    {(char*)"autoKey", (void*)set_autoKey},
+			    {(char*)"allDsup", (void*)set_allDsup},
+			    {(char*)"allDsdown", (void*)set_allDsdown},
+			    {(char*)"modernNotes", (void*)set_ModNotes},
+			    {(char*)"EPSF", (void*)set_EPSF},
+			    {(char*)"ascii", (void*)set_ascii},
+			    {(char*)"wide", (void*)set_wide},
+			    {(char*)"fontpath", (void*)set_fontpath},
+			    {(char*)"milan", (void*)set_milan},
+			    {(char*)"nmidi", (void*)set_nmidi},
+			    {(char*)"midi-patch", (void*)set_amidi_patch},
+			    {(char*)"guitar", (void*)set_guitar},
+			    {(char*)"staff-line-thickness", (void*)set_line_thickness},
+			    {(char*)"thin", (void*)set_thin_font},
+			    {(char*)"tfmdump", (void*)set_tfmdump},
+			    {(char*)"twelvedots", (void*) set_twelvedots},
+			    {(char*)"curly-e", (void*) set_curly_e},
+			    {(char*)"spanish", (void*) set_spanish},
+			    {(char*)"no_space_after_note", (void*) set_no_space_after_note},
+			    {(char*)"no_space_before_note", (void*) set_no_space_before_note},
+			    {(char*)"count_dots", (void*) set_count_dots},
+			    {(char *)0, (void*)0}
+  };
+  
+  static tree at(arglist);
 
-    struct tuple arglist[] = {
-      {(char*)"af", (void*)set_font_flag},
-      {(char*)"C", (void*)set_C},
-      {(char*)"c", (void*)set_c},
-      {(char*)"CC", (void*)set_CC},
-      {(char*)"b", (void*)set_b},
-      {(char*)"B", (void*)set_B},
-      {(char*)"D", (void*)set_D},
-      {(char*)"debug", (void*)set_d},
-      {(char*)"e", (void*)set_e},
-      {(char*)"E", (void*)set_E},
-      {(char*)"f", (void*)set_f},
-      {(char*)"fc", (void*)set_fc},
-      {(char*)"ff", (void*)set_ff},
-      {(char*)"F", (void*)set_F},
-      {(char*)"G", (void*)set_G},
-      {(char*)"H", (void*)set_H},
-      {(char*)"h", (void*)set_h},
-      {(char*)"i", (void*)set_i},
-      {(char*)"I", (void*)set_I},
-      {(char*)"K", (void*)set_K},
-      {(char*)"x", (void*)set_x},
-      {(char*)"O", (void*)set_O},
-      {(char*)"s", (void*)set_s},
-      {(char*)"T", (void*)set_T},
-      {(char*)"w", (void*)set_w},
-      {(char*)"Z", (void*)set_Z},
-      {(char*)"j", (void*)set_j},
-      {(char*)"l", (void*)set_l},
-      {(char*)"m", (void*)set_m},
-      {(char*)"M", (void*)set_M},     //not used
-      {(char*)"0", (void*)set_0},
-      {(char*)"2", (void*)set_2},
-      {(char*)"1200", (void*)set_2},
-      {(char*)"2400", (void*)set_24},
-      {(char*)"300", (void*)set_300},
-      {(char*)"360", (void*)set_360},
-      {(char*)"4", (void*)set_4},
-      {(char*)"5", (void*)set_5},
-      {(char*)"6", (void*)set_6},
-      {(char*)"600", (void*)set_6},
-      {(char*)"7", (void*)set_7},
-      {(char*)"N", (void*)set_N},
-      {(char*)"P", (void*)set_P},
-      {(char*)"dvi", (void*)set_dvi},
-      {(char*)"pdf", (void*)set_pdf},
-      {(char*)"Q", (void*)set_Q},
-      {(char*)"R7", (void*)set_R7},
-      {(char*)"R8", (void*)set_R8},
-      {(char*)"R8.5", (void*)set_R8},
-      {(char*)"R9", (void*)set_R9},
-      {(char*)"R95", (void*)set_R95},
-      {(char*)"R9.5", (void*)set_R95},
-      {(char*)"S", (void*)set_S},
-      {(char*)"V", (void*)set_V},
-      {(char*)"W", (void*)set_W},
-      {(char*)"X", (void*)set_X},
-      {(char*)"Y", (void*)set_Y},
-      {(char*)"listfonts", (void*)set_listfonts},
-      {(char*)"n", (void*)set_n},
-      {(char*)"o", (void*)set_o},
-      {(char*)"p", (void*)set_p},
-      {(char*)"q", (void*)set_q},
-      {(char*)"r", (void*)set_r},
-      {(char*)"t", (void*)set_t},
-      {(char*)"v", (void*)set_v},
-      {(char*)"y", (void*)set_y},
-      {(char*)"z", (void*)set_z},
-      {(char*)"tuning", (void*)set_tuning},
-      {(char*)"sharpUp",    (void*)set_sharp_up},
-      {(char*)"sharpNorm",    (void*)set_sharp_normal},
-      {(char*)"highlightparen", (void*)set_highlight_paren},
-      {(char*)"highlightred", (void*)set_highlight_red},
-      {(char*)"sound", (void*)set_sound},
-      {(char*)"midi", (void*)set_sound},
-      {(char*)"alttitle", (void*)set_alttitle},
-      {(char*)"alttitle-off", (void*)set_alttitle_off},
-      {(char*)"a4", (void*)set_a4},
-      {(char*)"nobox", (void*)set_nobox},
-      {(char*)"sItalNotes", (void*)set_sItalNotes},
-      {(char*)"italFlags", (void*)set_italFlags},
-      {(char*)"twostaff", (void*)set_twostaff},
-      {(char*)"longbar", (void*)set_longbar},
-      {(char*)"compressStaff", (void*)set_comp_staff},
-      {(char*)"autoKey", (void*)set_autoKey},
-      {(char*)"allDsup", (void*)set_allDsup},
-      {(char*)"allDsdown", (void*)set_allDsdown},
-      {(char*)"modernNotes", (void*)set_ModNotes},
-      {(char*)"EPSF", (void*)set_EPSF},
-      {(char*)"ascii", (void*)set_ascii},
-      {(char*)"wide", (void*)set_wide},
-      {(char*)"fontpath", (void*)set_fontpath},
-      {(char*)"milan", (void*)set_milan},
-      {(char*)"nmidi", (void*)set_nmidi},
-      {(char*)"midi-patch", (void*)set_amidi_patch},
-      {(char*)"guitar", (void*)set_guitar},
-      {(char*)"staff-line-thickness", (void*)set_line_thickness},
-      {(char*)"thin", (void*)set_thin_font},
-      {(char*)"tfmdump", (void*)set_tfmdump},
-      {(char*)"twelvedots", (void*) set_twelvedots},
-      {(char*)"curly-e", (void*) set_curly_e},
-      {(char*)"spanish", (void*) set_spanish},
-      {(char*)"no_space_after_note", (void*) set_no_space_after_note},
-      {(char*)"no_space_before_note", (void*) set_no_space_before_note},
-      {(char*)"count_dots", (void*) set_count_dots},
-      {(char *)0, (void*)0}
-    };
+  /* check for blank after flag */
 
-    static tree at(arglist);
+  while (argc > 0) {
 
-/* check for blank after flag */
-
-    while (argc > 0) {
-
-	if (**argv == '-') {
-	    (*argv)++;
-	    r = (void(*)(const char*, file_info*))at.get(*argv);
-	    
-	    if (r) {
-	      aa = argv[1];
-	           (*r)(aa, f);
-	      //   setit(r, aa, f);
-	    }
-	    else {
-	      aa = argv[0];
-	      dbg1(Warning, "tab: args: unknown flag %s\n", (void*)aa);
-	    }
-
-	    //swallow argument values here
-
-	    switch (argv[0][0]){
-	    case 't':
-	      if (strncmp(argv[0], "tuning", 6 ))
-		break;
-	      else {
-		*argv++;
-		argc--;
-		break;		
-	      }
-	    case 'd':
-	      if ( strncmp(argv[0], "debug", 5 ))
-		break;
-	      else {
-		*argv++;
-		argc--;
-		break;		
-	      }
-	    case 'f':
-	      if ( strncmp(argv[0], "font", 4 ))
-		break;
-	      else {
-		*argv++;
-		argc--;
-		break;		
-	      }
-	    case 'a':
-	      if ( argv[0][1] != 'f') break;
-	    case 'm':
-	      if (strncmp(argv[0], "midi-patch", 10 )) 
-		break;
-	    case 's':
-	      if (strncmp(argv[0], "staff-line-thickness", 18 )) 
-		break;
-	    case 'l':
-	    case 'o':
-	      *argv++;
-	      argc--;
-	      break;
-	    default:
-	      break;
-	    }
-
-	    *argv++;
-	    argc--;
-	}
-	else if (**argv == '$') {
-	  (*argv)++;
-	  (void)setflag(f, *argv, first);
-	  //	  dbg1(Warning, "tab: $ parameters not allowed on command line: %s\n", 
-	  //       *argv);
+    if (**argv == '-') {
+      (*argv)++;
+      r = (void(*)(const char*, file_info*))at.get(*argv);
+      
+      if (r) {
+	aa = argv[1];
+	(*r)(aa, f);
+	//   setit(r, aa, f);
+      }
+      else {
+	aa = argv[0];
+	dbg1(Warning, "tab: args: unknown flag %s\n", (void*)aa);
+      }
+      
+      //swallow argument values here
+      
+      switch (argv[0][0]){
+      case 't':
+	if (strncmp(argv[0], "tuning", 6 ))
+	  break;
+	else {
 	  *argv++;
-	  argc--;	}
-	/* assume what is left is filename */
-	else {			/* not - */
-	    strcpy (f->file, *argv);
-#ifdef WIN32
-	    if (!strstr(f->file, ".")) {
-#else
-	    if (!strstr(f->file, ".tab")) {
-#endif /* WIN32 */
-		strcat (f->file, ".tab");
-	    }
-	    if ( ! (f->m_flags & QUIET))
-	      dbg1 (Warning, "setting filename to %s\n", f->file);
-	    *argv++;
-	    argc--;
+	  argc--;
+	  break;
 	}
-    } 
+      case 'd':
+	if ( strncmp(argv[0], "debug", 5 ))
+	  break;
+	else {
+	  *argv++;
+	  argc--;
+	  break;
+	}
+      case 'f':
+	if ( strncmp(argv[0], "font", 4 ))
+	  break;
+	else {
+	  *argv++;
+	  argc--;
+	  break;
+	}
+      case 'a':
+	if ( argv[0][1] != 'f') break;
+      case 'm':
+	if (strncmp(argv[0], "midi-patch", 10 ))
+	  break;
+      case 's':
+	if (strncmp(argv[0], "staff-line-thickness", 18 ))
+	  break;
+      case 'l':
+      case 'o':
+	*argv++;
+	argc--;
+	break;
+      default:
+	break;
+      }
+      
+      *argv++;
+      argc--;
+    }
+    else if (**argv == '$') {
+      (*argv)++;
+      (void)setflag(f, *argv, first);
+      //	  dbg1(Warning, "tab: $ parameters not allowed on command line: %s\n",
+      //       *argv);
+      *argv++;
+      argc--;	}
+    /* assume what is left is filename */
+    else {			/* not - */
+      strcpy (f->file, *argv);
+      //#ifdef WIN32
+      //      if (!strstr(f->file, ".")) {
+      //#else
+      if (!strstr(f->file, ".tab")) {
+	//#endif /* WIN32 */
+	strcat (f->file, ".tab");
+      }
+      if ( ! (f->m_flags & QUIET))
+	dbg1 (Warning, "setting filename to %s\n", f->file);
+      *argv++;
+      argc--;
+    }
+  }
+  if (strlen(f->file) == 0) {
+    show_usage();
+    dbg0 (Error, "No file name given\n");
+  }
 }
-
+  
 #define ARG_LEN 120
 
 void args_from_string(char *buf, struct file_info *f)
 {
-    int argc=0, i, j;
-    char argv[ARG_LEN];
-    char *argp[N_ARGS];
-    int quote=0;
+  int argc=0, i, j;
+  char argv[ARG_LEN];
+  char *argp[N_ARGS];
+  int quote=0;
 
     memset(argv, 0, sizeof(argv));
 
     for (i=0,j=0; i<sizeof (argv) && buf[i] != (char)'\0'; /* i++, */ j++) {
 
-	while (buf[i] == ' ') 
+	while (buf[i] == ' ')
 	  i++;	/*  strip leading spaces */
 	if (buf[i] == '\0') break;
 	if (buf[i] == NEWLINE) break;
@@ -744,7 +752,7 @@ void args_from_string(char *buf, struct file_info *f)
 	  if (argv[j] == '"' || argv[j] == '\'' ||
 	      argv[j] == (signed char)0xd2 ||
 	      argv[j] == (signed char)0xd3 ||
-	      argv[j] == (signed char)0xe2 ) {  
+	      argv[j] == (signed char)0xe2 ) {
 	    if (argv[j] == (signed char)0xe2 ) {
 	      argv[j] = '"';
 	      i++;i++;

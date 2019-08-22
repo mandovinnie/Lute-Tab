@@ -154,14 +154,14 @@ void tfm_stuff(i_buf *b, file_info *f)
 	}
 	else 
 	  f_a[1] = init_font_list(1, "pncr", 1.0 );
-	
+
 	if (f->font_names[2]) {	// title
 	  f_a[2] = init_font_list(2, f->font_names[2], f->font_sizes[2]/10. );
 	  f_a[2]->real_name = get_real_name(f->font_names[2], 0);
 	}
 	else 
 	  f_a[2] = init_font_list(2, "pncr", f->font_sizes[2]/10.);
-	
+
 	if (f->font_names[3]) {	// italic title
 	  f_a[3] = init_font_list(3, f->font_names[3], 1.2 );
 	  f_a[3]->real_name = get_real_name(f->font_names[3], 0);
@@ -191,14 +191,14 @@ void tfm_stuff(i_buf *b, file_info *f)
 	}
 	else 
 	  f_a[1] = init_font_list(1, "pncr", 1.0 );
-	
+
 	if (f->font_names[2]) {	// title
 	  f_a[2] = init_font_list(2, f->font_names[2], f->font_sizes[2]/10. );
 	  f_a[2]->real_name = get_real_name(f->font_names[2], 0);
 	}
 	else 
 	  f_a[2] = init_font_list(2, "pncr", f->font_sizes[2]/10.);
-	
+
 	if (f->font_names[3]) {	// italic title
 	  f_a[3] = init_font_list(3, f->font_names[3], 1.2 );
 	  f_a[3]->real_name = get_real_name(f->font_names[3], 0);
@@ -216,7 +216,7 @@ void tfm_stuff(i_buf *b, file_info *f)
 	  f_a[5] = init_font_list(5, "pncri", 1.0 );
 	f_a[6] = init_font_list(6, "pncr", 1.0 );
 	f_a[7] = init_font_list(7, "pncr", 1.0 / red );
-	
+
 	pdfp = new pdf_print (f_a, f);
 	pp = (print **)&pdfp;
     }
@@ -343,7 +343,6 @@ int main(int argc, char **argv)
     i_buf b;
     struct file_info f;
     int i;
-
 
     for (i=0; i < FONT_NAMES; i++) f.font_names[i] = 0;
     

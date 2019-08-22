@@ -609,7 +609,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		  }
 		  break;
 		case '`':	/* comma on line is now a no-op */
-		  dbg0(Warning, "the backtick ` is no longer used\n");
+		  dbg0(Warning, "the backtick ` is no longer used, please use the comma ,\n");
 		  skip++;
 		  i--;
 		  break;

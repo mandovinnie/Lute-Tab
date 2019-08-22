@@ -1223,10 +1223,10 @@ void new_xref_entry(const int offset)
 void pdf_print::file_xref()
 {
   xref_entry *u;
-  char tstring[20];
+  char tstring[36];
 
   pr_out->PutString("xref\n");
-  sprintf (tstring, "%d %d\n", 0, xref_count);
+  snprintf (tstring, 19, "%d %d\n", 0, xref_count);
   pr_out->PutString(tstring);
 
   u = xref_root;
@@ -1235,7 +1235,7 @@ void pdf_print::file_xref()
   }
 
   while (u) {
-    sprintf (tstring, "%010d %05d %c \n", u->byte_offset, u->generation, u->use);
+    snprintf (tstring, 35, "%010d %05d %c \n", u->byte_offset, u->generation, u->use);
     pr_out->PutString(tstring);
     u = u->next;
     // free nodes here

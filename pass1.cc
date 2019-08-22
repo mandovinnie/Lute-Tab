@@ -1,7 +1,7 @@
 /*
    This program is copyright 1991 by Wayne Cripps,
    P.O. Box 677 Hanover N.H. 03755.
-   All rights reserved.  It is supplied "as is" 
+   All rights reserved.  It is supplied "as is"
    without express or implied warranty.
 
    Permission is granted to use, copy, modify and distribute
@@ -79,7 +79,7 @@ extern int breaksys2;		// in notes.cc, for ties across lines
 extern double tlength;		// the length of a tie
 
 /* LOCAL */
-double text_check(struct list *l, int line, double *total_weight, 
+double text_check(struct list *l, int line, double *total_weight,
 		  int in_sys, int staff);
 void find_val(char val, struct list *ll, int *found,
      double *total_width, double *total_weight, int offset,
@@ -125,13 +125,13 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
     strcat (chart[4].width, "0.237 in");
     strcat (chart[5].width, "0.185 in");
     strcat (chart[6].width, "0.145 in");
-#else	
+#else
     double base_sp = f_a[0]->fnt->get_width (2+194); /* three flags */
     double rt;
     base_sp *= .83;
     rt = 1.28;
     b_init++;
-	
+
     {
       char * foo;
       foo = (char *) malloc(45);
@@ -149,74 +149,74 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
   /* figure out basic widths on the first pass through */
 
   for (j=0; j < (*l_p) && l; j++){	/* get widths */
-    
+
     if ( l == 0 ){
       dbg0(Warning, "tab: pass1: nil pointer l\n");
     }
-    
+
     d = l->dat;
-    
+
     /*	printf ("pass1 dat %d ->%s", j, l->dat);   */
     /*	printf ("old weight %f width %f\n", old_width, old_weight); */
-    
+
     if (f->flags & VERBOSE)  {
-      dbg2( Inter, "tab: pass1: %d l:%3d: ", 
+      dbg2( Inter, "tab: pass1: %d l:%3d: ",
 	    (void *)n_system, (void *)(j+1));
       for (i=0; i<STAFF; i++) {
 	dd = d[i];
-	if (dd >= 'a' && dd <= 'p') 
-	  dbg1 ( Inter, "  %1c", (void *)(int)dd); 
-	else if (dd == 'D'|| dd == 'Q' || dd == 'E' || dd == 'R') 
-	  dbg1 ( Inter, "  %1c", (void *)((int)dd)); 
-	else if (dd == 'G') 
-	  dbg0 ( Inter, "  G"); 
-	else if (dd == 'U') 
-	  dbg0 ( Inter, "  U"); 
-	else if (dd == 'L') 
-	  dbg0 ( Inter, "  L"); 
-	else if (dd == 'J') 
-	  dbg0 ( Inter, "  J"); 
-	else if (dd == 'W') 
-	  dbg0 ( Inter, "  W"); 
-	else if (dd == 'w') 
-	  dbg0 ( Inter, "  w"); 
-	else if (dd == 'x') 
-	  dbg0 ( Inter, "  x"); 
-	else if (dd == 'Y') 
-	  dbg0 ( Inter, "  Y"); 
-	else if (dd == 'Z') 
-	  dbg0 ( Inter, "  Z"); 
-	else if (dd == '^') 
-	  dbg0 ( Inter, "  ^"); 
-	else if (dd == 'r') 
-	  dbg0 ( Inter, "  r"); 
-	else if (dd == 's') 
-	  dbg0 ( Inter, " //"); 
-	else if (dd == 254) 
-	  dbg0 ( Inter, "254"); 
-	else if (dd == 255) 
-	  dbg0 ( Inter, "255"); 
-	else if (dd == 't') 
-	  dbg0 ( Inter, "///"); 
-	else if (dd == ' ') 
-	  dbg1 ( Inter, "  %1c", (void *)'X'); 
+	if (dd >= 'a' && dd <= 'p')
+	  dbg1 ( Inter, "  %1c", (void *)(int)dd);
+	else if (dd == 'D'|| dd == 'Q' || dd == 'E' || dd == 'R')
+	  dbg1 ( Inter, "  %1c", (void *)((int)dd));
+	else if (dd == 'G')
+	  dbg0 ( Inter, "  G");
+	else if (dd == 'U')
+	  dbg0 ( Inter, "  U");
+	else if (dd == 'L')
+	  dbg0 ( Inter, "  L");
+	else if (dd == 'J')
+	  dbg0 ( Inter, "  J");
+	else if (dd == 'W')
+	  dbg0 ( Inter, "  W");
+	else if (dd == 'w')
+	  dbg0 ( Inter, "  w");
+	else if (dd == 'x')
+	  dbg0 ( Inter, "  x");
+	else if (dd == 'Y')
+	  dbg0 ( Inter, "  Y");
+	else if (dd == 'Z')
+	  dbg0 ( Inter, "  Z");
+	else if (dd == '^')
+	  dbg0 ( Inter, "  ^");
+	else if (dd == 'r')
+	  dbg0 ( Inter, "  r");
+	else if (dd == 's')
+	  dbg0 ( Inter, " //");
+	else if (dd == 254)
+	  dbg0 ( Inter, "254");
+	else if (dd == 255)
+	  dbg0 ( Inter, "255");
+	else if (dd == 't')
+	  dbg0 ( Inter, "///");
+	else if (dd == ' ')
+	  dbg1 ( Inter, "  %1c", (void *)'X');
 	else if ( dd == '\n' )
 	  goto eend;
 	else if (dd >= 040 && dd <= 0100 )
-	  dbg1 ( Inter, "  %1c", (void *)((int)dd)); 
+	  dbg1 ( Inter, "  %1c", (void *)((int)dd));
 	else if (dd >= 0202 && dd <= 0213)
-	  dbg1 ( Inter, "  %1c", (void *)(dd - 0202)); 
+	  dbg1 ( Inter, "  %1c", (void *)(dd - 0202));
 	else if (dd >= 0214 && dd <= 0225)
-	  dbg1 ( Inter, "  %1c", (void *)(dd - 0214)); 
+	  dbg1 ( Inter, "  %1c", (void *)(dd - 0214));
 	else if (dd >= 0226 && dd <= 0237)
-	  dbg1 ( Inter, "  %1c", (void *)(dd - 0226)); 
+	  dbg1 ( Inter, "  %1c", (void *)(dd - 0226));
 	else if ((dd == 70 || dd == 120) && i == 0)
 	  dbg1 ( Inter, "  %1c", (void *)((int)dd));
-	else 
-	  dbg1 ( Inter, "%03d",  (void *)((int)dd)); 
+	else
+	  dbg1 ( Inter, "%03d",  (void *)((int)dd));
       }
     eend:
-      dbg0 ( Inter, "\n"); 
+      dbg0 ( Inter, "\n");
     }
 
     switch (c=d[0]) {
@@ -226,15 +226,18 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       weight = 1.0;
       break;
     case '+':		/* ornaments */
-      l->padding = str_to_inch(min_O_w);
-      // printf("pass1: + initial padding %f\n", l->padding);
+      l->padding = str_to_inch(min_O_w);  /* 0.09 */
       // printf("pass1.cc: HERE 0 %f\n", l->padding);
-      if (strchr("Yy", l->next->dat[0])) 
+      // printf("pass1.cc: width +  %f \n", f_a[0]->fnt->get_width('+'));
+      // printf("pass1.cc: width -  %f \n", f_a[0]->fnt->get_width('-'));
+      // printf("pass1.cc: width _  %f \n", f_a[0]->fnt->get_width('_'));
+      // printf("pass1.cc: width %f \n", f_a[0]->fnt->get_width('+'));
+      if (strchr("Yy", l->next->dat[0]))
 	l->padding = 0.01 /* str_to_inch(min_d_w) */;
-      else if (strchr("{}[]()UX", c)) 
+      else if (strchr("{}[]()UX", c))
 	l->padding = 0.01;
       else if (strchr("x", l->dat[2])||strchr("x", l->dat[3])
-          ||strchr("x", l->dat[4])||strchr("x", l->dat[5])) 
+          ||strchr("x", l->dat[4])||strchr("x", l->dat[5]))
 	l->padding += 0.04;
       else {
 	if ( l->prev && l->prev->padding > 0.04 ) {
@@ -244,24 +247,25 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	else {
 	  /* l->prev->padding = 0.01; */
 	  /* total_width = 0.01; */
-	  //			printf ("tab: pass1: negative padding\n"); 
-	  //			printf ("tab: pass1: %s\n", l->prev->dat); 
-	  //			printf ("tab: pass1: %s\n", l->dat); 
+	  //			printf ("tab: pass1: negative padding\n");
+	  //			printf ("tab: pass1: %s\n", l->prev->dat);
+	  //			printf ("tab: pass1: %s\n", l->dat);
 	}
       }
       // printf("pass1: + inter padding %f\n", l->padding);
 
       // this is about ornaments before the notes
-      
+
       {
 	int Q_found=0;
 	int orn_found=0;
 	int found_wide_letter = 0;
-	for (i = 2; i < STAFF; i++ ) {  // was for i=2; 
-	  if (d[i] == 'Q') 
+	int underscore_found = 0;
+	for (i = 2; i < STAFF; i++ ) {  // was for i=2;
+	  if (d[i] == 'Q')
 	    Q_found=1;
 	  if (d[i] != ' ')
-	    orn_found=1;
+	    orn_found++;
 	  if ( l->next->dat[i] == 'D' || l->next->dat[i] == 'E') {
 	    found_wide_letter = l->next->dat[i];
 	  }
@@ -275,16 +279,21 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	    }
 	    else {
 	      if (found_wide_letter) {
-		l->padding += b_d_pad /* + 0.18 */; /* 0.18 see above */
+		l->padding += b_d_pad /* b_d_pad is 0.1 */; /* 0.18 see above */
 		// printf("adding to padding 2 padding %f  b_d_pad %f\n", l->padding, b_d_pad);
 		break;
 	      }
+	    }
+	    if (d[i] == '_') {
+	      underscore_found = 1;
 	    }
 	    // printf(" b_d_pad:  %f\n", b_d_pad);
 	    // found_wide_letter = 1;
 	    // break;
 	  }
 	}
+	// if ( underscore_found )  l->padding = 0.05;
+        if (!found_wide_letter && underscore_found && orn_found < 2 )  l->padding = 0.0;
 	if (!orn_found && Q_found) l->padding = 0.0;
       }
     DONE:
@@ -304,11 +313,11 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       l->padding = 0;
       {
 	for (i = 2; i < STAFF; i++ ) {
-	  if (d[i] != ' ' && d[i] != '{' && d[i] != '}' 
+	  if (d[i] != ' ' && d[i] != '{' && d[i] != '}'
 	      && d[i] != '(' && d[i] != ')' && (!(f->m_flags & NOSPACE )) ) {
 	    l->padding = str_to_inch(min_O_w);
-	    
-	    //	if ( 1 && l->prev && l->prev->dat[i] == 'e') { 
+
+	    //	if ( 1 && l->prev && l->prev->dat[i] == 'e') {
 	    //  printf ("HERE  ornament is %c\n", d[i]);
 	    //  l->prev->padding += 0.5;
 	    //   total_width += 0.5;
@@ -329,13 +338,13 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	      else l->padding += 0.08;
 	      break;
 	    }
-	    else if ( l->dat[0] == '^' 
-		      && f->char_flag == ROB_CHAR 
+	    else if ( l->dat[0] == '^'
+		      && f->char_flag == ROB_CHAR
 		      && l->next->dat[i] == 'd' ) {
 	      l->padding += 0.05;
 	      break;
 	    }
-	    else if  (baroque && l->next->dat[0] == '+' && 
+	    else if  (baroque && l->next->dat[0] == '+' &&
 		      l->next->next->dat[i] == 'd') {
 	      l->padding += 0.08;
 	    }
@@ -345,13 +354,13 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	      break;
 	    }
 	    if (l->next->dat[0] == '+' && l->next->next ) {
-	      if (l->next->next->dat[i] == 'E' || 
+	      if (l->next->next->dat[i] == 'E' ||
 		  l->next->next->dat[i] == 'D') {
-		l->padding += 0.05;  
+		l->padding += 0.05;
 	      }
 	    }
-	    else   
-	      if (i > 2 && 
+	    else
+	      if (i > 2 &&
 		  ((l->next->dat[i-1] == 'g') ||
 		  (l->next->dat[i-1] == 'G'))) {
 		l->padding += 0.02;
@@ -363,7 +372,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       break;
     case 'i':     /* insert a space */
       weight = W_NONE;
-      if (l->next && strchr("G", l->next->dat[0]) && strchr("0", l->next->dat[1])) 
+      if (l->next && strchr("G", l->next->dat[0]) && strchr("0", l->next->dat[1]))
 	l->padding = 0;
       else
 	l->padding = str_to_inch(min_d_w);
@@ -378,7 +387,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       goto rest;
     case '.':
       l->padding = 0.0;
-      if (l->next && 
+      if (l->next &&
 	  (l->next->dat[0] == '.' || l->next->dat[0] == 'b'
 	   || l->next->dat[0] == 'B')) {
 	l->padding = str_to_inch(min_d_w);
@@ -388,18 +397,18 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	l->padding = f_a[0]->fnt->get_width (l->next->dat[0])/-2.0;
 	goto rest;
       }
-      //	    if ( j == *l_p - 1) 
+      //	    if ( j == *l_p - 1)
       //			printf("dot at end\n");
     case 'b':
       l->padding = 0.0;
-      //      if (l->next && 
-      //	  (l->next->dat[0] == '.')) 
+      //      if (l->next &&
+      //	  (l->next->dat[0] == '.'))
       //	l->padding = str_to_inch(min_d_w);
     rest:
       if ( j == *l_p - 1) {
 	weight = W_NONE;
       }
-      
+
       else if (l->next->dat[0] == 'F') {
 	weight = W_NONE;
 	l->padding +=0.11;
@@ -424,15 +433,15 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       else {		        /* expansion - presumably notes here*/
 	l->padding += str_to_inch(min_d_w);
 	weight = W_ONE;
-	if (f->flags & BIGNOTES) 
+	if (f->flags & BIGNOTES)
 	  weight = .7;
 
-	if (bar_count || barCount) { 
+	if (bar_count || barCount) {
 	  char *ch  = l->dat;
 	  char *nxt = l->next->dat;
 
 	  if (( *ch == 'b' || *ch == 'B' || *ch == 'A')
-	      && j+1 != *l_p 
+	      && j+1 != *l_p
 	      && j != *l_p
 	      && *nxt != 'b'
 	      && *nxt != 'B'
@@ -440,13 +449,13 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	      && *nxt != 'Q'
 	      && *nxt != 'q'
 	      && ch[1] != 'X'
-	      ) {	
-	    measures++;	                
+	      ) {
+	    measures++;
 	    //	    fprintf (stderr, "pass 1: next is %s  measuers %d\n", nxt, measures);
-	    if ((bar_count && ! (measures % 5)) || 
+	    if ((bar_count && ! (measures % 5)) ||
 		(j == 0 && barCount)) {
 	      if ( nxt[8] != ' ' ) { // leave space for bar count number
-		//		dbg1 (Warning, 
+		//		dbg1 (Warning,
 		//		      "tab: pass1 :bar count expansion %c\n",
 		//		      (void *)ch[0]);
 		l->padding += 0.1;
@@ -483,7 +492,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       weight = wp[3].weight;
       goto done;
     case '1':
-      l->padding = str_to_inch(wp[4].width);	
+      l->padding = str_to_inch(wp[4].width);
       weight = wp[4].weight;
       goto done;
     case '2':
@@ -517,7 +526,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	breaksys=0;
 	breaksys2=1;
       }
-      if (d[1] == '.' || d[1] == '@' || d[1] == 'W') 
+      if (d[1] == '.' || d[1] == '@' || d[1] == 'W')
 	l->padding *= 1.6, weight *=1.2;
       else if (d[1] == 'B') {
 	if (l->prev) {
@@ -571,7 +580,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       default:
 	if ( ! (f->m_flags & QUIET ))
 	  dbg3(Warning, "x with no previous flag system %d chord %d after %c\n",
-	       (void *)((int)n_system), 
+	       (void *)((int)n_system),
 	       (void *)(int)(j+1), (void *)(int)old_flag);
 	break;
       }
@@ -579,31 +588,31 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 
     case 'U':
       if (l->next && l->next->dat[0] == 'G' && (l->next->dat[1] == '2' || l->next->dat[1] == '3')) {
-	l->padding = 1.27 * 
+	l->padding = 1.27 *
 	  f_a[0]->fnt->get_width(19);
 	//	fprintf(stderr, "HERE 1\n");
 	weight = W_ONE;
       }
       else {
-	l->padding = 1.17 * 
+	l->padding = 1.17 *
 	  f_a[0]->fnt->get_width(19); /* add some space */
 	weight = W_TWO;
       }
       break;
     case 'u':
       if (l->next && l->next->dat[0] == 'G' && (l->next->dat[1] == '2' || l->next->dat[1] == '3')) {
-	l->padding = 1.27 * 
+	l->padding = 1.27 *
 	  f_a[0]->fnt->get_width(19);
 	//	fprintf(stderr, "HERE 2\n");
 	weight = W_ONE;
       }
       else {
-	l->padding = 1.17 * 
+	l->padding = 1.17 *
 	  f_a[0]->fnt->get_width(20); /* add some space */
 	weight = W_TWO;
       }
       break;
-      
+
     case 'R':
     case 'S':
       //    case 'T':
@@ -620,7 +629,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  weight = W_NONE;
 	}
 	else {
-	  l->padding = 0.5 * 
+	  l->padding = 0.5 *
 	    f_a[0]->fnt->get_width(c) + str_to_inch(min_d_w);
 	  weight = W_TINY;
 	}
@@ -687,15 +696,15 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       if (l->dat[1] == 'M') {
 	l->padding = f_a[0]->fnt->get_width(252); /* g clef */
 	l->padding *= 1.2;
-	
+
 	/*	if (f->flags & BIGNOTES ) {*/
 	l->padding += 0.07;
 	weight =/* W_ONE */ 0.0;
 	/* }
-	   else  weight = W_ONE; 
+	   else  weight = W_ONE;
 	*/
       }
-      else { 
+      else {
 	if (j == 0) {	/* first, place to left of line */
 	  l->padding = 0;
 	  weight = W_NONE;
@@ -758,12 +767,12 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       }
       break;
     case 'A':		/* again - repeat */
-      l->padding = 2 * f_a[2]->fnt->get_width(l->dat[1]) 
+      l->padding = 2 * f_a[2]->fnt->get_width(l->dat[1])
 	+ /* 2 */ .3 * str_to_inch(min_d_w);
       weight = W_NONE;
       break;
     case 'd':
-      l->padding = 
+      l->padding =
 	f_a[0]->fnt->get_width(254); /* the del signe character */
       weight = W_ONE;
       break;
@@ -789,11 +798,11 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       //      dbg0(Warning, " [pass1: not implemented\n");
       l->padding = 0;
       weight = 0;
-      break; 
+      break;
     default:
-      dbg3(Warning, "tab: pass1: unknown flag %d %s at index %d\n", 
+      dbg3(Warning, "tab: pass1: unknown flag %d %s at index %d\n",
 	   (void *)(int)c, (void *)l->dat, (void *)j );
-      dbg2(Warning, 
+      dbg2(Warning,
 	   "pass1: unknown flag value in inter file %d %d\n",
 	   (void *)n_system, (void *)(j+1));
       break;
@@ -814,12 +823,12 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	total_weight -= ll->weight;
 
 	do {
-	  if (ll->notes && 
+	  if (ll->notes &&
 	      ( ll->notes->note != '0' ) ) {  /* could be the first one */
-	    found = 0;	
-	    find_val( ll->notes->time, ll, &found, 
-		      &total_width, 
-		      &total_weight, 
+	    found = 0;
+	    find_val( ll->notes->time, ll, &found,
+		      &total_width,
+		      &total_weight,
 		      f->note_conv + 0, wp,
 		      ll->notes->sharp);
 
@@ -827,30 +836,30 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	       if (ll->notes2 && (
 	       (ll->notes->time == 'w' && ll->notes2->time < '9')
 	       || (ll->notes->time == 'R' && ll->notes2->time < '9')
-	       )) { 
-	       find_val( ll->notes2->time, ll, &found, 
-	       &total_width, 
-	       &total_weight, 
+	       )) {
+	       find_val( ll->notes2->time, ll, &found,
+	       &total_width,
+	       &total_weight,
 	       f->note_conv + 0, wp,
 	       ll->notes2->sharp);
 	       }
 	    */
 
-	    if (!found){ 
+	    if (!found){
 	      found = 0;
 	      total_width += ll->padding;
 	      total_weight += ll->weight;
 	    }
-	  } 
+	  }
 	  else if (ll->notes2) {  /* could be the first one */
 	    found = 0;
-	    find_val( ll->notes2->time, ll, &found, 
-		      &total_width, 
-		      &total_weight, 
+	    find_val( ll->notes2->time, ll, &found,
+		      &total_width,
+		      &total_weight,
 		      f->note_conv + 0, wp,
 		      ll->notes2->sharp);
 
-	    if (!found){ 
+	    if (!found){
 	      found = 0;
 	      total_width += ll->padding;
 	      total_weight += ll->weight;
@@ -858,9 +867,9 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  }
 	  else {                /* !ll->notes */
 	    found = 0;
-	    find_val(ll->dat[0], ll, &found, 
-		     &total_width, 
-		     &total_weight, 
+	    find_val(ll->dat[0], ll, &found,
+		     &total_width,
+		     &total_weight,
 		     f->note_conv + 0, wp, ll->dat[1]);
 
 	    if (!found) { /* must be an x */
@@ -874,9 +883,9 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 
 	      /* here lll points to the character */
 
-	      find_val(lll->dat[0], ll, &found, 
-		       &total_width, 
-		       &total_weight, 
+	      find_val(lll->dat[0], ll, &found,
+		       &total_width,
+		       &total_weight,
 		       f->note_conv + 0, wp, lll->dat[1]);
 	    }
 	  }
@@ -887,12 +896,12 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	    goto end;
 	  }
 	  j++;
-		    
+
 	} while  (ll->dat[1] == 'M'); // end do loop
 	l = ll;
 	j--;
 	continue;
-      }	                              // end if (l->dat[1] == 
+      }	                              // end if (l->dat[1] ==
     }                                 // end processing line of notes
   end:
     /* wbc added ij June 98  and v aug 2004 */
@@ -922,8 +931,8 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	double extra = 1.1 * f_a[0]->fnt->get_width(22);
 	if (( ! ( f->flags & SHARP_UP ))
 	    && (l->notes->sharp == '+' || l->notes->sharp == '-')) {
-	  if (l->prev 
-	      && l->prev->dat[0] != '^' 
+	  if (l->prev
+	      && l->prev->dat[0] != '^'
 	      && l->prev->dat[0] != '+' ) {
 	    l->prev->padding += (extra);
 	    total_width += (extra);
@@ -959,28 +968,28 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
   if ( 1 ||  !(f->flags & NO_WORD)){
     for ( j=0; j < (*l_p) && l; j++ ) {
 
-      if (l->text) 
-	total_width += text_check(l, (*l_p) - j - 1, &total_weight, 
+      if (l->text)
+	total_width += text_check(l, (*l_p) - j - 1, &total_weight,
 				  l->text->words->in_sys, 1);
-	      
-      if (l->text2) 
-	total_width += text_check(l, (*l_p) - j - 1, &total_weight, 
+
+      if (l->text2)
+	total_width += text_check(l, (*l_p) - j - 1, &total_weight,
 				  l->text2->words->in_sys, 2);
-		
+
 #ifndef MAC
       if (f->flags & VERBOSE)
 	fprintf(stderr,
-		"tab: pass1: j %2d c %c width (padding) %f total width %f weight %f\n", 
-		j, 
+		"tab: pass1: j %2d c %c width (padding) %f total width %f weight %f\n",
+		j,
 		l->dat[0],
-		l->padding,  
+		l->padding,
 		total_width,
-		l->weight); 
+		l->weight);
 #endif /* MAC */
       l = l->next;
     }
   }
-    
+
   /* find out how much we have to pad it out */
   if (total_weight <= 0.0) {
     dbg0(Warning, "pass1: total_weight is zero\n");
@@ -995,14 +1004,14 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
   }
   else
     *extra = (staff_len - total_width) / total_weight;
-  /* 
+  /*
     fprintf (stderr, "tab: pass1: extra is %f staff_len %f t_width %f tot_weight %f\n",
 	     *extra, staff_len, total_width, total_weight);
      */
   if (*extra < 0.0) {
     /*	printf ("tab: extra %f\n", *extra); */
     if (! (f->m_flags & QUIET ) )
-      dbg1(Warning,"too many notes on one line, system %d \n", 
+      dbg1(Warning,"too many notes on one line, system %d \n",
 	   (void *)n_system );
   }
 
@@ -1010,18 +1019,18 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 
   for ( j=0; j < *l_p && l; j++) {
     l->space = (l->weight * *extra);  /* add in padding first */
-    if (f->flags & NO_EXPAND) 
+    if (f->flags & NO_EXPAND)
       l->space = 0.0;	/* for testing only */
     l = l->next;
   }
   if (f->flags & NO_EXPAND) {
 #ifndef MAC
-    printf("line length %f %f\n", 
+    printf("line length %f %f\n",
 	   total_width, staff_len);
 #endif /* MAC */
     staff_len = total_width;
   }
-  //    printf("line length %f %f\n", 
+  //    printf("line length %f %f\n",
   //	   total_width, staff_len);
   return;
 }
@@ -1052,27 +1061,27 @@ text_check(
     else if (staff == 2 ) text = l->text2;
 
     /*
-    printf ("tab: text_check: line: %d text_size: %f in_sys: %d text: %s  \n", 
+    printf ("tab: text_check: line: %d text_size: %f in_sys: %d text: %s  \n",
 	    line, text->size, text->words->in_sys,
 	    text->words->words);
 	    */
 
-    if (text && text->words->nospace ) 
+    if (text && text->words->nospace )
 	nospace_flag = 1;
     else nospace_flag = 0;
 
-    while (line && 
-	   (nospace_flag || 
+    while (line &&
+	   (nospace_flag ||
 	   (text  && text->size - t_size > l->padding ))) {
 	line--;
-	if ( in_sys 
+	if ( in_sys
 	    || ( (staff == 1 && ll->next->text )
 		 || (staff == 2 && ll->next->text2 ))
 	    || line < 1         /* end of this text */
 	    || strchr (".B", ll->next->dat[0])
 	    || (ll->next->dat[0] == 'b' && line == 1)
-	    || ( ll->next->next 
-		 && ll->next->dat[0] == 'b' 
+	    || ( ll->next->next
+		 && ll->next->dat[0] == 'b'
 		 && strchr ("Bb", ll->next->next->dat[0]))) {
 
 	    t_size += ll->padding;
@@ -1082,16 +1091,16 @@ text_check(
 
 	    if ( result < 0.0) {
 #ifndef MAC
-	      if ( 0 ) 
+	      if ( 0 )
 			printf ("tab: text_check negative result!! %f %s %d %d\n",
-			result, 
+			result,
 			text->words->words,
 			text->words->nospace,
 			nospace_flag);
 #endif /* MAC */
 		result = 0.0;
 	    }
-	      
+
 	    if (nospace_flag) {
 		t_size = text->size;	/* correct */
 	    }
@@ -1111,7 +1120,7 @@ text_check(
 		ll = ll->next;
 	    }
 	    if (result > 0.0) {
-//		printf ("tab: text_check: line: %d text_size %f text %s  \n", 
+//		printf ("tab: text_check: line: %d text_size %f text %s  \n",
 //			line, text->size, text->words->words);
 //		printf("tab: text_check: result: %f\n", result);
 	    }
