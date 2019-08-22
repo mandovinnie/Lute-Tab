@@ -4,6 +4,7 @@
 % -300
 -b
 % -l "9.0 in"
+% -l "1.4 in"
 % $flagstyle=thin
 % $flagstyle=contemp
 % $flagstyle=italian
@@ -12,14 +13,86 @@
 $slur_depth=-6.0
 
 b
-0 cdc!<!2mordent>
-0 c<!2mordent>dc
+0 DD"_a
+0  a"_d
+b
+1  aDE
+1  a"_E
+1  a"_Ea
+1  a"_D
+1  D"_a
+1  a"_f
+1  a"_e
+1   "_d
+1  a"_c
+x  a"_b
+x  a"_a
+1  c"_a
+1  D"_a
+b
+
+
+b
+0  Da
+0  ad
+b
+1  aE
+1  aEa
+1  a"+D
+1  D"xa
+1  af
+1  a+e
+1   +d
+1  ac
+x  ab
+x  aa
+1  ca
+1  Da
+b
+
+0 ad_c
+1  df_d
+0 ad&_c
+1  df&_d
+b
+0 c`   &` a
+0 c' 'c&' &, a
+0 c, ,c&, &, a
+b
+1 aDE
+1 ade
+1 aed
+
+b
+0  d<!2mordent>
+x  d<!3mordent>
+x  d<!tilde>
+b
+0  d!<!2mordent>
+x  d!<!3mordent>
+x  d!<!tilde>
+b
+0  d"<!2mordent>
+x  d"<!3mordent>
+x  d"<!tilde>
+b
+0  d&<!2mordent>
+x  d&<!3mordent>
+x  d&<!tilde>
+b
+
+
+b
+0 c, 'c&' &, a
+0 c`   &, a
+0 cdc &<!2mordent> a
+0 cdc!<!2mordent>  a
+0 c<!2mordent>dc  a
 0 c<!tilde>dc
 0 < <d !<
-w cdc!<!3mordent>
+w cd&,c!<!3mordent>
 0 c<!3mordent>dc
 b
-e
 b
 1E xc+c  /a
 1E c+c  /a
@@ -30,16 +103,17 @@ b
 1 d    /a
 1      /a
 b
+
+b
 1
 0 <!<
 0 c~c"Xc
 x a!X &X
+0 c!<!tilde>c
 b
-e
 b
 1 c U
 x c X
-e
 0 c    (
 x c  )
 0 c  d (
@@ -101,7 +175,7 @@ b
 x d e f
 x g h i]v
 x j k
-e
+
 1-xE
 x-E
 b
