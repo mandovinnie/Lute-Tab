@@ -117,9 +117,10 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	version.pl makedepend CHANGELOG \
 	midi-docs/midi-dump.c midi-docs/Makefile \
 	midi-docs/tftopl.web \
-	simple.tab 
+	simple.tab \
+	.gitignore
 
-DISTFILE = lute_tab4.3.97.tar
+DISTFILE = lute_tab4.3.97.tar.gz
 
 distrib:	 ${DISTFILE}
 
@@ -132,7 +133,7 @@ ${DISTFILE}:	 \
 	sed '/^# DO NOT DELETE/,/# IF YOU PUT ANYTH/d' | \
 	sed 's/^TLOC = /# TLOC = /' \
 	> Makefile; \
-	tar cvf ${DISTFILE} \
+	tar czvf ${DISTFILE} \
 	Makefile \
 	${HEADERS} \
 	${SOURCES} ${MISC}
