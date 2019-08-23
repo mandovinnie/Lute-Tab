@@ -1,0 +1,31 @@
+# Generated files
+*.ps
+*.log
+*.*gf
+*.pdf
+*.dvi
+
+# Object files
+*.o
+
+# Executables
+*.exe
+/tab
+
+# IDE
+*.kdev4
+*swp
+*.idea
+
+# VIm
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+
+#other
+.nfs*
+*.tab
+
