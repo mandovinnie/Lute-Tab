@@ -75,7 +75,7 @@ void init(file_info *f)
     f->font_sizes[1] = 10.0;	// used for song text, roman
     f->font_sizes[2] = 12.0;	// used for title, roman
     f->font_sizes[3] = 12.0;	// used for title italics
-    f->font_sizes[4] = 24.0;	// used for time signature 
+    f->font_sizes[4] = 24.0;	// used for time signature
     f->font_sizes[5] = 10.0;	// used for text italics
     f->font_sizes[6] = 17.0;	// used for time signatures in music
     f->font_sizes[7] = 0.0;	// not used
@@ -117,14 +117,14 @@ void tfm_stuff(i_buf *b, file_info *f)
       strcat (lutefont, f->font_names[0]);
     }
     else {
-      if (baroque) 
+      if (baroque)
 	strcat(lutefont, "blute");
       else if (thin_renaissance)
 	strcat(lutefont, "tlute");
       else
 	strcat(lutefont, "lute");
     }
-    
+
     if (red == 1.0) {
 	strcat (lutefont, "9");
     }
@@ -140,33 +140,33 @@ void tfm_stuff(i_buf *b, file_info *f)
     else {
 	strcat(lutefont, "6");
     }
-      
+
     f_a[0] = init_font_list(0, lutefont, 1.0);
-   
+
     for (i=1; i< MAXFONTS; i++) { // was 3 ??
-      f_a[i] = NULL; 
+      f_a[i] = NULL;
     }
-    
+
     if (f->flags & PS ) {
 	if (f->font_names[1]) {	// words
 	  f_a[1] = init_font_list(1, f->font_names[1], 1.2 );
 	  f_a[1]->real_name = get_real_name(f->font_names[1], 0);
 	}
-	else 
+	else
 	  f_a[1] = init_font_list(1, "pncr", 1.0 );
 
 	if (f->font_names[2]) {	// title
 	  f_a[2] = init_font_list(2, f->font_names[2], f->font_sizes[2]/10. );
 	  f_a[2]->real_name = get_real_name(f->font_names[2], 0);
 	}
-	else 
+	else
 	  f_a[2] = init_font_list(2, "pncr", f->font_sizes[2]/10.);
 
 	if (f->font_names[3]) {	// italic title
 	  f_a[3] = init_font_list(3, f->font_names[3], 1.2 );
 	  f_a[3]->real_name = get_real_name(f->font_names[3], 0);
 	}
-	else 
+	else
 	  f_a[3] = init_font_list(3, "pncri", 1.2 );
 
 	f_a[4] = init_font_list(4, "pncr", 2.4 );
@@ -175,11 +175,11 @@ void tfm_stuff(i_buf *b, file_info *f)
 	  f_a[5] = init_font_list(5, f->font_names[5], 1.0 );
 	  f_a[5]->real_name = get_real_name(f->font_names[5], 0);
 	}
-	else 
+	else
 	  f_a[5] = init_font_list(5, "pncri", 1.0 );
 	f_a[6] = init_font_list(6, "pncr", 1.0 );
 	f_a[7] = init_font_list(7, "pncr", 1.0 / red );
- 
+
 	psp = new ps_print (f_a, f);
 	pp = (print **)&psp;
     }
@@ -189,21 +189,21 @@ void tfm_stuff(i_buf *b, file_info *f)
 	  f_a[1] = init_font_list(1, f->font_names[1], 1.2 );
 	  f_a[1]->real_name = get_real_name(f->font_names[1], 0);
 	}
-	else 
+	else
 	  f_a[1] = init_font_list(1, "pncr", 1.0 );
 
 	if (f->font_names[2]) {	// title
 	  f_a[2] = init_font_list(2, f->font_names[2], f->font_sizes[2]/10. );
 	  f_a[2]->real_name = get_real_name(f->font_names[2], 0);
 	}
-	else 
+	else
 	  f_a[2] = init_font_list(2, "pncr", f->font_sizes[2]/10.);
 
 	if (f->font_names[3]) {	// italic title
 	  f_a[3] = init_font_list(3, f->font_names[3], 1.2 );
 	  f_a[3]->real_name = get_real_name(f->font_names[3], 0);
 	}
-	else 
+	else
 	  f_a[3] = init_font_list(3, "pncri", 1.2 );
 
 	f_a[4] = init_font_list(4, "pncr", 2.4 );
@@ -212,7 +212,7 @@ void tfm_stuff(i_buf *b, file_info *f)
 	  f_a[5] = init_font_list(5, f->font_names[5], 1.0 );
 	  f_a[5]->real_name = get_real_name(f->font_names[5], 0);
 	}
-	else 
+	else
 	  f_a[5] = init_font_list(5, "pncri", 1.0 );
 	f_a[6] = init_font_list(6, "pncr", 1.0 );
 	f_a[7] = init_font_list(7, "pncr", 1.0 / red );
@@ -224,17 +224,17 @@ void tfm_stuff(i_buf *b, file_info *f)
 
 	if (f->font_names[1])
 	  f_a[1] = init_font_list(1, f->font_names[1], 1.0);
-	else 
+	else
 	  f_a[1] = init_font_list(1, "cmr10", 1.0);
 
 	if (f->font_names[2])
 	  f_a[2] = init_font_list(2, f->font_names[2], 1.0);
-	else 
+	else
 	  f_a[2] = init_font_list(2, "cmr12", 1.0);
 
 	if (f->font_names[3])
 	  f_a[3] = init_font_list(3, f->font_names[3], 1.0);
-	else 
+	else
 	  f_a[3] = init_font_list(3, "cmr12", 1.0);
 
 	f_a[4] = 0;
@@ -255,25 +255,25 @@ void tfm_stuff(i_buf *b, file_info *f)
 	if (!f->midi_patch)  f->midi_patch = 34;
 	if (!strncmp(f->out_file, "stdout", 6))
 	  sp = new midi_snd(f->midi_patch, f->midi_volume, f->file, "stdout");
-	else if (strlen(f->out_file)) 
+	else if (strlen(f->out_file))
 	  sp = new midi_snd(f->midi_patch, f->midi_volume, f->file, f->out_file);
-	else 
+	else
 	  sp = new midi_snd(f->midi_patch, f->midi_volume, f->file);
       }
-      // wbc sept 2014 
+      // wbc sept 2014
       //	else {			// no midi patch
-      //	  if (!strncmp(f->out_file, "stdout", 6)) 
+      //	  if (!strncmp(f->out_file, "stdout", 6))
       //	    sp = new midi_snd(34, f->midi_volume , "stdout");
-      //	  else 
+      //	  else
       //	    sp = new midi_snd;
       //	}
     }
     else if (f->m_flags & NMIDI) {
       np = new nmidi();
     }
-    
+
     while (more == END_MORE) {
-	(*pp)->page_head(); 
+	(*pp)->page_head();
 	more = (*pp)->do_page(b, f_a);
 	(*pp)->page_trail();
     }
@@ -345,9 +345,9 @@ int main(int argc, char **argv)
     int i;
 
     for (i=0; i < FONT_NAMES; i++) f.font_names[i] = 0;
-    
+
     init(&f);
-    
+
     dbg_set(Warning);
     dbg_set(Error);
 
@@ -359,7 +359,7 @@ int main(int argc, char **argv)
     argc--;
     *argv++;
     args (argc, argv, &f);
-    
+
     //  dbg_set(Proceedure);
     //	dbg_set(Widths);
     //	dbg_set(TFM);
@@ -367,25 +367,25 @@ int main(int argc, char **argv)
     //	dbg_set(Flow);
     //	dbg_set(Inter);
     //  dbg_set(Fonts);
-    
+
     if ( ! (f.m_flags & QUIET) )
       dbg2(Warning, "tab %s copyright 1995-2019 by Wayne Cripps%c",
 	   (void *) VERSION,
 	   (void *) NEWLINE );
-    
+
     file_stuff(&b, &f);
     b.Seek(0, rew);
-    
+
     for (;;) {
-      b.GetLine(buf, BUFSIZ);   
+      b.GetLine(buf, BUFSIZ);
       if ((signed char)buf[0] == EOF) break;
       dbg1(Inter, "main: %s", (void *)buf);
     }
     b.Seek(0, rew);
-    
+
     tfm_stuff(&b, &f);
 
-    if (f.scribe) 
+    if (f.scribe)
       free (f.scribe);
     free (f.file);
     free (f.out_file);

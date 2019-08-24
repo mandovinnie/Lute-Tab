@@ -65,8 +65,8 @@ do_beam(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
   /* check for last one */
 
   nn_p = nn->parent->next;
-  
-  while (nn_p 
+
+  while (nn_p
 	 && nn_p->dat[0] != 'b'
 	 && nn_p->dat[0] != 'B') {
     nn_pp = NULL;
@@ -76,9 +76,9 @@ do_beam(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
     else if (nn->staff == 2) {
       if (nn_p->notes2) nn_pp = nn_p->notes2;
     }
-    else 
+    else
       dbg0(Error, "tab: beam.cc: staff not 1 or 2\n");
-    if ( nn_pp && 
+    if ( nn_pp &&
 	 (nn_pp->special == 'x'
 	 || nn_pp->special == '=' )) {
       //      printf("not last\n");	// this is not the last one
@@ -110,7 +110,7 @@ do_beam(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
     else
       c_total += (b->note + 29);
     count++;
-    if (!b->next) 
+    if (!b->next)
       last_b = b;
     b = b->next;
   }
@@ -120,11 +120,11 @@ do_beam(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
     beamup=1;
     l_stem = inch_to_dvi(-stem);
   }
-  else { 
+  else {
     beamup=0;
     l_stem = inch_to_dvi(stem);
   }
- 
+
   if (beamup) {
     int head_w = inch_to_dvi(f_a[0]->fnt->get_width(215)
 	      - str_to_inch("0.59 pt"));
@@ -151,7 +151,7 @@ do_beam(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
       int root_to_bottom;
       int a=0, c=0;
       int tt;
-      root_to_bottom = 
+      root_to_bottom =
 	(inch_to_dvi)(slope * dvi_to_inch(b->get_h() - b_base->get_h()));
       //      a = b->get_v();
       //      c = b_base->get_v();
@@ -179,7 +179,7 @@ do_beam(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
     v = b->get_v();
     p->moveto(h,v);
 
-    
+
     if (beamup) {
       if (f->flags & PS) {
 	p->movev(b->stem_h);
@@ -216,7 +216,7 @@ do_beam(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
       v = b_base->get_v() - b_base->stem_h - bs;
     else
       v = b_base->get_v() + b_base->stem_h + bs;
-    p->moveto(h, v); 
+    p->moveto(h, v);
     p->saveloc(BASE);
     h = last_b->get_h();
     h += inch_to_dvi(stem_w);
@@ -224,7 +224,7 @@ do_beam(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
       v = last_b->get_v() - last_b->stem_h - bs;
     else
       v = last_b->get_v() + last_b->stem_h + bs;
-    p->moveto(h, v); 
+    p->moveto(h, v);
     p->saveloc(BASE+1);
     //    p->put_thick_slant(BASE, BASE+1);
     p->put_thick_slant(BASE, BASE+1);
@@ -239,14 +239,14 @@ do_beam(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
     b = b_base;
     while (b) {
       if (b->time-'0' > firsttime) {
-	if (b->next && 
+	if (b->next &&
 	    b->next->time == b->time) { // betwen this note and next
 	  h = b->get_h();
 	  if (f->flags & PS )
 	    v = b->get_v() - b->stem_h - bs;
 	  else
 	    v = b->get_v() + b->stem_h + bs;
-	  p->moveto(h, v); 
+	  p->moveto(h, v);
 	  p->saveloc(BASE);
 
 	  h = b->next->get_h();
@@ -254,7 +254,7 @@ do_beam(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
 	    v = b->next->get_v() - b->next->stem_h - bs;
 	  else
 	    v = b->next->get_v() + b->next->stem_h + bs;
-	  p->moveto(h, v); 
+	  p->moveto(h, v);
 	  p->saveloc(BASE+1);
 
 	  p->put_thick_slant(BASE, BASE+1);
@@ -268,7 +268,7 @@ do_beam(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
 	    v = b->get_v() - b->stem_h - bs;
 	  else
 	    v = b->get_v() + b->stem_h + bs;
-	  p->moveto(h, v); 	
+	  p->moveto(h, v);
 
 	  p->saveloc(BASE);
 	  hh = (int)((b->next->get_h() - h)/3.5); //  was 2
@@ -286,7 +286,7 @@ do_beam(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
 	    v = b->get_v() - b->stem_h - bs;
 	  else
 	    v = b->get_v() + b->stem_h + bs;
-	  p->moveto(h, v); 	
+	  p->moveto(h, v);
 
 	  p->saveloc(BASE);
 	  hh = (int)((b->prev->get_h() - h)/3.5); // was 2
@@ -322,7 +322,7 @@ beam::beam(struct notes *nn)
      dot = '.';
      break;
    default:
-     dot = '\0';    
+     dot = '\0';
    }
    /*
   dot  = nn->sharp == '.' ?

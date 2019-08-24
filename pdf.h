@@ -1,3 +1,4 @@
+#pragma once
 
 /* commands for output buffering */
 #define MOVE    0x0001

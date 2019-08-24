@@ -1,5 +1,6 @@
+#pragma once
 #ifndef _DVI_PRINT_
-#define _DVI_PRINT_		
+#define _DVI_PRINT_
 #include "i_buf.h"
 #include "tfm.h"
 #include "dvi.h"
@@ -25,10 +26,10 @@ private:
 
   public:
     void PutByte(unsigned char c);
-    void SignedPair(unsigned short c); 
+    void SignedPair(unsigned short c);
     void SignedTrio(int c);
     void SignedQuad(int c);
-    
+
     dvi_print(font_list *f[], file_info *ff);
     ~dvi_print();
     void file_head();
@@ -40,11 +41,11 @@ private:
     void put_rule(char *w, char *h);
     void p_moveh(const int hor);
     void p_movev(const int ver);
-    void p_moveto(const int hor, const int ver) 
+    void p_moveto(const int hor, const int ver)
       {p_moveh(hor - get_h()); p_movev(ver - get_v());}
     void p_put_rule(int w, int h);
-    void put_a_char (unsigned char c);	
-    void set_a_char (unsigned char c);	
+    void put_a_char (unsigned char c);
+    void set_a_char (unsigned char c);
     void use_font(int fontnum);
     void do_tie(double length);
     void do_tie_reversed(double length);
@@ -53,7 +54,7 @@ private:
     void do_rtie(int bloc, int eloc);
     void print_clipped(char c, int font);
     void put_slash
-      (int bloc, int eloc, int count, struct file_info *f); 
+      (int bloc, int eloc, int count, struct file_info *f);
     void put_uline(int bloc, int eloc);
     void put_r_uline(int bloc, int eloc) { put_uline(bloc, eloc); };
     void put_w_uline(int bloc, int eloc) { put_uline(bloc, eloc); };
@@ -61,8 +62,8 @@ private:
     void put_med_slant(int bloc, int eloc);
     void put_slant(int bloc, int eloc);
     int more();
-    void showsave(int reg);	
-    void p_num(int n); 
+    void showsave(int reg);
+    void p_num(int n);
     void print_draft();
     void vert_curve(int len);
     void print_copyright();

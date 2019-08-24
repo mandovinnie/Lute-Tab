@@ -64,7 +64,7 @@ node::~node()
 }
 
 void *
-node::get_val(const char  *key) 
+node::get_val(const char  *key)
 {
   node * pp;
 
@@ -130,7 +130,7 @@ tree::~tree()
 }
 
 
-void 
+void
 tree::initkeys(node * top, struct tuple data[])
 {
   /*  node * a; */
@@ -138,7 +138,7 @@ tree::initkeys(node * top, struct tuple data[])
 
   for (i=0; data[i].key; i++) {
     //    printf ("%d %s\n", i, data[i].key);
-    /* a = */ 
+    /* a = */
     new node(data[i].key, data[i].val, top );
   }
 
@@ -147,12 +147,12 @@ tree::initkeys(node * top, struct tuple data[])
 void *
 tree::get(const char * key)
 {
-  //  fprintf (stderr, "get: top %X\n", top); 
+  //  fprintf (stderr, "get: top %X\n", top);
   return top->get_val(key);
 }
 
 node *
-tree::first() 
+tree::first()
 {
   node *n;
 
@@ -175,7 +175,7 @@ tree::first(node * n)
       return (first(nn));
     else return (n);
  }
- else 
+ else
    return (0);
 }
 char * tree::getkey(node *n)
@@ -258,7 +258,7 @@ void set_charstyle(const char *value, struct file_info *f)
   }
   //  if ( ! (f->m_flags & QUIET))
   //    dbg1 (Warning, "tab: set_charstyle %s\n", (void *)value);
-  
+
 }
 void set_numstyle(const char *value, struct file_info *f)
 {
@@ -285,7 +285,7 @@ void set_flagname(const char *value, struct file_info *f)
   switch (value[0]){
   case 'b':
     //  "board"
-    f->flag_flag = BOARD_FLAGS;	
+    f->flag_flag = BOARD_FLAGS;
     break;
   case 'c':
     //  "capirola"
@@ -322,7 +322,7 @@ void set_line(const char *value, struct file_info *f)
 	f->line_flag = ON_LINE;
     else if (value[0] == 'b')
 	f->line_flag = BETWEEN_LINE;
-    else   
+    else
 	dbg1 (Warning, "tab: unknown line = %s\n", (void *)value);
 
     //    dbg1 (Warning, "tab: set_line: %s\n", (void *)value);
@@ -381,7 +381,7 @@ void set_textsize(const char *value, struct file_info *f)
     dbg1 (Warning, "tab: set_textsize %s\n", (void *)value);
   }
   if (f->flags & PS) {
-    f->font_sizes[1] = atof(value); 
+    f->font_sizes[1] = atof(value);
   }
 }
 
@@ -391,7 +391,7 @@ void set_alttextsize(const char *value, struct file_info *f)
 	dbg1 (Warning, "tab: set_altextsize %s\n", (void *)value);
   }
   if (f->flags & PS) {
-    f->font_sizes[5] = atof(value); 
+    f->font_sizes[5] = atof(value);
   }
 }
 void set_titlefont(const char *value, struct file_info *f)
@@ -440,7 +440,7 @@ void set_titlesize(const char *value, struct file_info *f)
 {
   //    dbg1 (Warning, "set_titlesize %s\n", (void *)value);
     if (f->flags & PS) {
-	f->font_sizes[2] = atof(value); 
+	f->font_sizes[2] = atof(value);
     }
 }
 
@@ -449,7 +449,7 @@ void set_alttitlesize(const char *value, struct file_info *f)
     if ( ! (f->m_flags & QUIET))
       dbg1 (Warning, "set_alttitlesize %s\n", (void *)value);
     if (f->flags & PS) {
-	f->font_sizes[3] = atof(value); 
+	f->font_sizes[3] = atof(value);
     }
 }
 
@@ -473,7 +473,7 @@ void set_tempo(const char *value, struct file_info *f)
 
 void set_noteconv(const char *value, struct file_info *f)
 {
-        f->note_conv = *value-'0'; 
+        f->note_conv = *value-'0';
 	if (f->note_conv < 0 || f->note_conv > 12 ) {
 	  dbg1(Warning, "strange note-conversion value %c ",
 	       (void *)(int) *value);
@@ -563,7 +563,7 @@ void setit(void *r, const char *flag, struct file_info *f)
 */
 
 int
-set_string(const char *arg, const char *val, struct file_info *f, pass pass) 
+set_string(const char *arg, const char *val, struct file_info *f, pass pass)
 {
  /* void ** res(); */
   void (*r)(const char *, struct file_info *);
@@ -645,7 +645,7 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {(char*)"slur_depth", (void*)first},
     {0,0}
   };
-  
+
   static tree pt(passnum);
   static tree tt(data);
 

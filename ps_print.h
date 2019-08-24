@@ -1,5 +1,6 @@
+#pragma once
 #ifndef _PS_PRINT_
-#define _PS_PRINT_		
+#define _PS_PRINT_
 #include "i_buf.h"
 #include "tfm.h"
 #include "dvi.h"
@@ -25,8 +26,8 @@ class ps_print : public print {
   void make_ps_font(i_buf *ps_header);
   void init_hv();
   int ps_top_of_page;
-  char f_name[120];		// this should be in ps_print.h 
-  double font_sizes[FONT_NAMES];				    
+  char f_name[120];		// this should be in ps_print.h
+  double font_sizes[FONT_NAMES];
   int nodump;
   unsigned int left_margin;
   unsigned int top_margin;
@@ -34,7 +35,7 @@ class ps_print : public print {
 public:
   /*    char ps_used[256]; */
 
-  void PutByte(const char c);    
+  void PutByte(const char c);
   void PutLine(const char * l);
 
   ps_print(font_list *f[], file_info *ff);
@@ -50,8 +51,8 @@ public:
   void p_movev(const int ver);
   void p_moveto(const int hor,const int ver);
   void p_put_rule(int w, int h);
-  void put_a_char (unsigned char c);	
-  void set_a_char (unsigned char c);	
+  void put_a_char (unsigned char c);
+  void set_a_char (unsigned char c);
   void use_font(int fontnum);
   void use_named_font(int fontnum, char *name);
   void do_tie(double length);
@@ -64,7 +65,7 @@ public:
   void pop();
   void glp(int reg,int h[], int v[]);
   void put_slash
-  (int bloc, int eloc, int count, struct file_info *f); 
+  (int bloc, int eloc, int count, struct file_info *f);
   void put_uline(int bloc, int eloc);
   void put_r_uline(int bloc, int eloc);
   void put_w_uline(int bloc, int eloc);
@@ -73,8 +74,8 @@ public:
   void put_slant(int bloc, int eloc);
   int more();
   int is_used(char c) { return print_used[(unsigned char)c]; }
-  void showsave(int reg);	
-  void p_num(int n); 
+  void showsave(int reg);
+  void p_num(int n);
   void print_draft();
   void print_copyright();
   void vert_curve(int len);

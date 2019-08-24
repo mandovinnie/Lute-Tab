@@ -1,3 +1,4 @@
+#pragma once
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,18 +18,18 @@
 
 #include "tfm.h"
 
-enum dbg_type {File = 1, Path = 2, TFM = 4, Inter = 8, 
-		 Flow=16, Warning=32, Error = 64, Stack=128, 
-		 Proceedure=256, Fonts=512, Bug=1024, Widths=2048, 
+enum dbg_type {File = 1, Path = 2, TFM = 4, Inter = 8,
+		 Flow=16, Warning=32, Error = 64, Stack=128,
+		 Proceedure=256, Fonts=512, Bug=1024, Widths=2048,
 		 z=4098, xx=8192, yy = 16384, Null =32768 };
 extern int debug_flag;
 void dbg0(const int type, const char *fmt);
 void dbg1(const int type, const char *fmt, void *a);
 void dbg2(const int type, const char *fmt, void *a, void *b);
 void dbg3(const int type, const char *fmt, void *a, void *b, void *c);
-void dbg4(const int type, const char *fmt, 
+void dbg4(const int type, const char *fmt,
 	  void *a, void *b, void *c, void *d);
-void dbg5(const int type, const char *fmt, 
+void dbg5(const int type, const char *fmt,
 	  void *a, void *b, void *c, void *d, void *e);
 void dbg_set(const dbg_type type);
 
@@ -66,7 +67,7 @@ struct file_info {
   unsigned int  debug_flag;
   int n_text;			/* how many lines of text ? */
   int note_conv;		/* conversion between tab flags and notes */
-  double c_space;		/* additional space for middle c in staff */  
+  double c_space;		/* additional space for middle c in staff */
   int page;			/* what page are we on? */
   int include;		/* are we included from somehwere */
   int cur_system;		/* what system are we in? */

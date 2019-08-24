@@ -2,7 +2,7 @@
 /*
    This program is copyright 1991 by Wayne Cripps,
    P.O. Box 677 Hanover N.H. 03755.
-   All rights reserved.  It is supplied "as is" 
+   All rights reserved.  It is supplied "as is"
    without express or implied warranty.
 
    Permission is granted to use, copy, modify and distribute
@@ -20,7 +20,7 @@
 /*
  * this draws an underline
  * my_underline sets the starting point.  When the program
- * gets to the endpoint do_uline is called, and the line is 
+ * gets to the endpoint do_uline is called, and the line is
  * drawn from the saved beginning to the current point
  */
 #include "win.h"
@@ -55,9 +55,9 @@ my_underline(print *p, font_list *f_a[],
     else
       s1a = s1;
 
-    //   printf ("my_underline: skip %d line %d s1 %d s1a %d\n", 
+    //   printf ("my_underline: skip %d line %d s1 %d s1a %d\n",
     //	    *skip_spaces, line, s1, s1a);
- 
+
     if (*skip_spaces) {
 	p->p_movev(*skip_spaces * i_space);
 	*skip_spaces = 0;
@@ -71,15 +71,15 @@ my_underline(print *p, font_list *f_a[],
 
     p->saveloc(s1a);
     p->pop();
-    p->p_movev(i_space); 
+    p->p_movev(i_space);
 }
 
-void 
+void
 do_uline(print *p, int *skip_spaces, int s1, int s2, int line)
 {
     int i_space = str_to_dvi(interspace);
     int s1a;
- 
+
     if (s1 < 9) s1a = 15 + (((s1-3) / 2) * line);
     else (s1a = s1);
 
@@ -99,21 +99,21 @@ do_uline(print *p, int *skip_spaces, int s1, int s2, int line)
     p->saveloc(s2);		/* save current location */
     p->getloc(s1a);		/* go to start */
 
-    if (s1 > 7 ) 
+    if (s1 > 7 )
       p->put_slant(s1a, s2);
     else {
       p->put_uline( s1a, s2);
     }
     p->pop();
-    p->p_movev(i_space); 
+    p->p_movev(i_space);
 }
 
-void 
+void
 do_r_uline(print *p, int *skip_spaces, int s1, int s2, int line)
 {
     int i_space = str_to_dvi(interspace);
     int s1a;
- 
+
     if (s1 < 9) s1a = 15 + (((s1-3) / 2) * line);
     else (s1a = s1);
 
@@ -135,15 +135,15 @@ do_r_uline(print *p, int *skip_spaces, int s1, int s2, int line)
     if (s1 > 7 ) p->put_slant(s1a, s2);
     else  p->put_r_uline( s1a, s2);
     p->pop();
-    p->p_movev(i_space); 
+    p->p_movev(i_space);
 }
 
-void 
+void
 do_w_uline(print *p, int *skip_spaces, int s1, int s2, int line)
 {
     int i_space = str_to_dvi(interspace);
     int s1a;
- 
+
     if (s1 < 9) s1a = 15 + (((s1-3) / 2) * line);
     else (s1a = s1);
 
@@ -165,20 +165,20 @@ do_w_uline(print *p, int *skip_spaces, int s1, int s2, int line)
     if (s1 > 7 ) p->put_slant(s1a, s2);
     else  p->put_w_uline( s1a, s2);
     p->pop();
-    p->p_movev(i_space); 
+    p->p_movev(i_space);
 }
 
-void 
+void
 do_thick_uline(print *p, int *skip_spaces, int s1, int s2, int line)
 {
     int i_space = str_to_dvi(interspace);
     int s1a;
- 
+
     // printf ("do_thick_uline: line %d s1 %d s2 %d s1a %d\n", line, s1, s2, s1a);
 
     if (s1 < 9)
       s1a = 15 + (((s1-3) / 2) * line);
-    else 
+    else
       (s1a = s1);
     if (*skip_spaces) {
 	p->p_movev(*skip_spaces * i_space);
@@ -196,5 +196,5 @@ do_thick_uline(print *p, int *skip_spaces, int s1, int s2, int line)
     if (s1 > 7 ) p->put_med_slant(s1a, s2);
     else  p->put_uline(s1a, s2);
     p->pop();
-    p->p_movev(i_space); 
+    p->p_movev(i_space);
 }

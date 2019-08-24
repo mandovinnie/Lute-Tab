@@ -1,7 +1,7 @@
 /*
    This program is copyright 1991 by Wayne Cripps,
    P.O. Box 677 Hanover N.H. 03755.
-   All rights reserved.  It is supplied "as is" 
+   All rights reserved.  It is supplied "as is"
    without express or implied warranty.
 
    Permission is granted to use, copy, modify and distribute
@@ -61,7 +61,7 @@ double atof(char *s)
 	if (*p == '.') {
 	    point = i ;
 	}
-	else if (*p == '\0' || *p == '\n' || *p == ' ') { 
+	else if (*p == '\0' || *p == '\n' || *p == ' ') {
 	    if (point<0) point = i;
 	    break;
 	}
@@ -83,7 +83,7 @@ double atof(char *s)
 	}
     }
   exit_it:
-    return (r* sign);   
+    return (r* sign);
 }
 #endif /* MAC */
 
@@ -165,8 +165,8 @@ int mm_to_dvi(double mm)
 int pt_to_dvi(double pt)
 {
     return((int) (
-	   (red * 
-	    (pt * 254000) * 
+	   (red *
+	    (pt * 254000) *
 	    ((double)DENOM / (double)NUM) ) / 72.27));
 }
 
@@ -181,7 +181,7 @@ double tfm_dvi_to_inch(int dvi)
 }
 double dvi_to_pt(int dvi)
 {
-    return ((72.27 / red ) * ( (double)NUM / (double)DENOM) 
+    return ((72.27 / red ) * ( (double)NUM / (double)DENOM)
 	    * (double) dvi / 254000 );
 }
 double dvi_to_mm(int dvi)
@@ -216,7 +216,7 @@ double str_to_inch(const char *string)
 }
 
 
-struct font_list *add_font(char *name, double scale) 
+struct font_list *add_font(char *name, double scale)
 {
     font_list *f;
 

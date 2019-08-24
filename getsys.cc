@@ -1,7 +1,7 @@
 /*
    This program is copyright 1991 by Wayne Cripps,
    P.O. Box 677 Hanover N.H. 03755.
-   All rights reserved.  It is supplied "as is" 
+   All rights reserved.  It is supplied "as is"
    without express or implied warranty.
 
    Permission is granted to use, copy, modify and distribute
@@ -47,14 +47,14 @@ char get_special_ornament(char * string);
 char read_special_ornament (char *str, int * i, int * skip);
 
 int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
-{ 
+{
     int *l_p;
     char N[3];
     int barline=0,BARline=0,barnum=0;
-    unsigned char staff[STAFF], ornament[STAFF]; 
+    unsigned char staff[STAFF], ornament[STAFF];
     unsigned char finger[STAFF], a_ornament[STAFF], t_ornament[STAFF];
     signed char c;
-    char cc, *p, *pp; 
+    char cc, *p, *pp;
     int i, j=0;
 /*    signed char get(); */
     int gridflag=0;
@@ -65,25 +65,25 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
     int skip;
     int cur_chord=0;
     int cur_line=0;
-    
+
     l_p = (int *)malloc(sizeof (int));
     *l_p = 0;
-    
-    
+
+
     music[0] = music[4] = 0;
     memset(music, 0, sizeof(music));
-    
+
     do {
     start:			/* a return point for multible b */
 	c = buf[0];
-	//  	printf(" ->%sXXX", buf);  
+	//  	printf(" ->%sXXX", buf);
 	//      printf("cur_chord %d\n", cur_chord);
 	cur_chord++;
 
 	staff[0] = 0; skip = 0;
 	for (i = 0; i < STAFF ; i++) a_ornament[i] = ' ';
 	a_ornament[1] = '-';
-	    
+
 	switch (c) {
 	case '?':
 	    staff[0] = c;
@@ -149,7 +149,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	      staff[0] = '1'; 	// do something
 	      if ( ! (f->m_flags & QUIET) )
 		dbg2(Warning, "Getsystem: R with no number after it sys %d chord %d\n",
-		 (void*) f->cur_system, 
+		 (void*) f->cur_system,
 		 (void *)cur_chord);
 
 	    }
@@ -189,10 +189,10 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		}
 	    }
 	    else {
-	  
+
 		staff[1] = buf[1];
 		if (staff[1] == 'C')
-		  if (baroque) 
+		  if (baroque)
 		    staff[1] = 19; /* a C signature */
 		  else
 		    staff[1] = 'U'; /* a C signature */
@@ -216,7 +216,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 
 	    //	    if ((cur_chord < 2) && cur_key && (f->m_flags & AUTOKEY)) {
 	    //	      Key=1;
-	    //	    } 
+	    //	    }
 
 	    for (i=2;i<STAFF;i++) staff[i] = ' ';
 	    Mstore( ib,l_p, staff, f);
@@ -270,14 +270,14 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		barnum = c;
 	    }
 	    else if ( c != NEWLINE)
-		if (! (f->m_flags & QUIET))dbg3(Warning, 
-		     "Text %c after a barline (b), system %d chord %d\n", 
+		if (! (f->m_flags & QUIET))dbg3(Warning,
+		     "Text %c after a barline (b), system %d chord %d\n",
 		     (void *)((int)c) , (void *)f->cur_system, (void *)cur_chord);
 	    barline++;
 
 	    if ((cur_chord < 2) && cur_key && (f->m_flags & AUTOKEY)) {
 	      Key=1;
-	    } 
+	    }
 
 	    break;
 	case 'B':
@@ -290,7 +290,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	      BARline++;
 	      nocountbar=1;
 	      break;
-	    } 
+	    }
 	    else {
 		staff[0] = 'J';
 		staff[1] = '-';
@@ -327,9 +327,9 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    staff[0] = c;
 	    staff[1] = buf[1];
 	    if (c == 'Y' || c == 'y') {
-		switch (staff[1]) { 
-		case '.':                
-		    staff[1] = '.'; 
+		switch (staff[1]) {
+		case '.':
+		    staff[1] = '.';
 		    staff[2] = staff[8] = ' ';
 		    for (i=3;i<8;i++)  staff[i] = 'Z';
 		    Mstore( ib, l_p, staff, f);
@@ -405,7 +405,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	rest:
 
 	    //	    printf("a_ornament at 403: %s\n", a_ornament);
-	    
+
 	    for (i = 0; i < STAFF ; i++) {
 		ornament[i] = ' ';
 		//	a_ornament[i] = ' ';
@@ -416,9 +416,9 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    // a_ornament[1] = '-';
 	    t_ornament[1] = '-';
 	    finger[1] = '-';
-	    
+
 	    // get the notes here  NOTES HERE
-	    
+
 	    for (i = 2; i < STAFF; i++) {
 		staff[i] = buf[i+skip];
 		switch (staff[i]) {
@@ -436,23 +436,23 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		      staff[i] = 'D';
 		    }
 		  }
-		  
-		  if (baroque && buf[i+1+skip] == 'E') { 
+
+		  if (baroque && buf[i+1+skip] == 'E') {
 		    staff[i] = 'z';
-		    if (baroque && staff[i-1] == 'D') 
+		    if (baroque && staff[i-1] == 'D')
 		      staff[i-1] = 'z';
 		  }
-		  if (baroque && staff[i-1] == 'E' && staff[i-2] == 'z') { 
+		  if (baroque && staff[i-1] == 'E' && staff[i-2] == 'z') {
 		    staff[i] = 'z';
 		  }
 		  break;
 		case 'g':
-		  if (baroque 
+		  if (baroque
 		      && buf[i+1+skip] != '\n'
 		      && buf[i+1+skip] != ' '
 		      && buf[i+1+skip] != '.') {
 		    staff[i] = 'G';
-		  } 
+		  }
 		  break;
 		case '0':	/* reversed 0 and space for internal lang */
 		    break;
@@ -470,17 +470,17 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		      rrr = fff;
 		    }
 		    staff[i] = atoi(N);
-		    if ( ! isdigit (N[0])) 
+		    if ( ! isdigit (N[0]))
 			dbg1(Warning, "bad fret number", (void *)((int)N[0]));
-		    if ( ! isdigit (N[1])) 
+		    if ( ! isdigit (N[1]))
 			dbg1(Warning, "bad fret number", (void *)((int)N[1]));
 		    if (staff[i] > 30) {
-			dbg1(Warning, "fret number %d higher than max 34\n", 
+			dbg1(Warning, "fret number %d higher than max 34\n",
 			     (void *)((int)staff[i]));
 			staff[i]=0;
 		    }
 		    if (staff[i] < 10) {
-			dbg1(Warning, "fret number %d lower than min 10\n", 
+			dbg1(Warning, "fret number %d lower than min 10\n",
 			     (void *)((int)staff[i]));
 			staff[i]=0;
 		    }
@@ -506,15 +506,15 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 			staff[i] = ' ';
 		    break;
 		case '/':
-		    if ((cc = buf[i + (++skip)]) == '/') { 
+		    if ((cc = buf[i + (++skip)]) == '/') {
 			ornament[i] = 's';     /* two slashes */
-			if ((cc = buf[i + (++skip)]) == '/') { 
+			if ((cc = buf[i + (++skip)]) == '/') {
 			    ornament[i] = 't'; /* three slashes */
 			    skip++;
 			}
 			else {	/* only one slash */
 			}
-			i--; 
+			i--;
 		    }
 		    else if ( cc == ' ' ) {
 			/* leave staff[i] as '/' */
@@ -541,13 +541,13 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    break;
 		case 0xe2:	// this is a three character apple
 		  if (buf[i+1+skip] == (char)0x80) {              // double quote
-		    //	    printf ("HERE %x %x %x \n", 
+		    //	    printf ("HERE %x %x %x \n",
 		    //	    staff[i], (buf[i+1+skip]& 0xff), (buf[i+2+skip]&0xff));
 		    skip++;skip++;
 		  }
 		  else {
-		    dbg3(Warning, "uncaught special character %x %x %x \n", 
-			 (void*)(buf[i+skip]&0xff), (void*)(buf[i+1+skip]&0xff), 
+		    dbg3(Warning, "uncaught special character %x %x %x \n",
+			 (void*)(buf[i+skip]&0xff), (void*)(buf[i+1+skip]&0xff),
 			 (void*)(buf[i+2+skip]&0xff));
 		    staff[i] = '"';
 		    skip++;skip++;
@@ -590,13 +590,13 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		  */
 		case '<':
 		  // wbc april 2019 check for php header
-		  if (buf[i+skip+1] == '?' && buf[i+skip+2] == 'p' 
+		  if (buf[i+skip+1] == '?' && buf[i+skip+2] == 'p'
 		      && buf[i+skip+3] == 'h' && buf[i+skip+4] == 'p'){
 		    printf("getsys: getsystem: php header\n");
 		    dbg0(Error,
 			 "php header detected, this may not be a valid tab file\n");
 		  }
-		  
+
 		  // wbc August 2019 allow <! for extra things >
 		  else if (buf[i+skip+1] == '!') {
 		    ornament[i] = read_special_ornament(buf, &i, &skip);
@@ -647,7 +647,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    break;
 		case 'M':	/* music - time, note, sharp */
 		case '\t':
-		    do_music(ib, staff, buf, l_p, &skip, i, f); 
+		    do_music(ib, staff, buf, l_p, &skip, i, f);
 		    i=STAFF;
 		    break;
 		case 'T':	/* text */
@@ -659,7 +659,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		case 'R':	/* rest */
 		    staff[1] = 'R';
 		    if (buf[i+skip + 1] == '\t')
-			do_music(ib, staff, buf, l_p, &skip, i+1, f); 
+			do_music(ib, staff, buf, l_p, &skip, i+1, f);
 		    if (buf[i + skip + 1] == '!') {
 			staff[2] = '!';
 			i=3;
@@ -712,8 +712,8 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 			    break;
 			default:
 			    dbg3(Warning,
-  "tab: getsystem: bad finger or \\ character %c at line %d of system %d\n", 
-				 (void *)((int)cc), 
+  "tab: getsystem: bad finger or \\ character %c at line %d of system %d\n",
+				 (void *)((int)cc),
 				 (void*)cur_line,
 				 (void*)f->cur_system);
 			    break;
@@ -733,10 +733,10 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 
 		  if (cc == ']') {
 		    ccc = buf[i + (skip += 1)];
-		    
-		    if ( ccc == 'v' ) 
+
+		    if ( ccc == 'v' )
 		      cc = (char)133;
-		    else if ( ccc == 'w' ) 
+		    else if ( ccc == 'w' )
 		      cc = (char)134;
 		    else
 		      skip -= 1;
@@ -747,7 +747,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    cc = read_special_ornament (buf, &i, &skip);
 		  }
 		  else if (cc == '\n') {
-		    dbg2(Warning, 
+		    dbg2(Warning,
        	 "tab: getsystem: & with no character after it line %d sys %d\n",
 			 (void*)cur_line,
 			 (void*)f->cur_system);
@@ -758,19 +758,19 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		  a_ornament[i] = cc;
 		}
 	    }
-	    for ( i=2; i< STAFF; i++) 
+	    for ( i=2; i< STAFF; i++)
 		if (finger[i] != ' ') {
 		    finger[0] = '^';
 		    Mstore( ib, l_p, finger, f);
 		    break;
 		}
-	    for ( i=2; i< STAFF; i++) 
+	    for ( i=2; i< STAFF; i++)
 		if (ornament[i] != ' ') {
 		    ornament[0] = '+';
 		    Mstore( ib, l_p, ornament, f);
 		    break;
 		}
-	    for ( i=2; i< STAFF; i++) 
+	    for ( i=2; i< STAFF; i++)
 		if (t_ornament[i] != ' ') {
 		    t_ornament[0] = ':';
 		    Mstore( ib, l_p, t_ornament, f);
@@ -782,7 +782,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	      //printf ("a_ornament at 740: %2d %c %s\n", i, a_ornament[i], a_ornament);
 	      if ((i == 1 && a_ornament[i] != '-' )
 		  || a_ornament[i] != ' ') {
-		  
+
 		    a_ornament[0] = '&';
 		    //printf ("a_ornament at 744: %d %c %s\n", i, a_ornament[i], a_ornament);
 		    Mstore( ib, l_p, a_ornament, f);
@@ -795,7 +795,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    /* here is where we skip a tab */
 	    if (buf[1] == '\t') {
 		skip++;
-		
+
 	    }
 	    (void)do_music(ib, staff, buf, l_p, &skip, 0, f);
 	    /* store here ? */
@@ -808,7 +808,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    staff[2] = staff[8] = ' ';
 	    for (i=3; i < 8; i++)
 	      staff[i] = 'Z';
-	    for (;i < STAFF; i++) 
+	    for (;i < STAFF; i++)
 		staff[i] = ' ';
 	    Mstore( ib,l_p, staff, f);
 	    if ((c = buf[1]) == 'b' || c == '.') {
@@ -817,7 +817,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    }
 	    break;
 	case 'e':		/* don't do this on included files! */
-	    if (!(f->flags & INCLUDE)) 
+	    if (!(f->flags & INCLUDE))
 		ib->PutByte('e'); ib->PutByte(NEWLINE);
 	    free (l_p); /* memory leak */
 	    return(END_OK);
@@ -839,7 +839,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	case 'D':		/* da capo (D.C.)  */
 	    staff[0] = c;
 	    for (i = 1 ;i < STAFF; i++) staff[i] = ' ';
-	    Mstore( ib,l_p, staff, f);	    
+	    Mstore( ib,l_p, staff, f);
 	    break;
 	case 'F':		/* a big 4 */
 	    i=0;
@@ -891,10 +891,10 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    char *bp;
 	    bp = &buffer[0];
 	    for (i=1; (c = buf[i]) != NEWLINE; i++) {
-	      *bp=c; 
+	      *bp=c;
 	      bp++;
 	    }
-	    
+
 	    buffer[--i] = 0;
 	    if (setflag(f, buffer, first))
 	      break;		// return if we set the flag
@@ -903,13 +903,13 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	      ib->PutByte(buffer[j++]);
 	    }
 	    ib->PutByte(NEWLINE);
-	  }  
+	  }
 	  break;
 	case '[':
 	  staff[0] = c;
-	  //	  if ( ! (f->m_flags & QUIET) ) 
+	  //	  if ( ! (f->m_flags & QUIET) )
 	  //	    dbg0(Warning, "text in system not implemented\n");
-	  for (i = 1 ;i < STAFF; i++) { 
+	  for (i = 1 ;i < STAFF; i++) {
 	    if (buf[i] == '\n' ) {
 	      staff[i] = ' ';
 	    }
@@ -921,19 +921,19 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	  //	  staff[STAFF-1] = '\n';
 	  Mstore( ib, l_p, staff, f);
 	  break;
-	default:	
-	  if ( ! (f->m_flags & QUIET) ) 
-	    dbg3(Warning, 
-		 "getsystem: bad flag character %c in system %d chord %d\n", 
-		 (void *)((int)c), 
-		 (void*) f->cur_system, 
+	default:
+	  if ( ! (f->m_flags & QUIET) )
+	    dbg3(Warning,
+		 "getsystem: bad flag character %c in system %d chord %d\n",
+		 (void *)((int)c),
+		 (void*) f->cur_system,
 		 (void *)cur_chord);
 	  break;
 	}
     done:
 	if (barline) {
 	    barline = 0;
-	    if (hushbar)  
+	    if (hushbar)
 	        Mstore( ib, l_p, (unsigned char *)"b!         ", f);
 	    else if (tie) {
 		Mstore( ib, l_p, (unsigned char *)"bT         ", f);
@@ -955,7 +955,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		Mstore( ib, l_p, (unsigned char *)"bV         ", f);
 		Orig = 0;
 	    }
-	      
+
 	    else if (barnum) {
 		char line[13];
 		strcpy (line, "b");
@@ -970,11 +970,11 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	}
 	if (BARline) {
 	    BARline = 0;
-	    if (hushbar) 
+	    if (hushbar)
 	        Mstore( ib, l_p, (unsigned char *)"B!         ", f);
 	    else if (nocountbar)
 	      Mstore( ib, l_p, (unsigned char *)"BX         ", f);
-	    else 
+	    else
 	        Mstore( ib ,l_p, (unsigned char *)"B-         ", f);
 	    hushbar =0;
 	    nocountbar=0;
@@ -1011,16 +1011,16 @@ Mstore(i_buf *ib, int *l_p, unsigned char *staff, struct file_info *f)
 {
   int i;
 
-  if ( f->flags & CONVERT 
-       && staff[1] != 'R' 
+  if ( f->flags & CONVERT
+       && staff[1] != 'R'
        && staff[0] != '='
        && strchr( "LWw012345xYy", staff[0]) ) {
     int n_lines = 8;
-    if ( f->flags & CON_SEV ) 
+    if ( f->flags & CON_SEV )
       n_lines = 9;
-    if (f->flags & FIVE) 
+    if (f->flags & FIVE)
       n_lines = 7;
-    if (f->flags & FOUR) 
+    if (f->flags & FOUR)
       n_lines = 6;
     ib->PutByte (staff[0]);
     ib->PutByte (staff[1]);
@@ -1056,7 +1056,7 @@ Mstore(i_buf *ib, int *l_p, unsigned char *staff, struct file_info *f)
       else if ( c == 234 ) c = 'p'; // N14
       // wbc sep 2018       else if ( c >= '0' && c <= '9' && (0 && (!(f->m_flags & SPANISH)))) {
       else if ( c >= '0' && c <= '9' ) {
-	if (i == 8 && f->line_flag == ON_LINE 
+	if (i == 8 && f->line_flag == ON_LINE
 	    && f->flags & CONV_COR ) {
 	  if ( c < '7' ) c = 'a' + c - '0';
 	  if ( c == '7' ) c = 'a';
@@ -1074,7 +1074,7 @@ Mstore(i_buf *ib, int *l_p, unsigned char *staff, struct file_info *f)
       }
       ib->PutByte(c);
     }
-    for ( ; i < STAFF; i++ ) 
+    for ( ; i < STAFF; i++ )
       ib->PutByte (staff[i]);
   }
   else if ( f->flags & CONVERT && staff[0] == '+' ) {
@@ -1090,20 +1090,20 @@ Mstore(i_buf *ib, int *l_p, unsigned char *staff, struct file_info *f)
 
       ib->PutByte(c);
     }
-    for ( ; i < STAFF; i++ ) 
+    for ( ; i < STAFF; i++ )
       ib->PutByte (staff[i]);
   }
 
   else   /* not CONVERT */
     for  (i = 0 ; i < STAFF ; i++) {
       if ( staff[i] == 209 ) { // mac special double dash
-	staff[i]  = '-'; 
-	if ( i < (STAFF-1)) 
-	  staff[i+1]  = '-'; 
+	staff[i]  = '-';
+	if ( i < (STAFF-1))
+	  staff[i+1]  = '-';
       }
       ib->PutByte(staff[i]);
     }
-    
+
   if (staff[0] != '^' && staff[0] != '+' && music[0]) {
     ib->PutByte('M');
     for (i = 0; i < 3; i++) {
@@ -1127,11 +1127,11 @@ Mstore(i_buf *ib, int *l_p, unsigned char *staff, struct file_info *f)
     i = 0;
     text_f = text_s = 0;
     ib->PutByte('T');
-    while (i_text[i] != NEWLINE) 
+    while (i_text[i] != NEWLINE)
       ib->PutByte(i_text[i++]);
   }
   ib->PutByte(NEWLINE);
-  *l_p++; 
+  *l_p++;
 }
 
 void
@@ -1192,15 +1192,15 @@ do_music(i_buf *ib, unsigned char staff[], char buf[], int *l_p, int *skip,
 	strcat ( buff, "MG");
       }
     }
-    
+
     if (music[b] == NEWLINE ||
 	music[b+1] == NEWLINE ||
 	music[b+2] == NEWLINE ) {
-	dbg4(Warning, 
+	dbg4(Warning,
 	     "tab with incomplete music specification %c%c%c line %d\n",
-	     (void *)(int)music[b], 
-	     (void *)(int)music[b+1], 
-	     (void *)(int)music[b+2], 
+	     (void *)(int)music[b],
+	     (void *)(int)music[b+1],
+	     (void *)(int)music[b+2],
 	     (void *)*l_p);
     }
 
@@ -1227,9 +1227,9 @@ do_music(i_buf *ib, unsigned char staff[], char buf[], int *l_p, int *skip,
 #endif
     else {
 	for ( ; i< STAFF; i++) staff[i] = ' ';
-	
+
 	strncpy ( buff, (char *)staff, STAFF);
-	
+
     }
     switch ( buf[++j + *skip] ) {
       case 'T':
@@ -1257,33 +1257,33 @@ do_music(i_buf *ib, unsigned char staff[], char buf[], int *l_p, int *skip,
 	j--;
 	break;
     }
-    //    printf("do music - music is %c%c%c%c\n", 
+    //    printf("do music - music is %c%c%c%c\n",
     //    music[b], music[b+1], music[b+2], music[b+3]);
     if ( buf[++j + *skip] == '\t' ){ // test for more music first
 	if (is_music(&buf[j + *skip + 1])) {
 	    (void)do_music(ib, staff, buf, l_p, skip, j, f);
-	    if (!dontstore) 
+	    if (!dontstore)
 		Mstore( ib, l_p, (unsigned char *)buff, f);
 	    return;
 	}
 	else {
-	  text_f ++;			/* text */ 
+	  text_f ++;			/* text */
 	  strncpy(i_text, &buf[++j + *skip], sizeof(i_text));
-	  if (!dontstore) 
+	  if (!dontstore)
 	    Mstore( ib, l_p, (unsigned char *)buff, f);
 	  return;
 	}
     }
     else if ( buf[j + *skip] == 'T') {  /* test for text */
-      text_f ++;			/* text */ 
+      text_f ++;			/* text */
       strncpy(i_text, &buf[++j + *skip], sizeof(i_text));
-      if (!dontstore) 
+      if (!dontstore)
 	Mstore( ib, l_p, (unsigned char *)buff, f);
       return;
     }
-    
+
     else {
-	if (!dontstore) 
+	if (!dontstore)
 	    Mstore( ib, l_p, (unsigned char *)buff, f);
 	return;
     }
@@ -1309,7 +1309,7 @@ char read_special_ornament (char *buf, int *i, int *skip) {
   char *e = ebuf;
   int jj = 0;
   char result;
-  
+
   while (buf[*i + *skip] && *skip < 32) {
     e[jj] = buf[*i + *skip];
     (*skip)++;jj++;
@@ -1319,7 +1319,7 @@ char read_special_ornament (char *buf, int *i, int *skip) {
       break;
     }
   }
-  
+
   e += 2;
   // printf("ebuf %s\n", e);
 
@@ -1328,5 +1328,5 @@ char read_special_ornament (char *buf, int *i, int *skip) {
   // (*i)--;
   // printf("get special: result: %c\n", result);
   return (result);
-  
+
 }

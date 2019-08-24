@@ -1,7 +1,7 @@
 /*
    This program is copyright 1991 by Wayne Cripps,
    P.O. Box 677 Hanover N.H. 03755.
-   All rights reserved.  It is supplied "as is" 
+   All rights reserved.  It is supplied "as is"
    without express or implied warranty.
 
    Permission is granted to use, copy, modify and distribute
@@ -70,7 +70,7 @@ void include(i_buf *ib, struct file_info *f, char file [])
 #endif  /* WIN32 */
 
     get_tab_file(ffi, ib, newf);
- 
+
     delete (ffi);
 
     f->page = newf->page;
@@ -79,5 +79,5 @@ void include(i_buf *ib, struct file_info *f, char file [])
     free(newf);
 
     return;
-    
+
 }

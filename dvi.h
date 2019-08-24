@@ -1,3 +1,4 @@
+#pragma once
 /*
  *
  * dvi operation macros
@@ -11,7 +12,7 @@ int pt_to_dvi(double pt);
 int mm_to_dvi(double mm);
 int str_to_dvi(const char *string);
 
-#define NUM 12700000 
+#define NUM 12700000
 #define DENOM 473628672
 
 #define SET_CHAR_0 0

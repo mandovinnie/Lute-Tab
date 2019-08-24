@@ -1,3 +1,4 @@
+#pragma once
 
 /* this includes some things to help compile
  * on windows
@@ -5,8 +6,8 @@
  */
 
 /* the following quiets warnings about using
-   the posix string functions that in Windows can 
-   allow buffer overrun attacks.  It must be first in 
+   the posix string functions that in Windows can
+   allow buffer overrun attacks.  It must be first in
    every file that uses string functions
  */
 

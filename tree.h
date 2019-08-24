@@ -1,3 +1,4 @@
+#pragma once
 /*
  * tree.h
  * by Wayne Cripps
@@ -19,7 +20,7 @@ class node {
   node * root;
 public:
   node();			// for root
-  node(const char *key, void *val, node *top); // create node and set val 
+  node(const char *key, void *val, node *top); // create node and set val
   ~node();
   void * get_val(const char *key); /* return val for key */
   void * get_val(); /* return val for current  key */

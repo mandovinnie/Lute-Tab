@@ -5,32 +5,32 @@
 #include "ascii.h"
 #include "i_buf.h"
 
-ascii::ascii() 
+ascii::ascii()
 {
   int i, j;
-  
+
   n_lines = LINES;
   n_char  = 132;
   print_n_char  = 80;
-  
+
   // fprintf (stderr, "starting ascii\n");
-  
+
   ascii_h = 0;			// 0 is top line
   ascii_v = 0;
   n_staves = n_lines - 1;
 
-  for (i=0; i < n_lines; i++) { 
+  for (i=0; i < n_lines; i++) {
     lines[i] = (char *)malloc(n_char+1+64);
 
-    if ( i < 3 ) {      for (j=0; j< n_char; j++) 
+    if ( i < 3 ) {      for (j=0; j< n_char; j++)
 	lines[i][j] = ' ';
     }
     else if ( i < n_staves -2 ) {
-      for (j=0; j< n_char; j++) 
+      for (j=0; j< n_char; j++)
 	lines[i][j] = '_';
     }
     else {
-      for (j=0; j< n_char; j++) 
+      for (j=0; j< n_char; j++)
 	lines[i][j] = ' ';
     }
 
@@ -39,7 +39,7 @@ ascii::ascii()
   }
 }
 
-ascii::~ascii() 
+ascii::~ascii()
 {
   int i;
 
@@ -58,28 +58,28 @@ ascii::~ascii()
   }
 }
 
-void 
+void
 ascii::put_a_char(unsigned char c)
 {
   lines[ascii_v][ascii_h] = c;
 }
 
-void 
+void
 ascii::put_a_char_next(unsigned char c)
 {
   lines[ascii_v][ascii_h+1] = c;
 }
 
-void 
+void
 ascii::put_a_char_before(unsigned char c)
 {
   lines[ascii_v][ascii_h-1] = c;
 }
 void
-ascii::put_barline() 
+ascii::put_barline()
 {
   int i;
-  
+
   for (i=0; i < 4; i++)
     lines[i][ascii_h] = ' ';
   for (; i< n_staves-2; i++) {
@@ -129,7 +129,7 @@ do_ascii(struct list *l, struct file_info *f, i_buf *i_b)
   // fprintf(stderr, "%sXXX\n", l->dat);
 
   ap->reset_v();
-  if (! l->prev ) 
+  if (! l->prev )
     ap->reset_h();
 
   if (f->m_flags & AWIDE)
@@ -140,8 +140,8 @@ do_ascii(struct list *l, struct file_info *f, i_buf *i_b)
   case 'B':
     ap->put_barline();
     if (l->dat[1] == 'v' ) {
-      ap->increment_v();   
-      ap->increment_v();   
+      ap->increment_v();
+      ap->increment_v();
       ap->put_a_char ('v');
     }
     break;
@@ -288,7 +288,7 @@ do_ascii(struct list *l, struct file_info *f, i_buf *i_b)
     ap->put_a_char('v');
     break;
   default:
-    dbg1(Warning, "ascii: time value %c not defined\n", 
+    dbg1(Warning, "ascii: time value %c not defined\n",
 	 (void *)((int)cc));
   }
 

@@ -1,6 +1,6 @@
 %-600
 % -R7
-%-R9
+-R9
 % -300
 -b
 % -l "9.0 in"
@@ -11,6 +11,21 @@
 % $flagstyle=standard
 % a / is 47 
 $slur_depth=-6.0
+
+b
+1  ^aE  ///a
+1  ^aD  /a
+1  ^aD  //a
+1  ^aD  ///a
+b
+1  ^aE  /a
+1  ^aE  //a
+1  ^ae  ///a
+1  ^ad  /a
+1  ^aD  //a
+1  ^aD  ///a
+1  ^aE  //a
+1  ^aE  /a
 
 b
 0 DD"_a

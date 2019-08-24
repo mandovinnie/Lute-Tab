@@ -1,7 +1,8 @@
+#pragma once
 /*
  *
  * to go with sizes.c
- * 
+ *
  */
 
 extern double st_text;
@@ -18,7 +19,7 @@ extern double text_sp;
 extern char mus_space[];
 extern int n_measures;
 extern char thick_bar[];
-extern char baselinespace[]; 
+extern char baselinespace[];
 extern char grid_indent[];
 extern char flag_indent[];
 extern char i_flag_indent[];

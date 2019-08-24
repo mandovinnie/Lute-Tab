@@ -1,4 +1,4 @@
-/* Make a page of tablature 
+/* Make a page of tablature
  */
 
 
@@ -20,17 +20,17 @@ extern int text_font;
 
 int orig_v, orig_h;		// for milticol output
 int setflag(file_info *f, char * string, pass pass);
-int set_string(const char *arg, 
+int set_string(const char *arg,
 		const char *val, struct file_info *f, pass pass);
-int get_text(struct list *l, struct text **text, 
-	     i_buf *i_b, font_list *f_a[], 
+int get_text(struct list *l, struct text **text,
+	     i_buf *i_b, font_list *f_a[],
 	     struct file_info *f, int font);
 double my_max(double a, double b) {
   if (a > b ) return a;
   return b;
 }
 
-int format_page(print *p, i_buf *i_b, 
+int format_page(print *p, i_buf *i_b,
 		font_list *f_a[], struct file_info *f)
 {
     int i;
@@ -55,7 +55,7 @@ int format_page(print *p, i_buf *i_b,
     }
 
     if (f->flags & COPYRIGHT && f->flags & PS ) {
-	if (!(f->m_flags & QUIET)) 
+	if (!(f->m_flags & QUIET))
 	    dbg0 (Warning, "Copyright\n");
 	p->print_copyright();
 	if (f->scribe) {
@@ -67,19 +67,19 @@ int format_page(print *p, i_buf *i_b,
 	    p->moveh(2.20);
 	  }
 	  else if (red == 0.94440){
-	    p->movev(9.56 / 0.94440); 	
+	    p->movev(9.56 / 0.94440);
 	    p->moveh(2.20 / 0.94440);
 	  }
 	  else if (red == 0.88880){
-	    p->movev(9.56 / 0.88880); 	
+	    p->movev(9.56 / 0.88880);
 	    p->moveh(2.20 / 0.88880);
 	  }
 	  else if (red == 0.777770){
-	    p->movev(9.56 / 0.777770); 	
+	    p->movev(9.56 / 0.777770);
 	    p->moveh(2.20 / 0.777770);
 	  }
 	  else {
-	    p->movev(9.56 / 0.666667); 	
+	    p->movev(9.56 / 0.666667);
 	    p->moveh(2.20 / 0.666667);
 	  }
 	  while (*ppp) {
@@ -112,7 +112,7 @@ int format_page(print *p, i_buf *i_b,
     }
 
     if (f->m_flags & A4) staff_len *= 0.96426;
-    
+
     if (f->flags & ROTATE ) {
 	if ( red == 1.0 ) {
 	    staff_len = 9.0;
@@ -139,7 +139,7 @@ int format_page(print *p, i_buf *i_b,
 
     //    o_staff_len = staff_len;
 
-    if (f->flags & PAGENUM && f->flags && ROTATE 
+    if (f->flags & PAGENUM && f->flags && ROTATE
 	&& red == 0.94440 ) {	/* shift whole page for book */
 	int num = p->get_page_number();
 	p->push();
@@ -149,7 +149,7 @@ int format_page(print *p, i_buf *i_b,
 	    p->moveh(0.3);
 	}
 	/* right side does nothing*/
-	
+
     }
     if (f->flags & PAGENUM) {
 	char num[6];
@@ -181,7 +181,7 @@ int format_page(print *p, i_buf *i_b,
     }
     if (f->flags &  MANUSCRIPT ) {
 	flag_h = -1 * str_to_inch (interspace);
-    }    
+    }
     st_text = flag_h + .05;	/* flag height plus space */
 
     if (f->flags & LSA_FORM) {
@@ -191,12 +191,12 @@ int format_page(print *p, i_buf *i_b,
 
 
     p->get_current_loc(&orig_h, &orig_v); // in case we need to come back
-	
+
     while ((c = i_b->GetByte())) {
 	i_b->unGet(c);
 
  /* return if there isn't enough room */
-	if (p->more() && ! (f->m_flags & NO_AUTO_END )) { 
+	if (p->more() && ! (f->m_flags & NO_AUTO_END )) {
 	    return_val = END_MORE;
 	    goto leave;
 	}
@@ -226,18 +226,18 @@ int format_page(print *p, i_buf *i_b,
 		;
 	    break;
 	case '{':
-	    if (tit_last)  
+	    if (tit_last)
 		p->movev(-.085);
 	    tit_last++;
 	    if (one_sys_done) {    /* title after a system, add some space */
 	      /*
-		if (f->flags & LSA_FORM ) 
+		if (f->flags & LSA_FORM )
 		p->movev("1.0 in");
-		else 
+		else
 		*/
-		  if (f->flags & WALLACE ) 
+		  if (f->flags & WALLACE )
 		    p->movev("0.5 in");
-		else 
+		else
 		    p->movev("0.1 in"); /* from system to bottom of title */
 	    }
 	    one_sys_done = 0;
@@ -259,11 +259,11 @@ int format_page(print *p, i_buf *i_b,
 		else if (f->flags & ROTATE  && baroque) {
 		    p->movev( str_to_inch("0.3 in"));
 		}
-		else 
-		    p->movev( str_to_inch("0.40 in")); 
+		else
+		    p->movev( str_to_inch("0.40 in"));
 	    }
 	    else {		                      /* yes, more title  */
-		if (f->m_flags & ALTTITLE) 
+		if (f->m_flags & ALTTITLE)
 		    p->movev( str_to_inch(/* interspace */ "12.0 pt" )
 			  + f_a[3]->fnt->get_height('A'));    /* the em quad */
 		else
@@ -281,13 +281,13 @@ int format_page(print *p, i_buf *i_b,
 	    int h, v;
 	    one_sys_done = 0;
 	    tit_last = 0;
-	    while (( c = i_b->GetByte()) != NEWLINE) 
+	    while (( c = i_b->GetByte()) != NEWLINE)
 		;
 	    p->get_current_loc(&h, &v);
 	    p->moveh(3.5);
-	    if (f->flags & DVI_O) 
+	    if (f->flags & DVI_O)
 		p->movev(orig_v - v);  // dvi
-	    else if  (f->flags & PS) 
+	    else if  (f->flags & PS)
 		p->movev(v - orig_v);
 	    break;
 	}
@@ -333,7 +333,7 @@ int format_page(print *p, i_buf *i_b,
 	    // end wbc dec 2018
 	    break;
 	}
-	
+
 	case 'P':
 	    tit_last=0;
 	    {
@@ -341,7 +341,7 @@ int format_page(print *p, i_buf *i_b,
 		char *pp = nbuf;
 		(void)i_b->GetByte();
 		(void)i_b->GetByte();
-		while ((*pp = i_b->GetByte()) != NEWLINE && *pp!= (char)EOF) 
+		while ((*pp = i_b->GetByte()) != NEWLINE && *pp!= (char)EOF)
 		    pp++;
 		pp++;
 		*pp='\0';
@@ -398,13 +398,13 @@ int format_page(print *p, i_buf *i_b,
 	case NEWLINE:
 	case '\t':
 	case ' ':
-	    c = i_b->GetByte(); 
+	    c = i_b->GetByte();
 	    if ((c = i_b->GetByte()) == 'e') {
 		return_val = END_OK;
 		goto leave;
 	    }
  	    else i_b->unGet(c);
-	    
+
 	    break;
 	case 'V':		/* vertical skip */
 	{
@@ -430,14 +430,14 @@ int format_page(print *p, i_buf *i_b,
 	break;
 	case '%':
 	    while (( c = i_b->GetByte()) != NEWLINE);
-	    break; 
+	    break;
 	default:		/* assume that it must be lines of chords */
 	    tit_last=0;
-	    
+
 
 	    r = getisystem(i_b, f_a, &l_p[sys_count], f);  /* get line tab */
 
-	    //	    fprintf(stderr, "sys_count %d start system %d\n", 
+	    //	    fprintf(stderr, "sys_count %d start system %d\n",
 	    //   sys_count,f->start_system );
 
 	    if ( sys_count  >= f->start_system ) {
@@ -445,36 +445,36 @@ int format_page(print *p, i_buf *i_b,
 	      if (f->flags & NOTES) {        /* thick vert line at beginning */
 		if (f->m_flags & TWOSTAFF ) {
 		  p->push();
-		  // note 7 * interspace gives room 
+		  // note 7 * interspace gives room
 		  // for sharp and flat above staff
 		  p->movev(
 			   10 * m_space + 2 * text_sp * f->n_text +
-			   2 * f->c_space  + 7 * str_to_inch(interspace) 
+			   2 * f->c_space  + 7 * str_to_inch(interspace)
 			   + flag_h + str_to_inch(flag_to_staff) -.011
-			   - (f->line_flag == ON_LINE ? 
+			   - (f->line_flag == ON_LINE ?
 			      str_to_inch(interspace)/2 : 0.0 ));
-		  p->put_rule(0.01, 
+		  p->put_rule(0.01,
 			      ( 10 * m_space + 2 * text_sp * f->n_text +
-				2 * f->c_space  + 7 * str_to_inch(interspace) 
+				2 * f->c_space  + 7 * str_to_inch(interspace)
 				+ flag_h + str_to_inch(flag_to_staff) -.01
-				- (f->line_flag == ON_LINE ? 
+				- (f->line_flag == ON_LINE ?
 				   str_to_inch(interspace)/2 : 0.0 )));
-		  /* for a double line before the staves 
+		  /* for a double line before the staves
 		     p->moveh(-0.06);
-		     p->put_rule(0.03, 
+		     p->put_rule(0.03,
 		     ( 10 * m_space + 2 * text_sp * f->n_text +
-		     2 * f->c_space  + 7 * str_to_inch(interspace) 
+		     2 * f->c_space  + 7 * str_to_inch(interspace)
 		     + flag_h + str_to_inch(flag_to_staff)
-		     - (f->line_flag == ON_LINE ? 
+		     - (f->line_flag == ON_LINE ?
 		     str_to_inch(interspace)/2 : 0.0 )));
 		  */
 		  p->pop();
 		  for (i=0; i< 5; i++ ) {
 		    p->put_rule(staff_len, str_to_inch(staff_height));
 		    p->movev(m_space);
-		  }	
+		  }
 
-		  p->movev( text_sp * f->n_text + f->c_space); 
+		  p->movev( text_sp * f->n_text + f->c_space);
 		  p->movev( str_to_inch(interspace) );
 		}
 		else {  /* just one line of music, thick vert line */
@@ -486,15 +486,15 @@ int format_page(print *p, i_buf *i_b,
 		    p->movev(
 			     jj * m_space + text_sp * f->n_text +
 			     f->c_space  + 6 * str_to_inch(interspace)
-			     + flag_h + str_to_inch(flag_to_staff) 
-			     -.011 
-			     - (f->line_flag == ON_LINE ? 
+			     + flag_h + str_to_inch(flag_to_staff)
+			     -.011
+			     - (f->line_flag == ON_LINE ?
 				str_to_inch(interspace)/2 : 0.0 ));
 		    p->put_rule( 0.03,
 				 jj * m_space + text_sp * f->n_text +
 				 f->c_space  + 6 * str_to_inch(interspace)
 				 + flag_h + str_to_inch(flag_to_staff) -.011
-				 - (f->line_flag == ON_LINE ? 
+				 - (f->line_flag == ON_LINE ?
 				    str_to_inch(interspace)/2 : 0.0 ));
 		  }
 		  p->pop();
@@ -502,9 +502,9 @@ int format_page(print *p, i_buf *i_b,
 		for (i=0; i< 5; i++ ) {
 		  p->put_rule(staff_len, str_to_inch(staff_height));
 		  p->movev(m_space);
-		}	
+		}
 		p->movev( st_text);
-		p->movev( text_sp * f->n_text + f->c_space); 
+		p->movev( text_sp * f->n_text + f->c_space);
 	      }
 	      else if (f->flags & ROTATE  && baroque) {
 		p->movev(flag_h );
@@ -515,8 +515,8 @@ int format_page(print *p, i_buf *i_b,
 	      else {		/* compensate for flag height here */
 		p->movev(flag_h + str_to_inch(flag_to_staff));
 	      }
-	 //     printf("tab_p.cc: format_page: flag_h: %f %d\n", flag_h, inch_to_dvi(flag_h)); // wbc Dec 27 2018   	      
-	      if (!(f->m_flags & QUIET)) 
+	 //     printf("tab_p.cc: format_page: flag_h: %f %d\n", flag_h, inch_to_dvi(flag_h)); // wbc Dec 27 2018
+	      if (!(f->m_flags & QUIET))
 		dbg1(Warning, "tab: tab_p: sys_count: %d\n", (void *)(sys_count+1));
 	      printsystem(p, i_b, f_a, &l_p[sys_count], f);
 	    }
@@ -531,7 +531,7 @@ int format_page(print *p, i_buf *i_b,
 	    sys_count++;
 
 	    if (f->flags & MARKS)
-		p->put_rule(str_to_inch("1 in"), str_to_inch("0.02 in")); 
+		p->put_rule(str_to_inch("1 in"), str_to_inch("0.02 in"));
 
 	    if (f->flags & SAMELINE){
 		f->flags &= ~SAMELINE;
@@ -544,7 +544,7 @@ int format_page(print *p, i_buf *i_b,
 		p->movev(7 * str_to_inch(mus_space)); /* middle c to low c */
 		p->movev(.3);
 		if (f->flags & MARKS)
-		    p->put_rule(str_to_inch(".3 in"), str_to_inch("0.05 in")); 
+		    p->put_rule(str_to_inch(".3 in"), str_to_inch("0.05 in"));
 	    }
 	    else {		/* not Manuscript */
 		int num_lines = 6;
@@ -566,14 +566,14 @@ int format_page(print *p, i_buf *i_b,
 		/* staffspace is percieved space between  */
 		/* bot line of system, top of flags */
 		if (f->flags & MARKS)
-		    p->put_rule(str_to_inch(".3 in"), str_to_inch("0.05 in")); 
+		    p->put_rule(str_to_inch(".3 in"), str_to_inch("0.05 in"));
 	    }
 
 	    if (!(f->flags & NOTES) && f->flags & TXT ) {
 		/* text no music */
 		p->movev( str_to_inch(interspace)); /* only for 7th course! */
 		p->movev( f->n_text * text_sp );
-	    } 
+	    }
 
 	    if (f->flags & NOTES) f->flags &= ~NOTES;
 	    if (f->flags & TXT) f->flags &= ~TXT;
@@ -586,7 +586,7 @@ leave:
     one_sys_done = 0;
     title_done = 0;
     tit_last = 0;
-    if (f->flags & PAGENUM && f->flags && ROTATE 
+    if (f->flags & PAGENUM && f->flags && ROTATE
 	&& red == 0.94440) {
 	p->pop();		/* end shift whole page for book */
     }
@@ -594,7 +594,7 @@ leave:
 }
 
 
-/* draw a blank staff 
+/* draw a blank staff
  */
 
 static int i_space = 0;
@@ -624,11 +624,11 @@ void do_system(print *p, struct file_info *f)
     for (i=0; i< lines; i++ ) {
 	p->put_rule(staff_len, str_to_inch(staff_height));
 	if ( i != lines -1) p->p_movev(i_space);
-    }		
+    }
     p->pop();
 }
 
-signed char getisystem(i_buf *i_b, font_list *f_a[], 
+signed char getisystem(i_buf *i_b, font_list *f_a[],
 		       int *l_p, struct file_info *f)
 {
     signed char c;
@@ -636,7 +636,7 @@ signed char getisystem(i_buf *i_b, font_list *f_a[],
     dbg0(Flow, "getisystem: \n");
 
     *l_p = 0;
-    while (( c = getiline(i_b, f_a, l_p, f)) != END_SYSTEM && c != END_FILE ) 
+    while (( c = getiline(i_b, f_a, l_p, f)) != END_SYSTEM && c != END_FILE )
       ;
 
     if (c == END_FILE) return(END_OK);
@@ -645,7 +645,7 @@ signed char getisystem(i_buf *i_b, font_list *f_a[],
 
 int got_text = 0;		/* for multiple lines of text */
 
-signed char getiline(i_buf *i_b, font_list *f_a[], 
+signed char getiline(i_buf *i_b, font_list *f_a[],
 		     int *l_p, struct file_info *f)
 {
     int i=0;
@@ -654,8 +654,8 @@ signed char getiline(i_buf *i_b, font_list *f_a[],
     char cmdbuf[BUFSIZ], *p;
     extern struct list *listh;
     int font=text_font;
-    
-    got_text = 0;		
+
+    got_text = 0;
 
     // a new listh is allocated for each line
 
@@ -726,7 +726,7 @@ signed char getiline(i_buf *i_b, font_list *f_a[],
 	    default:
 		break;
 	    }
-	} 
+	}
 	if ( i == STAFF ) {
 	    char d;
 	    switch (c) {
@@ -741,7 +741,7 @@ signed char getiline(i_buf *i_b, font_list *f_a[],
 		l->notes->time  = d;
 		d = i_b->GetByte();
 		l->notes->note  = d;
-		if (l->notes->note == 'C') 
+		if (l->notes->note == 'C')
 		    f->c_space = my_max(f->c_space, 0.035);
 		d = i_b->GetByte();
 		l->notes->sharp = d;
@@ -749,11 +749,11 @@ signed char getiline(i_buf *i_b, font_list *f_a[],
 		l->notes->staff = 1;
 		l->notes->reversed = 0;
 
-		if (( d = i_b->GetByte() ) == 'r' || d == '#' 
+		if (( d = i_b->GetByte() ) == 'r' || d == '#'
 		    || d == 'x' || d == '-' || d == '=') {
 		    l->notes->special = d;
 		    d = i_b->GetByte();
-		    if (d == 'M') 
+		    if (d == 'M')
 		      goto music2;
 		    if (d != 'T')
 			break;
@@ -771,7 +771,7 @@ signed char getiline(i_buf *i_b, font_list *f_a[],
 		    l->notes2->time  = d;
 		    d = i_b->GetByte();
 		    l->notes2->note  = d;
-		    if (l->notes2->note == 'C') 
+		    if (l->notes2->note == 'C')
 		      f->c_space = my_max(f->c_space, 0.035);
 		    d = i_b->GetByte();
 		    l->notes2->sharp = d;
@@ -779,11 +779,11 @@ signed char getiline(i_buf *i_b, font_list *f_a[],
 		    l->notes2->staff = 2;
 		    l->notes2->reversed = 0;
 
-		    if (( d = i_b->GetByte() ) == 'r' || d == '#' 
+		    if (( d = i_b->GetByte() ) == 'r' || d == '#'
 			|| d == 'x' || d == '-' || d == '=') {
 			l->notes2->special = d;
 		    }
-		    else 	
+		    else
 			i_b->unGet(d);
 
 		    d = i_b->GetByte();
@@ -817,7 +817,7 @@ signed char getiline(i_buf *i_b, font_list *f_a[],
 	if (i < STAFF ) l->dat[i] = c;
 	if (l->special) l->special[i] = c;
 	i++;
-    } while (c  != EOF && c != NEWLINE && c != '\0'); 
+    } while (c  != EOF && c != NEWLINE && c != '\0');
 
 				// I don't think this
 				// does a whole lot.. Jan 30 97
@@ -828,7 +828,7 @@ signed char getiline(i_buf *i_b, font_list *f_a[],
 	    char *p;
 	    char cc[2];
 	    int fontnum;
-	    
+
 	    p=&(l->special[2]);
 
 	    cc[0] = *p;
@@ -855,7 +855,7 @@ signed char getiline(i_buf *i_b, font_list *f_a[],
     return (c);
 }
 
-int setflag(file_info *f, char * string, pass pass) 
+int setflag(file_info *f, char * string, pass pass)
 {
     int i;
     char *p=string;
@@ -872,7 +872,7 @@ int setflag(file_info *f, char * string, pass pass)
     arg[i] = '\0';
     p++;
     // wbc oct 9 2018
-    // =3D is the quoted printable for = 
+    // =3D is the quoted printable for =
     // if ((*p == '3') && ((*p+1) == 'D' )) {
     if ((*p == '3') && ((*(p+1)) == 'D' )) {
 	    // printf ("HERE in tab_p.cc setflag\n");
@@ -889,8 +889,8 @@ int setflag(file_info *f, char * string, pass pass)
 }
 
 
-int get_text(struct list *l, struct text **textt, 
-	     i_buf *i_b, font_list *f_a[], 
+int get_text(struct list *l, struct text **textt,
+	     i_buf *i_b, font_list *f_a[],
 	     struct file_info *f, int font)
 {
     text *text;
@@ -904,7 +904,7 @@ int get_text(struct list *l, struct text **textt,
 
     text = (struct text *)malloc(sizeof (struct text));
     *textt = text;
-    text->size = 0.0; 
+    text->size = 0.0;
     text->parent = l;
     text->length = 0;
     text->words = /* grab first buffer */
@@ -920,7 +920,7 @@ int get_text(struct list *l, struct text **textt,
 	while (1) {
 	    *p = i_b->GetByte();
 	    if (*p == NEWLINE || *p == '^') { /* end of text, */
-		
+
 		if (*p == '^')
 		    more=1;
 		*p = '\0'; /*  end of this chord */
@@ -946,7 +946,7 @@ int get_text(struct list *l, struct text **textt,
 		      f_a[font]->fnt->get_width('|');
 		    tp->nospace = 1;
 		}
-		else if (pp && *pp != '-') {		  
+		else if (pp && *pp != '-') {
 		  tmp_text += f->font_sizes[font]/12.0 *
 		    f_a[font]->fnt->get_width('-');
 		}
@@ -1001,11 +1001,11 @@ int get_text(struct list *l, struct text **textt,
 		case 'f': /* replace with ff with ff */
 		{
 		    char c = i_b->GetByte();
-		    if (f->flags & DVI_O &&	
+		    if (f->flags & DVI_O &&
 			c == 'f') *p = 0013; /* ff */
 		    else if ( c == 'i') { /* fi */
-			*p = 0014; 
-			tmp_text += 
+			*p = 0014;
+			tmp_text +=
 			  f->font_sizes[font]/12.0 *
 			  f_a[font]->fnt->get_width(0015);
 		    }
@@ -1031,17 +1031,17 @@ int get_text(struct list *l, struct text **textt,
 	    }
 	    pp = p;
 	    p++; n++;
-	    if ( n > sizeof(buff) ) 
+	    if ( n > sizeof(buff) )
 		break;
 	}
 	/* get the maximum */
-	text->size = 
-	    text->size > tmp_text ? 
+	text->size =
+	    text->size > tmp_text ?
 	    text->size : tmp_text;
-	text->length = 
+	text->length =
 	    text->length > n ?
 	    text->length : n;
-			
+
 	tp->words = (char *)malloc(n+2);
 	dbg1(Inter, "tab_p: get_text: text: %s\n", buff);
 	strncpy(tp->words, buff, n);
@@ -1049,14 +1049,14 @@ int get_text(struct list *l, struct text **textt,
 	tp->length = n;
 	tp->size = tmp_text;
 	tp = tp->next;
-			
+
 	tmp_text = 0.0;
 	n = 0;
 	p = buff;
     }
-    if ((got_text + 1) > f->n_text) 
+    if ((got_text + 1) > f->n_text)
 	f->n_text = got_text + 1;
-    //        printf ("get text: length %d size %f %s\n", 
+    //        printf ("get text: length %d size %f %s\n",
     //	text->length, text->size, buff);
     if ( text->length == 0 ) {
       *textt = NULL;

@@ -1,10 +1,11 @@
+#pragma once
 /*
  * printer file definitions, primitaves
  *
  *
  */
 #ifndef _PRINT_
-#define _PRINT_		
+#define _PRINT_
 #include "i_buf.h"
 #include "tfm.h"
 #include "dvi.h"
@@ -40,7 +41,7 @@ class print {
     virtual void page_head() = 0;
     virtual void file_trail() = 0;
     virtual void page_trail() = 0;
-    
+
     virtual int do_page(i_buf *b, font_list *f_l[]) = 0;
     void reset_dvi_vh()   { dvi_h=dvi_v=0;}
     virtual void p_moveh(const int hor) = 0;
@@ -65,8 +66,8 @@ class print {
           { p_put_rule(inch_to_dvi(ww), inch_to_dvi(h)); }
     void put_rule(int ww, int h) { p_put_rule(ww, h); }
     virtual void p_put_rule(int w, int h) = 0;
-    virtual void put_a_char (unsigned char c) = 0;	
-    virtual void set_a_char (unsigned char c) = 0;	
+    virtual void put_a_char (unsigned char c) = 0;
+    virtual void set_a_char (unsigned char c) = 0;
     virtual void use_font   (int fontnum) = 0;
     int get_font()        { return (curfont); }
     virtual void do_tie(double length) = 0;
@@ -75,10 +76,10 @@ class print {
     virtual void do_half_tie_reversed(double length) = 0;
     virtual void do_rtie(int bloc, int eloc) = 0;
     virtual void print_clipped(char c, int font) = 0;
-    virtual void saveloc(int reg) { slp(reg, save_h, save_v);} 
+    virtual void saveloc(int reg) { slp(reg, save_h, save_v);}
     virtual void glp(int reg,int h[], int v[]);
     void slp(int reg, int h[],int v[]);
-    void getloc(int reg)       { glp(reg, save_h, save_v); }	
+    void getloc(int reg)       { glp(reg, save_h, save_v); }
     void get_current_loc(int *h, int *v) { *h = dvi_h; *v = dvi_v; }
     virtual void push()=0;
     virtual void pop()=0;
@@ -88,7 +89,7 @@ class print {
     int get_h(){return (dvi_h);}
     int get_v(){return (dvi_v);}
     virtual void put_slash
-      (int bloc, int eloc, int count, struct file_info *f) = 0; 
+      (int bloc, int eloc, int count, struct file_info *f) = 0;
     virtual void put_uline(int bloc, int eloc) = 0;
     virtual void put_r_uline(int bloc, int eloc) = 0;
     virtual void put_w_uline(int bloc, int eloc) = 0;
@@ -96,8 +97,8 @@ class print {
     virtual void put_med_slant(int bloc, int eloc) = 0;
     virtual void put_slant(int bloc, int eloc) = 0;
     virtual int  more() = 0;
-    virtual void showsave(int reg) = 0;	
-    virtual void p_num(int n) = 0; 
+    virtual void showsave(int reg) = 0;
+    virtual void p_num(int n) = 0;
     virtual void print_draft() = 0;
     virtual void vert_curve(int len)= 0;
     virtual void print_copyright() = 0;

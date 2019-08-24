@@ -24,7 +24,7 @@ void mapflag(print *p, font_list *f_a[], char c, struct file_info *f)
 /*    printf("mapflag: flags %X   c %c\n", flags, c);  */
 
 /*
-  if (f->line_flag == ON_LINE) 
+  if (f->line_flag == ON_LINE)
   p->movev (-.5 * str_to_inch(interspace));
   */
     switch (c) {
@@ -48,7 +48,7 @@ void mapflag(print *p, font_list *f_a[], char c, struct file_info *f)
 	case BOARD_FLAGS:
 	case STAND_FLAGS:
 	    p->moveh(i_flag_indent);
-	    p->put_a_char(c); 
+	    p->put_a_char(c);
 	    break;
 	case ITAL_FLAGS:
 	case S_ITAL_FLAGS:
@@ -64,7 +64,7 @@ void mapflag(print *p, font_list *f_a[], char c, struct file_info *f)
 	  break;
 	default:
 	    p->moveh(i_flag_indent);
-	    p->put_a_char(c); 
+	    p->put_a_char(c);
 	    break;
 	}
 	break;
@@ -72,12 +72,12 @@ void mapflag(print *p, font_list *f_a[], char c, struct file_info *f)
 	switch (flags) {
 	case CONTEMP_FLAGS:
 	    p->moveh(i_flag_indent);
-	    p->put_a_char(c); 
+	    p->put_a_char(c);
 	    break;
 	case BOARD_FLAGS:
 	case STAND_FLAGS:
 	    p->moveh(i_flag_indent);
-	    p->put_a_char(c); 
+	    p->put_a_char(c);
 	    break;
 	case ITAL_FLAGS:
 	case THIN_FLAGS:
@@ -101,13 +101,13 @@ void mapflag(print *p, font_list *f_a[], char c, struct file_info *f)
 	  break;
 	default:
 	  p->moveh(i_flag_indent);
-	  p->put_a_char(c); 
+	  p->put_a_char(c);
 	  break;
 	}
 	break;
     case '0':
       /*
-	if (baroque) {  // wbc july 2019 
+	if (baroque) {  // wbc july 2019
             p->moveh(flag_indent);
             p->put_a_char(c + 146);
             break;
@@ -130,7 +130,7 @@ void mapflag(print *p, font_list *f_a[], char c, struct file_info *f)
             break;
 	  }
 	  p->moveh(i_flag_indent);
-	  p->put_a_char(232);	    
+	  p->put_a_char(232);
 	  break;
 	case THIN_FLAGS:
 	  if (baroque) {  /* wbc july 2019 */
@@ -139,11 +139,11 @@ void mapflag(print *p, font_list *f_a[], char c, struct file_info *f)
             break;
 	  }
 	  p->moveh(i_flag_indent);
-	  p->put_a_char(242); 
+	  p->put_a_char(242);
 	  break;
 	case CONTEMP_FLAGS:
 	    p->moveh(i_flag_indent);
-	    p->put_a_char(c - '0' + 202); 
+	    p->put_a_char(c - '0' + 202);
 	    break;
 	case BOARD_FLAGS:
 	case STAND_FLAGS:
@@ -154,7 +154,7 @@ void mapflag(print *p, font_list *f_a[], char c, struct file_info *f)
 	    p->moveh(flag_indent);
 	    p->put_a_char(c + 146);
 	    break;
-	}	
+	}
 	break;
     case '1':
     case '2':
@@ -173,7 +173,7 @@ void mapflag(print *p, font_list *f_a[], char c, struct file_info *f)
 	  break;
 	case S_ITAL_FLAGS:
 	  p->moveh(i_flag_indent);
-	  p->put_a_char( c - '0' + 232);	    
+	  p->put_a_char( c - '0' + 232);
 	  break;
 	case THIN_FLAGS:
 	case CAP_FLAGS:
@@ -183,7 +183,7 @@ void mapflag(print *p, font_list *f_a[], char c, struct file_info *f)
             break;
 	  }
 	  p->moveh(i_flag_indent);
-	  p->put_a_char(c - '0' + 242); 
+	  p->put_a_char(c - '0' + 242);
 	  break;
 	case CONTEMP_FLAGS:
 	  if (0 && baroque) {  /* wbc july 2019 baroque contemp flags exist */
@@ -192,7 +192,7 @@ void mapflag(print *p, font_list *f_a[], char c, struct file_info *f)
             break;
 	  }
 	  p->moveh(i_flag_indent);
-	  p->put_a_char(c - '0' + 202); 
+	  p->put_a_char(c - '0' + 202);
 	  break;
 	case BOARD_FLAGS:
 	  p->moveh(flag_indent);
@@ -206,7 +206,7 @@ void mapflag(print *p, font_list *f_a[], char c, struct file_info *f)
 	  p->moveh(flag_indent);
 	  p->put_a_char(c + 146);
 	  break;
-	}	
+	}
 	break;
     case '~':
       p->put_a_char(067);
@@ -219,7 +219,7 @@ void mapflag(print *p, font_list *f_a[], char c, struct file_info *f)
     case 'x':
       break;
     default:
-      p->put_a_char(c);	
+      p->put_a_char(c);
     }
 }
 
@@ -242,7 +242,7 @@ void mapchar(print *p, font_list *f_a[], unsigned char c, struct file_info *f)
 	    break;
 	  case ITAL_NUM:
 	    if (f_a[0]->fnt->is_defined(c - 20)) {
-		p->moveh((f_a[0]->fnt->get_width(133) 
+		p->moveh((f_a[0]->fnt->get_width(133)
 			  - f_a[0]->fnt->get_width(c - 20))/2.0);
 		p->put_a_char(c - 20); /* map to italian  */
 	    }
@@ -298,9 +298,9 @@ void mapchar(print *p, font_list *f_a[], unsigned char c, struct file_info *f)
 	    else if (f->num_flag == ITAL_NUM) {
 	      if (c == 10 )
 		p->moveh(-0.021);
-	      if (c == 11 ) 
+	      if (c == 11 )
 		p->moveh(-0.009);
-	      if (c == 12 || c == 13) 
+	      if (c == 12 || c == 13)
 		p->moveh(-0.018);
 	      p->set_a_char( c/10 + 0202 );
 	      p->moveh(0.011);
@@ -317,7 +317,7 @@ void mapchar(print *p, font_list *f_a[], unsigned char c, struct file_info *f)
 	c = 'E';			//  the curly baroque e
       }
 
-      switch (f->char_flag) {	
+      switch (f->char_flag) {
       case STAND_CHAR:
 	p->put_a_char(c);
 	break;
@@ -361,8 +361,8 @@ void mapchar(print *p, font_list *f_a[], unsigned char c, struct file_info *f)
     }
     else if ( c == 'x' && f->num_flag ==  ITAL_NUM ) {
       //           printf("here in map flag\n");
-	   p->moveh((f_a[0]->fnt->get_width(133) 
-		     - f_a[0]->fnt->get_width('X'))/2.0); 
+	   p->moveh((f_a[0]->fnt->get_width(133)
+		     - f_a[0]->fnt->get_width('X'))/2.0);
 	   p->put_a_char('X');
     }
     else if ( c == 0xd1) {

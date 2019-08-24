@@ -1,3 +1,4 @@
+#pragma once
 
 /*
  *
@@ -5,7 +6,7 @@
  *
  *
  */
- 
+
 #ifndef __BUFFER__
 #define __BUFFER__
 
@@ -39,7 +40,7 @@ class buffer {
     virtual void dump(const char *fname, const mode mode);
 };
 
-enum How { rew =0, cur=1, end=2};  // for Seek 
+enum How { rew =0, cur=1, end=2};  // for Seek
 
 
 #endif /* __BUFFER__ */

@@ -29,7 +29,7 @@ dvi_print::dvi_print(font_list *font_array[], file_info *f)
 dvi_print::~dvi_print()
 {
     file_trail();
-    if (f_name[0]) 
+    if (f_name[0])
       pr_out->dump(f_name, Creat);
     else
       pr_out->dump("out.dvi", Creat);
@@ -146,11 +146,11 @@ void dvi_print::p_movev( const int ver)
     }
 }
 
-void dvi_print::p_moveh( const int hor) 
+void dvi_print::p_moveh( const int hor)
 {
    if (!hor) return;
 
-   dvi_h += hor;	
+   dvi_h += hor;
    if (hor & 0xff800000) {
        dvi_command(RIGHT4, hor, 0);
    }
@@ -164,12 +164,12 @@ void dvi_print::p_moveh( const int hor)
        dvi_command(RIGHT1, hor, 0); /* was RIGHT4 */
    }
 }
-void dvi_print::p_put_rule(int w, int h) 
-{ 
+void dvi_print::p_put_rule(int w, int h)
+{
     dvi_command(PUT_RULE, h, w);
 }
-void dvi_print::put_a_char (unsigned char c) 
-{    
+void dvi_print::put_a_char (unsigned char c)
+{
   //    printf ("dviprint - put - c is %d %o %c\n", c, c, c);
     if (highlight==On) {
 	moveh (-.07);
@@ -177,15 +177,15 @@ void dvi_print::put_a_char (unsigned char c)
 	moveh (.07);
     }
     dvi_command(PUT1, (int)c, 0);
-    if (highlight==On) { 
+    if (highlight==On) {
 	moveh (.10);
 	dvi_command(PUT1, (int)')', 0);
 	moveh (-.10);
-	clear_highlight();  
+	clear_highlight();
     }
 }
-void dvi_print::set_a_char (unsigned char c) 
-{ 
+void dvi_print::set_a_char (unsigned char c)
+{
 //    if (highlight==On) {
 //	dvi_command(PUT1, (int)'(', 0);
 //    }
@@ -202,37 +202,37 @@ void dvi_print::set_a_char (unsigned char c)
 	dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width(c));
 	dvi_command(SET1, (int)c, 0);
     }
-//    if (highlight==On) { 
-//	clear_highlight();  
+//    if (highlight==On) {
+//	clear_highlight();
 //    }
 }
-void dvi_print::use_font(int fontnum) 
-{ 
+void dvi_print::use_font(int fontnum)
+{
     curfont = fontnum;
     dvi_command(FNT1, fontnum, 0);
 }
-void dvi_print::do_tie(double length) 
-{ 
+void dvi_print::do_tie(double length)
+{
     dbg0(Warning, "Undefined Proceedure dvi do_tie \n");
 }
-void dvi_print::do_tie_reversed(double length) 
-{ 
+void dvi_print::do_tie_reversed(double length)
+{
     dbg0(Warning, "Undefined Proceedure dvi do_tie_reversed \n");
 }
-void dvi_print::do_half_tie(double length) 
-{ 
+void dvi_print::do_half_tie(double length)
+{
     dbg0(Warning, "Undefined Proceedure dvi do_tie \n");
 }
-void dvi_print::do_half_tie_reversed(double length) 
-{ 
+void dvi_print::do_half_tie_reversed(double length)
+{
     dbg0(Warning, "Undefined Proceedure dvi do_tie_reversed \n");
 }
-void dvi_print::do_rtie(int bloc, int eloc) 
-{ 
+void dvi_print::do_rtie(int bloc, int eloc)
+{
     dbg0(Warning, "tab: do_rtie: ties are not printed in dvi mode \n");
 }
 void dvi_print::print_clipped(char c, int font)
-{ 
+{
 //    dbg0(Warning, "Undefined Proceedure ps_clipped\n");
     switch (c) {
       case 'i':
@@ -245,12 +245,12 @@ void dvi_print::print_clipped(char c, int font)
 	set_a_char(c);
 	break;
     }
-	
+
 }
 
 void dvi_print::put_slash
-      (int bloc, int eloc, int count, struct file_info *f) 
-{ 
+      (int bloc, int eloc, int count, struct file_info *f)
+{
     double nflags = (double)count;
     int thickness = str_to_dvi("0.005 in");
 
@@ -259,7 +259,7 @@ void dvi_print::put_slash
     saveloc(REGS-1);
     while (count) {
 	dvi_command(PUT_RULE,
-		    thickness, 
+		    thickness,
 		    save_h[eloc] - save_h[bloc]);
 	movev(str_to_inch("0.03 in") + 0.06/ nflags);
 	count --;
@@ -267,25 +267,25 @@ void dvi_print::put_slash
     getloc(REGS-1);
 }
 void dvi_print::put_uline(int bloc, int eloc)
-{ 
+{
     saveloc(REGS-1);
 
-    dvi_command(PUT_RULE, 
+    dvi_command(PUT_RULE,
 		str_to_dvi("0.005 in"),
 		save_h[eloc] - save_h[bloc]);
     getloc(REGS-1);
 }
-void dvi_print::put_thick_slant(int bloc, int eloc) 
-{ 
+void dvi_print::put_thick_slant(int bloc, int eloc)
+{
     dbg0(Warning, "using thin slant instead of thick \n");
     put_slant(bloc, eloc);
 }
-void dvi_print::put_med_slant(int bloc, int eloc) 
-{ 
+void dvi_print::put_med_slant(int bloc, int eloc)
+{
     dbg0(Warning, "using thin slant instead of medium\n");
     put_slant(bloc, eloc);
 }
-void dvi_print::put_slant(int bloc, int eloc) 
+void dvi_print::put_slant(int bloc, int eloc)
 {
     int length, height, inter;
     unsigned char cc;
@@ -295,17 +295,17 @@ void dvi_print::put_slant(int bloc, int eloc)
     int i_ratio;
 
     saveloc(REGS-1);
-    
+
     length = (save_h[eloc] - save_h[bloc]);
-    height = (save_v[eloc] - save_v[bloc]); 
-    
+    height = (save_v[eloc] - save_v[bloc]);
+
     if (!length) {
 	dbg0(Warning, "tab: put_slant: null length!\n");
 	put_a_char(0);
 	put_a_char('Q');
 	return;
-    }    
-    
+    }
+
     i_ratio = height * 256 / length;
     if (i_ratio > 10){
 	cc = 3;
@@ -318,50 +318,50 @@ void dvi_print::put_slant(int bloc, int eloc)
     }
     else if (i_ratio > -100 ) cc = 4; /* shallow upwards */
     else cc = 1;		/* steep upwards */
-    
+
     c_h = inch_to_dvi(f_a[0]->fnt->get_width(cc));
     c_v = inch_to_dvi(f_a[0]->fnt->get_height(cc));
-    
-    if ( c_h == 0 || c_v == 0 ) 
+
+    if ( c_h == 0 || c_v == 0 )
       dbg1 (Error, "tab: slant: font width compatibility problem %d\n",
 	    (void *)(int)(cc));
-    
+
     if (c_h == 0 || c_v == 0) {
 	dbg1(Warning,
-	     "tab: put_slant: bad font char width or height %d\n", 
+	     "tab: put_slant: bad font char width or height %d\n",
 	     (void *)((int)cc));
 	return;
     }
     if (height < 0) c_v = - c_v;
-    
+
     while (length > c_h) {
 	put_a_char((char)cc);
 	p_moveh(c_h);
-	p_movev(c_v); 
+	p_movev(c_v);
 	length -= c_h;
     }
     inter = length - c_h;
     p_moveh(inter);
     p_movev(inter * (((c_v*64 )/ c_h)) / 64 );
-    
-    put_a_char((char)cc); 
-    
+
+    put_a_char((char)cc);
+
     getloc(REGS-1);
     return;
 }
 int  dvi_print::more()		// return 1 if page full
-{ 
+{
     int foo=inch_to_dvi(8.8 / red);
 //    printf("dvi more %f\n", dvi_to_inch(dvi_v));
-    if (dvi_v  > foo) 
+    if (dvi_v  > foo)
       return(1);
     return(0);
 }
-void dvi_print::showsave(int reg) 
+void dvi_print::showsave(int reg)
    { dbg0(Error, "Undefined Proceedure showsave\n");}
 
-void dvi_print::p_num(int n) 
-{ 
+void dvi_print::p_num(int n)
+{
 #define N_S 5
     char string[N_S];
     int i;
@@ -376,15 +376,15 @@ void dvi_print::p_num(int n)
     use_font(1);
     for (i=0; i < N_S && string[i]; i++)
       set_a_char(string[i]);
-	
+
     use_font(0);
     pop();
 }
 void dvi_print::print_draft() { dbg0(Error, "Undefined Proceedure ps_draft\n");}
 void dvi_print::vert_curve(int len)
       { dbg0(Error, "Undefined Proceedure dvi vert_curve\n");}
-void dvi_print::print_copyright() 
-{ 
+void dvi_print::print_copyright()
+{
     dbg0(Error, "Undefined Proceedure print_copyright\n");
 }
 void dvi_print::define_font(int font_num, char *name)
@@ -408,10 +408,10 @@ void dvi_print::define_font(int font_num, char *name)
     SignedQuad((long)(*ff)->fnt->get_design_size()); /* design size */
     PutByte(0);		                /* a - the length of directory */
     PutByte((unsigned char)l);		/* length of font name */
-    for (j=0; j< l ; j++) 
+    for (j=0; j< l ; j++)
       PutByte((unsigned char)name[j]);
     /* font name */
-    
+
     /* font area, or directory goes here */
 }
 
@@ -512,8 +512,8 @@ void dvi_print::dvi_command(int com, int val1, int val2)
 	PutByte(o_val1);
 	break;
       case PUT_RULE:
-	PutByte((unsigned char)PUT_RULE); 
-	SignedQuad(o_val1); 
+	PutByte((unsigned char)PUT_RULE);
+	SignedQuad(o_val1);
 	SignedQuad(o_val2);
 	break;
       case PUT1:
@@ -540,7 +540,7 @@ void dvi_print::dvi_command(int com, int val1, int val2)
 	PutByte((unsigned char)NO_OP);
 	break;
       default:
-	dbg1(Warning, "tab: dvi_command: undefined command %d\n", 
+	dbg1(Warning, "tab: dvi_command: undefined command %d\n",
 	     (void *)com);
 	break;
     }
@@ -555,13 +555,13 @@ int dvi_print::do_page(i_buf *i_b,  struct font_list *f_a[])
     return (format_page(this, i_b, f_a, f_i));
 }
 
-void dvi_print::PutByte(unsigned char c) 
+void dvi_print::PutByte(unsigned char c)
   { cur_loc++;   pr_out->PutByte(c); }
-void dvi_print::SignedPair(unsigned short c) 
+void dvi_print::SignedPair(unsigned short c)
   { cur_loc +=2; pr_out->SignedPair(c); }
-void dvi_print::SignedTrio(int c) 
+void dvi_print::SignedTrio(int c)
   { cur_loc +=3; pr_out->SignedTrio(c); }
-void dvi_print::SignedQuad(int c) 
+void dvi_print::SignedQuad(int c)
   { cur_loc +=4; pr_out->SignedQuad(c); }
 
 void dvi_print::comment(const char *string)

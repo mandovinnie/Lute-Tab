@@ -521,7 +521,7 @@ void args(int argc, char ** argv, struct file_info *f)
   char *aa=0;
   //    void (*r) (const char *, struct file_info *f);
   void (*r)(const char *, struct file_info *);
-  
+
   struct tuple arglist[] = {
 			    {(char*)"af", (void*)set_font_flag},
 			    {(char*)"C", (void*)set_C},
@@ -629,7 +629,7 @@ void args(int argc, char ** argv, struct file_info *f)
 			    {(char*)"count_dots", (void*) set_count_dots},
 			    {(char *)0, (void*)0}
   };
-  
+
   static tree at(arglist);
 
   /* check for blank after flag */
@@ -639,7 +639,7 @@ void args(int argc, char ** argv, struct file_info *f)
     if (**argv == '-') {
       (*argv)++;
       r = (void(*)(const char*, file_info*))at.get(*argv);
-      
+
       if (r) {
 	aa = argv[1];
 	(*r)(aa, f);
@@ -649,9 +649,9 @@ void args(int argc, char ** argv, struct file_info *f)
 	aa = argv[0];
 	dbg1(Warning, "tab: args: unknown flag %s\n", (void*)aa);
       }
-      
+
       //swallow argument values here
-      
+
       switch (argv[0][0]){
       case 't':
 	if (strncmp(argv[0], "tuning", 6 ))
@@ -693,7 +693,7 @@ void args(int argc, char ** argv, struct file_info *f)
       default:
 	break;
       }
-      
+
       *argv++;
       argc--;
     }
@@ -725,7 +725,7 @@ void args(int argc, char ** argv, struct file_info *f)
     dbg0 (Error, "No file name given\n");
   }
 }
-  
+
 #define ARG_LEN 120
 
 void args_from_string(char *buf, struct file_info *f)

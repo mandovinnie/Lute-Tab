@@ -1,3 +1,4 @@
+#pragma once
 /* pk_input.h	Samuel W. Bent		1/23/91 */
 /* routines for reading PK files */
 
@@ -5,7 +6,7 @@
 /* $Log:	pk_input.h,v $
  * Revision 1.1  92/08/18  13:08:44  wbc
  * Initial revision
- * 
+ *
  */
 
 #ifndef _PK_INPUT_

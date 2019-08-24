@@ -86,7 +86,7 @@ void do_nmidi(struct list *l, struct file_info *f, i_buf *i_b)
     time_r[10]++; break;
   }
 
-  if (ch[1] == '.') 
+  if (ch[1] == '.')
      time = time * 3/2;
 
   switch (cc) {
@@ -112,7 +112,7 @@ void do_nmidi(struct list *l, struct file_info *f, i_buf *i_b)
       exit(0);
     }
     midi_p->next = (chord *)malloc(sizeof (struct chord));
-    midi_p->next->prev = midi_p; 
+    midi_p->next->prev = midi_p;
     midi_p = midi_p->next;
     midi_p->next = 0;
     for ( i=0; i< STRINGS; i++) {
@@ -149,15 +149,15 @@ void do_nmidi(struct list *l, struct file_info *f, i_buf *i_b)
 	}
 	else if ((i == 0 && l->dat[8] == 'a') && (l->prev->dat[8] == 's')) {
 	  midi_p->dat[i] -= 3;
-	}      
+	}
 	else if ((i == 0 && l->dat[8] == 'a') && (l->prev->dat[8] == 't')) {
 	  midi_p->dat[i] -= 5;
-	}      
-      } 
-      else if (l->dat[8-i] == 'j' || l->dat[8-i] == 'k' || 
+	}
+      }
+      else if (l->dat[8-i] == 'j' || l->dat[8-i] == 'k' ||
 	       l->dat[8-i] == 'l') {
         midi_p->dat[i] = i_nmidi_strings[i] + (l->dat[8-i] -'a' - 1);
-      } 
+      }
       else {
 	;
       }
@@ -171,7 +171,7 @@ void do_nmidi(struct list *l, struct file_info *f, i_buf *i_b)
   }
 /*
   printf("do_nmidi: %s\n", l->dat);
-  printf("do_nmidi: %2x %2x %2x %2x %2x %2x %2x \n", 
+  printf("do_nmidi: %2x %2x %2x %2x %2x %2x %2x \n",
 	 midi_p->dat[0], midi_p->dat[1], midi_p->dat[2],
 	 midi_p->dat[3], midi_p->dat[4], midi_p->dat[5],
 	 midi_p->dat[6]);

@@ -50,14 +50,14 @@ pdf_print::pdf_print(font_list *font_array[], file_info *f)
     new_xref_list();
 
     if (f->m_flags & A4 ) { // a4 is  297mm*210mm
-      if (!(f->flags & ROTATE)) 
+      if (!(f->flags & ROTATE))
 	pdf_top_of_page = 98670000 +  6563672/* 6712847 */;
-      else  
+      else
 	pdf_top_of_page = 98670000;
     }
     else
       pdf_top_of_page = 98670000;
-    /*    printf("top of page %f %f %u %u\n",  
+    /*    printf("top of page %f %f %u %u\n",
 	   dvi_to_inch(pdf_top_of_page),
 	   dvi_to_mm(pdf_top_of_page),
 	   pdf_top_of_page,
@@ -98,7 +98,7 @@ void pdf_print::file_head()
     char pk_name[300];
     char *p = NULL;
 
-    if (nodump) 
+    if (nodump)
       return;
 
     byte_count =  pdf_header.PutStringC("%PDF-1.4\n");
@@ -116,13 +116,13 @@ void pdf_print::file_head()
     byte_count += pdf_fontdef();
 
     if (font_path) {
-      //fprintf (stderr, "pdf_print - setting font path %s from command line\n", 
+      //fprintf (stderr, "pdf_print - setting font path %s from command line\n",
       //font_path);
       p = font_path;
     }
     else
       p = getenv("TABFONTS");
-    if (p == NULL ) 
+    if (p == NULL )
 #ifdef TFM_PATH
 	strcpy(pk_name, TFM_PATH);
 #else
@@ -152,9 +152,9 @@ void pdf_print::file_head()
 	strcat (pk_name, "8");
     else if (red == 0.777770)
 	strcat (pk_name, "7");
-    else 
+    else
 	strcat (pk_name, "6");
-    
+
     if (f_i->m_flags & DPI1200)
 	strcat (pk_name, ".1200pk");
     else if (f_i->m_flags & DPI2400)
@@ -253,7 +253,7 @@ void pdf_print::make_pdf_font(i_buf *pdf_header)
 
     if (f_i->flags & DPI600) dvi_to_dots /= 2.0;
     else if (f_i->m_flags & DPI1200) dvi_to_dots /= 4.0;             //adS
-    else if (f_i->m_flags & DPI2400) dvi_to_dots /= 8.0;         
+    else if (f_i->m_flags & DPI2400) dvi_to_dots /= 8.0;
 
     pdf_header->PutString("10 dict begin\n");
     pdf_header->PutString("/FontType 3 def\n");
@@ -291,7 +291,7 @@ void pdf_print::make_pdf_font(i_buf *pdf_header)
 	if (bits[i].bm_w && pdf_used[i]) {
 //	    printf ( "b_%d", i);
 	    pdf_bit_char(pdf_header, i);
-	} 
+	}
     }
     pdf_header->PutString("end %% of CharProcs\n");
     pdf_header->PutString("/CharWidths ");
@@ -318,7 +318,7 @@ void pdf_print::make_pdf_font(i_buf *pdf_header)
     pdf_header->PutString(" 0 get /MaxXVal exch def 1 get /MaxYVal exch def \n");
     pdf_header->PutString(" 2 get /MinXVal exch def 3 get /MinYVal exch def pop \n");
     pdf_header->PutString(" MaxXVal 0 MinXVal MinYVal MaxXVal MaxYVal\n");
-    pdf_header->PutString(" setcachedevice\n"); 
+    pdf_header->PutString(" setcachedevice\n");
     pdf_header->PutString(" /CharProcs get exch\n");
     pdf_header->PutString(" 2 copy known not {pop /.notdef} if\n");
     pdf_header->PutString(" get exec\n");
@@ -432,31 +432,31 @@ void pdf_print::p_movev(const int ver)
     dvi_v -= ver;
 }
 
-void pdf_print::p_moveh(const int hor) 
+void pdf_print::p_moveh(const int hor)
 {
    if (hor == 0) return;
    pdf_command(MOVEH, hor, 0, 0, 0);
-   dvi_h += hor;	
+   dvi_h += hor;
 }
 void pdf_print::p_moveto(const int hor, const int ver)
 {
 //    printf("in moveto %d %d\n", hor, ver);
     pdf_command(MOVE, hor, -ver, 0, 0);
-    dvi_h = hor;	
-    dvi_v = ver;	
+    dvi_h = hor;
+    dvi_v = ver;
 }
-void pdf_print::p_put_rule(int w, int h) 
-{ 
+void pdf_print::p_put_rule(int w, int h)
+{
     if (highlight==On){
 	pdf_command(P_S_GRAY, 0, 0, 0, 0);
     }
     pdf_command(RULE, w, h, 0, 0);
-    if (highlight==On) { 
-	clear_highlight();  
+    if (highlight==On) {
+	clear_highlight();
 	pdf_command(P_U_GRAY, 0, 0, 0, 0);
     }
 }
-void pdf_print::put_a_char (unsigned char c) 
+void pdf_print::put_a_char (unsigned char c)
 {
     if (highlight==On)  {
 	if (highlight_type == Paren ) {
@@ -470,11 +470,11 @@ void pdf_print::put_a_char (unsigned char c)
 	else
 	  pdf_command(P_S_GRAY, 0, 0, 0, 0);
     }
-    if (curfont == 0 && pdf_used[c] < 4) 
+    if (curfont == 0 && pdf_used[c] < 4)
 	pdf_used[c]++;
     pdf_command(PCHAR, (int)c, 0, 0,0);
-    if (highlight==On) { 
-	clear_highlight();  
+    if (highlight==On) {
+	clear_highlight();
 	if (highlight_type == Paren) {
 	  double www=f_a[curfont]->fnt->get_width(c);
 	    moveh (www);
@@ -488,11 +488,11 @@ void pdf_print::put_a_char (unsigned char c)
 	  pdf_command(P_U_GRAY, 0, 0, 0, 0);
     }
 }
-void pdf_print::set_a_char (unsigned char c) 
-{ 
-    if (highlight==On) 
+void pdf_print::set_a_char (unsigned char c)
+{
+    if (highlight==On)
 	pdf_command(P_S_GRAY, 0, 0, 0, 0);
-    if (c == 0365) 
+    if (c == 0365)
       dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width('i'));
     else if ( c == 0074)
       dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width('!'));
@@ -526,16 +526,16 @@ void pdf_print::set_a_char (unsigned char c)
 	else if ( c == 0076) c = 0277; // ? inverted
     }
 
-    if (curfont == 0 && pdf_used[c] < 4) 
+    if (curfont == 0 && pdf_used[c] < 4)
       pdf_used[c]++;
     pdf_command(CHAR, (int)c, 0, 0,0);
-    if (highlight==On) { 
-	clear_highlight();  
+    if (highlight==On) {
+	clear_highlight();
 	pdf_command(P_U_GRAY, 0, 0, 0, 0);
     }
 }
-void pdf_print::use_font(int fontnum) 
-{ 
+void pdf_print::use_font(int fontnum)
+{
     curfont = fontnum;
     switch (fontnum) {
     case 7:			/* page nnumber font doesn't shrink 12 pt */
@@ -569,35 +569,35 @@ void pdf_print::use_font(int fontnum)
     }
 }
 
-void pdf_print::do_tie(double length) 
-{ 
+void pdf_print::do_tie(double length)
+{
     pdf_command ( PTIE, inch_to_dvi(length), 0, 0, 0);
 }
-void pdf_print::do_tie_reversed(double length) 
-{ 
+void pdf_print::do_tie_reversed(double length)
+{
     pdf_command ( PRTIE, inch_to_dvi(length), 0, 0, 0);
 }
-void pdf_print::do_half_tie(double length) 
-{ 
+void pdf_print::do_half_tie(double length)
+{
     pdf_command ( PHTIE, inch_to_dvi(length), 0, 0, 0);
 }
-void pdf_print::do_half_tie_reversed(double length) 
-{ 
+void pdf_print::do_half_tie_reversed(double length)
+{
     pdf_command ( PHRTIE, inch_to_dvi(length), 0, 0, 0);
 }
-void pdf_print::do_rtie(int bloc, int eloc) 
-{ 
+void pdf_print::do_rtie(int bloc, int eloc)
+{
     pdf_command ( PTIE, (save_h[eloc] - save_h[bloc]), 0, 0, 0);
 }
 void pdf_print::print_clipped(char c, int font/* acutally height */)
-{ 
+{
     pdf_command ( PDF_CLIP, c, font, dvi_h, dvi_v);
      dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width(c));
 }
 
 void pdf_print::put_slash
-      (int bloc, int eloc, int count, struct file_info *f) 
-{ 
+      (int bloc, int eloc, int count, struct file_info *f)
+{
     double nflags = (double)count;
     int thickness = str_to_dvi("0.005 in");
 
@@ -614,31 +614,31 @@ void pdf_print::put_slash
 }
 
 void pdf_print::put_uline(int bloc, int eloc)
-{ 
+{
     saveloc(REGS-1);
     pdf_command ( PTIE2, save_h[eloc] - save_h[bloc], 0, 0, 0);
     getloc(REGS-1);
 }
-void pdf_print::put_thick_slant(int bloc, int eloc) 
-{ 
+void pdf_print::put_thick_slant(int bloc, int eloc)
+{
   pdf_command(TH_LINE, save_h[bloc], save_v[bloc], save_h[eloc], save_v[eloc]);
 }
-void pdf_print::put_med_slant(int bloc, int eloc) 
-{ 
+void pdf_print::put_med_slant(int bloc, int eloc)
+{
    pdf_command(MED_LINE, save_h[bloc], save_v[bloc], save_h[eloc], save_v[eloc]);
 }
-void pdf_print::put_slant(int bloc, int eloc) 
+void pdf_print::put_slant(int bloc, int eloc)
 {
     saveloc(REGS-1);
 
     pdf_command(LINE, save_h[bloc], save_v[bloc], save_h[eloc], save_v[eloc]);
-    
+
     getloc(REGS-1);
     return;
 }
 
 int  pdf_print::more()
-{ 
+{
     double length;
     if ( red == 1.0 ) {
 	length = 2.6;
@@ -661,11 +661,11 @@ int  pdf_print::more()
     }
     return(0);			/* END_OK */
 }
-void pdf_print::showsave(int reg) 
+void pdf_print::showsave(int reg)
    { dbg0(Error, "Undefined Proceedure showsave\n");}
 
-void pdf_print::p_num(int n) 
-{ 
+void pdf_print::p_num(int n)
+{
 #define N_S 5
     char string[N_S];
     int i;
@@ -687,17 +687,17 @@ void pdf_print::p_num(int n)
 
     for (i=0; i < N_S && string[i]; i++)
       set_a_char(string[i]);
-	
+
     use_font(0);
     pop();
 }
 
-void pdf_print::print_draft() 
-{ 
+void pdf_print::print_draft()
+{
     pdf_command(PDRAFT, 0, 0, 0, 0);
 }
-void pdf_print::print_copyright() 
-{ 
+void pdf_print::print_copyright()
+{
     pdf_command(PCOPYRIGHT, 0, 0, 0, 0);
 }
 void pdf_print::define_font(int font_num, char *name)
@@ -709,7 +709,7 @@ void pdf_print::vert_curve(int len)
     pdf_command(PVCURVE, len, 0, 0, 0);
 }
 
-void pdf_print::push() 
+void pdf_print::push()
 {
 //    pdf_command(PPUSH, 0, 0, 0, 0);
 //    printf("pdf push %d, dvi_h %d, stack h %d\n",
@@ -717,7 +717,7 @@ void pdf_print::push()
     slp(sp, stack_h, stack_v); sp++;		  // also set the dvi_v, dvi_h
 }
 
-void pdf_print::pop() 
+void pdf_print::pop()
 {
 //    pdf_command(PPOP, 0, 0, 0, 0);
 //    sp--; dvi_h = stack_h[sp]; dvi_v = stack_v[sp];
@@ -751,15 +751,15 @@ void pdf_print::pdf_command(int com, int h_n, int v_n, int hh_n, int vv_n)
   double currentgray =0.0;
   char ctemp[STREAM];
 
-  //    printf("pdf_command com %d h %03.2f v %03.2f\n", 
+  //    printf("pdf_command com %d h %03.2f v %03.2f\n",
   //	   com, d_to_p (h_n), d_to_p(v_n));
 
   //    if (com == MOVE  printf("com - move h_n %d %f\n", h_n, d_to_p(h_n));
   //#define OPTI
-#ifdef OPTI    
+#ifdef OPTI
   last_last_com = last_com;
   last_com = com;
-  h = h_n; v = v_n; 
+  h = h_n; v = v_n;
   hh = hh_n; vv = vv_n;
   dvi_oh = dvi_h; dvi_ov = dvi_v;
 #endif /* OPTI */
@@ -793,19 +793,19 @@ void pdf_print::pdf_command(int com, int h_n, int v_n, int hh_n, int vv_n)
       return;
     }
   }
- 
+
   //    if (com == PPOP && last_com == PPUSH ) {
   //	last_com = last_last_com;
   //	return;
   //    }
 
-  if (com == MOVEH && 
+  if (com == MOVEH &&
       (last_com == MOVEV || last_com == MOVEVH)) {
     last_com = MOVEVH;
     h += h_n;
     return;
-  }    
-  if (com == MOVEV && 
+  }
+  if (com == MOVEV &&
       (last_com == MOVEH || last_com == MOVEVH)) {
     last_com = MOVEVH;
     v += v_n;
@@ -847,7 +847,7 @@ void pdf_print::pdf_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     break;
   case RULE:		// now takes x, y to draw a box 0, 0, x, y
     // printf("pdf_print: RULE 847: %d %d\n", dvi_h, h);
-    // 
+    //
     sprintf (ctemp, "q %.1f %.1f %.1f %.1f re s Q \n",
 		    d_to_p(dvi_h), d_to_p(dvi_v),
 		    d_to_p(h), d_to_p(-v));
@@ -916,11 +916,11 @@ void pdf_print::pdf_command(int com, int h_n, int v_n, int hh_n, int vv_n)
       pr_out->PutString("<");
       pr_out->Put16(h);
       pr_out->PutString(">");
-      ; 
+      ;
     }
-    if ( last_com == CHAR) 
+    if ( last_com == CHAR)
       /* pr_out->PutString("S\n") */;
-    else 
+    else
       /* pr_out->PutString("X\n") */;
     break;
   case LUTE:
@@ -998,7 +998,7 @@ void pdf_print::pdf_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     pr_out->PutString("(");
     //	pr_out->Put10(h);
     pr_out->PutString((char*)&h);
-    pr_out->PutString(") false charpath clip\n"); 
+    pr_out->PutString(") false charpath clip\n");
     //#ifdef OLD_PRINTER
     //	pr_out->PutString("newpath\n");
     //	pr_out->PutString("xval %.2f moveto ", d_to_p(vv));      /* x, y */
@@ -1013,7 +1013,7 @@ void pdf_print::pdf_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     pr_out->PutChar(h);
     pr_out->PutString(") stringwidth pop ");
     pr_out->PutF(d_to_p(v), places);
-    pr_out->PutString(" rectfill\n"); 
+    pr_out->PutString(" rectfill\n");
     //#endif /* OLD_PRINTER */
     pr_out->PutString("grestore\n");
     pr_out->PutString(" (");
@@ -1041,7 +1041,7 @@ void pdf_print::pdf_command(int com, int h_n, int v_n, int hh_n, int vv_n)
   case PDRAFT :
     pr_out->PutString("gsave\n");
     pr_out->PutString("/Times-Roman findfont dup 150 scalefont setfont\n");
-    pr_out->PutString("0.70 setgray \n"); 
+    pr_out->PutString("0.70 setgray \n");
     pr_out->PutString("25 650 moveto \n");
     pr_out->PutString("[.7 -.7 .7 .7 0 0] concat\n");
     pr_out->PutString("(DRAFT) show\n");
@@ -1083,7 +1083,7 @@ void pdf_print::pdf_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     break;
   case P_U_RED:
     pr_out->PutString("0.0 0.0 0.0 1.0  setcmykcolor\n");
-    break;      
+    break;
   case PPUSH:
     //	pr_out->PutString("gsave\n");
     pr_out->PutString("currentpoint\n");
@@ -1102,12 +1102,12 @@ void pdf_print::pdf_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     break;
   }
 
-#ifndef OPTI    
+#ifndef OPTI
   last_last_com = last_com;
   last_com = com;
-    
+
   ooh = h; oov = v;
-  h = h_n; v = v_n; 
+  h = h_n; v = v_n;
 
   oohh = hh; oovv = vv;
   hh = hh_n; vv = vv_n;
@@ -1127,7 +1127,7 @@ void pdf_bit_char(i_buf *pdf, int char_num)
     int byte_w;
 
     b = &bits[char_num];
-    byte_w = (b->bm_w + 7 ) / 8; 
+    byte_w = (b->bm_w + 7 ) / 8;
 
 
     pdf->PutString("/b_");
@@ -1151,7 +1151,7 @@ void pdf_bit_char(i_buf *pdf, int char_num)
 
 void pdf_print::glp(int reg,int h[], int v[])
 {
-    if (reg >= REGS) 
+    if (reg >= REGS)
       dbg1 (Error, "tab: getloc: illegal register %d\n", (void *)reg);
 
     h_diff = h[reg] - dvi_h;
@@ -1159,13 +1159,13 @@ void pdf_print::glp(int reg,int h[], int v[])
     dvi_h = h[reg];
     dvi_v = v[reg];
 
-    dbg5(Stack, "print: glp: reg %d v_diff %d h_diff %d dvi_v %d dvi_h %d\n", 
-	 (void *)reg, 
-	 (void *)v_diff, (void *)h_diff, 
+    dbg5(Stack, "print: glp: reg %d v_diff %d h_diff %d dvi_v %d dvi_h %d\n",
+	 (void *)reg,
+	 (void *)v_diff, (void *)h_diff,
 	 (void *)dvi_v, (void *)dvi_h );
 
     pdf_command(MOVE, dvi_h, -dvi_v, 0, 0);
-    
+
 }
 
 void pdf_print::comment(const char *string)
@@ -1207,9 +1207,9 @@ void new_xref_entry(const int offset)
   t->next = 0;
 
   xref_count += 1;
-  
+
   u = xref_root;
-  
+
   while (u->next) {
     //    fprintf(stderr, "increment xref list\n");
     u = u->next;
@@ -1254,11 +1254,11 @@ unsigned int pdf_print::do_catalog()
   bytes += pr_out->PutStringC("1 0 obj\n");
   bytes += pr_out->PutStringC("  << /Type /Catalog\n");
   bytes += pr_out->PutStringC("     /Pages 2 0 R\n");
-  bytes += pr_out->PutStringC("  >>\nendobj\n"); 
+  bytes += pr_out->PutStringC("  >>\nendobj\n");
   return (bytes);
 }
 
-unsigned int pdf_print::do_page_tree() 
+unsigned int pdf_print::do_page_tree()
 {
   unsigned int bytes = 0;
 
@@ -1268,11 +1268,11 @@ unsigned int pdf_print::do_page_tree()
   bytes += pr_out->PutStringC("  << /Type /Pages\n");
   bytes += pr_out->PutStringC("     /Kids [3 0 R]\n");
   bytes += pr_out->PutStringC("     /Count 1\n");
-  bytes += pr_out->PutStringC("  >>\nendobj\n"); 
+  bytes += pr_out->PutStringC("  >>\nendobj\n");
   return (bytes);
 }
 
-unsigned int pdf_print::do_page_leaf() 
+unsigned int pdf_print::do_page_leaf()
 {
   unsigned int bytes = 0;
 
@@ -1286,7 +1286,7 @@ unsigned int pdf_print::do_page_leaf()
   bytes += pr_out->PutStringC("     /Contents 6 0 R\n");
   bytes += pr_out->PutStringC("     /ProcSet 5 0 R\n");
   bytes += pr_out->PutStringC("     /Resources << /Font  << /F13 21 0 R >> >> \n");
-  bytes += pr_out->PutStringC("  >>\nendobj\n"); 
+  bytes += pr_out->PutStringC("  >>\nendobj\n");
   return (bytes);
 }
 unsigned int pdf_print::do_page_content(i_buf *i_b,  struct font_list *f_a[])
@@ -1304,12 +1304,12 @@ unsigned int pdf_print::do_page_content(i_buf *i_b,  struct font_list *f_a[])
 
   // we need to know byte count of content stream here
   // count includes trailing newline
-    
+
   sprintf (b, "<</Length %u>>\n", scount);
   bytes += pr_out->PutStringC(b);
 
   bytes += pr_out->PutStringC("stream\n");
-  
+
   bytes += pr_out->PutStringC(s_buf);
   //  print_stream();
   // we go byte count in scount above
@@ -1320,7 +1320,7 @@ unsigned int pdf_print::do_page_content(i_buf *i_b,  struct font_list *f_a[])
   return(bytes);
 }
 
-unsigned int pdf_print::do_page_resource() 
+unsigned int pdf_print::do_page_resource()
 {
   unsigned int bytes = 0;
 
@@ -1329,7 +1329,7 @@ unsigned int pdf_print::do_page_resource()
   bytes += pr_out->PutStringC("5 0 obj \n");
   bytes += pr_out->PutStringC("<<  /ProcSet [/PDF] \n");
  // bytes += pr_out->PutStringC("    /Font << /F13 21 0 R >> \n");
-  bytes += pr_out->PutStringC(">> \n endobj \n");   
+  bytes += pr_out->PutStringC(">> \n endobj \n");
   return(bytes);
 }
 
@@ -1340,7 +1340,7 @@ unsigned int pdf_print::pdf_fontdef()
    new_xref_entry( byte_count /* offset */);
    bytes += pr_out->PutStringC("21 0 obj\n");
    bytes += pr_out->PutStringC("<<  /Type /Font \n   /Suntype /Type1 \n   /BaseFont /Helvetica \n >> \n");
-   bytes += pr_out->PutStringC("endobj\n"); 
+   bytes += pr_out->PutStringC("endobj\n");
   return(bytes);
 }
 
@@ -1350,16 +1350,16 @@ unsigned int pdf_print::do_rule_stream(i_buf *i_b,  struct font_list *f_a[],
 
   fprintf(stderr,"pdf_print: do_rule_stream: bytes dec %d oct %o\n",
 	  bytes, bytes);
- 
+
   //  pdf_print *page_buf;
-  
+
   page_retval = (format_page(this, i_b, f_a, f_i));
-  
+
   strcat (s_buf,  pdf_stream_b );
-  
+
   bytes = strlen(s_buf);
   printf("do_rule_stream: bytes %u \n", bytes);
-  if (bytes > STREAM) { dbg1(Error, 
+  if (bytes > STREAM) { dbg1(Error,
      "tab: pdf_print.cc: do_rule_stream: bytes greater than STREAM %d\n",
 			     (void *)bytes); }
   return (bytes);
@@ -1370,10 +1370,10 @@ unsigned int pdf_print::do_text_stream(i_buf *i_b,  struct font_list *f_a[],
   unsigned int bytes = 0;
   unsigned int scount = 0;
   char b[16];
-  
+
   fprintf(stderr,"pdf_print: do_text_stream: bytes dec %d oct %o\n",
 	  bytes, bytes);
-  
+
   memset (s_buf, 0, sizeof(s_buf));
   strcpy (s_buf, "BT\n/F13 12 Tf\n 288 520 Tda\n (ABC) Tj\nET \n");
   scount = strlen(s_buf);

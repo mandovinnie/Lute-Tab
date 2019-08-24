@@ -1,7 +1,7 @@
 /*
    This program is copyright 1991 by Wayne Cripps,
    P.O. Box 677 Hanover N.H. 03755.
-   All rights reserved.  It is supplied "as is" 
+   All rights reserved.  It is supplied "as is"
    without express or implied warranty.
 
    Permission is granted to use, copy, modify and distribute
@@ -32,11 +32,11 @@ int  setflag(file_info *f, char * string, pass pass);
 int badchar(unsigned char p) {
   if ( p == 255 )
     return (0);
-  else if ((int)p > 127) 
+  else if ((int)p > 127)
     return (1);
   else if ( p == '\n' )
     return (0);
-  else if (strchr("{%PLJWw0123456xYyQqeMSkbBiIp8vV .-\n\r*$[F#CcRAT!", p)) 
+  else if (strchr("{%PLJWw0123456xYyQqeMSkbBiIp8vV .-\n\r*$[F#CcRAT!", p))
     return(0);
   return(1);
 }
@@ -55,15 +55,15 @@ void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
   while (1) {
     fi->GetLine(buf, sizeof(buf));
     dbg1 (Flow, "tab: get_tab_file: %s", (void *)buf);
-	
+
     p = buf;
 
     // test to see if this is valid tab file stuff
-	
+
     // printf("buf %s", buf );
-    
+
     if ( badchar((unsigned char)*p) ) {
-      dbg2(Error, "Bad character-%c-%x, this may not be a valid tab file\n", 
+      dbg2(Error, "Bad character-%c-%x, this may not be a valid tab file\n",
 	   (void *)*p, (void *)*p);
     }
     if (! strncmp(buf, "Content-Type: text/plain", 24 )) {
@@ -115,9 +115,9 @@ void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
 	break;
       case 'e':		/* printout! */
       case 'b':		/* baroque uses different font files */
-      case 'E': 
+      case 'E':
       case 'G':			/* copyright */
-      case 'h': 		/* flakey behavior */ 
+      case 'h': 		/* flakey behavior */
       case 'H': 		/* h cant be turned off */
       case 'j':
       case '6':
@@ -130,7 +130,7 @@ void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
       case '4':
       end:
 	args_from_string(buf, f);
-	//		printf ("tab: setting flag %s\n",  buf); 
+	//		printf ("tab: setting flag %s\n",  buf);
 	p = buf;
 	break;
       default:
@@ -177,7 +177,7 @@ void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
       break;
     case '\0':
     case 'e':
-      if (!(f->flags & INCLUDE)) 
+      if (!(f->flags & INCLUDE))
 	ib->PutByte('e');
       ib->PutByte(NEWLINE);
       return;
@@ -193,7 +193,7 @@ void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
     case 'I':	                      	        /* include file */
       {
 	p++;		/* remove I */
-	while ( *p == ' ' ) 
+	while ( *p == ' ' )
 	  p++;
 	pp = p;
 	while ( *pp != NEWLINE )
@@ -204,7 +204,7 @@ void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
       break;
     case 'K':
       ib->PutByte('K'); ib->PutByte(NEWLINE);
-      break;   
+      break;
     case '$':
       // code ripped out of getsystem.cc
       {
@@ -216,7 +216,7 @@ void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
 	  *bp=c;
 	  bp++;
 	}
-	
+
 	buffer[--i] = 0;
 	if (setflag(f, buffer, first))
 	  break;            // return if we set the flag
@@ -226,7 +226,7 @@ void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
 	}
 	ib->PutByte(NEWLINE);
       }
-      
+
       break;
     default:		/* assume that it must be lines of chords */
       r = getsystem(fi, ib, f, buf);	/* get line tab */

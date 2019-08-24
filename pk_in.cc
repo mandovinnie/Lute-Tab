@@ -10,19 +10,19 @@ static char *rcsid = "$Header: /usr/everest/wbc/src/lute/RCS/pk_input.c,v 1.5 93
 /* $Log:	pk_input.c,v $
  * Revision 1.5  93/03/19  21:00:46  wbc
  * version 3.0
- * 
+ *
  * Revision 1.4  92/11/02  11:12:07  wbc
  * new arguments - numbers, transposition
- * 
+ *
  * Revision 1.3  92/09/02  14:51:38  wbc
  * fixes for vax
- * 
+ *
  * Revision 1.2  92/08/28  11:58:18  wbc
  *  ps improvements
- * 
+ *
  * Revision 1.1  92/08/18  13:08:04  wbc
  * Initial revision
- * 
+ *
  */
 
 
@@ -71,7 +71,7 @@ int cmd, k;
 
     pre->id = pk->GetByte();			/* read the information */
     pre->comment_length = pk->GetByte();
-    for (k=0; k<pre->comment_length; ++k) 
+    for (k=0; k<pre->comment_length; ++k)
 	pre->comment[k] = pk->GetByte();
     pre->comment[k] = '\0';
     pre->design_size = pk->Get4Bytes();
@@ -253,7 +253,7 @@ void pk_read_short_packet_header(file_in *pk, PKPacketHeader *h)
     h->hoffset <<=24;  h->hoffset >>=24;	/* sign extend */
     h->voffset = pk->GetByte();
     h->voffset <<=24;  h->voffset >>=24;	/* sign extend */
-//    dbg2(Bug, "read_short_packet_header: length %d, voffset %d\n", 
+//    dbg2(Bug, "read_short_packet_header: length %d, voffset %d\n",
 //	   (void *)h->bitmap_length, (void *)h->voffset );
 }
 
@@ -313,7 +313,7 @@ pk_read_bitmapped_char(
     int k;
     int row;
 
-//    printf ("tab: pk_read_bitmapped_char %d\n", h->code); 
+//    printf ("tab: pk_read_bitmapped_char %d\n", h->code);
 
     data = (unsigned char *) malloc(bytes_in_row * h->height + 1);
     if (data == NULL) {
@@ -323,7 +323,7 @@ pk_read_bitmapped_char(
     p = q = data + bytes_in_row*h->height - h->bitmap_length + 1;
     for (k=0; k<h->bitmap_length; ++k)
       *p++ = pk->GetByte();
-    
+
     p = data;
     offset = 0;
     mask = 0xff;
@@ -332,7 +332,7 @@ pk_read_bitmapped_char(
 	    *p = ((*q << offset)) | ((*(q+1) >> (8-offset)) & mask);
 	    ++p;  ++q;
 	}
-	if (offset < ((8 - h->width) & 0x7) ) 
+	if (offset < ((8 - h->width) & 0x7) )
 	  --q;
 	offset = (offset + h->width) & 0x7;
 	mask = ~(0xff << offset);
@@ -383,12 +383,12 @@ pk_read_encoded_char(
     int offset;
     int b;
 
-//    printf ("tab: pk_read_encoded_char %d\n", h->code); 
+//    printf ("tab: pk_read_encoded_char %d\n", h->code);
 
     if (BlackBits == NULL)
       init_black_bits();
     data = (unsigned char *) malloc(bytes_in_row * h->height + 1);
-    if (data == NULL) 
+    if (data == NULL)
 	dbg1 (Error, "pk_read_encoded_char: not enough memory for %d bytes\n",
 	      (void *)(bytes_in_row * h->height));
 
@@ -406,7 +406,7 @@ pk_read_encoded_char(
 
 	} else if (black) {
 //	    dbg3 (Bug, "pk read encoded char: black is %d tell %d left %d\n",
-//		    (void *)count, (void *)pk->Tell(), 
+//		    (void *)count, (void *)pk->Tell(),
 //		  (void *)rowsleft);
 	    while (count >= bitsleft) {
 		/* blacken rest of the current row */
@@ -452,7 +452,7 @@ pk_read_encoded_char(
 
 	} else {
 //	    dbg3 (Bug, "pk read encoded char: else is %d tell %d left %d\n",
-//		    (void *)count, (void *)pk->Tell(), 
+//		    (void *)count, (void *)pk->Tell(),
 //		  (void *)rowsleft;
 	    while (count >= bitsleft) {
 		/* whiten rest of row */
@@ -498,7 +498,7 @@ pk_read_encoded_char(
 unsigned char *
 pk_read_bitmap(file_in *pk, PKPacketHeader *h)
 {
-    
+
     pk->Seek (h->address, 0);
 
     if (h->dyn_f == 14) {

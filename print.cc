@@ -28,7 +28,7 @@ print::~print()
 
 void print::glp(int reg,int h[], int v[])
 {
-    if (reg >= REGS) 
+    if (reg >= REGS)
       dbg1 (Error, "tab: getloc: illegal register %d\n", (void *)reg);
 
     h_diff = h[reg] - dvi_h;
@@ -36,9 +36,9 @@ void print::glp(int reg,int h[], int v[])
     dvi_h = h[reg];
     dvi_v = v[reg];
 
-    dbg5(Stack, "print: glp: reg %d v_diff %d h_diff %d dvi_v %d dvi_h %d\n", 
-	 (void *)reg, 
-	 (void *)v_diff, (void *)h_diff, 
+    dbg5(Stack, "print: glp: reg %d v_diff %d h_diff %d dvi_v %d dvi_h %d\n",
+	 (void *)reg,
+	 (void *)v_diff, (void *)h_diff,
 	 (void *)dvi_v, (void *)dvi_h );
 
     if (v_diff) {/* dvi_print::dvi_command(DOWN4, v_diff, 0); */
@@ -52,14 +52,14 @@ void print::glp(int reg,int h[], int v[])
 }
 
 void print::slp(int reg,int h[], int v[])
-{ 
-    if (reg >= REGS) 
+{
+    if (reg >= REGS)
       dbg1 (Error, "tab: slp: illegal register %d\n", (void *)reg);
     h[reg] = dvi_h;
     v[reg] = dvi_v;
-    dbg3(Stack, "print: slp: reg %d dvi_v %u dvi_h %u\n", 
+    dbg3(Stack, "print: slp: reg %d dvi_v %u dvi_h %u\n",
 	   (void *)reg, (void *)dvi_v, (void *)dvi_h);
 
-} 
+}
 
 

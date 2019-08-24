@@ -48,14 +48,14 @@ ps_print::ps_print(font_list *font_array[], file_info *f)
     //    printf ("val %f\n", dvi_to_inch(98670000));
     npages=0;
     if (f->m_flags & A4 ) { // a4 is  297mm*210mm
-      if (!(f->flags & ROTATE)) 
+      if (!(f->flags & ROTATE))
 	ps_top_of_page = 98670000 +  6563672/* 6712847 */;
-      else  
+      else
 	ps_top_of_page = 98670000;
     }
     else
       ps_top_of_page = 98670000;
-    /* printf("ps_print: top of page %f in  %f mm  %u dvi-units \t%u=32.42mm\n",  
+    /* printf("ps_print: top of page %f in  %f mm  %u dvi-units \t%u=32.42mm\n",
     	   dvi_to_inch(ps_top_of_page),
 	   dvi_to_mm(ps_top_of_page),
 	   ps_top_of_page,
@@ -109,8 +109,8 @@ void ps_print::file_head()
 
     char *p = NULL;
 
- 
-    if (nodump) 
+
+    if (nodump)
       return;
 
     ps_header.PutString("%!PS-Adobe-3.0");
@@ -128,7 +128,7 @@ void ps_print::file_head()
 	  val = (int)((dvi_to_inch(dvi_v) - 2.75 ) * 72.27 * red);
 	  ps_header.Put10(val);
 	  /* */
-	  ps_header.PutString(" 555 735\n"); 
+	  ps_header.PutString(" 555 735\n");
 	}
     }
     else if (ROTATE) {	// yes, rotate
@@ -147,7 +147,7 @@ void ps_print::file_head()
     t = time(0);
     ps_header.PutString( ctime(&t));
     ps_header.PutString("%%Orientation: ");
-    if (!(f_i->flags & ROTATE)) 
+    if (!(f_i->flags & ROTATE))
 	ps_header.PutString("Portrait\n");
     else
 	ps_header.PutString("Landscape\n");
@@ -165,12 +165,12 @@ void ps_print::file_head()
     ps_header.PutString("%%BeginDefaults\n");
 //    ps_header.PutString("%%PageBoundingBox: 50 65 555 740\n");
     ps_header.PutString("%%PageOrientation: ");
-    if (!(f_i->flags & ROTATE)) 
+    if (!(f_i->flags & ROTATE))
 	ps_header.PutString("Portrait\n");
     else
 	ps_header.PutString("Landscape\n");
     ps_header.PutString("%%EndDefaults\n");
- 
+
     ps_header.PutString("%%BeginProlog\n");
     ps_header.PutString("%%EndProlog\n");
     ps_header.PutString("%%BeginSetup\n");
@@ -178,13 +178,13 @@ void ps_print::file_head()
 	ps_header.PutString("%%Feature: *Resolution 600\n");
         // printf ("ps_print.cc: 179: 600 \n");
     }
-    else if (f_i->m_flags & DPI1200) 
+    else if (f_i->m_flags & DPI1200)
 	ps_header.PutString("%%Feature: *Resolution 1200\n");
-    else if (f_i->m_flags & DPI2400) 
+    else if (f_i->m_flags & DPI2400)
 	ps_header.PutString("%%Feature: *Resolution 2400\n");
     else if (f_i->m_flags & DPI360) {
 	ps_header.PutString("%%Feature: *Resolution 360\n");
-        // printf ("ps_print.cc: 187: 360 \n"); 
+        // printf ("ps_print.cc: 187: 360 \n");
     }
     else ps_header.PutString("%%Feature: *Resolution 300\n");
 
@@ -196,9 +196,9 @@ void ps_print::file_head()
 	//	fprintf (stderr, "ps_print.c - setting font path %s from command line\n", font_path);
 	p = font_path;
       }
-      else 
+      else
 	p = getenv("TABFONTS");
-    
+
     if (p == NULL ) {
       char *font_file = (char*)"fonthome";
       struct stat buf;
@@ -219,7 +219,7 @@ void ps_print::file_head()
 #else
 	  nr = read(ffd, ffd_name, sizeof(ffd_name));
 #endif
-	  if (nr < sizeof(ffd_name)) 
+	  if (nr < sizeof(ffd_name))
 	    ffd_name[nr] = 0;
 	  c = strchr(ffd_name, '\n');
 	  if (c) *c = 0;
@@ -227,10 +227,10 @@ void ps_print::file_head()
 	}
       }
     }
-    if (p == NULL ) 
+    if (p == NULL )
 
 #ifdef TFM_PATH
-	strcpy(pk_name, TFM_PATH); 
+	strcpy(pk_name, TFM_PATH);
 #else
     strcpy(pk_name, ".");
 #endif /* TFM_PATH */
@@ -260,9 +260,9 @@ void ps_print::file_head()
 	strcat (pk_name, "8");
     else if (red == 0.777770)
 	strcat (pk_name, "7");
-    else 
+    else
 	strcat (pk_name, "6");
-    
+
     if (f_i->m_flags & DPI1200)
 	strcat (pk_name, ".1200pk");
     else if (f_i->m_flags & DPI2400)
@@ -317,7 +317,7 @@ void ps_print::page_head()
     pr_out->PutString("\n");
 
     pr_out->PutString("%%PageOrientation: ");
-    if (!(f_i->flags & ROTATE)) 
+    if (!(f_i->flags & ROTATE))
 	pr_out->PutString("Portrait\n");
     else
 	pr_out->PutString("Landscape\n");
@@ -328,17 +328,17 @@ void ps_print::page_head()
     /* NOTE - INDENT PAGE HERE */
     /* you can change the left margin by changing the 72 below */
     if (f_i->flags & LSA_FORM )
-	pr_out->PutString("72 -42 translate\n"); 
+	pr_out->PutString("72 -42 translate\n");
     else if (f_i->flags & ROTATE)
 	/* for fun try [ 0 1 1 0 -250 72 ] concat */
-	pr_out->PutString("[0 1 -1 0  818 72 ] concat\n"); 
+	pr_out->PutString("[0 1 -1 0  818 72 ] concat\n");
     else {
 	pr_out->Put10(left_margin);
 	pr_out->PutString(" -35 translate\n");
     }
-    pr_out->PutString("/LuteFont FF setfont\n"); 
+    pr_out->PutString("/LuteFont FF setfont\n");
 /*    in case there is no default font */
-    
+
     init_hv();
 }
 
@@ -433,7 +433,7 @@ void ps_print::make_ps_font(i_buf *ps_header)
 	if (bits[i].bm_w && print_used[i]) {
 	  /*	    printf ( "ps_print: 391: b_%d\n", i); */
 	  bit_char(ps_header, i, f_i->flags & DPI600 );
-	} 
+	}
     }
     ps_header->PutString("end %% of CharProcs\n");
     ps_header->PutString("/CharWidths ");
@@ -460,7 +460,7 @@ void ps_print::make_ps_font(i_buf *ps_header)
     ps_header->PutString(" 0 get /MaxXVal exch def 1 get /MaxYVal exch def \n");
     ps_header->PutString(" 2 get /MinXVal exch def 3 get /MinYVal exch def pop \n");
     ps_header->PutString(" MaxXVal 0 MinXVal MinYVal MaxXVal MaxYVal\n");
-    ps_header->PutString(" setcachedevice\n"); 
+    ps_header->PutString(" setcachedevice\n");
     ps_header->PutString(" /CharProcs get exch\n");
     ps_header->PutString(" 2 copy known not {pop /.notdef} if\n");
     ps_header->PutString(" get exec\n");
@@ -634,21 +634,21 @@ void ps_print::p_movev(const int ver)
     dvi_v -= ver;
 }
 
-void ps_print::p_moveh(const int hor) 
+void ps_print::p_moveh(const int hor)
 {
    if (hor == 0) return;
    ps_command(MOVEH, hor, 0, 0, 0);
-   dvi_h += hor;	
+   dvi_h += hor;
 }
 void ps_print::p_moveto(const int hor, const int ver)
 {
 //    printf("in moveto %d %d\n", hor, ver);
     ps_command(MOVE, hor, -ver, 0, 0);
-    dvi_h = hor;	
-    dvi_v = ver;	
+    dvi_h = hor;
+    dvi_v = ver;
 }
-void ps_print::p_put_rule(int w, int h) 
-{ 
+void ps_print::p_put_rule(int w, int h)
+{
     if (highlight==On){
       if (highlight_type==Red)
 	ps_command(P_S_RED, 0, 0, 0, 0);
@@ -656,12 +656,12 @@ void ps_print::p_put_rule(int w, int h)
 	ps_command(P_S_GRAY, 0, 0, 0, 0);
     }
     ps_command(RULE, w, h, 0, 0);
-    if (highlight==On) { 
-	clear_highlight();  
+    if (highlight==On) {
+	clear_highlight();
 	ps_command(P_U_GRAY, 0, 0, 0, 0);
     }
 }
-void ps_print::put_a_char (unsigned char c) 
+void ps_print::put_a_char (unsigned char c)
 {
     if (highlight==On)  {
 	if (highlight_type == Paren ) {
@@ -675,11 +675,11 @@ void ps_print::put_a_char (unsigned char c)
 	else
 	  ps_command(P_S_GRAY, 0, 0, 0, 0);
     }
-    if (curfont == 0 && print_used[c] < 4) 
+    if (curfont == 0 && print_used[c] < 4)
 	print_used[c]++;
     ps_command(PCHAR, (int)c, 0, 0,0);
-    if (highlight==On) { 
-	clear_highlight();  
+    if (highlight==On) {
+	clear_highlight();
 	if (highlight_type == Paren) {
 	  double www=f_a[curfont]->fnt->get_width(c);
 	    moveh (www);
@@ -693,18 +693,18 @@ void ps_print::put_a_char (unsigned char c)
 	  ps_command(P_U_GRAY, 0, 0, 0, 0);
     }
 }
-void ps_print::set_a_char (unsigned char c) 
-{ 
-  if (highlight==On) 
+void ps_print::set_a_char (unsigned char c)
+{
+  if (highlight==On)
     {
     if (highlight_type == Red) {
       ps_command(P_S_RED, 0, 0, 0, 0);
-    } 
+    }
     else {
       ps_command(P_S_GRAY, 0, 0, 0, 0);}
     }
 
-  if (c == 0365) 
+  if (c == 0365)
     dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width('i'));
   else if ( c == 0074)
     dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width('!'));
@@ -718,7 +718,7 @@ void ps_print::set_a_char (unsigned char c)
     dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width(031));
   else
     dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width(c));
-  
+
   if (curfont != 0) {
     //	printf("set_a_char: c is %d %c\n", c, c);
     if ( c == 0013) {
@@ -737,17 +737,17 @@ void ps_print::set_a_char (unsigned char c)
     else if ( c == 0074) c = 0241; // ! inverted
     else if ( c == 0076) c = 0277; // ? inverted
   }
-  
-  if (curfont == 0 && print_used[c] < 4) 
+
+  if (curfont == 0 && print_used[c] < 4)
     print_used[c]++;
   ps_command(CHAR, (int)c, 0, 0,0);
-  if (highlight==On) { 
-    clear_highlight();  
+  if (highlight==On) {
+    clear_highlight();
     ps_command(P_U_GRAY, 0, 0, 0, 0);
   }
 }
-void ps_print::use_font(int fontnum) 
-{ 
+void ps_print::use_font(int fontnum)
+{
     curfont = fontnum;
     switch (fontnum) {
     case 7:			/* page number font doesn't shrink 12 pt */
@@ -781,35 +781,35 @@ void ps_print::use_font(int fontnum)
     }
 }
 
-void ps_print::do_tie(double length) 
-{ 
+void ps_print::do_tie(double length)
+{
     ps_command ( PTIE, inch_to_dvi(length), 0, 0, 0);
 }
-void ps_print::do_tie_reversed(double length) 
-{ 
+void ps_print::do_tie_reversed(double length)
+{
     ps_command ( PRTIE, inch_to_dvi(length), 0, 0, 0);
 }
-void ps_print::do_half_tie(double length) 
-{ 
+void ps_print::do_half_tie(double length)
+{
     ps_command ( PHTIE, inch_to_dvi(length), 0, 0, 0);
 }
-void ps_print::do_half_tie_reversed(double length) 
-{ 
+void ps_print::do_half_tie_reversed(double length)
+{
     ps_command ( PHRTIE, inch_to_dvi(length), 0, 0, 0);
 }
-void ps_print::do_rtie(int bloc, int eloc) 
-{ 
+void ps_print::do_rtie(int bloc, int eloc)
+{
     ps_command ( PTIE, (save_h[eloc] - save_h[bloc]), 0, 0, 0);
 }
 void ps_print::print_clipped(char c, int font/* acutally height */)
-{ 
+{
     ps_command ( PS_CLIP, c, font, dvi_h, dvi_v);
      dvi_h += inch_to_dvi(f_a[curfont]->fnt->get_width(c));
 }
 
 void ps_print::put_slash
-      (int bloc, int eloc, int count, struct file_info *f) 
-{ 
+      (int bloc, int eloc, int count, struct file_info *f)
+{
     double nflags = (double)count;
     int thickness = str_to_dvi("0.005 in");
 
@@ -826,45 +826,45 @@ void ps_print::put_slash
 }
 
 void ps_print::put_uline(int bloc, int eloc)
-{ 
+{
     saveloc(REGS-1);
     // printf ("HERE put_uline \n");
     ps_command ( PRTIE, save_h[eloc] - save_h[bloc], 0, 0, 0); // was PTIE2
     getloc(REGS-1);
 }
 void ps_print::put_r_uline(int bloc, int eloc)
-{ 
+{
     saveloc(REGS-1);
     ps_command ( PTIE, save_h[eloc] - save_h[bloc], 0, 0, 0); // was PTIE2
     getloc(REGS-1);
 }
 void ps_print::put_w_uline(int bloc, int eloc)
-{ 
+{
     saveloc(REGS-1);
     ps_command ( PWTIE, save_h[eloc] - save_h[bloc], 0, 0, 0); // was PTIE2
     getloc(REGS-1);
 }
-void ps_print::put_thick_slant(int bloc, int eloc) 
-{ 
+void ps_print::put_thick_slant(int bloc, int eloc)
+{
   ps_command(TH_LINE, save_h[bloc], save_v[bloc], save_h[eloc], save_v[eloc]);
 }
-void ps_print::put_med_slant(int bloc, int eloc) 
+void ps_print::put_med_slant(int bloc, int eloc)
 {
-  // printf("put_med_slant \n");  
+  // printf("put_med_slant \n");
   ps_command(MED_LINE, save_h[bloc], save_v[bloc], save_h[eloc], save_v[eloc]);
 }
-void ps_print::put_slant(int bloc, int eloc) 
+void ps_print::put_slant(int bloc, int eloc)
 {
     saveloc(REGS-1);
     // printf("put_slant \n");
     ps_command(LINE, save_h[bloc], save_v[bloc], save_h[eloc], save_v[eloc]);
-    
+
     getloc(REGS-1);
     return;
 }
 
 int  ps_print::more()
-{ 
+{
     double length;
     if ( red == 1.0 ) {
 	length = 2.6;
@@ -887,7 +887,7 @@ int  ps_print::more()
     }
     return(0);			/* END_OK */
 }
-void ps_print::showsave(int reg) 
+void ps_print::showsave(int reg)
    { dbg0(Error, "Undefined Proceedure showsave\n");}
 
 void ps_print::set_slur_depth(double depth)
@@ -898,8 +898,8 @@ double ps_print::get_slur_depth()
 {
   return slur_depth;
 }
-void ps_print::p_num(int n) 
-{ 
+void ps_print::p_num(int n)
+{
 #define N_S 5
     char string[N_S];
     int i;
@@ -921,17 +921,17 @@ void ps_print::p_num(int n)
 
     for (i=0; i < N_S && string[i]; i++)
       set_a_char(string[i]);
-	
+
     use_font(0);
     pop();
 }
 
-void ps_print::print_draft() 
-{ 
+void ps_print::print_draft()
+{
     ps_command(PDRAFT, 0, 0, 0, 0);
 }
-void ps_print::print_copyright() 
-{ 
+void ps_print::print_copyright()
+{
     ps_command(PCOPYRIGHT, 0, 0, 0, 0);
 }
 void ps_print::define_font(int font_num, char *name)
@@ -943,7 +943,7 @@ void ps_print::vert_curve(int len)
     ps_command(PVCURVE, len, 0, 0, 0);
 }
 
-void ps_print::push() 
+void ps_print::push()
 {
 //    ps_command(PPUSH, 0, 0, 0, 0);
 //    printf("ps push %d, dvi_h %d, stack h %d\n",
@@ -951,7 +951,7 @@ void ps_print::push()
     slp(sp, stack_h, stack_v); sp++;		  // also set the dvi_v, dvi_h
 }
 
-void ps_print::pop() 
+void ps_print::pop()
 {
 //    ps_command(PPOP, 0, 0, 0, 0);
 //    sp--; dvi_h = stack_h[sp]; dvi_v = stack_v[sp];
@@ -984,15 +984,15 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
   int places=4;			// digits of floating pt numbers
   double currentgray =0.0;
 
-  //    printf("ps_command com %d h %03.2f v %03.2f\n", 
+  //    printf("ps_command com %d h %03.2f v %03.2f\n",
   //	   com, d_to_p (h_n), d_to_p(v_n));
 
   //    if (com == MOVE) printf("com - move h_n %d %f\n", h_n, d_to_p(h_n));
   //#define OPTI
-#ifdef OPTI    
+#ifdef OPTI
   last_last_com = last_com;
   last_com = com;
-  h = h_n; v = v_n; 
+  h = h_n; v = v_n;
   hh = hh_n; vv = vv_n;
   dvi_oh = dvi_h; dvi_ov = dvi_v;
 #endif /* OPTI */
@@ -1026,19 +1026,19 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
       return;
     }
   }
- 
+
   //    if (com == PPOP && last_com == PPUSH ) {
   //	last_com = last_last_com;
   //	return;
   //    }
 
-  if (com == MOVEH && 
+  if (com == MOVEH &&
       (last_com == MOVEV || last_com == MOVEVH)) {
     last_com = MOVEVH;
     h += h_n;
     return;
-  }    
-  if (com == MOVEV && 
+  }
+  if (com == MOVEV &&
       (last_com == MOVEH || last_com == MOVEVH)) {
     last_com = MOVEVH;
     v += v_n;
@@ -1156,7 +1156,7 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     break;
   case LUTE:
     if ( last_font != LUTE ) {
-      pr_out->PutString("/LuteFont FF setfont\n"); 
+      pr_out->PutString("/LuteFont FF setfont\n");
       last_font = LUTE;
     }
     break;
@@ -1230,7 +1230,7 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     pr_out->PutString("(");
     //	pr_out->Put10(h);
     pr_out->PutString((char*)&h);
-    pr_out->PutString(") false charpath clip\n"); 
+    pr_out->PutString(") false charpath clip\n");
     //#ifdef OLD_PRINTER
     //	pr_out->PutString("newpath\n");
     //	pr_out->PutString("xval %.2f moveto ", d_to_p(vv));      /* x, y */
@@ -1245,7 +1245,7 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     pr_out->PutChar(h);
     pr_out->PutString(") stringwidth pop ");
     pr_out->PutF(d_to_p(v), places);
-    pr_out->PutString(" rectfill\n"); 
+    pr_out->PutString(" rectfill\n");
     //#endif /* OLD_PRINTER */
     pr_out->PutString("grestore\n");
     pr_out->PutString(" (");
@@ -1258,7 +1258,7 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     pr_out->PutString("doslur\n");
     break;
   case PRTIE:
-    
+
     pr_out->PutF(d_to_p(h), places);
     //  wbc July 2019 new slurs!
     // pr_out->PutF(0.0, places) ; // horizontal
@@ -1289,7 +1289,7 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
   case PDRAFT:
     pr_out->PutString("gsave\n");
     pr_out->PutString("/Times-Roman findfont dup 150 scalefont setfont\n");
-    pr_out->PutString("0.70 setgray \n"); 
+    pr_out->PutString("0.70 setgray \n");
     pr_out->PutString("25 650 moveto \n");
     pr_out->PutString("[.7 -.7 .7 .7 0 0] concat\n");
     pr_out->PutString("(DRAFT) show\n");
@@ -1332,7 +1332,7 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     break;
   case P_U_RED:
     pr_out->PutString("0.0 0.0 0.0 1.0  setcmykcolor\n");
-    break;      
+    break;
   case PPUSH:
     //	pr_out->PutString("gsave\n");
     pr_out->PutString("currentpoint\n");
@@ -1351,12 +1351,12 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     break;
   }
 
-#ifndef OPTI    
+#ifndef OPTI
   last_last_com = last_com;
   last_com = com;
-    
+
   ooh = h; oov = v;
-  h = h_n; v = v_n; 
+  h = h_n; v = v_n;
 
   oohh = hh; oovv = vv;
   hh = hh_n; vv = vv_n;
@@ -1376,14 +1376,14 @@ void bit_char(i_buf *ps, int char_num, int sixh)
     int byte_w;
 
     b = &bits[char_num];
-    byte_w = (b->bm_w + 7 ) / 8; 
+    byte_w = (b->bm_w + 7 ) / 8;
 
 
     ps->PutString("/b_");
     ps->Put10(char_num);
     ps->PutString(" {");  // char_name);
- 
-    if (char_num == 81 && sixh ) {    /* vector char 0121 81 decimal */    
+
+    if (char_num == 81 && sixh ) {    /* vector char 0121 81 decimal */
 /* at 600 dpi scaled this character seems to be 331 412 */
 /* these dimensions are scaled -R9 */
 /*      ps->Put10(b->bm_w); ps->Put10(b->bm_h); */
@@ -1426,7 +1426,7 @@ void bit_char(i_buf *ps, int char_num, int sixh)
       ps->Put10(b->bm_h_off);     ps->Put10(b->bm_h - b->bm_v_off );
       ps->PutString("]\n{<");
       /* bitmapt */
-      
+
       for (i=0; i < byte_w * b->bm_h; i++) {
 	ps->Put16(b->bm_bits[i] & 0xff);
 	if (!((i+1) % 40)) ps->PutString("\n");
@@ -1439,7 +1439,7 @@ void bit_char(i_buf *ps, int char_num, int sixh)
 
 void ps_print::glp(int reg, int h[], int v[])
 {
-    if (reg >= REGS) 
+    if (reg >= REGS)
       dbg1 (Error, "tab: getloc: illegal register %d\n", (void *)reg);
 
     h_diff = h[reg] - dvi_h;
@@ -1447,13 +1447,13 @@ void ps_print::glp(int reg, int h[], int v[])
     dvi_h = h[reg];
     dvi_v = v[reg];
 
-    dbg5(Stack, "print: glp: reg %d v_diff %d h_diff %d dvi_v %d dvi_h %d\n", 
-	 (void *)reg, 
-	 (void *)v_diff, (void *)h_diff, 
+    dbg5(Stack, "print: glp: reg %d v_diff %d h_diff %d dvi_v %d dvi_h %d\n",
+	 (void *)reg,
+	 (void *)v_diff, (void *)h_diff,
 	 (void *)dvi_v, (void *)dvi_h );
 
     ps_command(MOVE, dvi_h, -dvi_v, 0, 0);
-    
+
 }
 
 void ps_print::comment(const char *string)

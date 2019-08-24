@@ -118,9 +118,9 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	midi-docs/midi-dump.c midi-docs/Makefile \
 	midi-docs/tftopl.web \
 	simple.tab \
-	.gitignore
+	update.pl .gitignore
 
-DISTFILE = lute_tab4.3.97.tar.gz
+DISTFILE = lute_tab4.3.98.tar.gz
 
 distrib:	 ${DISTFILE}
 

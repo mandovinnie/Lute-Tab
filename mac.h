@@ -1,3 +1,4 @@
+#pragma once
 /* mac.h */
 
 
@@ -34,7 +35,7 @@
 //void free(void * pointer);
 
 int my_sprintf(char *string, const char *format, ...);
-/* int */ 
+/* int */
 void my_printf(const char *format, ...);
 short my_open();
 

@@ -1,5 +1,6 @@
+#pragma once
 #ifndef _PDF_PRINT_
-#define _PDF_PRINT_		
+#define _PDF_PRINT_
 #include "i_buf.h"
 #include "tfm.h"
 #include "dvi.h"
@@ -29,8 +30,8 @@ class pdf_print : public print {
     void make_pdf_font(i_buf *pdf_header);
     void init_hv();
     int pdf_top_of_page;
-    char f_name[120];		// this should be in pdf_print.h 
-    double font_sizes[FONT_NAMES];				    
+    char f_name[120];		// this should be in pdf_print.h
+    double font_sizes[FONT_NAMES];
     int nodump;
 
     unsigned int byte_count;
@@ -39,11 +40,11 @@ class pdf_print : public print {
 
     int page_retval;
     char pdf_stream_b[STREAM];
-    
+
   public:
     char pdf_used[256];
 
-    void PutByte(const char c);    
+    void PutByte(const char c);
     void PutLine(const char * l);
 
     pdf_print(font_list *f[], file_info *ff);
@@ -68,8 +69,8 @@ class pdf_print : public print {
     void p_movev(const int ver);
     void p_moveto(const int hor,const int ver);
     void p_put_rule(int w, int h);
-    void put_a_char (unsigned char c);	
-    void set_a_char (unsigned char c);	
+    void put_a_char (unsigned char c);
+    void set_a_char (unsigned char c);
     void use_font(int fontnum);
     void use_named_font(int fontnum, char *name);
     void do_tie(double length);
@@ -82,7 +83,7 @@ class pdf_print : public print {
     void pop();
     void glp(int reg,int h[], int v[]);
     void put_slash
-      (int bloc, int eloc, int count, struct file_info *f); 
+      (int bloc, int eloc, int count, struct file_info *f);
     void put_uline(int bloc, int eloc);
     void put_r_uline(int bloc, int eloc) { put_uline(bloc, eloc); };
     void put_w_uline(int bloc, int eloc) { put_uline(bloc, eloc); };
@@ -91,8 +92,8 @@ class pdf_print : public print {
     void put_slant(int bloc, int eloc);
     int more();
     int is_used(char c) { return pdf_used[(unsigned char)c]; }
-    void showsave(int reg);	
-    void p_num(int n); 
+    void showsave(int reg);
+    void p_num(int n);
     void print_draft();
     void print_copyright();
     void vert_curve(int len);

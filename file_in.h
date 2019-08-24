@@ -1,3 +1,4 @@
+#pragma once
 //
 //  to input a file to memory, and hand out a byte at a time
 //

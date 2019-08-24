@@ -40,7 +40,7 @@ nmidi::nmidi(){
     midi_root = (chord *)malloc(sizeof (struct chord));
     midi_p = midi_root;
     midi_p->next = 0;
-    midi_p->prev = 0; 
+    midi_p->prev = 0;
     midi_p->time = 0;
     midi_p->bar = 0;
     for ( i=0; i< STRINGS; i++) {
@@ -62,17 +62,17 @@ nmidi::~nmidi(){
 
   do_file_head();
 
-  
+
   count=0;
    do_tempo_map_track();
   midi_track_tail();
   nmidi_track_head(count);
-  
+
   for (i=0;i<count;i++) {
     nbuffer->PutChar(buf[i]);
   }
   count=0;
-  
+
   do_lute_music();
 
   midi_track_tail();
@@ -92,7 +92,7 @@ nmidi::~nmidi(){
 
 // --- Below RIPPED OFF from midi_snd
 
-void 
+void
 nmidi::nmidi_head(unsigned short int pulses)
 {
   format = 0;
@@ -100,12 +100,12 @@ nmidi::nmidi_head(unsigned short int pulses)
   format = 1;
   nbuffer->PutByte('M');  nbuffer->PutByte('T');
   nbuffer->PutByte('h');  nbuffer->PutByte('d');
-  nbuffer->PutByte('\0'); nbuffer->PutByte('\0'); 
+  nbuffer->PutByte('\0'); nbuffer->PutByte('\0');
   nbuffer->PutByte('\0'); nbuffer->PutByte('\6');
 
-  nbuffer->PutByte(0); nbuffer->PutByte(format); // midi type 0-single track 
+  nbuffer->PutByte(0); nbuffer->PutByte(format); // midi type 0-single track
                                           // was 1
-				          // 1-mult track, or 2 
+				          // 1-mult track, or 2
   if (format == 0)
     ;
   else if (format == 1) {
@@ -114,10 +114,10 @@ nmidi::nmidi_head(unsigned short int pulses)
   else {
     fprintf(stderr," We don't handle type 3 or other midi formats\n");
   }
-  nbuffer->PutByte((ntracks & 0xff00)>>8); 
+  nbuffer->PutByte((ntracks & 0xff00)>>8);
   nbuffer->PutByte( ntracks & 0xff); /* how many tracks */
 
-  nbuffer->PutByte((pulses & 0xff00)>>8); 
+  nbuffer->PutByte((pulses & 0xff00)>>8);
   nbuffer->PutByte( pulses & 0xff);  /* pulses per quarter note */
 }
 
@@ -125,7 +125,7 @@ void nmidi::midi_track_tail() {
   buf[count++] = 0x00;		// delta time 0
   buf[count++] = 0xff;		// special
   buf[count++] = 0x2f;		// end of track
-  buf[count++] = 0x00; 
+  buf[count++] = 0x00;
 }
 
 void nmidi::nmidi_track_head(const int len)
@@ -139,12 +139,12 @@ void nmidi::nmidi_track_head(const int len)
   nbuffer->PutByte((char)(len&0xff)); /* data length in bytes */
 }
 
-void nmidi::ntext (enum text_type type, const char *words) 
+void nmidi::ntext (enum text_type type, const char *words)
 {
   int len, i;
 
   if (! words)
-    return; 
+    return;
   len = strlen(words);
 
   buf[count++] = ('\0');
@@ -172,7 +172,7 @@ void nmidi::program()
   else
     buf[count++] = instmnt;	// the instrument
 
-  /* 
+  /*
   000 - 005 pianos ->006 hpsichord  010 other keyboards
  (16) drawbar organ
  (19E (nicer)) church organ
@@ -221,8 +221,8 @@ void nmidi::writeVarLen(unsigned long value)
 /*
  * stop_stop
  *
- * go forward and clear the stop for the note you 
- * have just stopped 
+ * go forward and clear the stop for the note you
+ * have just stopped
  */
 void
 nmidi::stop_stop(chord *c, int index) {
@@ -241,7 +241,7 @@ nmidi::stop_stop(chord *c, int index) {
 
 /*
  * check_adjacent
- * 
+ *
  * check and stop note playing on adjacent string
  *
  */
@@ -250,9 +250,9 @@ void
 nmidi::check_adjacent(const int string, direction d, int *saved ) {
   int o;
 
-  if (d == Down) 
+  if (d == Down)
     o = string - 1;
-  else if (d == Down2) 
+  else if (d == Down2)
     o = string - 2;
   else if (d == Up)
     o = string + 1;
@@ -273,7 +273,7 @@ nmidi::set_nmidi_title(char *title){
   ntitle = title;
 }
 
-void 
+void
 nmidi::set_patch(int patch){
   if ((patch >= 0) && patch < 128)
     npatch = patch;
@@ -292,12 +292,12 @@ int dissonant(int string, int step, int *chord) {
   int str_p=0;
   int *c = chord;
   int d=0;
-  
+
   //  fprintf(stderr, "string %02d, %02d %02d %02d %02d %02d %02d\n", string,
   //  chord[0], chord[1], chord[2], chord[3],chord[4],chord[5]);
 
   for (i=0; i< STRINGS; i++) { dis[i] = 0;}
-  
+
   for (i=0; i< STRINGS; i++) {
     if (string == chord[i] - step)
       d = chord[i];
@@ -364,14 +364,14 @@ void nmidi::do_lute_music()
   // SECOND PASS
 
   midi_p = midi_root->next;
-  if (1) 
+  if (1)
     while(midi_p) {
       for (i=0; i< STRINGS; i++) {
 	if (midi_p->prev->dat[i] != 0) {
 	  saved[i] = midi_p->prev->dat[i];
 	}
       }
-      
+
       cc = get_chord(midi_p);
 
       if (dbg) dpt();
@@ -379,24 +379,24 @@ void nmidi::do_lute_music()
 
       if (1)
 	check_adjacent(0, Up, saved);
-      
+
       // stop 6th string if something on 4th
-      
+
       if (1)
 	check_adjacent(0, Up2,saved);
-      
+
       // stop 5th string if something on 6th
       if (1)
 	check_adjacent(1, Down, saved);
-      
+
       // stop 5th string if something on 4th string
       if (1)
 	check_adjacent(1, Up, saved);
-      
+
       // stop 4th string if something on 5th string
       if (1)
 	check_adjacent(2, Down, saved);
-      
+
       // stop a minor seventh above or below (10)
       if (0)
 	for (i=0; i< STRINGS; i++) {
@@ -404,7 +404,7 @@ void nmidi::do_lute_music()
 	  if ((diss=dissonant(midi_p->dat[i], 10, saved)))
 	    stop_string(diss, saved, midi_p);
 	}
-      
+
       // stop a major seventh above or below (11)
       if (1)
 	for (i=0; i< STRINGS; i++) {
@@ -412,7 +412,7 @@ void nmidi::do_lute_music()
 	  if ((diss=dissonant(midi_p->dat[i], 11, saved)) )
 	    stop_string(diss, saved, midi_p);
 	}
-      
+
       // stop an augmented eighth above (13) or below (-13)
       if (1)
 	for (i=0; i< STRINGS; i++) {
@@ -420,24 +420,24 @@ void nmidi::do_lute_music()
 	  if ((diss=dissonant(midi_p->dat[i], 13, saved)))
 	    stop_string(diss, saved, midi_p);
 	}
-      
+
       // call dissonant to check (major minor seconds)
       if (1)
 	for (i=0; i< STRINGS; i++) {
 	  int diss=0;
-	  if ((diss=dissonant(midi_p->dat[i], 1, saved))) 
+	  if ((diss=dissonant(midi_p->dat[i], 1, saved)))
 	    stop_string(diss, saved, midi_p);
 	}
 	for (i=0; i< STRINGS; i++) {
 	  int diss=0;
-	  if ((diss=dissonant(midi_p->dat[i], 2, saved))) 
+	  if ((diss=dissonant(midi_p->dat[i], 2, saved)))
 	    stop_string(diss, saved, midi_p);
 	}
-      
+
       // stop left over strings at end of piece (next to last chord)
       if (1)
 	if (! midi_p->next) {
-	  for (i=0; i< STRINGS; i++) 
+	  for (i=0; i< STRINGS; i++)
 	    if (saved[i] != 0 ) {
 	      midi_p->stop[i] = saved[i];
 	      saved[i] = 0;
@@ -445,7 +445,7 @@ void nmidi::do_lute_music()
 	}
       midi_p = midi_p->next;
     }
-  
+
 
   // LAST (PRINTING) PASS
 
@@ -490,7 +490,7 @@ void nmidi::do_lute_music()
 	writeVarLen(0);
 	buf[count++] = (char)0x90;  /* note on channel 0*/
 	buf[count++] = (char)midi_p->start[i]; /* the note - 60 = middle c*/
-	if (midi_p->bar) 
+	if (midi_p->bar)
 	  buf[count++] = (char)VEL+16 /*velocity*/ ;        /* velocity */
 	else
 	  buf[count++] = (char)VEL /*velocity*/ ;        /* velocity */
@@ -513,7 +513,7 @@ void nmidi::do_lute_music()
 	writeVarLen((unsigned int)last_time);   /* delta time */
 	first = 0;
       }
-      else 
+      else
 	writeVarLen(0);
       buf[count++] = (char)0x80;  /* note off channel 0*/
       buf[count++] = (char)old_strings[i]; /* the note - 60 = middle c*/
@@ -524,10 +524,10 @@ void nmidi::do_lute_music()
   if (verbose)
     printf ("\n");
 
-  for (i=1; i<100; i++) 
+  for (i=1; i<100; i++)
     if (on[i])
       printf("note %d %x is on\n", i, i);
-  
+
 }
 
 void
@@ -545,15 +545,15 @@ nmidi::do_tempo_map_track() {
   buf[count++] = 0x08; 		// number of 1/32 notes per 24 MIDI clocks (8 std)
 
   // set tempo
-  
+
   buf[count++] = 0x00; 		// don't forget the delta time!
   buf[count++] = 0xff;		// FF
   buf[count++] = 0x51;		// 51 - set tempo
   buf[count++] = 0x03;		// count
   buf[count++] = 0x07; 		// should be 500000 for 120 q-notes per min
-  buf[count++] = 0xa1; 
-  buf[count++] = 0x20; 
-  
+  buf[count++] = 0xa1;
+  buf[count++] = 0x20;
+
   // sequence/track name
 
   ntext(Track, ntitle);
@@ -562,10 +562,10 @@ nmidi::do_tempo_map_track() {
 
   buf[count++] = 0x00; 		// don't forget the delta time!
   buf[count++] = 0xff;		// FF
-  buf[count++] = 0x00;		// 
+  buf[count++] = 0x00;		//
   buf[count++] = 0x02;		// count
-  buf[count++] = 0x00; 
-  buf[count++] = 0x01; 
+  buf[count++] = 0x00;
+  buf[count++] = 0x01;
 
   // marker
 
@@ -596,7 +596,7 @@ void nmidi::do_file_head()
     }
   }
 
- if ((time_r[maxi+1]) * 3 > time_r[maxi]) 
+ if ((time_r[maxi+1]) * 3 > time_r[maxi])
       maxi++;
 
  //  fprintf(stderr, "maxi %d\n", maxi);
@@ -604,7 +604,7 @@ void nmidi::do_file_head()
   case 2:
     pulses = 4; break;		// 0x06 .. 0x18
   case 3:
-    pulses = 6; break;		// 
+    pulses = 6; break;		//
   case 4:
     pulses = 8 ; break;		// 0x0c .. 0x30
   case 5:
@@ -706,7 +706,7 @@ int nmidi::get_chord(chord * c) {
   fprintf(stderr, "%s  ", numtonote(dat[2]));
   fprintf(stderr, "%s\n", numtonote(dat[3]));
   */
-  for ( ; i<STRINGS; i++) 
+  for ( ; i<STRINGS; i++)
     dat[i] = 0;
 
   return (0);

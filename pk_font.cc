@@ -29,13 +29,13 @@ void print_data(unsigned char *data, PKPacketHeader *h);
 
 #include "pk_input.h"
 void read_pk_file(file_in *pk, print *ps)
-{ 
+{
     unsigned int cmd;
     int length;
     PKPacketHeader header;
     PKPreamble pre;
     unsigned char *bitmap;
-    
+
     while ((cmd = pk->GetByte()) != EOF && ((int)cmd != 255 )
 	   && (int)cmd != -1 && cmd != (unsigned int)EOF) {
 
@@ -47,7 +47,7 @@ void read_pk_file(file_in *pk, print *ps)
 	    pk->Seek(length, 1);
 	    pre.design_size = pk->Get4Bytes();
 	    pre.checksum = pk->Get4Bytes();
-		
+
 //	    if ( pre.checksum != pk_checksum[0] ) {
 //		printf ("tab: read_pk_file: checksum mismatch %X %X\n",
 //			pre.checksum, pk_checksum[0]);
@@ -64,7 +64,7 @@ void read_pk_file(file_in *pk, print *ps)
 
 	  case PK_XXX1:
 	    length = pk->GetByte();
-	    pk_dump_special(pk, length); 
+	    pk_dump_special(pk, length);
 	    break;
 
 	  case PK_XXX2:
@@ -73,12 +73,12 @@ void read_pk_file(file_in *pk, print *ps)
 	    break;
 
 	  case PK_XXX3:
-	    length = pk->Get3Bytes(); 
+	    length = pk->Get3Bytes();
 	    pk_dump_special(pk, length);
 	    break;
 
 	  case PK_XXX4:
-	    length = pk->Get4Bytes(); 
+	    length = pk->Get4Bytes();
 	    pk_dump_special(pk, length);
 	    break;
 
@@ -92,8 +92,8 @@ void read_pk_file(file_in *pk, print *ps)
 	    pk_read_packet_header(pk, &header);
 /*	    printf( "header read %d %d\n", pk->Tell(), header.code);  */
 
-	    dbg2(Bug, "read pk file: %d %c\n", 
-		 (void *)header.code, 
+	    dbg2(Bug, "read pk file: %d %c\n",
+		 (void *)header.code,
 		 (void *)header.code );
 
 	    bitmap = pk_read_bitmap(pk, &header);
@@ -122,11 +122,11 @@ void save_bitmap(unsigned char *data, PKPacketHeader *h)
     PKBit *b;
     int byte_w;			/* width in bytes */
 
-    b = &bits[h->code]; 
+    b = &bits[h->code];
     b->bm_char = h->code;;
     b->bm_w = h->width;
     if (b->bm_w > max_b_w) max_b_w = b->bm_w;
-    byte_w = (b->bm_w + 7 ) / 8; 
+    byte_w = (b->bm_w + 7 ) / 8;
     b->bm_h = h->height;
     if (b->bm_h > max_b_h) max_b_h = b->bm_h;
 /*    printf ("wbc save_bitmap %08X\n", h->hoffset); */
@@ -134,12 +134,12 @@ void save_bitmap(unsigned char *data, PKPacketHeader *h)
     if (b->bm_h_off > max_off_w) max_off_w = b->bm_h_off;
     b->bm_v_off = h->voffset;
     if (b->bm_v_off > max_off_h) max_off_h = b->bm_v_off;
-    if (byte_w * b->bm_h == 0) 
+    if (byte_w * b->bm_h == 0)
       dbg1 (Warning, "tab: save_bitmap: 0 size bitmap %d\n",
-	    (void *)h->code); 
+	    (void *)h->code);
     else {
 	b->bm_bits = (char *) malloc ( byte_w * b->bm_h);
-	if (!b->bm_bits) 
+	if (!b->bm_bits)
 	  dbg1 (Error, "tab: save_bitmap: malloc failed !!!!%d\n",
 		 (void *)h->code);
     }
@@ -147,13 +147,13 @@ void save_bitmap(unsigned char *data, PKPacketHeader *h)
 
     for (row= h->height; row ; --row) {
 	for (col=0; col  < byte_w; ++col) {
-	    b->bm_bits[((row-1) * byte_w) + col] = *p; 
+	    b->bm_bits[((row-1) * byte_w) + col] = *p;
 	    ++p;
 	}
     }
 }
 
-/* void print_data(		
+/* void print_data(
     unsigned char *data,
     PKPacketHeader *h)
 {

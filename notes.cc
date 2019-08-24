@@ -15,9 +15,9 @@
 
 /* EXTERNAL */
 int online(char c);
-double stem; 
+double stem;
 double stem_w;
-void 
+void
  do_beam(print *p, font_list *f_a[], struct notes *nn, struct file_info *f);
 
 /* LOCAL */
@@ -83,9 +83,9 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
   p->movev ( - f->c_space );
   p->movev ( m_space ); /* to low A line */
   if (f->flags & MARKS) p->put_rule(02., 0.01);
-  /*    p->movev ( center ); */ /* center note on line */ 
+  /*    p->movev ( center ); */ /* center note on line */
   if (f->flags & MARKS) p->put_rule(1., 0.01);
-  //    printf("do note - note %c time %c\n", 
+  //    printf("do note - note %c time %c\n",
   //	   nn->note, nn->time);
 
   switch (nn->note) {
@@ -110,7 +110,7 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
     p->pop();
   case 'B':
   case 'C':
-    p->movev (-1.0 * ( nn->note - 'A' ) 
+    p->movev (-1.0 * ( nn->note - 'A' )
 	      * (m_space / 2.0));
     p->push();
     if (nn->note %2 -1) p->movev (m_space / -2.0);
@@ -121,7 +121,7 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
   case 'E':
   case 'F':
   case 'G':
-    p->movev (-1.0 * ( nn->note - 'A' ) 
+    p->movev (-1.0 * ( nn->note - 'A' )
 	      * (m_space / 2.0));
     break;
   case 'a':
@@ -131,7 +131,7 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
   case 'e':
   case 'f':
   case 'g':
-    p->movev (-1.0 * ((double)( nn->note - 'a') + 7. ) 
+    p->movev (-1.0 * ((double)( nn->note - 'a') + 7. )
 	      * (m_space / 2.0));
     break;
   case '4':			/* high d */
@@ -144,7 +144,7 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
       p->pop();
   case '2':			/* high b */
   case '1':			/* high a */
-	
+
     p->movev (-14.0 * m_space / 2.0);
     p->push();
     p->moveh ( -.043 );p->put_rule(0.16, str_to_inch(staff_height));
@@ -183,7 +183,7 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
   if (nn->note < 'b' &&
       nn->note >  '3' )  up = 1;
   else up = 0;
-		
+
   if (breaksys2 &&
       nn->time != 'G' ) {		// carry over a tie
     //    dbg0(Warning, "Breaksys2 set\n");
@@ -266,7 +266,7 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
     p->movev(w_center);
     if (f->note_flag == ITAL_NOTES){
       if ( nn->note >= 'b'){
-	if (nn->special == 'r') 
+	if (nn->special == 'r')
 	  p->put_a_char (217);
 	else
 	  p->put_a_char (225);
@@ -277,7 +277,7 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
 	p->put_rule (0.09, rest);
       }
       else {
-	if (nn->special == 'r') 
+	if (nn->special == 'r')
 	  p->put_a_char(225);
 	else
 	  p->put_a_char(217);
@@ -325,18 +325,18 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
 	  break;
 	}
       }
-	    
+
       else if (nn->note == 'b' // a b between two a's
-	       && (nn->staff == 1 ? 
+	       && (nn->staff == 1 ?
 		   ( nn->parent->prev
 		     && nn->parent->prev->notes
 		     && ! nn->parent->prev->notes->reversed
-		     && nn->parent->prev->notes->note <= 'a' 
+		     && nn->parent->prev->notes->note <= 'a'
 		     && nn->parent->next
 		     && nn->parent->next->notes
 		     && nn->parent->next->notes->note <= 'a' ) :
-		   ( nn->parent->prev 
-		     && nn->parent->prev->notes2 
+		   ( nn->parent->prev
+		     && nn->parent->prev->notes2
 		     && nn->parent->prev->notes2->note <= 'a'
 		     && nn->parent->next
 		     && nn->parent->next->notes2
@@ -345,7 +345,7 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
 	p->movev(i_center);
 	p->put_a_char (218 + nn->time - '0');
       }
-	    
+
       else if ( nn->note >= 'b' || (
 				    nn->note >= '1' && nn->note <= '4' )) {
 	if (nn->special == 'r') {
@@ -358,20 +358,20 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
 	}
       }
       else if (nn->note == 'a' // an a between two b's
-	       && nn->staff == 1 ? 
+	       && nn->staff == 1 ?
 	       ( nn->parent->prev
 		 && nn->parent->prev->notes
-		 && nn->parent->prev->notes->note >= 'b' 
+		 && nn->parent->prev->notes->note >= 'b'
 		 && nn->parent->next
 		 && nn->parent->next->notes
-		 && nn->parent->next->notes->note >= 'b' 
+		 && nn->parent->next->notes->note >= 'b'
 		 && ! nn->parent->prev->notes->reversed ) :
-	       ( nn->parent->prev 
-		 && nn->parent->prev->notes2 
-		 && nn->parent->prev->notes2->note >= 'b' 
+	       ( nn->parent->prev
+		 && nn->parent->prev->notes2
+		 && nn->parent->prev->notes2->note >= 'b'
 		 && nn->parent->next
 		 && nn->parent->next->notes2
-		 && nn->parent->next->notes2->note >= 'b' 
+		 && nn->parent->next->notes2->note >= 'b'
 		 && ! nn->parent->prev->notes2->reversed )) {
 	nn->reversed=1;
 	p->movev(i_center);
@@ -394,7 +394,7 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
       if (nn->special == '#' ||           /* beams */
 	  nn->special == 'x' ||
 	  nn->special == '=' ) {
-	
+
 
 	p->push();
 	p->put_a_char(215);     /* solid note body */
@@ -442,7 +442,7 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
     double tspace = nn->parent->space + nn->parent->padding;
     double t_indent=0.014;
     double head_w = f_a[0]->fnt->get_width(215);
-	
+
     breaksys = 0;
 
     if (nn->staff == 1 ) {
@@ -452,14 +452,14 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
 	  breaksys=1;
 	}
       }
-      while (nl && nl->next 
+      while (nl && nl->next
 	     && ((! nl->notes )  || nl->notes->note == '0' )) {
 	tspace += ( nl->space + nl->padding);
 	nl = nl->next;
       }
     }
     else if (nn->staff == 2 ) {
-      while (nl && nl->next 
+      while (nl && nl->next
 	     && ! nl->notes2 ) {
 	tspace += ( nl->space + nl->padding);
 	nl = nl->next;
@@ -607,8 +607,8 @@ do_notes(print *p, font_list *f_a[], struct notes *nn, struct file_info *f)
 extern int text_font;
 
 void
-do_text(print *p, i_buf *i_b, font_list *f_a[], 
-	struct list *l, struct text *text, struct file_info *f, 
+do_text(print *p, i_buf *i_b, font_list *f_a[],
+	struct list *l, struct text *text, struct file_info *f,
 	int in_sys, int staff)
 {
   int i;
@@ -619,22 +619,22 @@ do_text(print *p, i_buf *i_b, font_list *f_a[],
   struct list *ll;
   struct t_words *tp;
   double d_i_space = str_to_inch(interspace);
-  
+
   p->push();
   if (in_sys) {
     p->movev(3 * d_i_space - .02);
   }
   else {
     if (f->flags & NOTES ) {
-      
-      p->movev ( -1 * str_to_inch(flag_to_staff) ); 
+
+      p->movev ( -1 * str_to_inch(flag_to_staff) );
       if (f->flags & MARKS) p->put_rule (.4, 0.01);
       p->movev ( -st_text ); /* to the top of the flags plus a little */
       if (f->flags & MARKS) p->put_rule (.5, 0.01);
       p->movev ( -text_sp * (f->n_text - 1));
       if (f->flags & MARKS) p->put_rule (.6, 0.01);
       if (staff == 2 ) {
-	//		p->movev ( -st_text ); 
+	//		p->movev ( -st_text );
 	p->movev ( -str_to_inch(interspace) );
 	p->movev ( -text_sp * (f->n_text));
 	p->movev ( -f->c_space);
@@ -654,16 +654,16 @@ do_text(print *p, i_buf *i_b, font_list *f_a[],
     font =5;		// italic text font
   else
     font = text_font;
-  
+
   p->use_font(font);
-  
+
   tp = text->words;
-  
+
   while (tp) {
     p->push();
     for (i=0;i < tp->length; i++) {
       pp = &tp->words[i];
-      
+
       if (f->flags & MARKS) p->put_rule(.002, .25);
 
       switch (*pp) {
@@ -682,7 +682,7 @@ do_text(print *p, i_buf *i_b, font_list *f_a[],
 	break;
       case '\\':	/* escape the next character */
 	text_used +=
-	  f->font_sizes[font]/12.0 * 
+	  f->font_sizes[font]/12.0 *
 	  print_special_char(&pp, p, i_b, f_a, font, f, 0);
 	i++;
 	i++;
@@ -704,13 +704,13 @@ do_text(print *p, i_buf *i_b, font_list *f_a[],
 	/* here we use ll which is specific to l, not text line */
 	ll = l;
 	if (staff == 1) {
-	  while ((ll = ll->next) 
-		 && (int)text_pt(p, f_a, ll->text, level)) 
+	  while ((ll = ll->next)
+		 && (int)text_pt(p, f_a, ll->text, level))
 	    p->moveh ((ll->space + ll->padding)/2.0);
 	}
 	else if (staff == 2) {
-	  while ((ll = ll->next) 
-		 && (int)text_pt(p, f_a, ll->text2, level)) 
+	  while ((ll = ll->next)
+		 && (int)text_pt(p, f_a, ll->text2, level))
 	    p->moveh ((ll->space + ll->padding)/2.0);
 	}
 	if (f->flags & MARKS) p->put_rule("0.002 in", "0.1 in" );
@@ -719,7 +719,7 @@ do_text(print *p, i_buf *i_b, font_list *f_a[],
       case '"':
 	// Feb 98 - I can't remember why we insert a space
 	// before a quote
-	//	p->moveh((tp->size - 
+	//	p->moveh((tp->size -
 	// f_a[font]->fnt->get_width ('"'))/2.0);
 	p->set_a_char(*pp);
 	break;
@@ -738,7 +738,7 @@ do_text(print *p, i_buf *i_b, font_list *f_a[],
     }
   next:
     p->pop();
-    if (in_sys) 
+    if (in_sys)
       p->movev(d_i_space);
     else
       p->movev(text_sp);
@@ -782,10 +782,10 @@ do_a_stem(print *p, font_list *f_a[], struct notes *nn)
     if (nn->note < 'b' &&
 	nn->note > '5')  up = 1;
     else up = 0;
-    
-    if (nn->note > '0' && nn->note < '@') 
+
+    if (nn->note > '0' && nn->note < '@')
       w_stem += m_space * (nn->note -'0' -1)/3.5;
-    
+
     if (up) {
 	p->moveh(f_a[0]->fnt->get_width(215) - str_to_inch("0.59 pt"));
 	p->movev(-.043);
@@ -827,30 +827,30 @@ void space_rest(print *p, notes *nn)
     struct list *tl = nn->parent;
     double space=0.0;
     int i= -8;
-    
+
     if (tl->prev) {
 	p->moveh(-0.5 * (tl->prev->space + tl->prev->padding) );
 	if (nn->staff == 1 && tl->prev->notes ) // fudge for rest preceeded
-	    p->moveh(tl->prev->space / 1.5);    // by a note rather than a 
+	    p->moveh(tl->prev->space / 1.5);    // by a note rather than a
 	if (nn->staff == 2 && tl->prev->notes2 )// barline
 	    p->moveh(tl->prev->space / 1.5);
     }
 
     while ( tl && tl->dat[0] != 'b' && i++ ) {
 	space += tl->space + tl->padding;
-	if (nn->staff==0) 
+	if (nn->staff==0)
 		dbg0 (Warning, "space_rest: null staff\n");
-	if ( nn->staff == 1 && tl->next 
+	if ( nn->staff == 1 && tl->next
 		&& tl->next->notes && tl->next->notes->note != '0' ) break;
-	if ( nn->staff == 2 && tl->next 
+	if ( nn->staff == 2 && tl->next
 		&& tl->next->notes2 && tl->next->notes2->note != '0' ) break;
 	tl = tl->next;
     }
     p->moveh (( space - (2 * rest ))/2.0 );
 }
 
-/* is the rest of this line a music specification? 
-   if it is, return 1, if not return 0 
+/* is the rest of this line a music specification?
+   if it is, return 1, if not return 0
    */
 
 int is_music(char *text)
@@ -866,5 +866,5 @@ int is_music(char *text)
     if ( ! strchr ( "0+-^v.n", *t))
 	return (0);
     return (1);
-    
+
 }

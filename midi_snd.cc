@@ -31,7 +31,7 @@ midi_snd::midi_snd()
   velocity = 100;
 }
 
-midi_snd::midi_snd(const unsigned int instrument, const unsigned int volume, 
+midi_snd::midi_snd(const unsigned int instrument, const unsigned int volume,
 		   const char * infile )
 {
   char s[80];
@@ -67,7 +67,7 @@ midi_snd::midi_snd(const unsigned int instrument,
   instmnt = instrument;
   program();
   strncat (fname, filename, 120);
-  // fprintf(stderr, "midi_snd::midi_snd initial velocity d %d X %X\n", 
+  // fprintf(stderr, "midi_snd::midi_snd initial velocity d %d X %X\n",
   //  volume, volume );
 
   velocity = volume;
@@ -86,13 +86,13 @@ midi_snd::~midi_snd()
     buffer->PutChar(buf[i]);
   }
 
-  if ( ! strcmp (fname, "stdout")) 
+  if ( ! strcmp (fname, "stdout"))
     buffer->dump ("stdout", Creat);
   else {
     /*    buffer->dump ("data.mid", Creat); */
-    if (strlen (fname)) 
+    if (strlen (fname))
       buffer->dump ( fname, Creat);
-    else 
+    else
       buffer->dump ("data.mid", Creat);
   }
   delete(buffer);
@@ -127,7 +127,7 @@ midi_snd::play(const double time)
     if (t_velocity > 127) t_velocity = 127;
   }
 
-//  fprintf(stderr, "midi_snd::play_midi velocity d %d  x %X\n", 
+//  fprintf(stderr, "midi_snd::play_midi velocity d %d  x %X\n",
 //	  t_velocity,
 //	  t_velocity );
 
@@ -157,13 +157,13 @@ midi_snd::rest(const double time)
   buf[count++] = (char)0x90;  /* note on channel 0*/
   buf[count++] = (char)60; /* the note - 60 = middle c*/
   buf[count++] = (char)0;	  /* velocity */
-  
+
   writeVarLen((unsigned int) time * 3);	  /* delta time */
-  
+
   buf[count++] = (char)0x80;  /* note off channel 0*/
   buf[count++] = (char)60; /* the note - 60 = middle c*/
   buf[count++] = (char)velocity;	  /* velocity */
-  
+
   tt=0;
 }
 
@@ -188,9 +188,9 @@ void midi_snd::play_note(const int note, const double time)
   printf("midi_snd::play_note midi_velocity %d\n", t_velocity );
 
   buf[count++] = (char)velocity;	  /* velocity */
-  
+
   writeVarLen((unsigned int) time * 3);	  /* delta time */
-  
+
   buf[count++] = (char)0x80;  /* note off channel 0*/
   buf[count++] = (char)note; /* the note - 60 = middle c*/
   buf[count++] = (char)t_velocity;	  /* velocity */
@@ -200,22 +200,22 @@ void midi_head()
 {
   buffer->PutByte('M');  buffer->PutByte('T');
   buffer->PutByte('h');  buffer->PutByte('d');
-  buffer->PutByte('\0'); buffer->PutByte('\0'); 
+  buffer->PutByte('\0'); buffer->PutByte('\0');
   buffer->PutByte('\0'); buffer->PutByte('\6');
 
-  buffer->PutByte(0); buffer->PutByte(0); // midi type 0-single track 
+  buffer->PutByte(0); buffer->PutByte(0); // midi type 0-single track
                                           // was 1
-				          // 1-mult track, or 2 
+				          // 1-mult track, or 2
   buffer->PutByte(0); buffer->PutByte(1); /* how many tracks */
   buffer->PutByte(0); buffer->PutByte(0x60);  /* pulses per quarter note */
 }
 
-void 
+void
 midi_snd :: midi_tail() {
   buf[count++] = 0x00;		// delta time 0
   buf[count++] = 0xff;		// special
   buf[count++] = 0x2f;		// end of track
-  buf[count++] = 0x00; 
+  buf[count++] = 0x00;
 }
 
 void midi_track(const int len)
@@ -225,11 +225,11 @@ void midi_track(const int len)
   buffer->PutByte('r');  buffer->PutByte('k');
   buffer->PutByte(0);    buffer->PutByte(0);
   // fprintf (stderr, " len %x %x %x\n", (len&0xff0000), (len&0xff00), (len&0xff));
-  buffer->PutByte((char)((len&0xff00)>>8)); 
+  buffer->PutByte((char)((len&0xff00)>>8));
   buffer->PutByte((char)(len&0xff)); /* data length in bytes */
 }
 
-void midi_snd::text (enum text_type type, const char *words) 
+void midi_snd::text (enum text_type type, const char *words)
 {
   int len, i;
 
@@ -251,7 +251,7 @@ void midi_snd::program()
   buf[count++] = ('\0');
   buf[count++] = ('\300');
   buf[count++] = instmnt;	// the instrument
-  /* 
+  /*
   000 - 005 pianos ->006 hpsichord  010 other keyboards
   014 marimba
   016 tube bell

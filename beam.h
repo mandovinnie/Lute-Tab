@@ -1,3 +1,4 @@
+#pragma once
 
 #ifndef _BEAM_
 #define _BEAM_

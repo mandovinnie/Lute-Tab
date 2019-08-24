@@ -1,8 +1,8 @@
 /*
    This program is copyright 1991 by Wayne Cripps,
    P.O. Box 677 Hanover N.H. 03755.
- 
-   All rights reserved.  It is supplied "as is" 
+
+   All rights reserved.  It is supplied "as is"
    without express or implied warranty.
 
    Permission is granted to use, copy, modify and distribute
@@ -18,7 +18,7 @@
 
  */
 /*
- * 
+ *
  */
 #include "win.h"
 #include "tab.h"
@@ -50,7 +50,7 @@ int setflag(file_info *f, char * string, pass pass);
  */
 int strings[] = {
     0,		/* null string */
-    34,		/* g 1 */		    
+    34,		/* g 1 */
     29,		/* d 2 */
     24,		/* A 3 */
     20,		/* F 4 */
@@ -63,7 +63,7 @@ int strings[] = {
   };            /* 0 is low A */
 int b_strings[] = {
     0,		/* null string */
-    32,		/* f */		    
+    32,		/* f */
     29,		/* d */
     24,		/* a */
     20,		/* F */
@@ -98,7 +98,7 @@ int *tuning_str(char *str)
     //    fprintf(stderr, "find note: arg %s %d\n", arg_str, j);
     while (--j > -1) {
       //	printf ("j is %d %c\n", j, str[j]);
-	
+
 	switch (k=tolower(str[j])) {
 	case '+':
 	    sharp++;
@@ -153,16 +153,16 @@ int find_note(
 
 //    printf("find note: string %d char %c\n", string, c);
 
-    if (arg_str) 
+    if (arg_str)
 	str = tuning_str(arg_str);
-    else if (baroque) 
+    else if (baroque)
 	str = b_strings;
-    else 
+    else
 	str = strings;
 
     if ((f->num_flag == ITAL_NUM) && ((
-	    (c >= '0' && c <= '9') 
-	    || ( c >= 230 && c <= 240 ) 
+	    (c >= '0' && c <= '9')
+	    || ( c >= 230 && c <= 240 )
 	    || c == 'x') || c == 'y' || c == 'z')) {
 	if ( c == 'x' || c == 230 )
 	    fret = 10;
@@ -174,7 +174,7 @@ int find_note(
 	    fret = c - 220;
 	else
 	    fret = c  - '0';
-	if (f->m_flags & MILAN) 
+	if (f->m_flags & MILAN)
 	  note = str[string] + fret;
 	else
 	  note = str[7 - string] + fret;
@@ -217,12 +217,12 @@ score(print *p, struct list *l, struct file_info *f,
 
     //    printf("conv %f\n", conv);
     p->clear_highlight();
-    
+
     p->push();
 
     p->use_font(0);
 
-    if (ch[1] == '.') 
+    if (ch[1] == '.')
       dot = 1;
 
     switch (cc) {
@@ -233,12 +233,12 @@ score(print *p, struct list *l, struct file_info *f,
 	if (f->m_flags & GUIT ) {
 	  p->movev(-6.0 * str_to_inch(mus_space));
 	  p->put_rule (str_to_inch(staff_height),
-		       4.0 * str_to_inch(mus_space) 
+		       4.0 * str_to_inch(mus_space)
 		       + str_to_inch (staff_height));
 	}
 	else
 	  p->put_rule (str_to_inch(staff_height),
-		       10.0 * str_to_inch(mus_space) 
+		       10.0 * str_to_inch(mus_space)
 		       + str_to_inch (staff_height));
 	if (f->m_flags & SOUND) {
 	  sp->add_bar();
@@ -321,7 +321,7 @@ score(print *p, struct list *l, struct file_info *f,
 	    p->push();
 	    do_text(p, i_b, f_a, l, l->text, f, 1, 1);
 	    p->pop();
-	    
+
 	    free (l->text);
 	    l->text = NULL;
 	}
@@ -334,15 +334,15 @@ score(print *p, struct list *l, struct file_info *f,
 	char *bp;
 	bp = &buffer[0];
 	for (i=1; (c = l->dat[i]) != NEWLINE; i++) {
-	  *bp=c; 
+	  *bp=c;
 	  bp++;
 	}
-	
+
 	buffer[--i] = 0;
 	if (setflag(f, buffer, second))
 	  break;		// return if we set the flag
-      }  
-      
+      }
+
 
 
     case '[':
@@ -375,7 +375,7 @@ score(print *p, struct list *l, struct file_info *f,
 	p->pop();
 	break;
      default:
-	dbg1(Warning, "score: time value %c not defined\n", 
+	dbg1(Warning, "score: time value %c not defined\n",
 	     (void *)((int)cc));
     rest:
 	o_timeval = timeval;
@@ -389,14 +389,14 @@ score(print *p, struct list *l, struct file_info *f,
 	      if ( prev && prev[0] == '+' && prev[i] == 'Q') {
 		p->set_highlight();
 	      }
-	      if ( i < 8 ) {	
+	      if ( i < 8 ) {
 		// flip italian
 		if (f->num_flag == ITAL_NUM &&
-		    (((c >= '0' && c <= '9') 
+		    (((c >= '0' && c <= '9')
 		      || c == 'x' || (c >= 230 && c <= 240 )) && i < 8)) {
-		  // 
+		  //
 		  // Peter Nightingale uses !x, \.!x and \:!x for 10, 11, 12
-		  // 
+		  //
 		  if ( c == 'x') {
 		    if (prev[i] == ':') {
 		      put_note(p, i-1, 'z', timeval, f, ch);
@@ -414,7 +414,7 @@ score(print *p, struct list *l, struct file_info *f,
 		    put_note(p, i-1, c, timeval, f, ch);
 		}
 		else if (c == 'z')
-		  put_note(p, i-1, 'd', timeval, f, ch); 
+		  put_note(p, i-1, 'd', timeval, f, ch);
 		else if (c >= 'a' && c <= 'p')
 		  put_note(p, i-1, c, timeval, f, ch); /* i-1 is string number */
 	      } // i >= 8 - bourdon
@@ -425,9 +425,9 @@ score(print *p, struct list *l, struct file_info *f,
 		  put_note(p, 9, 'a', timeval, f, ch);
 		else if (prev[i] == 't' )
 		  put_note(p, 10, 'a', timeval, f, ch);
-		else if (prev[0] != '+' && c == '4') 
+		else if (prev[0] != '+' && c == '4')
 		  put_note(p, 11, 'a', timeval, f, ch);
-		else if (prev[0] != '+' && c == '5') 
+		else if (prev[0] != '+' && c == '5')
 		  put_note(p, 12, 'a', timeval, f, ch);
 		else if (!(f->num_flag == ITAL_NUM)) {
 		  if ( c != 'u' && c != 'x')
@@ -447,7 +447,7 @@ score(print *p, struct list *l, struct file_info *f,
 	    //}
 	  }
 	  if (f->m_flags & SOUND) {
-	    // timeval is from -2 to 5 - 128 to 
+	    // timeval is from -2 to 5 - 128 to
 	    double t_val=0.0;
 	    switch (timeval) {
 	    case -2:
@@ -476,9 +476,9 @@ score(print *p, struct list *l, struct file_info *f,
 	      break;
 	    }
 	    if (dot) t_val = 1.5 * t_val;
-	    // 
+	    //
 	    // handle rests here
-	    // 
+	    //
 	    if (ch[1] == 'M')
 	      ;
 	    else if (rest_note) {
@@ -492,7 +492,7 @@ score(print *p, struct list *l, struct file_info *f,
 	dot = 0;
 	break;
     }
-    
+
     /*    getloc(1); */
     p->pop();
     p->moveh(space + width);
@@ -559,9 +559,9 @@ void put_note(print *p, int string, unsigned char c, int timeval, struct file_in
     }
     p->pop();
 
-    if ((f->m_flags & SOUND) && (ch[1] != 'M')) 
+    if ((f->m_flags & SOUND) && (ch[1] != 'M'))
       sp->add(note);
-      
+
 }
 
 void ledger(print *p, double dist)
@@ -584,7 +584,7 @@ int b_flat[] =  {0,-1, 0, 0, 1, 0,-1, 0, 0, 1, 0,-1};
 //int b_steps[] = { 0, 1, 1, 2, 2, 3, 4, 4, 5, 5, 6, 7};
 //int b_flat[] =  { 0,-1, 0, 0, 1, 0,-1, 0, 0, 1, 0,-1};
 
-int 
+int
 getpos(               /* pos as int from top g = m string 1 = 45 */
      int note,              /* string 1 open = 33 = g = 9 steps */
      int *adj)			/* -1 flat 0 1 sharp */

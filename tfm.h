@@ -1,3 +1,4 @@
+#pragma once
 //
 //  input a set of font metrics
 //

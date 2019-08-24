@@ -1,3 +1,4 @@
+#pragma once
 /* pkfile.h	Samuel W. Bent		1/23/91 */
 /* Definitions for ADT PK file */
 
@@ -5,7 +6,7 @@
  * $Log:	pkfile.h,v $
  * Revision 1.1  92/08/18  13:08:48  wbc
  * Initial revision
- * 
+ *
  */
 
 

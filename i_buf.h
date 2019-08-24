@@ -1,3 +1,4 @@
+#pragma once
 
 /*
  * a tmp io buffer
@@ -23,7 +24,7 @@ class i_buf : public buffer {
     ~i_buf();
     void dump(const char *fname, const mode mode);
     void PutByte(const char c);
-    void SignedPair(unsigned short c); 
+    void SignedPair(unsigned short c);
     void SignedTrio(int c);
     void SignedQuad(int c);
     unsigned char GetByte();

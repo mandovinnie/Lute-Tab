@@ -29,7 +29,7 @@ pass2(print *p, i_buf *i_b, font_list *f_a[], int *l_p, struct file_info *f, dou
 	l = listh;
 	first_2++;
     }
-    else l = l->next;  
+    else l = l->next;
 
     p->push();
 
@@ -41,7 +41,7 @@ pass2(print *p, i_buf *i_b, font_list *f_a[], int *l_p, struct file_info *f, dou
     for ( j=0; j < *l_p && l; j++) {	/* loop through line of notes */
       //	printf ("pass 2: %s\n", l->dat);
 
-	if (f->flags & MANUSCRIPT) { 
+	if (f->flags & MANUSCRIPT) {
 	    f->line_flag = BETWEEN_LINE;
 	    score(p, l, f, i_b, f_a);
 	}
@@ -53,30 +53,30 @@ pass2(print *p, i_buf *i_b, font_list *f_a[], int *l_p, struct file_info *f, dou
 	  do_nmidi(l, f, i_b);
 	  dvi_format(p, i_b, f_a, l_p, j, f, l);
 	}
-	else 
+	else
 	  dvi_format(p, i_b, f_a, l_p, j, f, l);
 
 	if (! l->next) break;
 	l = l->next;
 	//	free (l->prev);
     }
-    
+
     if (ap) delete (ap);
 
     while (l->prev) {
       if (l->notes)   free (l->notes);
       if (l->notes2)  free (l->notes2);
-      
+
       if (l->text) {
-	
+
 	if (l->text->words) {
 	   if (l->text->words->words)  free (l->text->words->words);
 	   free (l->text->words);
 	}
-	
+
 	free (l->text);
       }
-      
+
       if (l->text2){
 	if (l->text2->words)  {
 	  if (l->text2->words->words)  free (l->text2->words->words);
@@ -90,7 +90,7 @@ pass2(print *p, i_buf *i_b, font_list *f_a[], int *l_p, struct file_info *f, dou
     }
     free (l);
     l=NULL;
-    
+
     listh = 0;
 
     p->comment("%% about to pop out of pass 2\n");
@@ -103,6 +103,6 @@ pass2(print *p, i_buf *i_b, font_list *f_a[], int *l_p, struct file_info *f, dou
 
     if (f->flags & MANUSCRIPT) {
 	p->p_movev(6 * str_to_dvi(mus_space));
-	if ( ! (f->m_flags & GUIT))do_system(p, f);			
-    }	
+	if ( ! (f->m_flags & GUIT))do_system(p, f);
+    }
 }

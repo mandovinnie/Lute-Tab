@@ -26,23 +26,23 @@ i_buf::i_buf()
     size = BUFSIZ;
     num_bytes = 0;
 
-    dbg2(Proceedure, "ptr %d size %d\n", 
+    dbg2(Proceedure, "ptr %d size %d\n",
 	 (void *)read_ptr, (void *)size);
-    //    dbg3(Warning, "starting i_buf ptr %d size %d bufsiz %d\n", 
+    //    dbg3(Warning, "starting i_buf ptr %d size %d bufsiz %d\n",
     //	 (void *)read_ptr, (void *)size, (void *)BUFSIZ);
 
 }
 
 void i_buf::more_buffer()
 {
-    dbg0(Flow, "more_buffer: \n"); 
-    //    dbg1(Warning, "more_buffer: size %d\n", (void *) size); 
+    dbg0(Flow, "more_buffer: \n");
+    //    dbg1(Warning, "more_buffer: size %d\n", (void *) size);
 
     buf_l->next = new link;
     if (buf_l->next  == NULL)
       dbg0(Error, "more, new failed\n");
-    //    dbg2(Warning, "more_buffer: size %d, addr %X", 
-    //	 (void *) size, (void *)buf_l->next); 
+    //    dbg2(Warning, "more_buffer: size %d, addr %X",
+    //	 (void *) size, (void *)buf_l->next);
     buf_l->next->prev = buf_l;
     buf_l->next->next = NULL;
     buf_l->next->bytes = (char *) malloc(BUFSIZ);
@@ -51,22 +51,22 @@ void i_buf::more_buffer()
     buf_l = buf_l->next;
     bytes = buf_l->bytes;
     size +=BUFSIZ;
-    //    dbg1(Warning, "new size %d\n", (void *) size); 
+    //    dbg1(Warning, "new size %d\n", (void *) size);
 }
 
 i_buf::~i_buf()
 {
   link *ttt;
-  
-  dbg2(Proceedure, "ending i_buf ptr %d size %d\n", 
+
+  dbg2(Proceedure, "ending i_buf ptr %d size %d\n",
        (void *)read_ptr, (void *)size);
 
   //  fprintf(stderr, "delete %X\n", start);
 
   ttt = start;
-  while ( ttt->next ) 
+  while ( ttt->next )
     ttt = ttt->next;
-  
+
   while (ttt->prev) {
     free (ttt->bytes);
     ttt = ttt->prev;
@@ -87,9 +87,9 @@ void i_buf::PutByte(const char c)
 
     bytes[read_ptr%BUFSIZ] = c;
 
-    //        dbg2(Warning, "put_byte: size %d %c\n", 
+    //        dbg2(Warning, "put_byte: size %d %c\n",
     //	     (void *)read_ptr, (void *)c);
-    
+
     read_ptr++;
     num_bytes++;
     return;
@@ -102,7 +102,7 @@ unsigned char i_buf::GetByte()
     //    dbg2(Warning, "i_buf: GetByte: read_ptr %d  size %d",
     //	 (void *)read_ptr,
     //	 (void *)size);
-	
+
     if (read_ptr >= num_bytes) {
 	/* eof jump here */
 	return((unsigned char )EOF);
@@ -142,7 +142,7 @@ unsigned char i_buf::unGet(const char c)
     buf_l->bytes[read_ptr%BUFSIZ] = c;
     return (c);
 }
- 
+
 
 char * i_buf::GetLine(char *buf, int buflen)
 {
@@ -182,19 +182,19 @@ int i_buf::Seek(const long offset, const int how)
     switch (how) {
       case rew:
 	if (offset > BUFSIZ)
-	  dbg2(Error, "Seek cant do rew offset %u how %d\n", 
+	  dbg2(Error, "Seek cant do rew offset %u how %d\n",
 	 (void *)offset, (void *)how);
 	buf_l = start;
 	bytes = buf_l->bytes;
 	read_ptr = offset;
 	break;
       case cur:
-	dbg2(Error, "Seek cant do cur offset %u how %d\n", 
+	dbg2(Error, "Seek cant do cur offset %u how %d\n",
 	 (void *)offset, (void *)how);
 	read_ptr += offset;
 	break;
       case end:
-	dbg2(Error, "Seek cant do endoffset %u how %d\n", 
+	dbg2(Error, "Seek cant do endoffset %u how %d\n",
 	 (void *)offset, (void *)how);
 	read_ptr = size - offset;
 	break;
@@ -212,16 +212,16 @@ int my_min(int a, int b)
 
 void i_buf::dump(const char *fname, const mode mode)	// dump to a file
 {
-    dbg2(Flow, "Dump; writing %s  size %d\n", 
+    dbg2(Flow, "Dump; writing %s  size %d\n",
 	 (void *)fname, (void *)num_bytes);
-	 
+
 #ifdef MAC
     short refNum;
     OSErr error;
     int n_written, file_bytes;
     long int wsize;
     int m_mode;
-       
+
     Seek(rew, 0);
     if (mode == Creat) m_mode = 1;
     else if (mode == Append) m_mode = 2;
@@ -233,7 +233,7 @@ void i_buf::dump(const char *fname, const mode mode)	// dump to a file
     	error = FSWrite(refNum, &wsize, buf_l->bytes);
 		if (wsize == BUFSIZ && buf_l->next) buf_l = buf_l->next;
 		file_bytes -= wsize;
-    }	
+    }
 	error = FSClose(refNum);
     dbg1(Warning, "i_buff::dump: done%c", (void *)NEWLINE);
 #else /* not  MAC */
@@ -244,7 +244,7 @@ void i_buf::dump(const char *fname, const mode mode)	// dump to a file
     Seek(rew, 0);
 
     if (!strcmp(fname, "stdout")) {
-      if (mode == Creat) 
+      if (mode == Creat)
 #ifdef BUILD_FOR_WINDOWS
 	fp = _fdopen(1, "wb");
 #else
@@ -255,7 +255,7 @@ void i_buf::dump(const char *fname, const mode mode)	// dump to a file
       //      }
     }
     else {
-      if (mode == Creat) 
+      if (mode == Creat)
 	fp = fopen(fname, "wb");
       else if (mode == Append)
 	fp = fopen(fname, "ab");

@@ -4,7 +4,7 @@
  *
  *
  */
- 
+
 #include "win.h"
 #include <stdio.h>
 #include <string.h>
@@ -35,7 +35,7 @@ void buffer::PutByte(const char c)
     read_ptr++;
     num_bytes++;
     if (read_ptr > (size - 1)) {
-	dbg2(Warning, "PutByte overflow %d %d\n",  
+	dbg2(Warning, "PutByte overflow %d %d\n",
 	     (void *)read_ptr, (void *)size);
 	read_ptr = size - 1;
     }
@@ -57,11 +57,11 @@ char * buffer::GetLine(char *buf, int buflen)
 	p++;
 	*p = '\0';
 	if (buf[0] == 'e')
-	  dbg0(Warning, 
+	  dbg0(Warning,
 	       "tab: buffer: file ends with no trailing newline\n");
 	else {
-	  dbg1(Error, "buffer: GetLine EOF at end of line %d\n", 
-	       (void *)((int)*buf & 0xff)); 
+	  dbg1(Error, "buffer: GetLine EOF at end of line %d\n",
+	       (void *)((int)*buf & 0xff));
                                 /* *buf suggestion of insight */
 	}
       }
@@ -73,7 +73,7 @@ char * buffer::GetLine(char *buf, int buflen)
     else {
 #ifndef _WIN32
       if ( *p == '\r') {
-	dbg0(Flow, 
+	dbg0(Flow,
 	     "buffer: GetLine: discarding windows format return\n");
 	*p = NEWLINE;
 	p++;
@@ -173,7 +173,7 @@ void buffer::Put10(const int num)
     int nnum = num;
     int	i;
     char temp[PLACES+3];
-    
+
     if (nnum < 0) {
 	PutByte('-');
 	nnum = -nnum;
@@ -195,7 +195,7 @@ void buffer::Put10(const int num)
 void buffer::Put16(const int num)	// format char as 2 character hex
 {
     char hi, lo;
-    
+
     hi = (num >> 4) & 0xf;
     lo = num & 0xf;
 	if (hi < 10) PutChar(hi + '0');
@@ -262,24 +262,24 @@ void rdiv(int a, int b, int *c, int *d)
 {
     int counter=0;
     int res=0;
-    
+
     while ( b <= a ) {
 	counter++;
 	b <<= 1;
     }
 
-//    printf(" a is %d b is %d %d\n", a, b, (b>>1)); 
+//    printf(" a is %d b is %d %d\n", a, b, (b>>1));
 
     while(counter > 0) {
 	b >>= 1;
 	counter --;
 	if (a >= b) {
 	    a -= b;
-	    res |=(1<<counter); 
+	    res |=(1<<counter);
 //	    printf(" a is %d b is %d res is %d\n", a, b, res);
 	}
     }
-    
+
     *c = res;
     *d = a;
 }

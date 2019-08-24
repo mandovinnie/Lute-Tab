@@ -127,13 +127,13 @@ raw_snd::play(const double time)
   int i;
   snotes *p, *pp;
 
-  if (!n) 
+  if (!n)
     return;
 
   p = n;
   double val = sample / (p->pitch * 2.0 * 3.1415);
   double duration = time / 64.0;
-  
+
 
   dat_s = (int)((double)sample * duration * 2);
   dat = (unsigned char *)malloc((size_t)dat_s);
@@ -157,7 +157,7 @@ raw_snd::play(const double time)
   while (p) {
     pp = p;
     p = p->next;
-    free (pp);  
+    free (pp);
   }
   free (dat);
   n=0;
