@@ -1477,7 +1477,7 @@ struct list *l)			/* data */
 	  p->movev(-.025);
 	  if (baroque) {
 	    p->moveh(-.06);
-	    // printf ("under smile %c - \n", l->next->dat[i]);
+	    //  printf ("under smile %c - \n", l->next->dat[i]);
 	    if (l->next &&
 		     (l->next->dat[i] == 'D'
 		      || l->next->dat[i-1] == 'D'
@@ -1489,6 +1489,10 @@ struct list *l)			/* data */
 	    else if (l->next && l->next->dat[i] == ' ')
 	      p->movev(-.02); /* wbc July july 2019 fix up the underbar */
 	    // if (i > 2 && l->next && l->next->dat[i-1] == 'D') p->movev(-0.094);
+	    else {
+	      // printf ("HERE %s\n", ch);
+	      p->moveh(-.097);
+	    }
 	  }
 	  if (f->line_flag == ON_LINE)
 	    p->movev(0.5 * d_i_space);
@@ -1719,12 +1723,19 @@ struct list *l)			/* data */
 	    else {  // a slash before the note is really between notes
 	      p->moveh("-0.002 in");
 	      p->movev(-0.061);
-	      if ( l->padding > 0.10) // this is a hack for the extra padding
-		                      // when the down curved D is used
-	                              // ouch - a kerning table
-                 if (l->next && l->next->dat[i] == 'D') p->moveh(0.06);
-                 else if (l->next && l->next->dat[i] == 'E') p->moveh(0.15);
-	         else  p->moveh(0.06);
+	      if ( l->padding > 0.10) { // this is a hack for the extra padding
+		// when the down curved D is used
+		// ouch - a kerning table
+		if (l->next && l->next->dat[i] == 'D') {
+		  p->moveh(0.06);
+		}
+		else if (l->next && l->next->dat[i] == 'E') { 
+		  p->moveh(0.15);
+		}
+		else  {
+		  p->moveh(0.06);
+		}
+	      }
 	      // printf ("dvi_f.cc: HERE - -  char %cc padding %f\n", c, l->padding);
 	      if (l->next && l->next->dat[i-1] == 'd') {
 		p->movev(-0.012);
