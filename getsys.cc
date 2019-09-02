@@ -581,13 +581,17 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    i--;
 		    break;
 		case 'x':	/* small x */
-		  /*
 		  // printf ("small x here\n");
+		  /*
 		  if ( f->num_flag == ITAL_NUM) {
 		    // printf ("ital num and x here\n");
 		    break;
 		  }
 		  */
+		   ornament[i] = buf[i+skip];
+		   skip++;
+		   i--;
+		   break;
 		case '<':
 		  // wbc april 2019 check for php header
 		  if (buf[i+skip+1] == '?' && buf[i+skip+2] == 'p'
