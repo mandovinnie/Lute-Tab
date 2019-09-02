@@ -56,6 +56,7 @@ b
 1  a"+D
 1  D"xa
 1  af
+1  aff
 1  a+e
 1   +d
 1  ac
@@ -83,9 +84,9 @@ b
 x  d<!3mordent>
 x  d<!tilde>
 b
-0  d!<!2mordent>
-x  d!<!3mordent>
-x  d!<!tilde>
+0  c!<!2mordent>
+x  c!<!3mordent>
+x  c!<!tilde>
 b
 0  d"<!2mordent>
 x  d"<!3mordent>
@@ -94,6 +95,10 @@ b
 0  d&<!2mordent>
 x  d&<!3mordent>
 x  d&<!tilde>
+b
+1  xd
+1  xc
+1  xD
 b
 
 
