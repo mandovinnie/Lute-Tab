@@ -27,11 +27,15 @@ tab is a program to typset lute tablature.  It works like TeX  in that
 a plain text file (that bears little resemblance to the desired output)
 is created and processed into a device independent printer format
 file.  The standard output format is PostScript, which laserwriter
-printers print.  With the dvi option this file can be previewed with 
-a dvi previewer and formatted
-for your printer with a dvi to printer filter, which is not included
-in this package.  This program is not particularly beginner-friendly,
+printers print.  This program is not particularly beginner-friendly,
 but is quite fast once you have gotten used to it.  
+
+github:
+The source is available at github.com/mandovinnie, but I work with the old
+make distrib system.  The Makefile has a list of files to include in the
+distribution tarball, which saves me from making a huge .gitignore.  However,
+this means that I can't pull change requests.  I have to put them in by hand
+into the main code stream.
 
 Environment variables:
 
