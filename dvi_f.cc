@@ -1477,21 +1477,31 @@ struct list *l)			/* data */
 	  p->movev(-.025);
 	  if (baroque) {
 	    p->moveh(-.06);
-	    //  printf ("under smile %c - \n", l->next->dat[i]);
+	    // printf ("under smile %c - \n", l->next->dat[i]);
 	    if (l->next &&
 		     (l->next->dat[i] == 'D'
 		      || l->next->dat[i-1] == 'D'
-		      || l->next->dat[i-2] == 'D' )) p->moveh(0.05);
+		      || l->next->dat[i-2] == 'D' )) {
+	      p->moveh(0.05);
+	      // printf ("dvi_f.cc: smile: case 1\n");
+	    }
 	    else if (l->next && l->next->dat[i] == 'E') {
 	      p->moveh(.04); /* was .21 */
-	      if  (l->next && l->next->dat[i+1] == ' ') p->movev(0.06);
+	      printf ("dvi_f.cc: smile: case 2\n");
+	      if  (l->next && l->next->dat[i+1] == ' ') {
+		p->movev(0.06);
+		// printf ("dvi_f.cc: smile: case 3\n");
+	      }
 	    }
-	    else if (l->next && l->next->dat[i] == ' ')
+	    else if (l->next && l->next->dat[i] == ' ') {
 	      p->movev(-.02); /* wbc July july 2019 fix up the underbar */
+	      p->moveh(-.097);
+	      // printf ("dvi_f.cc: smile: case 4\n");
+	    }
 	    // if (i > 2 && l->next && l->next->dat[i-1] == 'D') p->movev(-0.094);
 	    else {
-	      // printf ("HERE %s\n", ch);
 	      p->moveh(-.097);
+	      // printf ("dvi_f.cc: smile: case 5\n");
 	    }
 	  }
 	  if (f->line_flag == ON_LINE)
