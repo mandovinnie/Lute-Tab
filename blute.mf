@@ -1013,38 +1013,66 @@ endchar;enddef;
 %
 def do_one_slash =
 beginchar (114, em#, 1.0cap#, 0);"a slash"; % "r"
-  pickup pencircle xscaled 1.wid yscaled .3wid rotated -15;
-  x1=0w;x2=w;
-  y1=-0.1h;y2=.9h;
-  draw z1..z2;
+  % MP - 01Sep19
+  pickup lute_pen;
+  x1=-0.3w; x2=0.7w; x3=2.2w;
+  y1=0.4h; y2=0.9h; y3=1.6h;
+  draw z1..z2..z3;
+%  pickup pencircle xscaled 1.wid yscaled .3wid rotated -15;
+%  x1=0w;x2=w;
+%  y1=-0.1h;y2=.9h;
+%  draw z1..z2;
 endchar;enddef;
 %
 def do_two_slash =
 beginchar ("s", em#, 1.0cap#, 0);"two slashes";
-  pickup pencircle xscaled 1.wid yscaled .3wid rotated -15;
-  x1=0w;x2=w;
-  y1=-0.1h;y2=.9h;
-  draw z1..z2;
-  x3=-.4w;y3=y1+.2h;
-  x4=.6w;y4=y2+.2h;
-  x5=1.2[x3,x4];y5=1.2[y3,y4];
-  draw z3..z5;
+  % MP - 01Sep19
+  pickup lute_pen;
+  x1=-0.3w; x2=0.7w; x3=2.2w;
+  y1=0.4h; y2=0.9h; y3=1.6h;
+  draw z1..z2..z3;
+  % offset
+  z0 = (-0.5h, 0w);
+  % second slash
+  z4 = z1 + z0;  z5 = z2 + z0; z6 = z3 + z0;
+  draw z4..z5..z6;
+%   pickup pencircle xscaled 1.wid yscaled .3wid rotated -15;
+%   x1=0w;x2=w;
+%   y1=-0.1h;y2=.9h;
+%   draw z1..z2;
+%   x3=-.4w;y3=y1+.2h;
+%   x4=.6w;y4=y2+.2h;
+%   x5=1.2[x3,x4];y5=1.2[y3,y4];
+%   draw z3..z5;
 endchar;enddef;
 %
 def do_three_slash =
 beginchar ("t", em#, 1.0cap#, 0);"three slashes";
-  pickup pencircle xscaled 1.wid yscaled .3wid rotated -15;
-  x1=0w;x2=w;
-  y1=-0.1h;y2=.9h;
-   draw z1..z2;
-  x3=-.4w;y3=y1+.2h;
-  x4=.6w;y4=y2+.2h;
-  x7=1.2[x3,x4];y7=1.2[y3,y4];
-   draw z3..z7;
-  x5=-.8w;y5=y1+.4h;
-  x6=.2w;y6=y2+.4h;
-  x8=1.4[x5,x6];y8=1.4[y5,y6];
-   draw z5..z8;
+  % MP - 01Sep19
+  pickup lute_pen;
+  x1=-0.3w; x2=0.7w; x3=2.2w;
+  y1=0.4h; y2=0.9h; y3=1.6h;
+  draw z1..z2..z3;
+  % offset
+  z0 = (-0.5h, 0w);
+  % second slash
+  z4 = z1 + z0; z5 = z2 + z0; z6 = z3 + z0;
+  draw z4..z5..z6;
+  % third slash
+  z7 = z4 + z0; z8 = z5 + z0; z9 = z6 + z0;
+  draw z7..z8..z9;
+%   pickup pencircle xscaled 1.wid yscaled .3wid rotated -15;
+%   x1=0w;x2=w;
+%   y1=-0.1h;y2=.9h;
+%    draw z1..z2;
+%   x3=-.4w;y3=y1+.2h;
+%   x4=.6w;y4=y2+.2h;
+%   x7=1.2[x3,x4];y7=1.2[y3,y4];
+%    draw z3..z7;
+%   x5=-.8w;y5=y1+.4h;
+%   x6=.2w;y6=y2+.4h;
+%   x8=1.4[x5,x6];y8=1.4[y5,y6];
+%    draw z5..z8;
 endchar;enddef;
 %
 def do_minus =
@@ -1266,8 +1294,15 @@ endchar;enddef;
 % endchar;enddef;
 %
 def do_four_p =
- x1=x2=x3=.65w; lft x4=0w; x5=w; top y1=top y3=h; y2=0h; y4=y5=.27h;
- draw z1..z2; draw z3{dir 250}..z4; draw z4..z5;
+%  % MP - 02sep19
+%  x1=x3=.65w; x2 = 0.55w; lft x4=-0.3w; x5=w;
+%  top y1=top y3=h; y2=-0.3h; y4=0.1h; y5=0.4h;
+%  % litte tail swoosh
+%  x7 = x2 + 0.2w; y7 = y2 + 0.05h;
+%  draw z1..z2; draw z3{dir 250}..z4; draw z4..z5;
+%  draw z2..z7;
+  x1=x2=x3=.65w; lft x4=0w; x5=w; top y1=top y3=h; y2=0h; y4=y5=.27h;
+  draw z1..z2; draw z3{dir 250}..z4; draw z4..z5;
 enddef;
 %
 def do_bbbb =
@@ -1282,36 +1317,61 @@ beginchar (144, .55em#, .7cap#, 0);" a small 4";
 endchar;enddef;
 %
 def do_b_four =
-beginchar (11, 1.5em#, 1.5cap#, 0);" a baroque bass 4";
- pickup pencircle xscaled 1.4wid yscaled .7wid; do_four_p;
+beginchar (11, 1.5em#, 1.5cap#, 0);" a baroque bass 4";  % octal 013 
+ pickup pencircle xscaled 1.4wid yscaled .7wid; 
+%  do_four_p;
+  % MP - 02sep19
+  x1=x3=.65w; x2 = 0.55w; lft x4=-0.3w; x5=w;
+  top y1=top y3=h; y2=-0.3h; y4=0.1h; y5=0.4h;
+  % litte tail swoosh
+  x7 = x2 + 0.2w; y7 = y2 + 0.05h;
+  draw z1..z2; draw z3{dir 250}..z4; draw z4..z5;
+  draw z2..z7;
 endchar;enddef;
 %
-def do_BIG_four =
-beginchar ("S", 2.0em#, 2.0cap#, 0);"a big four";
+def do_BIG_four =   % time signature 4
+beginchar ("S", 2.0em#, 2.0cap#, 0);"a big four"; % S = 0123 D83
  pickup pencircle xscaled 2.5wid yscaled .8wid rotated 45;
   do_four_p;
 endchar;enddef;
 %
 def do_five_p =
+%  % MP 02sep19 - more Baroque?
+%  z1 = (1.2w, 0.95h);
+%  z2 = (0.9w, 0.9h);
+%  z3 = (0.65w, 0.65h);
+%  z4 = (0.8w, -0.1h);
+%  z5 = (0.1w, 0.15h);
+%  draw z1..z2; draw z2..z3;
+%  draw z3..z4..z5;
  x1=x3=0.05w; x2=.9w; x7=.5w;y7=.95h; x4=x5=.7w;
  x6=0w; y1=y2=h; y3=y4=7/13h; y5=y6=.05h;
  draw z1..z7..z2; draw z1..z3; draw z3..z4..z5..z6;
 enddef;
 %
 def do_bbbbb =
-beginchar (155, .8em#, .9cap#, 0);" a 5 bourdon";
+beginchar (155, .8em#, .9cap#, 0);" a 5 bourdon"; % 233 octal  small 5
  pickup pencircle xscaled 1.0wid yscaled .5wid;
  do_five_p;
 endchar;enddef;
 %
 def do_five_f =
-beginchar (145, .55em#, .7cap#, 0);" a small 5";
+beginchar (145, .55em#, .7cap#, 0);" a small 5";  % 221 octal 
  pickup pencircle xscaled .8wid yscaled .3wid; do_five_p;
 endchar;enddef;
 %
 def do_b_five =
-beginchar (12, 1.5em#, 1.5cap#, 0);" a small 5";
- pickup pencircle xscaled 1.5wid yscaled .7wid; do_five_p;
+beginchar (12, 1.5em#, 1.5cap#, 0);" a small 5";  % 014 octal baroque bass 5 
+ pickup pencircle xscaled 1.5wid yscaled .7wid; 
+%  do_five_p;
+  % MP 02sep19 - more Baroque?
+  z1 = (1.4w, 1.0h); %  was 1.2w 0.95h
+  z2 = (0.9w, 0.9h);
+  z3 = (0.65w, 0.65h);
+  z4 = (0.8w, -0.1h);
+  z5 = (0.1w, 0.15h);
+  draw z1{dir 215}..z2; draw z2..z3;
+  draw z3..z4..z5;
 endchar;enddef;
 %
 def do_BIG_five =
@@ -1334,12 +1394,20 @@ beginchar ("V", 1.20em#, 2.0cap#, 0);" a big 5 here it is!";
 endchar;enddef;
 %
 def do_six_p =
- x4=.85w;y4=.9h;
- x1=.5w;y1=h;
- x2=x1;y2=0h;
- x3=x1;y3=7/13h;
- x5=.1w;y5=.3h;
- draw z4..tension 1.2..z1..tension 1.5..z2..tension 1.1..z3..z5;
+  % MP 02sep19 - more Baroque?
+  z1 = (1.2w, 1.25h);
+  z2 = (0.4w, 0.7h);
+  z3 = (0.3w, 0.3h);
+  z4 = (0.65w, -0.1h);
+  z5 = (0.95w, 0.45h);
+  z6 = (0.4w, 0.5h);
+  draw z1..z2..z3..z4..z5..z6;
+% x4=.85w;y4=.9h;
+% x1=.5w;y1=h;
+% x2=x1;y2=0h;
+% x3=x1;y3=7/13h;
+% x5=.1w;y5=.3h;
+% draw z4..tension 1.2..z1..tension 1.5..z2..tension 1.1..z3..z5;
 enddef;
 %
 def do_b_six =
