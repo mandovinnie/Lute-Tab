@@ -661,7 +661,11 @@ beginchar ("|", em#, 1.0cap#, 0);"|";
  penpos2(1.5wid, 0);
  penpos1(1.wid, 20);
  penstroke z0e..tension 2..z2e..tension 5 ..z1e;
-% draw z2..z1;
+%   % MP 03sep19 made lighter and smaller   
+%  pickup pencircle xscaled 0.9wid yscaled 0.9wid rotated 45;
+%  x1 = 0.5w; x2 = x1;
+%  y1 =-0.5h; y2 = 0.4h;
+%  draw z2..z1;
 endchar;enddef;
 %
 def c_body(expr thick) =

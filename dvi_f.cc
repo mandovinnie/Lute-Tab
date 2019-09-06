@@ -1477,7 +1477,7 @@ struct list *l)			/* data */
 	  p->movev(-.025);
 	  if (baroque) {
 	    p->moveh(-.06);
-	    // printf ("under smile %c - \n", l->next->dat[i]);
+	    //  printf ("under smile %c - \n", l->next->dat[i]);
 	    if (l->next &&
 		     (l->next->dat[i] == 'D'
 		      || l->next->dat[i-1] == 'D'
@@ -1487,19 +1487,24 @@ struct list *l)			/* data */
 	    }
 	    else if (l->next && l->next->dat[i] == 'E') {
 	      p->moveh(.04); /* was .21 */
-	      printf ("dvi_f.cc: smile: case 2\n");
+	      // printf ("dvi_f.cc: smile: case 2\n");
 	      if  (l->next && l->next->dat[i+1] == ' ') {
 		p->movev(0.06);
 		// printf ("dvi_f.cc: smile: case 3\n");
 	      }
 	    }
+	    else if (l->padding == 0.0900) {
+	      p->moveh(0.025);
+	    }
 	    else if (l->next && l->next->dat[i] == ' ') {
+	      printf("dvi_f: 1 padding %f\n", l->padding);
 	      p->movev(-.02); /* wbc July july 2019 fix up the underbar */
 	      p->moveh(-.097);
 	      // printf ("dvi_f.cc: smile: case 4\n");
 	    }
 	    // if (i > 2 && l->next && l->next->dat[i-1] == 'D') p->movev(-0.094);
 	    else {
+	      // printf("dvi_f: 2 padding %f\n", l->padding);
 	      p->moveh(-.097);
 	      // printf ("dvi_f.cc: smile: case 5\n");
 	    }
@@ -1715,10 +1720,13 @@ struct list *l)			/* data */
 	else if ( cc == '/') {  /* wbc July 2019 */
 	  p->push();
 	  if (baroque) {
-	    if ( i + skip_spaces == 8) {  //bourdon
+	    // printf("dvi_f.cc: 1722 bourdon test  ch %s %d\n", ch, (i+skip_spaces));
+	    if ( (i + skip_spaces) == 9) {  //bourdon
 	      if (wide_note && wide_note != i) {
 		 p->moveh (0.1);  // was .2  this should match line 256 in pass1.cc
+		 // printf("dvi_f.cc: 1722 bourdon wide note \n");
 	      }
+	      // printf("dvi_f.cc: 1722 bourdon not wide  \n");
 	      mapchar(p, f_a, 114, f);  // wbc for bourdons
 	    }
 	    else if (c != '+' && c != '&') {  // the slash in note position
@@ -1779,11 +1787,12 @@ struct list *l)			/* data */
 
 	else {
 	  p->push();
-
-	  if (baroque && wide_note && wide_note != i) {
-	    p->moveh (0.2);  // this should match line 256 in pass1.cc
+	  
+	  if (baroque && wide_note && wide_note != i ) {
+	    // printf ("padding %f  %s\n", l->padding, ch);
+	    if (l->padding > 0.090) p->moveh (0.09);  // this should match line 256 in pass1.cc
 	  }
-
+	  
 	  mapchar(p, f_a, cc, f);
 	  p->pop();
 	}

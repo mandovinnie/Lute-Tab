@@ -227,7 +227,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       break;
     case '+':		/* ornaments */
       l->padding = str_to_inch(min_O_w);  /* 0.09 */
-      // printf("pass1.cc: HERE 0 %f\n", l->padding);
+      // printf("pass1.cc: +ornament padding %f  d %s\n", l->padding, d);
       // printf("pass1.cc: width +  %f \n", f_a[0]->fnt->get_width('+'));
       // printf("pass1.cc: width -  %f \n", f_a[0]->fnt->get_width('-'));
       // printf("pass1.cc: width _  %f \n", f_a[0]->fnt->get_width('_'));
@@ -252,7 +252,8 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  //			printf ("tab: pass1: %s\n", l->dat);
 	}
       }
-      // printf("pass1: + inter padding %f\n", l->padding);
+
+      // printf("pass1.cc: + inter padding   %f\n", l->padding);
 
       // this is about ornaments before the notes
 
@@ -286,15 +287,25 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	    }
 	    if (d[i] == '_') {
 	      underscore_found = 1;
+	      //printf("underscore %d\n", i);
 	    }
-	    // printf(" b_d_pad:  %f\n", b_d_pad);
+	    if (d[i] == '/') {
+	      //	printf("slash %d\n", i);
+	    }
+	    // printf("found_wide_letter %d  b_d_pad:  %f\n", found_wide_letter, b_d_pad);
 	    // found_wide_letter = 1;
 	    // break;
 	  }
 	}
+
+	// printf("found_wide_letter %d  b_d_pad: %f padding %f underscore_found %d orn_found %d\n",
+	//       found_wide_letter, b_d_pad, l->padding, underscore_found, orn_found );
+	
 	// if ( underscore_found )  l->padding = 0.05;
         if (!found_wide_letter && underscore_found && orn_found < 2 )  l->padding = 0.0;
 	if (!orn_found && Q_found) l->padding = 0.0;
+	//if (underscore_found && d[9] == '/'  && orn_found < 3)  l->padding = 0.0;
+	// printf(" l->padding %f %c\n", l->padding, d[10]); 
       }
     DONE:
       weight = W_NONE;
