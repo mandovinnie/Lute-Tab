@@ -13,6 +13,32 @@
 $slur_depth=-6.0
 
 b
+1  +aE  a
+1  ^aE  ///a
+1  +a+E  ///a
+1  a+E  ///a
+1  +aD  ///a
+1  +a   ///a
+1  +aE  a
+1 _e -  /a
+1 e"_ -  /a
+1 _E -  /a
+1 _c -  /a
+1 _c -  //a
+1 _c -  a
+1 c -  /a
+1 _e -  a
+b
+1 e -  /a
+1 _E -  /a
+1  xd   6
+1  xc   4
+1  xD   5
+1      a|
+b
+
+b
+1  ^a   ///a
 1  ^aE  ///a
 1  ^aD  /a
 1  ^aD  //a
