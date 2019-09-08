@@ -1766,7 +1766,7 @@ struct list *l)			/* data */
 		p->movev(-0.012);
 	      }
 	      // printf ("dvi_f.cc: 1768 - -  char %cc padding %f   %d\n",
-		c, l->padding, i+skip_spaces);
+		//c, l->padding, i+skip_spaces);
 	      // mapchar(p, f_a, 114, f);
 	      mapchar(p, f_a, cc, f);
 	    }
