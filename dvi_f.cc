@@ -1721,13 +1721,14 @@ struct list *l)			/* data */
 	  p->push();
 	  if (baroque) {
 	    // printf("dvi_f.cc: 1722 bourdon test  ch %s %d\n", ch, (i+skip_spaces));
-	    if ( (i + skip_spaces) == 9) {  //bourdon
+	    if ( (i + skip_spaces) == 8||(i + skip_spaces) == 9) {  //bourdon
 	      if (wide_note && wide_note != i) {
 		 p->moveh (0.1);  // was .2  this should match line 256 in pass1.cc
-		 // printf("dvi_f.cc: 1722 bourdon wide note \n");
+		//   printf("dvi_f.cc: 1722 bourdon wide note \n");
 	      }
-	      // printf("dvi_f.cc: 1722 bourdon not wide  \n");
-	      mapchar(p, f_a, 114, f);  // wbc for bourdons
+	      //  printf("dvi_f.cc: 1729 bourdon not wide  \n");
+	      //  p->moveh(0.1);  // wbc sept 8 19 test case
+	      mapchar(p, f_a, 114, f);  // wbc for bourdons  114 = r
 	    }
 	    else if (c != '+' && c != '&') {  // the slash in note position
 	      p->moveh("-0.086 in");
@@ -1754,7 +1755,6 @@ struct list *l)			/* data */
 		  p->moveh(0.06);
 		}
 	      }
-	      // printf ("dvi_f.cc: HERE - -  char %cc padding %f\n", c, l->padding);
 	      if (l->next && l->next->dat[i-1] == 'd') {
 		p->movev(-0.012);
 	      }
@@ -1765,6 +1765,8 @@ struct list *l)			/* data */
 	      if (l->next && l->next->dat[i] == 'c') {
 		p->movev(-0.012);
 	      }
+	      // printf ("dvi_f.cc: 1768 - -  char %cc padding %f   %d\n",
+		c, l->padding, i+skip_spaces);
 	      // mapchar(p, f_a, 114, f);
 	      mapchar(p, f_a, cc, f);
 	    }
