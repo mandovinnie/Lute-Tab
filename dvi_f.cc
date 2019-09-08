@@ -1497,7 +1497,7 @@ struct list *l)			/* data */
 	      p->moveh(0.025);
 	    }
 	    else if (l->next && l->next->dat[i] == ' ') {
-	      printf("dvi_f: 1 padding %f\n", l->padding);
+	      // printf("dvi_f: 1 padding %f\n", l->padding);
 	      p->movev(-.02); /* wbc July july 2019 fix up the underbar */
 	      p->moveh(-.097);
 	      // printf ("dvi_f.cc: smile: case 4\n");
