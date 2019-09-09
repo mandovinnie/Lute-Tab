@@ -1732,6 +1732,11 @@ struct list *l)			/* data */
 	    }
 	    else if (c != '+' && c != '&') {  // the slash in note position
 	      p->moveh("-0.086 in");
+	      if (  l->dat[i-1] == '.' || l->dat[i-1] == ' ') {
+		// printf("dvi_f.cc: 1736: shift slash up %c %d %s\n",
+		// c, i, l->dat);
+		p->movev(-0.07);
+	      }
 	      mapchar(p, f_a, cc, f);
 	    }
 	    else if (c == '&') {  // the slash after the note
@@ -1765,6 +1770,13 @@ struct list *l)			/* data */
 	      if (l->next && l->next->dat[i] == 'c') {
 		p->movev(-0.012);
 	      }
+	      // the following is not an ornament thing
+	      //if (c != '+' 
+	      //  && l->dat[i-1] == '.' || l->dat[i-1] == ' ') {
+	      //  printf("dvi_f.cc: 1769: HERE %c %d %s\n", c, i, l->dat);
+	      //  p->movev(-0.1);
+	      //}
+	      
 	      // printf ("dvi_f.cc: 1768 - -  char %cc padding %f   %d\n",
 		//c, l->padding, i+skip_spaces);
 	      // mapchar(p, f_a, 114, f);
