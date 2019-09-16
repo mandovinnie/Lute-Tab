@@ -3,16 +3,26 @@
 -R9
 % -300
 -b
-% -l "9.0 in"
-% -l "1.4 in"
-% $flagstyle=thin
-% $flagstyle=contemp
-% $flagstyle=italian
-% $flagstyle=standard
+$line=o
 % a / is 47 
 $slur_depth=-6.0
 
-b
+be
+0-a/
+0-     !/a
+0-    a!/a
+0-   a !/a
+0-   a.!/a
+0-      /a
+0-a/a/a/a
+b6
+1  ih.!/a
+0       /a
+0.      /a
+0.a&,/a."/ a|
+b fgg
+
+bb.
 1  +aE  a
 1  ^aE  ///a
 1  +a+E  ///a

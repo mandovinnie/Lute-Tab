@@ -1007,7 +1007,7 @@ endchar;enddef;
 %
 def do_slash =
 % beginchar ("/", em#, 1.0cap#, 0);"a slash";
-beginchar ("/", 3.1 em#, 1.0cap#, 0);"a slash";
+beginchar ("/", 3.1 em#, 1.0cap#, 0);"a slash between notes";
 % wbc July 2019
   pickup pencircle xscaled 1.2wid yscaled .4wid rotated -29;
   x1=0w;x2=w;
