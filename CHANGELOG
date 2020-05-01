@@ -1,3 +1,6 @@
+VERSION "4.3.99"
+a fix to grids with dotted notes, or extra flags for just some notes
+
 VERSION "4.3.98"
 added pragma once to all .h files, removed trailing whitespace for .cc files
 other changes for development tools

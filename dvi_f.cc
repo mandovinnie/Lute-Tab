@@ -872,31 +872,50 @@ struct list *l)			/* data */
 	  }
 	  p->put_a_char('.');
 	}
+	else if ( cc == '.' ) {
+	  p->moveh(0.04
+		   + l->space / 10.0 );
+	  if (f->flag_flag == CONTEMP_FLAGS) {
+	    p->movev ("0.025 in");
+	  } 
+	  p->put_a_char('.');
+	}
 	else if ( cc == '|') {              /* print extra bar  */
 	  p->move_n_v("0.19 in");
 	  p->movev  ( grids * str_to_inch ("0.05 in"));
 
 	  if (l->next && l->next->dat[1] != '|') {
+	    // printf("dvi_f: | and next ne | \n");
 	    if (!double_grid ) {    /* must be following dot */
-	      p->moveh  ( -1.0 *
-			  (l->space + l->padding)/ 2.2
-			  + str_to_inch(".01 in"));
-	      // dec 06 - change to stop using staff_h which can change
-	      // 0.005 is from ps_print.cc ps_print::put_slash
-	      //
-	      p->put_rule((l->space + l->padding)/ 2.2,
-			  /* staff_h */ str_to_inch("0.005 in"));
+	      if (l->prev && l->prev->prev && l->prev->prev->dat[1] == '.') {
+		p->moveh  ( -1.0 *
+			    (l->space + l->padding)/ 2.2
+			    + str_to_inch(".01 in"));
+		p->put_rule((l->space + l->padding)/ 2.2,
+			    /* staff_h */ str_to_inch("0.005 in"));
+		// printf("dvi_f: not double_grid printing half rule\n");
+              }
+	      else {
+		p->moveh  ( -1.0 *
+			    (l->space + l->padding)
+			    + str_to_inch(".01 in"));
+		p->put_rule((l->space + l->padding),
+			    /* staff_h */ str_to_inch("0.005 in"));
+		// printf("dvi_f: not double_grid printing half rule\n");
+	      }
 	    }
-	    else {
+	    else { // not following a dot, double_grid is true
 	      /* finish double grid */
 	      double_grid=0;
+ 	      // printf("double grid cleared, not printing anything\n");
 	    }
 	  }
-	  else {
+	  else {   // cc not equal either * nor | 
 	    double_grid++;
 	    p->moveh(0.006); /* fudge factor, unknown reason */
 	    p->put_rule((l->space + l->padding),
 			/* staff_h */ str_to_inch("0.005 in"));
+	    // printf("dvi_f: double_grid  just set printing rule\n");
 	  }
 	}
 	p->pop();

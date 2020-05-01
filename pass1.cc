@@ -198,6 +198,8 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  dbg0 ( Inter, "255");
 	else if (dd == 't')
 	  dbg0 ( Inter, "///");
+	else if (dd == '|')
+	  dbg0 ( Inter, "  |");
 	else if (dd == ' ')
 	  dbg1 ( Inter, "  %1c", (void *)'X');
 	else if ( dd == '\n' )
