@@ -927,7 +927,7 @@ struct list *l)			/* data */
 	p->movev(flag_to_staff);
 	p->put_a_char(c);
 	// now we must draw the dot... feb 2001
-	if (ch[1] == '-' || ch[3] == 'Z') {
+	if (ch[1] == '-' || ch[3] == 'Z' || ch[1] == 'b') {
 	  p->put_a_char(92);
 	}
 	if (f->flags & NOTES ) {
