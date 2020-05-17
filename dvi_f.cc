@@ -327,18 +327,24 @@ struct list *l)			/* data */
   case 'i':			/* indent as for barline - no line*/
   case 'j':			/* indent as for barline - no line*/
     break;
+    /* v draws the v and upside doown v to mark the page turn
+     * in the original.  But the baroque font is different
+     * and has numbers, so it doesn't work for baroque
+     */
   case 'v':
     //      printf("v here\n");
-    p->push();
-    p->moveh(-0.5 * f_a[0]->fnt->get_width(9));
-    p->movev(f_a[0]->fnt->get_height(9));
-    if (f->line_flag != ON_LINE)
-      p->movev(0.5 * d_i_space);	// wbc Sept 06
-    p->put_a_char (8);
-    p->movev(5.5 * d_i_space);
-    p->put_a_char (9);
-    //      p->movev(-5.5 * d_i_space);
-    p->pop();
+    if (! baroque ) {
+      p->push();
+      p->moveh(-0.5 * f_a[0]->fnt->get_width(9));
+      p->movev(f_a[0]->fnt->get_height(9));
+      if (f->line_flag != ON_LINE)
+	p->movev(0.5 * d_i_space);	// wbc Sept 06
+      p->put_a_char (8);
+      p->movev(5.5 * d_i_space);
+      p->put_a_char (9);
+      //      p->movev(-5.5 * d_i_space);
+      p->pop();
+    }
     break;
   case '.':
     p->push();
@@ -355,6 +361,20 @@ struct list *l)			/* data */
     }
     p->pop();
     p->push();
+// the following stolen from the code for b2
+    if (ch[1] > '0' && ch[1] <= '9' ) {
+      if (!(f->m_flags & QUIET ))
+        dbg1(Warning,
+           "tab: dvi_f -number after a dot %c\n", (void *)((int)ch[1]));
+      p->push();
+      p->movev(-.1);
+      /*            p->put_a_char(140 + ch[1] - '0');*/
+      p->use_font(3);   // was 2, 3 at rainer's request
+      p->put_a_char(ch[1]);
+      p->use_font(0);
+      p->pop();
+    }
+
 
     if (f->m_flags & COUNT_DOTS) {
       p->movev(6.0 * d_i_space);
@@ -927,7 +947,9 @@ struct list *l)			/* data */
 	p->movev(flag_to_staff);
 	p->put_a_char(c);
 	// now we must draw the dot... feb 2001
-	if (ch[1] == '-' || ch[3] == 'Z' || ch[1] == 'b') {
+	// note the the 3/4 circle y has its own dot, the half circle doesn't
+	if (ch[1] == '-' || ch[3] == 'Z' || ch[1] == 'b' /* || ch[1] == 'B' */ ) {
+	  // printf("DOT\n");
 	  p->put_a_char(92);
 	}
 	if (f->flags & NOTES ) {

@@ -506,11 +506,19 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 			staff[i] = ' ';
 		    break;
 		case '/':
+		  // printf("getsys: slash: 1 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
 		    if ((cc = buf[i + (++skip)]) == '/') {
 			ornament[i] = 's';     /* two slashes */
+			// printf("getsys: slash: 2 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
 			if ((cc = buf[i + (++skip)]) == '/') {
 			    ornament[i] = 't'; /* three slashes */
 			    skip++;
+			    // printf("getsys: slash: 3 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
+			    if ((cc = buf[i + (skip)]) == '/') {
+			      ornament[i] = 0xb0; /* four slashes */
+			      skip++;
+			      // printf("getsys: slash: 4 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
+			    }
 			}
 			else {	/* only one slash */
 			}
@@ -808,6 +816,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	case '.':		/* this does not acutally determine */
 	    staff[0] = '.';	/* the number of dots printed */
 	    if (buf[1] == 'X') staff[1] = 'X';
+	    else if (buf[1] >= '1' && buf[1] <= '9') staff[1] = buf[1];
 	    else staff[1] = '-';
 	    staff[2] = staff[8] = ' ';
 	    for (i=3; i < 8; i++)

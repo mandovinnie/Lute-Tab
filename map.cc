@@ -21,7 +21,7 @@ void mapflag(print *p, font_list *f_a[], char c, struct file_info *f)
 {
     int flags = f->flag_flag;
 
-/*    printf("mapflag: flags %X   c %c\n", flags, c);  */
+    //    printf("mapflag: flags %X   c %c\n", flags, c);  
 
 /*
   if (f->line_flag == ON_LINE)
@@ -364,6 +364,22 @@ void mapchar(print *p, font_list *f_a[], unsigned char c, struct file_info *f)
 	   p->moveh((f_a[0]->fnt->get_width(133)
 		     - f_a[0]->fnt->get_width('X'))/2.0);
 	   p->put_a_char('X');
+    }
+    else if ( c == 0xb0) {
+      // printf("four slashes\n");
+      p->push();
+      if ( baroque ) {
+	p->moveh(-0.19);
+	p->movev(-0.001);
+	p->put_a_char('r');
+      }
+      else {
+	p->moveh(-0.12);
+	p->movev(-0.04);
+	p->put_a_char('/');
+      }
+      p->pop();
+      p->put_a_char('t');
     }
     else if ( c == 0xd1) {
       dbg0 (Warning, "mapchar: apple dash detected, fudging\n ");
