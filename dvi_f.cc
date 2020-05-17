@@ -243,7 +243,7 @@ struct list *l)			/* data */
     if (ch[1] > '0' && ch[1] <= '9' ) {
       if (!(f->m_flags & QUIET ))
 	dbg1(Warning,
-	   "tab: dvi_f -number after barline %c\n", (void *)((int)ch[1]));
+	   "tab: dvi_f: number after barline %c\n", (void *)((int)ch[1]));
       p->push();
       p->movev(-.1);
       /*	    p->put_a_char(140 + ch[1] - '0');*/

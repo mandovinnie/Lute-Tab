@@ -505,34 +505,40 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    for ( ; i < STAFF; i++)
 			staff[i] = ' ';
 		    break;
-		case '/':
+		case '/':    /* slash slashes bourdons */
 		  // printf("getsys: slash: 1 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
+		  if ((cc = buf[i + (++skip)]) == '/') {
+		    ornament[i] = 's';     /* two slashes */
+		    // printf("getsys: slash: 2 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
 		    if ((cc = buf[i + (++skip)]) == '/') {
-			ornament[i] = 's';     /* two slashes */
-			// printf("getsys: slash: 2 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
-			if ((cc = buf[i + (++skip)]) == '/') {
-			    ornament[i] = 't'; /* three slashes */
-			    skip++;
-			    // printf("getsys: slash: 3 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
-			    if ((cc = buf[i + (skip)]) == '/') {
-			      ornament[i] = 0xb0; /* four slashes */
-			      skip++;
-			      // printf("getsys: slash: 4 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
-			    }
+		      ornament[i] = 't'; /* three slashes */
+		      skip++;
+		      // printf("getsys: slash: 3 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
+		      if ((cc = buf[i + (skip)]) == '/') {
+			ornament[i] = 0xb0; /* four slashes 0xb0 is 176 */
+			skip++;
+			// printf("getsys: slash: 4 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
+			if ((cc = buf[i + (skip)]) == '/') {
+			  ornament[i] = 0xb1; /* five slashes 0xb1 is 177 */
+			  skip++;
+			  // printf("getsys: slash: 5 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
 			}
-			else {	/* only one slash */
-			}
-			i--;
+			
+		      }
 		    }
-		    else if ( cc == ' ' ) {
-			/* leave staff[i] as '/' */
+		    else {	/* only one slash */
+		    }
+		    i--;
+		  }
+		  else if ( cc == ' ' ) {
+		    /* leave staff[i] as '/' */
 			skip--;
-		    }
-		    else {
-			ornament[i] = '/';
-			i--;
-		    }
-		    break;
+		  }
+		  else {
+		    ornament[i] = '/';
+		    i--;
+		  }
+		  break;
 		case '!':	/* infix */
 		    staff[i] = buf[i + (++skip)];
 		    if (staff[i] == '0') { // a octal number after !0

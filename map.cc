@@ -365,7 +365,7 @@ void mapchar(print *p, font_list *f_a[], unsigned char c, struct file_info *f)
 		     - f_a[0]->fnt->get_width('X'))/2.0);
 	   p->put_a_char('X');
     }
-    else if ( c == 0xb0) {
+    else if ( c == 0xb0) { // 0xb0 is 176
       // printf("four slashes\n");
       p->push();
       if ( baroque ) {
@@ -381,8 +381,26 @@ void mapchar(print *p, font_list *f_a[], unsigned char c, struct file_info *f)
       p->pop();
       p->put_a_char('t');
     }
+    else if ( c == 0xb1) { // 0xb0 is 177
+      dbg0(Warning, "mapchar: five slash not supported yet\n");
+      p->push();
+      if ( baroque ) {
+        p->moveh(-0.19); p->movev(-0.001);
+        p->put_a_char('r');
+        p->moveh(-0.057); p->movev(-0.0091);
+        p->put_a_char('r');
+      }
+      else {
+        p->moveh(-0.12); p->movev(-0.04);
+        p->put_a_char('/');
+        p->moveh(-0.04); p->movev(-0.015);
+        p->put_a_char('/');
+      }
+      p->pop();
+      p->put_a_char('t');
+    }
     else if ( c == 0xd1) {
-      dbg0 (Warning, "mapchar: apple dash detected, fudging\n ");
+      // dbg0 (Warning, "mapchar: apple dash detected, fudging\n ");
       p->moveh(0.04);
       p->movev(0.08);
       p->put_rule(0.006, 0.13837);
