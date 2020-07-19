@@ -62,6 +62,10 @@ format_title(print *p, i_buf *i_b, font_list *f_a[], struct file_info *f)
     static char *tp;			// title pointer
     static char title_done=0;		// this seems to be for midi titles
     double font_scale = f->font_sizes[font]/12.0;  // wbc apr 17
+    // July 19 2020 wbc
+    // was 12.0 should be titlesize title is font 2
+    // not sure why font_scale is here, it seems to mess up $titlesize
+    font_scale = 1.0;
 
     centerline = 0;
     bzero(bbuf, LLINE);
