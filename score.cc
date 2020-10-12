@@ -420,9 +420,9 @@ score(print *p, struct list *l, struct file_info *f,
 	      } // i >= 8 - bourdon
 	      else if (prev && isalnum(c)) {
 		if (prev[i] == '/' )
-		  put_note(p, 8, 'a', timeval, f, ch);
+		  put_note(p, 8, /* wbc oct 2020 'a' */ c, timeval, f, ch);
 		else if (prev[i] == 's' )
-		  put_note(p, 9, 'a', timeval, f, ch);
+		  put_note(p, 9, /* wbc oct 2020 'a' */ c, timeval, f, ch);
 		else if (prev[i] == 't' )
 		  put_note(p, 10, 'a', timeval, f, ch);
 		else if (prev[0] != '+' && c == '4')
