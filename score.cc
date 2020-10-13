@@ -424,7 +424,7 @@ score(print *p, struct list *l, struct file_info *f,
 		else if (prev[i] == 's' )
 		  put_note(p, 9, /* wbc oct 2020 'a' */ c, timeval, f, ch);
 		else if (prev[i] == 't' )
-		  put_note(p, 10, 'a', timeval, f, ch);
+		  put_note(p, 10, c, timeval, f, ch);
 		else if (prev[0] != '+' && c == '4')
 		  put_note(p, 11, 'a', timeval, f, ch);
 		else if (prev[0] != '+' && c == '5')
