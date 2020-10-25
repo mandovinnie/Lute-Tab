@@ -1,4 +1,7 @@
-#define VERSION "4.3.101"
+VERSION "4.3.102"
+fixes to make measure numbers print when used with double bar lines
+
+VERSION "4.3.101"
 fixed score on 7 and 8 course when a b or c is used rather than a
 
 VERSION "4.3.100"

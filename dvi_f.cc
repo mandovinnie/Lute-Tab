@@ -2091,13 +2091,29 @@ void check_bar(print * p, int j, int *l_p, struct list* l)
     }
   }
 
-  // printf ("  j %d  l_p %d measures %d \n", j, *l_p, n_measures);
+/*  printf ("  j %d  l_p %d measures %d ", 
+	  j, *l_p, n_measures);
+  if (prev) printf (" prev %c ", *prev);
+  if (nxt) printf (" nxt %c ", *nxt);
+  printf ("\n");
+ */
 
   if (j+1 == *l_p || j+2 == *l_p ) return;
+
+  /* this is where we print the number */
   /* choose one of these below to put number under first or second bar */
   /* the first one gives wht wrong number */
-  //if (prev && *prev == 'b') return;
-  if (nxt && ( *nxt == 'b' || *nxt == 'B')) return;
+  if (!j && ! barCount && prev && (*prev == 'b' || *prev == 'B')) return;
+  if (nxt && ( *nxt == 'b' || *nxt == 'B')) {
+    if  (bar_count && ! (n_measures % 5))
+      p->p_num(n_measures);
+    else if (j == 0 && barCount) 
+      p->p_num(n_measures+1);
+    else if (j == 0 && barCCount) {
+      p->p_num(n_measures+1);
+    }
+    return;
+  }
 
   if (bar_count && ! (n_measures % 5))
     p->p_num(n_measures);

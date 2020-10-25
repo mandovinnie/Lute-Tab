@@ -121,7 +121,7 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	simple.tab \
 	update.pl .gitignore
 
-DISTFILE = lute_tab4.3.100.tar.gz
+DISTFILE = lute_tab4.3.102.tar.gz
 
 distrib:	 ${DISTFILE}
 
