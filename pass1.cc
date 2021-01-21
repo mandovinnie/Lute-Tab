@@ -182,6 +182,8 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  dbg0 ( Inter, "  w");
 	else if (dd == 'x')
 	  dbg0 ( Inter, "  x");
+	else if (dd == 'X')
+	  dbg0 ( Inter, "  X");
 	else if (dd == 'Y')
 	  dbg0 ( Inter, "  Y");
 	else if (dd == 'Z')

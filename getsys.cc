@@ -59,8 +59,9 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 /*    signed char get(); */
     int gridflag=0;
     int hushbar=0, tie=0, dimline=0;/* for non print bars, and ties */
-    int nocountbar=0;		// for non ocunting bar
-    int Key=0;                       //for auto key signature
+    int nocountbar=0;		// for non counting bar
+    int nocountdimbar=0;	// for non counting dim bar
+    int Key=0;                  //for auto key signature
     int orig=0,Orig=0;
     int skip;
     int cur_chord=0;
@@ -252,15 +253,21 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    return(2);
 	case 'b':
 	    /* barline */
+	    /* Jan 2021 wbc added code for QX and XQ for uncounted gray barline */
 	    if ((c = buf[1]) == '!') {
 		hushbar++;
 //		dbg1(Warning, "hushbar, barline not printed\n", (void *)c);
 	    }
+	    else if (c == 'X' && buf[2] == 'Q') nocountdimbar=1;
+	    else if (c == 'Q' && buf[2] == 'X') nocountdimbar=1;
 	    else if (c == 'T') tie++;
 	    else if (c == 'Q') dimline++;
 	    else if (c == 'v') orig=1;
 	    else if (c == 'V') Orig=1;
 	    else if (c == 'X') nocountbar=1;
+	    else if (c == 'L') {
+                nocountdimbar=1;
+	    }
 	    else if (c == 'b' || c == '.') {
 		Mstore( ib,l_p, (unsigned char *)"b-         ", f);
 		incr(buf);
@@ -289,6 +296,10 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    else if ( buf[1] == 'X' ) {
 	      BARline++;
 	      nocountbar=1;
+	      break;
+	    }
+	    else if ( buf[1] == 'L' ) {
+	      nocountdimbar=1;
 	      break;
 	    }
 	    else {
@@ -965,6 +976,10 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    else if (nocountbar) {
 		Mstore( ib, l_p, (unsigned char *)"bX         ", f);
 		nocountbar = 0;
+	    }
+	    else if (nocountdimbar) {
+		Mstore( ib, l_p, (unsigned char *)"bL         ", f);
+		nocountdimbar = 0;
 	    }
 	    else if (orig) {
 		Mstore( ib, l_p, (unsigned char *)"bvabc      ", f);

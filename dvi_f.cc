@@ -123,7 +123,7 @@ struct list *l)			/* data */
       p->p_movev((int)(5.5 * i_space));
     else p->p_movev(6 * i_space);
     if (ch[1] != '!') {
-      if (ch[1] == 'Q' ) {
+      if (ch[1] == 'Q'  || ch[1] == 'L') {
 	p->set_highlight();
 	if (f->m_flags & RED )
 	  p->red_highlight();
@@ -163,7 +163,7 @@ struct list *l)			/* data */
 		     + staff_h);
       }
     }
-    if (ch[1] == 'X' )
+    if (ch[1] == 'X' || ch[1] == 'L')  // L is no count, light bar
       ;
     else check_bar(p, j, l_p, l);
 
@@ -2060,9 +2060,9 @@ void check_bar(print * p, int j, int *l_p, struct list* l)
 	&& *nxt != 'Q'
 	&& *nxt != 'q') {
       n_measures++;
-      //      printf ("check bar b measures %d\n", n_measures);
+      //  printf ("check bar b measures %d\n", n_measures);
     }
-
+    
     else if ( *ch == '.' ) {
       //      printf ("dvi_f: check_bar: dot: ch %c\n", *ch);
 

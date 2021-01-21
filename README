@@ -262,6 +262,7 @@ bV		- two v's
 b2, b3	- a barline with a number, 1 - 9, above it
 bQ              - a pale bar
 bX		- a bar line that does not count with -C or -c
+bL	 	- a pale bar that does not count witn -C -c or -CC
 B		- a very thick barline (when followed by newline or !)
 B		- a breve (when followed by notes)
 bb 		- two barlines
