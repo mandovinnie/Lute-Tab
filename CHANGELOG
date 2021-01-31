@@ -1,5 +1,6 @@
 VERSION "4.3.103"
 make gray barline that don't count in bar numbering
+add github token
 
 VERSION "4.3.102"
 fixes to make measure numbers print when used with double bar lines
