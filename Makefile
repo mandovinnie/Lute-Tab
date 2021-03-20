@@ -31,6 +31,7 @@ TLOC='"."'
 # or your personal library.
 #
 # TLOC = '"/Users/wbc/nnt"'
+# TLOC = '"/Users/wayne/src/nnt"'
 # TLOC = '"/net/wbc/src/nnt"'
 # TLOC = '"/net/ifs-users/wbc/src/nnt"'
 # TLOC = '"/net/syno-fs/wbc/src/nnt"'
