@@ -57,7 +57,7 @@ void init(file_info *f)
     red = 1.0;
     f->file = (char *)malloc( BUFSIZ /* BL */ );  /* wbc Mar 28 2022 */
     f->file[0] = '\0';
-    f->out_file = (char *)malloc( BL );
+    f->out_file = (char *)malloc( BUFSIZ /* BL */ );
     f->out_file[0] = '\0';
     f->line_flag = BETWEEN_LINE;
     f->flag_flag = STAND_FLAGS;
