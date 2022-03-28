@@ -262,7 +262,7 @@ void i_buf::dump(const char *fname, const mode mode)	// dump to a file
     }
 
     if (fp == NULL) {
-	dbg1(Error, "tab: dump: can't open %s for output\n", (void *)fname);
+	dbg1(Error, "tab: i_buf: dump: can't open %s for output\n", (void *)fname);
     }
 
     file_bytes = num_bytes;

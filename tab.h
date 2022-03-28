@@ -38,7 +38,7 @@ void dbg_set(const dbg_type type);
 #endif
 
 #define STAFF 11
-#define BL 120			/* default file name size */
+#define BL 1024   /* 120 */			/* default file name size */
 #define STAFF_PAGE 9
 #define MAX_PAGE 25
 

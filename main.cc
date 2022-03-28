@@ -55,7 +55,7 @@ void init(file_info *f)
     /*    int pagenum = 0; */
     bar_count = 0;
     red = 1.0;
-    f->file = (char *)malloc( BL );
+    f->file = (char *)malloc( BUFSIZ /* BL */ );  /* wbc Mar 28 2022 */
     f->file[0] = '\0';
     f->out_file = (char *)malloc( BL );
     f->out_file[0] = '\0';

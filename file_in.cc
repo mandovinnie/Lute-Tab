@@ -32,7 +32,7 @@ void c2p(const char * name, Str255 fname);
 file_in::file_in(const char * fname, const char *mode)
 {
     dbg1(Proceedure, "starting file_in %s\n", (void *)fname);
-    fn = (char *)malloc(120);
+    fn = (char *)malloc(1024);
     strcpy (fn, fname);
     _file_in(fname, mode);
 }
@@ -117,7 +117,7 @@ file_in::~file_in()
 
 file_in::file_in()
 {
-    char fname[120];
+    char fname[1024];
 #ifdef MAC
     OSErr error;
     short refNum;

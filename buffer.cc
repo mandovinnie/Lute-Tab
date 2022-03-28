@@ -154,7 +154,7 @@ void buffer::dump(const char *fname, const mode mode)	// dump to a file
     if (strcmp(fname, "stdout")) {
       fp = fopen(fname, "wb");
       if (fp == NULL) {
-	dbg1(Error, "tab: dump: can't open %s for output\n", (void *)fname);
+	dbg1(Error, "tab: buffer: dump: can't open %s for output\n", (void *)fname);
       }
       fwrite(bytes, num_bytes, 1, fp);
       fclose(fp);

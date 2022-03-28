@@ -26,7 +26,7 @@ class ps_print : public print {
   void make_ps_font(i_buf *ps_header);
   void init_hv();
   int ps_top_of_page;
-  char f_name[120];		// this should be in ps_print.h
+  char f_name[BUFSIZ];		// this should be in ps_print.h
   double font_sizes[FONT_NAMES];
   int nodump;
   unsigned int left_margin;
