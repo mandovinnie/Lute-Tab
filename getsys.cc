@@ -635,6 +635,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		  }
 		  else { ornament[i] = buf[i+skip];
 		    skip++;
+		    i--;
 		  }
 		  break;
 		case '`':	/* comma on line is now a no-op */
@@ -770,9 +771,8 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    else
 		      skip -= 1;
 		  }
-		  else if (cc == '<' && buf[i + (skip += 3) == '!']) {
+		  else if (cc == '<' && buf[i + skip + 3] == '!') {
 		    // printf("HERE getsys.cc 737 \n");
-		    skip -= 3;
 		    cc = read_special_ornament (buf, &i, &skip);
 		  }
 		  else if (cc == '\n') {
