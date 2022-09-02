@@ -635,6 +635,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		  }
 		  else { ornament[i] = buf[i+skip];
 		    skip++;
+		    i--; //* Paul Overell Sept 1 2022 */
 		  }
 		  break;
 		case '`':	/* comma on line is now a no-op */
@@ -754,15 +755,17 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		}
 		/*  after ornaments */
 		if ((cc = buf[i + skip + 1]) == '&' ) {
-		  // printf("getsys.cc:line 690 got &\n");
+		  // printf("getsys.cc:line 757 got &\n");
 		  char ccc;
 		  cc = buf[i + (skip += 2)];
 		  if (cc == '*' ) cc = '.'; /* was Z */
 		  if (cc == '%' ) cc = ':'; /* was Z */
+		  
+		  // printf("HERE getsys.cc 764 i %d cc %c skip %d buf %s result %c\n", i, cc, skip, buf, buf[i+skip]);
 
 		  if (cc == ']') {
 		    ccc = buf[i + (skip += 1)];
-
+		    
 		    if ( ccc == 'v' )
 		      cc = (char)133;
 		    else if ( ccc == 'w' )
@@ -770,9 +773,9 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    else
 		      skip -= 1;
 		  }
-		  else if (cc == '<' && buf[i + (skip += 3) == '!']) {
-		    // printf("HERE getsys.cc 737 \n");
-		    skip -= 3;
+		  else if (cc == '<' && buf[i + skip + 1] == '!') {
+		    // printf("HERE getsys.cc 777 i %d skip %d buf %s\n", i, skip, buf);
+		    /* skip -= 3; Paul Overell Sept 1 2022 */
 		    cc = read_special_ornament (buf, &i, &skip);
 		  }
 		  else if (cc == '\n') {
@@ -1324,7 +1327,7 @@ do_music(i_buf *ib, unsigned char staff[], char buf[], int *l_p, int *skip,
 }
 
 
-char get_special_ornament(char * str) {
+char get_special_ornament(char * str) { //  <!tilde
   //   printf("getsys.cc: get_special_ornament: %s\n", str);
 
   if (!strcmp (str, "tilde"))
