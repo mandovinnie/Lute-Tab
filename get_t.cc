@@ -126,8 +126,6 @@ void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
       case 'w':
       case 'W':
       case 'D':
-      case '5':
-      case '4':
       end:
 	args_from_string(buf, f);
 	//		printf ("tab: setting flag %s\n",  buf);

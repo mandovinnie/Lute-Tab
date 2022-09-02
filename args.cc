@@ -253,6 +253,8 @@ void set_24(const char *value, struct file_info *f) {
   f->flags &= ~DPI600;
   red = 1.0;}
 void set_7(const char *value, struct file_info *f) {
+  f->flags &= ~FOUR;
+  f->flags &= ~FIVE;
   f->m_flags |= SEVEN;
 }
 void set_Q(const char *value, struct file_info *f) {f->flags |= BIGNOTES;}
@@ -285,11 +287,17 @@ void set_Y(const char *value, struct file_info *f) { f->flags |= NO_WORD;}
 void set_y(const char *value, struct file_info *f) {}
 void set_z(const char *value, struct file_info *f) {}
 void set_4(const char *value, struct file_info *f) {
-  f->flags |= FOUR;}
-void set_5(const char *value, struct file_info *f) { f->flags |= FIVE;}
+  f->flags |= FOUR;
+  f->flags &= ~FIVE;
+  f->m_flags &= ~SEVEN;}
+void set_5(const char *value, struct file_info *f) {
+  f->flags &= ~FOUR;
+  f->flags |= FIVE;
+  f->m_flags &= ~SEVEN;}
 void set_0(const char *value, struct file_info *f) {
   f->flags &= ~FOUR;
-  f->flags &= ~FIVE;}
+  f->flags &= ~FIVE;
+  f->m_flags &= ~SEVEN;}
 void set_l(const char *value, struct file_info *f) {
   if ( ! strncmp ("reset", value, 5))
     staff_len = o_staff_len;
