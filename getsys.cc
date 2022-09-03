@@ -771,7 +771,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		    else
 		      skip -= 1;
 		  }
-		  else if (cc == '<' && buf[i + skip + 3] == '!') {
+		  else if (cc == '<' && buf[i + skip + 1] == '!') {
 		    // printf("HERE getsys.cc 737 \n");
 		    cc = read_special_ornament (buf, &i, &skip);
 		  }
