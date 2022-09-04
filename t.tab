@@ -6,12 +6,29 @@
 % $line=o
 % a / is 47 
 % $slur_depth=-6.0
--CC
+% -CC
 
+%b
+%1 1
+%bXQ
 b
-1 1
-bXQ
-1 2
+1 <a
+x a&<
+x "<a a&,
+x '<a a&'
+x >a
+x a&>
+x +a
+x a&+
+x <!tilde>a
+x <!tilde>
+x a&<!tilde>+bc&+'<a&<
+x <!2mordent>
+x <!3mordent>
+x  %aa&%:bb&:
+x ":aa&:
+b
+e
 bQX
 1 3
 bL
