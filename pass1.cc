@@ -62,9 +62,9 @@ struct w big_chart[10] = {
     {min_2_w, W_TWO},		/* w */
     {min_3_w, W_ONE - 0.07 },		/* 0 */ /* wbc Sept 22 2022 */
     {min_4_w, W_HALF + 0.3 },		/* 1 */ /* these sizes should be bigger than the character width */
-    {min_4_w, W_QUART},		/* 2 */
-    {min_4_w, W_QUART},		/* 3 */
-    {min_4_w, W_QUART},		/* 4 */
+    {min_4_w, W_QUART + 0.3 },		/* 2 */
+    {min_4_w, W_QUART + 0.3 },		/* 3 */
+    {min_4_w, W_QUART + 0.3 },		/* 4 */
     {(char*)"0.05 in", W_QUART},	/* 5 */
     {(char*)"0.05 in", W_QUART}	/* 6 */
 };
