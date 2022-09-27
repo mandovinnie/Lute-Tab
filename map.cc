@@ -229,7 +229,7 @@ void mapchar(print *p, font_list *f_a[], unsigned char c, struct file_info *f)
 {
     extern char italian_offset[];
 
-    //    printf ("mapchar c is %c  %d\n", c, c);
+    //  printf ("mapchar c is %c  %d\n", c, c);
 
     if (f->line_flag == ON_LINE )       /* shift here in case we have  */
 	if (c != 'Z') p->movev(italian_offset);    /* italian and mace, etc */

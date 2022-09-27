@@ -48,6 +48,7 @@ int format_page(print *p, i_buf *i_b,
     int return_val;
 
 //    dbg0(Flow, "in format page\n");
+    dbg1(Inter, "in format page %d\n", (void *)(f->flags & FOUR));
 
     if (f->flags & DRAFT && f->flags & PS ) {
 	if (!(f->m_flags & QUIET)) dbg0 (Warning, "Draft\n");
@@ -357,7 +358,7 @@ int format_page(print *p, i_buf *i_b,
 	    }
 	    cmdbuf[i++] = '\0';
 	    cmdbuf[i++] = '\0';
-	    dbg1(Inter, "tab_p: argument: %s\n", (void *)cmdbuf);
+	    dbg2(Inter, "tab_p: format_page: argument: %s    %c\n", (void *)cmdbuf, f);
 	    args_from_string(cmdbuf, f);
 
 	    break;
@@ -610,8 +611,8 @@ void do_system(print *p, struct file_info *f)
     p->push();
 
     if (f->flags & FIVE || f->flags &  MANUSCRIPT) lines = 5;
-    if (f->flags & FOUR) lines = 4;
-    if (f->m_flags & SEVEN) lines = 7;
+    else if (f->flags & FOUR) lines = 4;
+    else if (f->m_flags & SEVEN) lines = 7;
     if (f->flags &  MANUSCRIPT) i_space = str_to_dvi(mus_space);
 
     if (f->line_flag == ON_LINE) p->p_movev(i_space / 2);
@@ -699,6 +700,7 @@ signed char getiline(i_buf *i_b, font_list *f_a[],
 		p++;
 		while((*p = i_b->GetByte()) != NEWLINE)
 		    p++;
+	        dbg2(Inter, "tab_p: getiline: argument: %s    %c\n", (void *)cmdbuf, f);
 		args_from_string(cmdbuf, f);
 		l->prev->next = NULL;
 		l = l->prev;

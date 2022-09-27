@@ -1604,8 +1604,8 @@ struct list *l)			/* data */
 	    }
 	  }
 	  else { // not ON LINE
-	    /* if (baroque) p->movev(0.017); */ /* wbc sept 2022 - try to center the dot in the line */
-		  if (baroque) p->movev(0.008);	
+	    // if (baroque) p->movev(0.017);  /* Sept 2022 wbc reduced this to center dot */
+	    if (baroque) p->movev(0.008);
 	  }
 	  p->put_a_char(cc);  /* draw dot */
 	  p->pop();

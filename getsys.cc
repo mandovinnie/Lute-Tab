@@ -125,6 +125,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    case 'W':
 	    case 'D':
 	    end:
+ 	        dbg2(Inter, "getsystem: buffer %s f %c\n", buf, f);
 		args_from_string(buf, f);
 		break;
 	    default:
