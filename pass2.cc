@@ -38,7 +38,7 @@ pass2(print *p, i_buf *i_b, font_list *f_a[], int *l_p, struct file_info *f, dou
       f->utility = ap;
     }
 
-    for ( j=0; j < *l_p && l; j++) {	/* loop through line of notes */
+    for ( j=0; j < *l_p && l; j++) {	/* loop through line of notes  and print them */
       //	printf ("pass 2: %s\n", l->dat);
 
 	if (f->flags & MANUSCRIPT) {
@@ -62,6 +62,8 @@ pass2(print *p, i_buf *i_b, font_list *f_a[], int *l_p, struct file_info *f, dou
     }
 
     if (ap) delete (ap);
+
+    /* free memory up */
 
     while (l->prev) {
       if (l->notes)   free (l->notes);
