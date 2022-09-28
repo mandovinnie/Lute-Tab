@@ -26,7 +26,7 @@
 #define 	W_NONE  0.0
 #define         W_TINY  0.000001
 #define		W_QUART 0.15
-#define		W_HALF  0.3
+#define		W_HALF  0.3 
 #define		W_ONE   1.0
 #define		W_TWO   2.0
 #define		W_THREE 3.0
@@ -34,15 +34,17 @@
 
 /* weights of each flag when filling out line */
 
-char min_0_w[] = "0.20 in   ";
-char min_1_w[] = "0.14 in   ";	/* one flag */
-char min_2_w[] = "0.12 in   ";
-char min_3_w[] = "0.10 in   ";
-char min_4_w[] = "0.09 in   ";	/* four flags */
-char min_b_w[] = "0.03 in   ";	/* bar */
-char min_d_w[] = "0.06 in   ";	/* repeat dot */
-char min_O_w[] = "0.09 in   ";	/* ornament was 0.09 */
-char min_F_w[] = "0.07 in   ";	/* a fingering number */
+char min_0_w[] = "0.2000 in   ";
+char min_1_w[] = "0.1400 in   ";	/* one flag */
+char min_2_w[] = "0.1200 in   ";
+char min_3_w[] = "0.1000 in   ";
+char min_4_w[] = "0.0900 in   ";	/* four flags */
+char min_b_w[] = "0.0300 in   ";	/* bar */
+char min_d_w[] = "0.0600 in   ";	/* repeat dot */
+char min_O_w[] = "0.0900 in   ";	/* ornament was 0.09 */
+char min_F_w[] = "0.0700 in   ";	/* a fingering number */
+
+/* struct words { char* width; double weight; } */
 
 struct w chart[10] = {
     {(char*)"0.26   in", 6.0},		/* B (J) */
@@ -60,11 +62,11 @@ struct w big_chart[10] = {
     {min_0_w, 6.0},		/* B (J) */
     {min_1_w, 4.0},		/* W */
     {min_2_w, W_TWO},		/* w */
-    {min_3_w, W_ONE - 0.07 },		/* 0 */ /* wbc Sept 22 2022 */
+    {min_3_w, W_ONE /* - 0.07 */ },	/* 0 */ /* wbc Sept 22 2022 */
     {min_4_w, W_HALF + 0.35 },		/* 1 */ /* these sizes should be bigger than the character width */
-    {min_4_w, W_QUART + 0.3 },		/* 2 */
-    {min_4_w, W_QUART + 0.3 },		/* 3 */
-    {min_4_w, W_QUART + 0.3 },		/* 4 */
+    {min_4_w, W_QUART },		/* 2 */
+    {min_4_w, W_QUART },		/* 3 */
+    {min_4_w, W_QUART },		/* 4 */
     {(char*)"0.05 in", W_QUART},	/* 5 */
     {(char*)"0.05 in", W_QUART}	/* 6 */
 };
@@ -119,33 +121,41 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
   else wp = chart;
 
   if (baroque && ! b_init) {
-#ifdef MAC
-    strcat (chart[2].width, "0.364 in");
-    strcat (chart[3].width, "0.303 in");
-    strcat (chart[4].width, "0.237 in");
-    strcat (chart[5].width, "0.185 in");
-    strcat (chart[6].width, "0.145 in");
-#else
-    double base_sp = f_a[0]->fnt->get_width (2+194); /* three flags */
+    double base_sp = f_a[0]->fnt->get_width (/* 2 + */ 1+ 194); /* three flags */
     double rt;
     base_sp *= .83;
+    base_sp = 0.02;
     rt = 1.28;
-    b_init++;
-
-    {
+    b_init = 1;
+    
+    { /* this overrides the defaults assigned in the global inititalization above */
       char * foo;
+      int bf_num[8] = {int('B'),(int)'W',(int)'w',194,195,196,197,198};
+      int i;
+
       foo = (char *) malloc(45);
-      sprintf(foo , "%.3f in", 1.2 * rt * rt * rt * base_sp);
-      chart[2].width = foo;
+      chart[2].width = foo;					/* w */
+      sprintf(wp[2].width, "%.3f in", 1.2 * rt * rt * rt * base_sp);
 
-      sprintf(chart[3].width, "%.3f in", rt * rt * rt *  base_sp);
-      sprintf(chart[4].width, "%.3f in", rt * rt *  base_sp);
-      sprintf(chart[5].width, "%.3f in", rt * base_sp);
-      sprintf(chart[6].width, "%.3f in", base_sp);
+      //      sprintf(chart[3].width, "%.3f in", rt * rt * rt *  base_sp);  /*  0 flags */
+      sprintf(wp[3].width, "%.3f in", (f_a[0]->fnt->get_width(bf_num[3])));  /*  0 flags */
+      //      sprintf(chart[4].width, "%.3f in", rt * rt *  base_sp);       /*  1 flags */
+      sprintf(wp[4].width, "%.3f in", (f_a[0]->fnt->get_width(bf_num[4])));       /*  1 flags */
+      //      sprintf(chart[5].width, "%.3f in", rt * base_sp);   	/*  2 flags */
+      sprintf(wp[5].width, "%.3f in", f_a[0]->fnt->get_width(bf_num[5]));   	/*  2 flags */
+      sprintf(wp[6].width, "%.3f in", f_a[0]->fnt->get_width(bf_num[6]));  		/*  3 flags */
+    
+      if (0) {
+	printf("pass1: init font widths \n");
+	for (i=0; i< 8; i++) {
+	  printf("%d %s  %f %f\n", i, chart[i].width,  chart[i].weight,
+		 f_a[0]->fnt->get_width(bf_num[i]));
+	}
+	printf("\n");
+      }
     }
-#endif /* MAC */
-  }
-
+  }  /* end baroque && ! b_init */
+  
   /* figure out basic widths on the first pass through */
 
   for (j=0; j < (*l_p) && l; j++){	/* get widths */
@@ -541,8 +551,10 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	breaksys=0;
 	breaksys2=1;
       }
-      if (d[1] == '.' || d[1] == '@' || d[1] == 'W')
-	l->padding *= 1.6, weight *=1.2;
+      if (d[1] == '.' || d[1] == '@' || d[1] == 'W') {
+	  l->padding *= 1.422;  /* Sept 2022 wbc was 1.6 */
+          weight *=1.2;
+      }
       else if (d[1] == 'B') {
 	if (l->prev) {
 	  l->prev->padding += .05;
@@ -974,7 +986,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       }
       l = l->next;
     }
-  }
+  }  /* end f->flags & NOTES */
 
   /* another pass for all text */
 
@@ -1168,7 +1180,7 @@ find_val(
 	if (vals[k] == val) {
 	    *found=1;
 	    ll->padding = str_to_inch(wp[k+offset].width);
-	    if (dot == '.') ll->padding *= 1.8;
+	    if (dot == '.') ll->padding *= 1.8; 
 	    ll->weight = wp[k-offset].weight;
 	    *total_width += ll->padding;
 	    *total_weight += ll->weight;
