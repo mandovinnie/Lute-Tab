@@ -526,7 +526,26 @@ void set_count_dots(const char *value, struct file_info *f)
 {
   f->m_flags |=COUNT_DOTS;
 }
-
+void show_tabfonts()
+{
+  extern char *font_path;
+  char *p = 0;
+  if (font_path) dbg1(Warning, "args: font path set on command line  %s\n", font_path);
+  else {
+    p = getenv("TABFONTS");
+    if (p)
+      dbg1(Warning, "args: font path set in env TABFONTS %s\n", font_path);
+    else {
+#ifdef TFM_PATH
+      dbg1(Warning, "args: font path set at compile time by TFM_PATH to  %s\n",
+	   (void *)TFM_PATH);
+#else  /* TFM_PATH */
+      dbg1(Warning, "args: font path compiled in  %s\n", font_path);
+#endif /* TFM_PATH */
+    }
+  }
+  // if (p) printf ("args: p is %s\n", p);
+}
 void args(int argc, char ** argv, struct file_info *f)
 {
   char *aa=0;
@@ -638,7 +657,8 @@ void args(int argc, char ** argv, struct file_info *f)
 			    {(char*)"no_space_after_note", (void*) set_no_space_after_note},
 			    {(char*)"no_space_before_note", (void*) set_no_space_before_note},
 			    {(char*)"count_dots", (void*) set_count_dots},
-			    {(char *)0, (void*)0}
+			    {(char*)"tabfonts", (void *) show_tabfonts},
+			    {(char*)0, (void*)0}
   };
 
   static tree at(arglist);

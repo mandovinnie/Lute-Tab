@@ -51,32 +51,27 @@ tfm_font::tfm_font(const char *font_name, double scale)
 
 
   dbg1 (TFM, "\nstarting tfm_font %s\n", (void *)font_name);
-  //    printf ("tfm.cc: scale is %f\n", scale);
-
-
-#ifdef MAC
-  strcpy(font_n, font_name);
-#else  /* not MAC */
 
   if (font_path) {
     //	fprintf (stderr, "tfm.c - setting font path %s from command line\n", font_path);
     p = font_path;
   }
-  else
+  else {
     p = getenv("TABFONTS");
-  if (p == NULL )
-
+    }
+  //  if (p == NULL )
+  if (p) 
+    strcpy(font_n, (const char *)p);
+  else {
 #ifdef TFM_PATH
     strcpy(font_n, TFM_PATH);
 #else
-  strcpy(font_n, ".");
+    strcpy(font_n, ".");
 #endif /* TFM_PATH */
-  else
-    strcpy(font_n, (const char *)p);
-
+  }
+  
   strcat(font_n, "/");
   strcat(font_n, font_name);
-#endif /* MAC */
   strcat(font_n, ".tfm");
 
   dbg1(Fonts, "tfm.cc: font name is %s\n", font_n);
