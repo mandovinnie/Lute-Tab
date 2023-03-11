@@ -373,10 +373,10 @@ int main(int argc, char **argv)
 	   (void *) VERSION,
 	   (void *) NEWLINE );
 #ifdef _WIN32
-      dbg1(Warning, "Windows 32 bit", (void *) NEWLINE);
+      dbg1(Warning, "Windows 32 bit%c", (void *) NEWLINE);
 #endif
 #ifdef _WIN64
-      dbg1(Warning, "Windows 64 bit", (void *) NEWLINE);
+      dbg1(Warning, "Windows 64 bit%c", (void *) NEWLINE);
 #endif
     }
     file_stuff(&b, &f);
