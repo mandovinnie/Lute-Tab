@@ -234,7 +234,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
     }
 
     switch (c=d[0]) {
-      int ii;
+//      int ii;
     case '?':
       l->padding = 3.0;
       weight = 1.0;
@@ -321,7 +321,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	//if (underscore_found && d[9] == '/'  && orn_found < 3)  l->padding = 0.0;
 	// printf(" l->padding %f %c\n", l->padding, d[10]); 
       }
-    DONE:
+//    DONE:
       weight = W_NONE;
       if (f->m_flags & NOSPACEBEFORE ) {
 	l->padding = 0;
