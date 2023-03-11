@@ -368,11 +368,17 @@ int main(int argc, char **argv)
     //	dbg_set(Inter);
     //  dbg_set(Fonts);
 
-    if ( ! (f.m_flags & QUIET) )
+    if ( ! (f.m_flags & QUIET) ) {
       dbg2(Warning, "tab %s copyright 1995-2023 by Wayne Cripps%c",
 	   (void *) VERSION,
 	   (void *) NEWLINE );
-
+#ifdef _WIN32
+      dbg1(Warning, "Windows 32 bit", (void *) NEWLINE);
+#endif
+#ifdef _WIN64
+      dbg1(Warning, "Windows 64 bit", (void *) NEWLINE);
+#endif
+    }
     file_stuff(&b, &f);
     b.Seek(0, rew);
 
