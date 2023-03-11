@@ -526,7 +526,7 @@ void set_count_dots(const char *value, struct file_info *f)
 {
   f->m_flags |=COUNT_DOTS;
 }
-void show_tabfonts()
+void show_tabfontpath()
 {
   extern char *font_path;
   char *p = 0;
@@ -657,7 +657,7 @@ void args(int argc, char ** argv, struct file_info *f)
 			    {(char*)"no_space_after_note", (void*) set_no_space_after_note},
 			    {(char*)"no_space_before_note", (void*) set_no_space_before_note},
 			    {(char*)"count_dots", (void*) set_count_dots},
-			    {(char*)"tabfonts", (void *) show_tabfonts},
+			    {(char*)"tabfontpath", (void *) show_tabfontpath},
 			    {(char*)0, (void*)0}
   };
 
