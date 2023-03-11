@@ -540,7 +540,7 @@ void show_tabfontpath()
       dbg1(Warning, "args: font path set at compile time by TFM_PATH to  %s\n",
 	   (void *)TFM_PATH);
 #else  /* TFM_PATH */
-      dbg1(Warning, "args: font path compiled in  %s\n", font_path);
+      dbg0(Warning, "args: font path compiled in .\n");
 #endif /* TFM_PATH */
     }
   }
