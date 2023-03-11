@@ -183,6 +183,7 @@ Options:
         called "data".
     -spanish when used with -m and -h converts "spanish" tab to 
         music correctly.
+    -tabfontpath prints out the place where TAB looks for font files
     -tuning 
 	-tuning C4D4E4F4G4c3f3a2d2g2	renaissance
 	-tuning e4a3d3f+3b2e2		for guitar
