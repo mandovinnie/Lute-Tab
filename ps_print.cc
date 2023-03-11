@@ -652,6 +652,8 @@ void ps_print::p_put_rule(int w, int h)
     if (highlight==On){
       if (highlight_type==Red)
 	ps_command(P_S_RED, 0, 0, 0, 0);
+      else if (highlight_type==Blue)
+	ps_command(P_S_BLUE, 0, 0, 0, 0);
       else
 	ps_command(P_S_GRAY, 0, 0, 0, 0);
     }
@@ -672,6 +674,9 @@ void ps_print::put_a_char (unsigned char c)
 	else if (highlight_type == Red) {
 	  ps_command(P_S_RED, 0, 0, 0, 0);
 	}
+        else if (highlight_type == Blue) {
+          ps_command(P_S_BLUE, 0, 0, 0, 0);
+	}
 	else
 	  ps_command(P_S_GRAY, 0, 0, 0, 0);
     }
@@ -689,6 +694,8 @@ void ps_print::put_a_char (unsigned char c)
 	}
 	else if (highlight_type == Red)
 	  ps_command(P_U_RED, 0, 0, 0, 0);
+	else if (highlight_type == Blue)
+	  ps_command(P_U_BLUE, 0, 0, 0, 0);
 	else
 	  ps_command(P_U_GRAY, 0, 0, 0, 0);
     }
@@ -700,6 +707,8 @@ void ps_print::set_a_char (unsigned char c)
     if (highlight_type == Red) {
       ps_command(P_S_RED, 0, 0, 0, 0);
     }
+    else if (highlight_type == Blue)
+	  ps_command(P_S_BLUE, 0, 0, 0, 0);
     else {
       ps_command(P_S_GRAY, 0, 0, 0, 0);}
     }
@@ -1331,6 +1340,14 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     pr_out->PutString("0.0 1.0 1.0 0.0  setcmykcolor\n");
     break;
   case P_U_RED:
+    pr_out->PutString("0.0 0.0 0.0 1.0  setcmykcolor\n");
+    break;
+  case P_S_BLUE:
+    pr_out->PutString("/mygray currentgray def\n");
+ /*   pr_out->PutString("1.0 1.0 0.0 0.0  setcmykcolor\n"); */
+    pr_out->PutString("0.5 0.5 0.0 0.0  setcmykcolor\n");
+    break;
+  case P_U_BLUE:
     pr_out->PutString("0.0 0.0 0.0 1.0  setcmykcolor\n");
     break;
   case PPUSH:

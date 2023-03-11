@@ -31,7 +31,7 @@ class print {
     int curfont;
     i_buf *pr_out;
     enum highlight {On, Off} highlight;
-    enum highlight_type {Paren, Gray, Red} highlight_type;
+    enum highlight_type {Paren, Gray, Red, Blue} highlight_type;
   public:
     print();
     ~print();
@@ -110,5 +110,6 @@ class print {
     void gray_highlight() { highlight_type = Gray;}
     void paren_highlight() { highlight_type = Paren;}
     void red_highlight() { highlight_type = Red;}
+    void blue_highlight() { highlight_type = Blue;}
 };
 #endif /* _PRINT_ */
