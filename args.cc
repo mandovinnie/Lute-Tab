@@ -534,7 +534,7 @@ void show_tabfontpath()
   else {
     p = getenv("TABFONTS");
     if (p)
-      dbg1(Warning, "args: font path set in env TABFONTS %s\n", font_path);
+      dbg1(Warning, "args: font path set in env TABFONTS %s\n", p);
     else {
 #ifdef TFM_PATH
       dbg1(Warning, "args: font path set at compile time by TFM_PATH to  %s\n",
