@@ -4,7 +4,7 @@
 # to uses preview to look at the tablature
 #
 # $ps2pdf="/usr/bin/gs -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=- - ";
-$ps2pdf="/opt/homebrew/bin/gs  -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=- ";
+$ps2pdf="/opt/homebrew/bin/gs  -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sPAPERSIZE=letter -sOutputFile=- ";
 #
 #
 $ifile = "out.ps";
