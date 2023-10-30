@@ -7,6 +7,7 @@
 
 #include "win.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "buffer.h"
 #include "dbg.h"
@@ -150,7 +151,14 @@ void buffer::dump(const char *fname, const mode mode)	// dump to a file
 #else
     FILE *fp=0;
 
+   // printf("HERE in buffer.cc dump  %s %d\n", fname, 7);
+   // exit(0);
+
     Seek(rew, 0);
+//    if (!strncmp(fname, "stdpipe", 6)) {             /* really is stdout */
+//      fwrite(bytes, num_bytes, 1, stdout);
+//    }
+//    else
     if (strcmp(fname, "stdout")) {
       fp = fopen(fname, "wb");
       if (fp == NULL) {
@@ -161,7 +169,6 @@ void buffer::dump(const char *fname, const mode mode)	// dump to a file
     }
     else {             /* really is stdout */
       fwrite(bytes, num_bytes, 1, stdout);
-      //      fclose(fp);
     }
 #endif
 }

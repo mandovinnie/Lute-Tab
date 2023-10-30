@@ -231,9 +231,17 @@ void set_dvi(const char *value, struct file_info *f) {
   f->flags &= ~PDF;
   f->flags &= ~PS;}
 void set_pdf(const char *value, struct file_info *f) {
+/*  void set_o(const char *value, struct file_info *f); */
+/*  now this runs the PS through ghostscript
   f->flags &= ~DVI_O;
   f->flags &= ~PS;
   f->flags |= PDF;}
+ */
+  f->flags &= ~DVI_O;
+  f->flags |= PS;
+  f->m_flags |= GS;
+/* set_o("stdpipe.ps", f); */
+}
 void set_2(const char *value, struct file_info *f) {
   f->m_flags |= DPI1200;
   f->flags &= ~DPI600;

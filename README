@@ -84,10 +84,8 @@ Options:
     -c prints measure numbers only at the start of a line
     -compressStaff sets interspace to 9.0 pt and m_space to 0.068 which makes things tighter
     -dvi output in dvi format to out.dvi
+         this depensd on you installing the GNU gs postscript processing command in the right place.
     -pdf generate pdf output to out.pdf
-	WARNING! - this is under development and does not work.  If you
-	try to use -pdf your computer may catch on fire and you may be injured.
-	Don't try this!  You have been warned!
     -D sort of like Dowland's style
     -debug <Mode> print out debugging information about 
 	Fonts Inter TFM Stack Flow Proceedure
@@ -162,7 +160,7 @@ Options:
     -o specifies an output file.  default is out.dvi
        if the .dvi or .ps extension is not specified it is added.
 	   this can not be specified in the input file.
-       if the name is stdout then output goes to standart output.
+       if the name is stdout then output goes to standard output.
     -p number the pages automatically
     -P the output file out.ps, in PostScript format, is
            generated - this can be sent to a printer directly,

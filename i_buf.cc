@@ -240,20 +240,29 @@ void i_buf::dump(const char *fname, const mode mode)	// dump to a file
     static FILE *fp;
     int n_written, file_bytes;
 
+    // printf("i_buf: dump: %s\n", fname);
 
     Seek(rew, 0);
 
-    if (!strcmp(fname, "stdout")) {
+    if (!strcmp(fname, "stdout")) { // write to stdout
       if (mode == Creat)
 #ifdef BUILD_FOR_WINDOWS
 	fp = _fdopen(1, "wb");
 #else
 	fp = fdopen(1, "wb");
 #endif
-      //      else if (mode == Append) {
-      //	fp = fdopen(1, "ab");
-      //      }
     }
+/*
+    else if (!strncmp(fname, "stdpipe", 7)) { // write to  a pipe
+      printf("i_buf: dump: writing to a pipe \n");
+      if (mode == Creat)
+#ifdef BUILD_FOR_WINDOWS
+	fp = _fdopen(1, "wb");
+#else
+	fp = fdopen(1, "wb");
+#endif
+    }
+ */
     else {
       if (mode == Creat)
 	fp = fopen(fname, "wb");
@@ -272,6 +281,7 @@ void i_buf::dump(const char *fname, const mode mode)	// dump to a file
 	file_bytes -= n_written;
 	dbg1(Flow, "%u bytes left\n", (void *)file_bytes);
     }
+
     if (strcmp(fname, "stdout"))
       fclose(fp);
     else if (mode == Append)

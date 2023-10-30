@@ -22,7 +22,7 @@ midi_snd::midi_snd()
   buffer = new i_buf();
   midi_head();
   count = 0;
-  sprintf(s, "tab %s copyright 1995-2023 by Wayne Cripps",  VERSION);
+  sprintf(s, "tab %s copyright 1995-2024 by Wayne Cripps",  VERSION);
   text(Copyright, s);
   text(Text, "converted by TAB");
   instmnt = 0;

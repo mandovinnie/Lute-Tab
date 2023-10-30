@@ -1,4 +1,6 @@
 
+#include <sys/stat.h>
+
 #include "win.h"
 #include "version.h"
 #include "tab.h"
@@ -369,7 +371,7 @@ int main(int argc, char **argv)
     //  dbg_set(Fonts);
 
     if ( ! (f.m_flags & QUIET) ) {
-      dbg2(Warning, "tab %s copyright 1995-2023 by Wayne Cripps%c",
+      dbg2(Warning, "tab %s copyright 1995-2024 by Wayne Cripps%c",
 	   (void *) VERSION,
 	   (void *) NEWLINE );
 #ifdef _WIN32
@@ -395,6 +397,28 @@ int main(int argc, char **argv)
       free (f.scribe);
     free (f.file);
     free (f.out_file);
+
+    if (f.m_flags & GS ) {
+       char command[120];
+       struct stat statbuf;
+       int ret=0;
+
+       strcpy ( command, "/opt/homebrew/bin/gs");
+       ret = stat ( command, &statbuf );
+       if ( ret == -1 ) {
+          strcpy ( command, "/usr/bin/gs");
+          ret = stat ( command, &statbuf );
+          if ( ret == -1 ) {
+             strcpy ( command, "/usr/local/bin/gs");
+             ret = stat ( command, &statbuf );
+          }
+       }
+       if ( ret == -1 ) { printf ("main: stat failed, can\'t find a copy of gs \n"); exit (-1);}
+
+       strcat (command, " -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sPAPERSIZE=letter -sOutputFile=out.pdf out.ps");
+       system (command);
+    }
+
     return(0);
 }
 

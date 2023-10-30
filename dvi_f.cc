@@ -1892,10 +1892,22 @@ struct list *l)			/* data */
   }
   //    printf("dvi_format: space %f padding %f\n", l->space, l->padding);
   last_move = l->space + l->padding;
-  p->moveh(l->space + l->padding);
   /*    printf("space %f padding %f\n", l->space, l->padding); */
-  if (f->flags & MARKS) p->put_rule("0.01 in", "0.25 in");
-
+  if (f->flags & MARKS) {
+     p->moveh(l->space);
+     p->red_highlight();
+     p->set_highlight();
+     p->put_rule("0.017 in", "0.15 in");  /* wbc Sept 27 2022 */
+     p->clear_highlight();
+     p->moveh( l->padding);
+     p->blue_highlight();
+     p->set_highlight();
+     p->put_rule("0.01 in", "0.25 in");
+     p->clear_highlight();
+  }
+  else {
+     p->moveh(l->space + l->padding);
+  }    
 
 }
 
