@@ -1250,7 +1250,7 @@ do_music(i_buf *ib, unsigned char staff[], char buf[], int *l_p, int *skip,
 	  for (i=2; i < STAFF; i++) buff[i] = ' ';
       }
 #else
-      sprintf(buff, "%cM         ", music[b]);
+      snprintf(buff, sizeof(buff), "%cM         ", music[b]);
 #endif
     else if (staff[1] == 'R' )
 #ifdef MAC
@@ -1261,7 +1261,7 @@ do_music(i_buf *ib, unsigned char staff[], char buf[], int *l_p, int *skip,
 	  for (i=3; i < STAFF; i++) buff[i] = ' ';
       }
 #else
-    sprintf(buff, "%cR%c        ", staff[0], staff[2]); /* get the dot */
+    snprintf(buff, sizeof(buff), "%cR%c        ", staff[0], staff[2]); /* get the dot */
 #endif
     else {
 	for ( ; i< STAFF; i++) staff[i] = ' ';

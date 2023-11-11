@@ -207,7 +207,7 @@ void pdf_print::file_trail()		// write_postamble
   file_xref();
 
   pr_out->PutString("trailer\n");
-  sprintf (buf, "<< /Size %d\n", xref_count );
+  snprintf (buf, sizeof(buf),"<< /Size %d\n", xref_count );
   pr_out->PutString(buf);
   pr_out->PutString("   /Root 1 0 R\n");
   pr_out->PutString(">>\n");
@@ -672,7 +672,7 @@ void pdf_print::p_num(int n)
     double total_width=0.0;
 #ifdef MAC
 #else
-    sprintf(string, "%d", n);
+    snprintf(string, sizeof(string), "%d", n);
 #endif
     push();
     movev("0.18 in");
@@ -839,7 +839,7 @@ void pdf_print::pdf_command(int com, int h_n, int v_n, int hh_n, int vv_n)
   case MOVE:
     {
       double ttt=d_to_p(h); double tttt=d_to_p(-v);
-      sprintf  (ctemp, "%.1f %.1f m \n", ttt, tttt);
+      snprintf  (ctemp, sizeof(ctemp), "%.1f %.1f m \n", ttt, tttt);
       // printf ("     MOVE %.4f  %.4f\n",  ttt, tttt);
     }
     // printf ("     MOVE: %.4f %.4f\n",  d_to_p(h), d_to_p( -v));
@@ -848,19 +848,19 @@ void pdf_print::pdf_command(int com, int h_n, int v_n, int hh_n, int vv_n)
   case RULE:		// now takes x, y to draw a box 0, 0, x, y
     // printf("pdf_print: RULE 847: %d %d\n", dvi_h, h);
     //
-    sprintf (ctemp, "q %.1f %.1f %.1f %.1f re s Q \n",
+    snprintf (ctemp, sizeof(ctemp),  "q %.1f %.1f %.1f %.1f re s Q \n",
 		    d_to_p(dvi_h), d_to_p(dvi_v),
 		    d_to_p(h), d_to_p(-v));
     strcat (pdf_stream_b, ctemp);
     break;
   case MOVEH:
-    sprintf  (ctemp, "%.1f 0 m \n", d_to_p(h));
+    snprintf  (ctemp, sizeof(ctemp), "%.1f 0 m \n", d_to_p(h));
     // printf ("     MOVEH %.4f\n",  d_to_p(h));
     strcat (pdf_stream_b, ctemp);
     break;
   case MOVEV:
     // if (d_to_p(dvi_v -v) < 610.0 ) { printf("HERE HERE\n");}
-    sprintf (ctemp, "0 %.1f m \n", d_to_p(dvi_v -v));
+    snprintf (ctemp, sizeof(ctemp), "0 %.1f m \n", d_to_p(dvi_v -v));
     // printf ("     MOVEV: %.4f\n",  d_to_p(dvi_v -v));
     strcat (pdf_stream_b, ctemp);
     break;
@@ -1305,7 +1305,7 @@ unsigned int pdf_print::do_page_content(i_buf *i_b,  struct font_list *f_a[])
   // we need to know byte count of content stream here
   // count includes trailing newline
 
-  sprintf (b, "<</Length %u>>\n", scount);
+  snprintf (b, sizeof(b), "<</Length %u>>\n", scount);
   bytes += pr_out->PutStringC(b);
 
   bytes += pr_out->PutStringC("stream\n");
@@ -1378,7 +1378,7 @@ unsigned int pdf_print::do_text_stream(i_buf *i_b,  struct font_list *f_a[],
   strcpy (s_buf, "BT\n/F13 12 Tf\n 288 520 Tda\n (ABC) Tj\nET \n");
   scount = strlen(s_buf);
   bytes += pr_out->PutStringC("6 0 obj\n<</Length ");
-  sprintf (b, "%d", scount);
+  snprintf (b, sizeof(b), "%d", scount);
   bytes += pr_out->PutStringC(b);
   bytes += pr_out->PutStringC(">>\nstream\n");
   bytes += pr_out->PutStringC(s_buf);

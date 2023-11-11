@@ -915,7 +915,7 @@ void ps_print::p_num(int n)
     double total_width=0.0;
 #ifdef MAC
 #else
-    sprintf(string, "%d", n);
+    snprintf(string, sizeof(string), "%d", n);
 #endif
     push();
     movev("0.18 in");

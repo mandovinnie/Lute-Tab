@@ -135,15 +135,11 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 
       foo = (char *) malloc(45);
       chart[2].width = foo;					/* w */
-      sprintf(wp[2].width, "%.3f in", 1.2 * rt * rt * rt * base_sp);
-
-      //      sprintf(chart[3].width, "%.3f in", rt * rt * rt *  base_sp);  /*  0 flags */
-      sprintf(wp[3].width, "%.3f in", (f_a[0]->fnt->get_width(bf_num[3])));  /*  0 flags */
-      //      sprintf(chart[4].width, "%.3f in", rt * rt *  base_sp);       /*  1 flags */
-      sprintf(wp[4].width, "%.3f in", (f_a[0]->fnt->get_width(bf_num[4])));       /*  1 flags */
-      //      sprintf(chart[5].width, "%.3f in", rt * base_sp);   	/*  2 flags */
-      sprintf(wp[5].width, "%.3f in", f_a[0]->fnt->get_width(bf_num[5]));   	/*  2 flags */
-      sprintf(wp[6].width, "%.3f in", f_a[0]->fnt->get_width(bf_num[6]));  		/*  3 flags */
+      snprintf(wp[2].width, sizeof(wp[2].width), "%.3f in", 1.2 * rt * rt * rt * base_sp);
+      snprintf(wp[3].width, sizeof(wp[3].width), "%.3f in", (f_a[0]->fnt->get_width(bf_num[3])));/* 0 flags */
+      snprintf(wp[4].width, sizeof(wp[4].width), "%.3f in", (f_a[0]->fnt->get_width(bf_num[4])));/* 1 flags */
+      snprintf(wp[5].width, sizeof(wp[5].width), "%.3f in", f_a[0]->fnt->get_width(bf_num[5]));  /* 2 flags */
+      snprintf(wp[6].width, sizeof(wp[6].width), "%.3f in", f_a[0]->fnt->get_width(bf_num[6]));  /* 3 flags */
     
       if (0) {
 	printf("pass1: init font widths \n");

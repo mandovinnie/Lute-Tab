@@ -368,7 +368,7 @@ void dvi_print::p_num(int n)
 #ifdef MAC
 	string[0] = 0;
 #else
-    sprintf(string, "%d", n);
+    snprintf(string, sizeof(string), "%d", n);
 #endif
     push();
     movev("0.18 in");

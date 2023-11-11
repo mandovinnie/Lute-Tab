@@ -154,7 +154,7 @@ int format_page(print *p, i_buf *i_b,
     }
     if (f->flags & PAGENUM) {
 	char num[6];
-	sprintf(num, "%d", p->get_page_number());
+	snprintf(num, sizeof(num), "%d", p->get_page_number());
 	format_pagenum (p, f_a, num, f);
     }
 // printf("tab_p.cc: format_page: first flag_h: %f %d\n", flag_h, inch_to_dvi(flag_h)); // wbc Dec 27 2018
