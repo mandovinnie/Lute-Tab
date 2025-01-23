@@ -1,7 +1,12 @@
+VERSION "4.3.107"
+updated the date
+a few corrections to comments
+modified the barCount function to not number bar 1 when the piece starts with double barlines
 
 VERSION "4.3.106"
 changed the -pdf option to exec the gs command with options, including one to specify 
 letter paper size
+Also, change sprintf to snprintf to keep apple compiler happy
 
 VERSION "4.3.105
 A correction for < used as a dash ornament submitted by Paul Overell
