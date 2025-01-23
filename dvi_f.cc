@@ -2118,15 +2118,20 @@ void check_bar(print * p, int j, int *l_p, struct list* l)
   /* the first one gives wht wrong number */
   if (!j && ! barCount && prev && (*prev == 'b' || *prev == 'B')) return;
   if (nxt && ( *nxt == 'b' || *nxt == 'B')) {
-    if  (bar_count && ! (n_measures % 5))
-      p->p_num(n_measures);
+    if  (bar_count && ! (n_measures % 5)) {
+      if (n_measures != 0) {  /* also added */
+         p->p_num(n_measures);
+      }
+    }
     else if (j == 0 && barCount) {
       if (n_measures != 0) {   /* wbc jan 2025 to fix double bars on first measure */
          p->p_num(n_measures+1);
       }
     }
     else if (j == 0 && barCCount) {
-      p->p_num(n_measures+1);
+      if ((n_measures != 0) && (n_measures != 1)) {  /* also added */ 
+         p->p_num(n_measures+1);
+      }
     }
     return;
   }
