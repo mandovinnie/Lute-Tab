@@ -447,7 +447,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	if (c == '.') l->padding = str_to_inch(min_d_w);
       }
       else if (strchr("bB.Ai", l->next->dat[0])) {
-	//  this overrides what was et above
+	//  this overrides what was set above
 	l->padding = str_to_inch(min_d_w); /* wbc was += */
 	weight = W_NONE;		/* no expansion */
       }
@@ -472,7 +472,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	      && ch[1] != 'X'
 	      ) {
 	    measures++;
-	    //	    fprintf (stderr, "pass 1: next is %s  measuers %d\n", nxt, measures);
+	    //	    fprintf (stderr, "pass 1: next is %s  measures %d\n", nxt, measures);
 	    if ((bar_count && ! (measures % 5)) ||
 		(j == 0 && barCount)) {
 	      if ( nxt[8] != ' ' ) { // leave space for bar count number

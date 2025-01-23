@@ -2120,8 +2120,11 @@ void check_bar(print * p, int j, int *l_p, struct list* l)
   if (nxt && ( *nxt == 'b' || *nxt == 'B')) {
     if  (bar_count && ! (n_measures % 5))
       p->p_num(n_measures);
-    else if (j == 0 && barCount) 
-      p->p_num(n_measures+1);
+    else if (j == 0 && barCount) {
+      if (n_measures != 0) {   /* wbc jan 2025 to fix double bars on first measure */
+         p->p_num(n_measures+1);
+      }
+    }
     else if (j == 0 && barCCount) {
       p->p_num(n_measures+1);
     }
