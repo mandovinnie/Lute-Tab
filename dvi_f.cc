@@ -730,6 +730,7 @@ struct list *l)			/* data */
     // p->movev(-0.223);
     p->movev(-1.0 * str_to_inch(flag_to_staff));
     p->movev(1 * f_a[2]->fnt->get_height(ch[1])); // wbc jan 2025
+    p->movev(str_to_inch("0.5 mm"));
     p->moveh(-1 * str_to_inch(min_d_w)); 
     if (l->prev) 
        p->moveh  ( -1.0 * (l->prev->space + l->prev->padding));

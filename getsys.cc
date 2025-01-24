@@ -913,7 +913,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	case '*':  // insert a letter here
 	    staff[0] = c;
 	    staff[1] = buf[1];
-	    if ( staff[2] > 16) {   /* wbc jan 2025  */
+	    if ( buf[2] > 33) {   /* wbc jan 2025  */
               staff[2] = buf[2];
               for (i = 3 ;i < STAFF; i++) staff[i] = ' ';
             }
