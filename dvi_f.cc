@@ -734,6 +734,9 @@ struct list *l)			/* data */
     if (l->prev) 
        p->moveh  ( -1.0 * (l->prev->space + l->prev->padding));
     p->put_a_char(ch[1]);
+    if (ch[2] > ' ') 
+       p->moveh (f_a[2]->fnt->get_height(ch[1]));
+       p->put_a_char(ch[2]);
     p->use_font(0);
     p->pop();
     break;

@@ -417,7 +417,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       l->padding = 0.0;
       if (l->next &&
 	  (l->next->dat[0] == '.' || l->next->dat[0] == 'b'
-	   || l->next->dat[0] == 'B')) {
+	   || l->next->dat[1] == 'B' )) { 
 	l->padding = str_to_inch(min_d_w);
 	goto rest;
       }
@@ -429,9 +429,15 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       //			printf("dot at end\n");
     case 'b':
       l->padding = 0.0;
-      //      if (l->next &&
-      //	  (l->next->dat[0] == '.'))
-      //	l->padding = str_to_inch(min_d_w);
+//  /*
+//      if (l->next &&              // wbc jan 2025 inserted *  
+//        (l->next->dat[0] == '*') &&
+//        (l->next->next) && (l->next->next->dat[0] == 'b')) {
+//           printf ("here line 434\n ");
+//      	   l->padding = str_to_inch(min_d_w);
+//           weight = W_NONE;
+//   */
+//        }
     rest:
       if ( j == *l_p - 1) {
 	weight = W_NONE;
@@ -453,7 +459,13 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	weight = W_NONE;		/* no expansion */
 	if (c == '.') l->padding = str_to_inch(min_d_w);
       }
-      else if (strchr("bB.Ai", l->next->dat[0])) {
+      else if (l->next->dat[0] == '*' && l->next->next && l->next->next->dat[0] == 'b') {   /* wbc jan 2025 */
+	//  this overrides what was set above
+        // printf (" here 462\n");
+	l->padding = str_to_inch(min_d_w); /* wbc was += */
+	weight = W_NONE;		/* no expansion */
+      }
+      else if (strchr("bB.Ai", l->next->dat[0])) { 
 	//  this overrides what was set above
 	l->padding = str_to_inch(min_d_w); /* wbc was += */
 	weight = W_NONE;		/* no expansion */
@@ -473,9 +485,9 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	      && j != *l_p
 	      && *nxt != 'b'
 	      && *nxt != 'B'
+	      && *nxt != '*' /* wbc jan 2025 */
 	      && bdot(l)
 	      && *nxt != 'Q'
-	      && *nxt != 'q'
 	      && ch[1] != 'X'
 	      ) {
 	    measures++;
@@ -818,7 +830,8 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       break;
     case '*':
       l->padding = f_a[2]->fnt->get_width(d[1]);
-      weight = /* W_TWO */ 0.01;
+      l->padding = 0.0;
+      weight = /* W_TWO */ /* 0.01 */ 0.0;
       break;
       //    case '$':			// flags
       //    case '-':
