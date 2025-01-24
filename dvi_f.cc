@@ -722,9 +722,16 @@ struct list *l)			/* data */
     }
     break;
   case '*':			/* a mark, as in AA BB */
+// printf ("a star, ch1 is %d %c %s\n", ch[1], ch[1], ch);  // wbc jan 2025
+// printf ("height of %c is %f\n", ch[1], f_a[2]->fnt->get_height(ch[1]));
     p->push();
     p->use_font(2);
     p->movev(-f_a[0]->fnt->get_height(f->flag_flag == ITAL_FLAGS ? 217 : 195));
+    // p->movev(-0.223);
+    p->movev(-1.0 * str_to_inch(flag_to_staff));
+    p->movev(1 * f_a[2]->fnt->get_height(ch[1])); // wbc jan 2025
+    p->moveh(-1 * str_to_inch(min_d_w)); 
+    p->moveh  ( -1.0 * (l->prev->space + l->prev->padding));
     p->put_a_char(ch[1]);
     p->use_font(0);
     p->pop();
@@ -2129,7 +2136,7 @@ void check_bar(print * p, int j, int *l_p, struct list* l)
       }
     }
     else if (j == 0 && barCCount) {
-      if ((n_measures != 0) && (n_measures != 1)) {  /* also added */ 
+      if ((n_measures != 0) && (n_measures != 1)) {  /* also added but it doesn't quite work */ 
          p->p_num(n_measures+1);
       }
     }

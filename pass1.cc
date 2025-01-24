@@ -227,6 +227,8 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  dbg1 ( Inter, "  %1c", (void *)(dd - 0226));
 	else if ((dd == 70 || dd == 120) && i == 0)
 	  dbg1 ( Inter, "  %1c", (void *)((int)dd));
+	else if (i == 1 && d[0] == '*')
+	  dbg1 ( Inter, "  %1c", (void *)((int)dd));
 	else
 	  dbg1 ( Inter, "%03d",  (void *)((int)dd));
       }
