@@ -25,24 +25,24 @@
 
 #define 	W_NONE  0.0
 #define         W_TINY  0.000001
-#define		W_QUART 0.15
-#define		W_HALF  0.3 
-#define		W_ONE   1.0
-#define		W_TWO   2.0
-#define		W_THREE 3.0
-#define		W_FOUR  4.0
+#define		W_QUART 0.15  
+#define		W_HALF  0.3    
+#define		W_ONE   1.0     
+#define		W_TWO   2.0      
+#define		W_THREE 3.0       
+#define		W_FOUR  4.0        
 
 /* weights of each flag when filling out line */
 
-char min_0_w[] = "0.2000 in   ";
-char min_1_w[] = "0.1400 in   ";	/* one flag */
-char min_2_w[] = "0.1200 in   ";
-char min_3_w[] = "0.1000 in   ";
-char min_4_w[] = "0.0900 in   ";	/* four flags */
-char min_b_w[] = "0.0300 in   ";	/* bar */
-char min_d_w[] = "0.0600 in   ";	/* repeat dot */
-char min_O_w[] = "0.0900 in   ";	/* ornament was 0.09 */
-char min_F_w[] = "0.0700 in   ";	/* a fingering number */
+char min_0_w[] = "0.2000 in    ";
+char min_1_w[] = "0.1400 in    ";	/* one flag */
+char min_2_w[] = "0.1200 in    ";
+char min_3_w[] = "0.1000 in    ";
+char min_4_w[] = "0.0900 in    ";	/* four flags */
+char min_b_w[] = "0.0300 in    ";	/* bar */
+char min_d_w[] = "0.0600 in    ";	/* repeat dot */
+char min_O_w[] = "0.0900 in    ";	/* ornament was 0.09 */
+char min_F_w[] = "0.0700 in    ";	/* a fingering number */
 
 /* struct words { char* width; double weight; } */
 
@@ -67,8 +67,8 @@ struct w big_chart[10] = {
     {min_4_w, W_QUART },		/* 2 */
     {min_4_w, W_QUART },		/* 3 */
     {min_4_w, W_QUART },		/* 4 */
-    {(char*)"0.05 in", W_QUART},	/* 5 */
-    {(char*)"0.05 in", W_QUART}	/* 6 */
+    {(char*)"0.05    in", W_QUART},	/* 5 */
+    {(char*)"0.05    in", W_QUART}	/* 6 */
 };
 
 char vals[] = "JWw0123456";
@@ -135,11 +135,16 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 
       foo = (char *) malloc(45);
       chart[2].width = foo;					/* w */
-      snprintf(wp[2].width, sizeof(wp[2].width), "%.3f in", 1.2 * rt * rt * rt * base_sp);
-      snprintf(wp[3].width, sizeof(wp[3].width), "%.3f in", (f_a[0]->fnt->get_width(bf_num[3])));/* 0 flags */
-      snprintf(wp[4].width, sizeof(wp[4].width), "%.3f in", (f_a[0]->fnt->get_width(bf_num[4])));/* 1 flags */
-      snprintf(wp[5].width, sizeof(wp[5].width), "%.3f in", f_a[0]->fnt->get_width(bf_num[5]));  /* 2 flags */
-      snprintf(wp[6].width, sizeof(wp[6].width), "%.3f in", f_a[0]->fnt->get_width(bf_num[6]));  /* 3 flags */
+      wp[2].width = (char *)malloc(45);
+      snprintf(wp[2].width, 1+sizeof(wp[2].width), "%.3f in", 1.2 * rt * rt * rt * base_sp);
+      wp[3].width = (char *)malloc(45);
+      snprintf(wp[3].width, 1+sizeof(wp[3].width), "%.3f in", (f_a[0]->fnt->get_width(bf_num[3])));/* 0 flags */
+      wp[4].width = (char *)malloc(45);
+      snprintf(wp[4].width, 1+sizeof(wp[4].width), "%.3f in", (f_a[0]->fnt->get_width(bf_num[4])));/* 1 flags */
+      wp[5].width = (char *)malloc(45);
+      snprintf(wp[5].width, 1+sizeof(wp[5].width), "%.3f in", f_a[0]->fnt->get_width(bf_num[5]));  /* 2 flags */
+      wp[6].width = (char *)malloc(45);
+      snprintf(wp[6].width, 1+sizeof(wp[6].width), "%.3f in", f_a[0]->fnt->get_width(bf_num[6]));  /* 3 flags */
     
       if (0) {
 	printf("pass1: init font widths \n");
