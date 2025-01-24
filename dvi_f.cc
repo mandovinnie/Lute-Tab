@@ -731,7 +731,8 @@ struct list *l)			/* data */
     p->movev(-1.0 * str_to_inch(flag_to_staff));
     p->movev(1 * f_a[2]->fnt->get_height(ch[1])); // wbc jan 2025
     p->moveh(-1 * str_to_inch(min_d_w)); 
-    p->moveh  ( -1.0 * (l->prev->space + l->prev->padding));
+    if (l->prev) 
+       p->moveh  ( -1.0 * (l->prev->space + l->prev->padding));
     p->put_a_char(ch[1]);
     p->use_font(0);
     p->pop();
