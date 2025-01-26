@@ -2106,22 +2106,10 @@ void check_bar(print * p, int j, int *l_p, struct list* l) {
 	n_measures++;
 	goto PRINT;
       }
-      // else if ((j==0) && (*nxt == '*')) {  // * at start of line
-      //	printf ("here  0.5\n");
-      //	n_measures++;
-      //	goto PRINT;
-      //}
-      
-      // else if (!(nxt && *nxt == '*' && (j+1 == *l_p))  // (not) end of line  /* wbc jan 2025  line 2087*/
-      //      &&  (!(nxt && *nxt == '*' && l->next->next && (l->next->next->dat[0] == 'b' )))) {   /* wbc jan 2025  line 2087*/
-      // printf ("here  0.6\n");
-	// n_measures++;
-	// goto PRINT;
-      //}
     }
     // the following doesn't do much
     else if ( *ch == '.' ) {
-      //      printf ("dvi_f: check_bar: dot: ch %c\n", *ch);
+      //    printf ("dvi_f: check_bar: dot: ch %c\n", *ch);
 	if ( prev ) {
 	  //	  	printf ("dvi_f: check_bar: dot: ch %c prev %c\n", *ch, *prev);
 	  if ( *prev == 'b'|| *prev == 'B'|| *prev == '.') {
@@ -2129,16 +2117,16 @@ void check_bar(print * p, int j, int *l_p, struct list* l) {
 	    return;
 	  }
 	}
-	if ( nxt ) {  // we get here, it does nothing
-	  //  printf ("dvi_f: check_bar: dot: ch %c nxt %c\n", *ch, *nxt);
-          if ( *nxt == 'b'
-               || *nxt == 'B'
-               || *nxt == '.'
-               ) { 
-            //  printf ("dot - nxt is a b of some sort - exiting\n");
-	  }
-	  // n_measures++;
-      }
+	//	if ( nxt ) {  // we get here, it does nothing
+	//  printf ("dvi_f: check_bar: dot: ch %c nxt %c\n", *ch, *nxt);
+	//    if ( *nxt == 'b'
+	//   || *nxt == 'B'
+	//   || *nxt == '.'
+	//   ) { 
+	//  printf ("dot - nxt is a b of some sort - exiting\n");
+	//}
+	// n_measures++;
+	// }
 	// printf ("dot measures %d\n", n_measures);
     }
   }
@@ -2153,16 +2141,18 @@ void check_bar(print * p, int j, int *l_p, struct list* l) {
   /* choose one of these below to put number under first or second bar */
   /* the first one gives wht wrong number */
   // printf ("here 1 ");
-
+  
   printf (" -> bar_count %d barCount %d barCCount %d n_measures %d %d j %d *l_p %d dat %c\n",
 	  bar_count, barCount, barCCount, n_measures, n_measures % 5, j, *l_p, l->dat[0]);
- 
+  
   if (barCount && ((n_measures % 5))) return;
   if (bar_count && (j > 0)) return;
   
   if (j+1 == *l_p) return;
   if (j+2 == *l_p) return;  // last bar on line
+  if (j+3 == *l_p && ( l->next && l->next->dat[0] == '.' )) return;  // b.b end line
   if (j+3 == *l_p && ( l->next && l->next->dat[0] == '*' )) return;  // b*b end line
+  if (j+3 == *l_p && ( l->dat[0] == '.' )) return;  // .bb end line
   if (j+3 == *l_p && ( l->next && l->next->next && l->next->next->dat[0] == '*' )) return;  //  bb* end line
 
   if (prev && l->prev->dat[0] == 'b'  ) return;
