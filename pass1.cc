@@ -490,12 +490,13 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  char *nxt = l->next->dat;
 	  char *prev = 0;
 	  if (l->prev) prev = l->prev->dat;
-	  
+	  /*  
 	printf(" pass1.cc  488 here l->dat[0] %c l->dat %s l->next->dat[0] %c next->next->dat[0] %c\n",
 	       l->dat[0], l->dat, l->next->dat[0], l->next->next->dat[0]);
 	printf ("j %d l_p %d  \n", j, *l_p );
+	  */
 	if (*ch == 'b') {
-	    printf(" pass1.cc  488 here ch %c l->dat[1] %s nxt %c next->next %c\n", *ch, l->dat, *nxt, l->next->next->dat[0]);
+	  // printf(" pass1.cc  488 here ch %c l->dat[1] %s nxt %c next->next %c\n", *ch, l->dat, *nxt, l->next->next->dat[0]);
 	      if (*nxt == '*') {
 	      if ( l->next->next && (l->next->next->dat[0] ==  'b')) {
 		//printf(" pass1.cc  491 here nxt %c next->next %c\n", *nxt, l->next->next->dat[0]);
@@ -503,7 +504,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	    }
 	  }
 	  else
-	    printf(" pass1.cc  496 here ch %c nxt %c next->next %c\n", *ch,  *nxt, l->next->next->dat[0]);
+	    /* printf(" pass1.cc  496 here ch %c nxt %c next->next %c\n", *ch,  *nxt, l->next->next->dat[0]) */;
 
 	  if (( *ch == 'b' || *ch == 'B' || *ch == 'A')
 	      && j+1 != *l_p
@@ -513,8 +514,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	      && bdot(l)
 	      && *nxt != 'Q'
 	      && ch[1] != 'X'
-	      /*   && (!(*nxt == '*' && l->next->next && (l->next->next->dat[0] ==  'b' ))) */  /* wbc jan 2025  line 494*/
-	      &&  (!(prev && *prev == '*' && l->prev->prev && (l->prev->prev->dat[0] ==  'b' ))))  /* wbc jan 2025  line 2087*/
+	      &&  (!(prev && *prev == '*' && l->prev->prev && (l->prev->prev->dat[0] ==  'b' ))))  /* wbc jan 2025  line 517*/
 	    {
 	    measures++;
 	    if ( j+4 == *l_p && l->next && l->next->next && l->next->dat[0] == '*') {
@@ -1097,10 +1097,8 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
     l = l->next;
   }
   if (f->flags & NO_EXPAND) {
-#ifndef MAC
     printf("line length %f %f\n",
 	   total_width, staff_len);
-#endif /* MAC */
     staff_len = total_width;
   }
   //    printf("line length %f %f\n",
@@ -1163,14 +1161,12 @@ text_check(
 	    result = (text->size  - t_size);
 
 	    if ( result < 0.0) {
-#ifndef MAC
 	      if ( 0 )
 			printf ("tab: text_check negative result!! %f %s %d %d\n",
 			result,
 			text->words->words,
 			text->words->nospace,
 			nospace_flag);
-#endif /* MAC */
 		result = 0.0;
 	    }
 
