@@ -2061,75 +2061,132 @@ int rev_bdot(struct list* l)
 // -CC means number every bar
 //
 
-void check_bar(print * p, int j, int *l_p, struct list* l)
-{
+void check_bar(print * p, int j, int *l_p, struct list* l) {
   char *ch=0, *nxt=0, *prev=0;
 
   if (bar_count || barCount || barCCount) {
+    //      printf ("entering check_bar: ch %c\n", *ch);
 
-    if (l) {
-      ch = l->dat;
-      //      printf ("entering check_bar: ch %c\n", *ch);
-    }
-    //    else printf ("in check_bar, l not defined\n");
-
+    if (l) ch = l->dat;
     if (l->next) nxt = l->next->dat;
-    //    else printf ("in check_bar, ch %c nxt not defined\n", *ch);
     if (l->prev) prev = l->prev->dat;
-    //    else printf ("in check_bar, ch %c prev not defined\n", *ch);
 
-    if (( *ch == 'b' || *ch == 'B' || *ch == 'A')
-	&& j+1 != *l_p
-	&& j != *l_p
-	&& bdot(l)              // check for b..b
-	&& *nxt != 'Q'
-	&& *nxt != 'q') {
-      n_measures++;
-      //  printf ("check bar b measures %d\n", n_measures);
-    }
-    
-    else if ( *ch == '.' ) {
-      //      printf ("dvi_f: check_bar: dot: ch %c\n", *ch);
+    printf ("dvi_f.cc: -->> check bar 2078 entrance ch %c%c measures %d j %d *l_p %d ", *ch, l->dat[1],  n_measures, j, *l_p);
+    if (nxt) printf ("%c ", *nxt);  printf ("\n");
 
-      if ( prev ) {
-	//	printf ("dvi_f: check_bar: dot: ch %c prev %c\n", *ch, *prev);
-	if ( *prev == 'b'
-	     || *prev == 'B'
-	     || *prev == '.'){
-	  //	  printf ("dot - prev is a b of some sort - exiting\n");
-	  return;
-	}
-      }
-
-      if ( nxt ) {
-	//	printf ("dvi_f: check_bar: dot: ch %c nxt %c\n", *ch, *nxt);
-	if ( *nxt == 'b'
-	     || *nxt == 'B'
-	     || *nxt == '.'
-	     ) {
-	  //  printf ("dot - nxt is a b of some sort - exiting\n");
-	  return;
-	}
+    if ( *ch == 'b' || *ch == 'B' || *ch == 'A') {
+      // if these following conditions are all met count a bar.
+      if (
+	  j != *l_p            // not at end of line
+	  && j+1 != *l_p             // not at end of line
+	  && j+2 != *l_p             // not at end of line
+	  // && bdot(l)              // check for b..b
+	  && (prev && *prev != 'b')         // check for double bar, print on first one
+	  && (prev && *prev != 'B')
+	  && (prev && *prev != '.')
+	  && (prev && *prev != '*')          // numbers
+	  && *nxt != 'Q'          // check for end of music ?
+	  && *nxt != 'q'
+	  ) {
+	
 	n_measures++;
+
+/*	printf ("dvi_f.cc: HERE 0.4 check bar 2094 ch %c measures %d j %d *l_p %d ", *ch,  n_measures, j, *l_p);
+	if (prev) printf(" prev %c", *prev);
+	if (nxt) printf(" nxt %c %c\n", *nxt, l->next->dat[1]);
+	else printf ("\n");
+*/
+	goto PRINT;
       }
-      //printf ("dot measures %d\n", n_measures);
+
+      else if (j==0) {
+	n_measures++;
+	goto PRINT;
+      }
+      // else if ((j==0) && (*nxt == '*')) {  // * at start of line
+      //	printf ("here  0.5\n");
+      //	n_measures++;
+      //	goto PRINT;
+      //}
+      
+      // else if (!(nxt && *nxt == '*' && (j+1 == *l_p))  // (not) end of line  /* wbc jan 2025  line 2087*/
+      //      &&  (!(nxt && *nxt == '*' && l->next->next && (l->next->next->dat[0] == 'b' )))) {   /* wbc jan 2025  line 2087*/
+      // printf ("here  0.6\n");
+	// n_measures++;
+	// goto PRINT;
+      //}
+    }
+    else if ( *ch == '.' ) {
+                printf ("dvi_f: check_bar: dot: ch %c\n", *ch);
+	if ( prev ) {
+	  //	  	printf ("dvi_f: check_bar: dot: ch %c prev %c\n", *ch, *prev);
+	  if ( *prev == 'b'|| *prev == 'B'|| *prev == '.') {
+	    //	  printf ("dot - prev is a b of some sort - exiting\n");
+	    return;
+	  }
+	}
+	
+	if ( nxt ) {
+	  	printf ("dvi_f: check_bar: dot: ch %c nxt %c\n", *ch, *nxt);
+	  if ( *nxt == 'b'
+	       || *nxt == 'B'
+	       || *nxt == '.'
+	       ) {
+	    //  printf ("dot - nxt is a b of some sort - exiting\n");
+	  }
+	  // n_measures++;
+      }
+      printf ("dot measures %d\n", n_measures);
     }
   }
 
-/*  printf ("  j %d  l_p %d measures %d ", 
-	  j, *l_p, n_measures);
+/*  printf ("  j %d  l_p %d measures %d ", j, *l_p, n_measures);
   if (prev) printf (" prev %c ", *prev);
-  if (nxt) printf (" nxt %c ", *nxt);
-  printf ("\n");
+  if (nxt) printf (" nxt %c ", *nxt);  printf ("\n");
  */
 
-  if (j+1 == *l_p || j+2 == *l_p ) return;
 
+ PRINT:
   /* this is where we print the number */
   /* choose one of these below to put number under first or second bar */
   /* the first one gives wht wrong number */
-  if (!j && ! barCount && prev && (*prev == 'b' || *prev == 'B')) return;
-  if (nxt && ( *nxt == 'b' || *nxt == 'B')) {
+  // printf ("here 1 ");
+  
+  if (j+1 == *l_p || j+2 == *l_p ) return;  // last bar on line
+
+  if (prev && l->prev->dat[0] == 'b'  ) return;
+  if (prev && l->prev->dat[0] == 'B'  ) return;
+  if (prev && l->prev->dat[0] == '*'  ) return;
+  if (prev && l->prev->dat[0] == '.'  ) return;
+
+  
+  p->p_num(n_measures);
+  return;
+  
+  if (!j && ! barCount && prev && (*prev == 'b' || *prev == 'B')) return;  // first on the line
+    printf ("here 2 ");
+    if (j+3 == *l_p && l->next && l->next->next && l->next->dat[0] == '*') return;  // last on line
+   printf ("here 3 \n");
+   
+   if (l->prev) {
+     printf ("here 3.2 %s\n", l->prev->dat);
+     if (l->prev->prev) {
+       printf ("here 3.3 %s\n", l->prev->prev->dat);
+       //if (l->prev->dat[0] == 'b') return;
+       //if (l->prev->dat[0] == '*') return;
+       //if (l->prev->dat[0] == '.') return;
+     }
+   }
+   printf ("here 3.5 \n");
+   // printf("here in dvi_f.cc line 2154 j %d dat %c prev %c prev-prev %c\n", j, l->dat[0], l->prev->dat[0], l->prev->prev->dat[0]  );
+   if (0 && j) {
+    if (l->prev && l->prev->dat[0] == '*') {
+      if (l->prev->prev && (l->prev->prev->dat[0] == 'b' || l->prev->prev->dat[0] == 'B')) {
+	// printf("here in dvi_f.cc line 2158 dat %c prev %c prev-prev %c\n", l->dat[0], l->prev->dat[0], l->prev->prev->dat[0]  );
+	return;
+      }}}
+  
+  if (nxt && ( *nxt == 'b' || *nxt == 'B' ||*nxt == '*')) {
     if  (bar_count && ! (n_measures % 5)) {
       if (n_measures != 0) {  /* also added */
          p->p_num(n_measures);
@@ -2137,33 +2194,38 @@ void check_bar(print * p, int j, int *l_p, struct list* l)
     }
     else if (j == 0 && barCount) {
       if (n_measures != 0) {   /* wbc jan 2025 to fix double bars on first measure */
-         p->p_num(n_measures+1);
+         p->p_num(n_measures);
       }
     }
     else if (j == 0 && barCCount) {
-      if ((n_measures != 0) && (n_measures != 1)) {  /* also added but it doesn't quite work */ 
-         p->p_num(n_measures+1);
+      if ((n_measures != 0)) {  /* also added but it doesn't quite work */ 
+	p->p_num(n_measures);
       }
     }
     return;
   }
-
-  if (bar_count && ! (n_measures % 5))
+  printf ("here 4\n");
+  if (bar_count && ! (n_measures % 5)) {
     p->p_num(n_measures);
+  }
   else if (barCCount) {
+    printf ("here 5\n");
     if (j > 4 )
       p->p_num(n_measures);
     else if ( rev_bdot(l) )
       p->p_num(n_measures);
   }
   else if ((barCount) && j==0) {
+    printf ("here 6\n");
     if (n_measures != 1 ) {
       if (bdot(l)) p->p_num(n_measures);
       else p->p_num(n_measures+1);
     }
   }
+  printf ("here END\n");
+  return;
 }
-
+/* enc check_bar */
 
 void do_key_s( char ch[], print *p, font_list *f_a[], struct file_info *f)
 {
