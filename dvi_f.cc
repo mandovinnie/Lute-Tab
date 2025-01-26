@@ -2070,10 +2070,10 @@ void check_bar(print * p, int j, int *l_p, struct list* l) {
     if (l) ch = l->dat;
     if (l->next) nxt = l->next->dat;
     if (l->prev) prev = l->prev->dat;
-
+    /*
     printf ("dvi_f.cc: -->> check bar 2078 entrance ch %c%c measures %d j %d *l_p %d ", *ch, l->dat[1],  n_measures, j, *l_p);
     if (nxt) printf ("%c ", *nxt);  printf ("\n");
-
+    */
     if ( *ch == 'b' || *ch == 'B' || *ch == 'A') {
       // if these following conditions are all met count a bar.
       if (
@@ -2116,6 +2116,7 @@ void check_bar(print * p, int j, int *l_p, struct list* l) {
 	// goto PRINT;
       //}
     }
+    // the following doesn't do much
     else if ( *ch == '.' ) {
                 printf ("dvi_f: check_bar: dot: ch %c\n", *ch);
 	if ( prev ) {
@@ -2125,14 +2126,13 @@ void check_bar(print * p, int j, int *l_p, struct list* l) {
 	    return;
 	  }
 	}
-	
-	if ( nxt ) {
-	  	printf ("dvi_f: check_bar: dot: ch %c nxt %c\n", *ch, *nxt);
-	  if ( *nxt == 'b'
-	       || *nxt == 'B'
-	       || *nxt == '.'
-	       ) {
-	    //  printf ("dot - nxt is a b of some sort - exiting\n");
+	if ( nxt ) {  // we get here, it does nothing
+	  printf ("dvi_f: check_bar: dot: ch %c nxt %c\n", *ch, *nxt);
+          if ( *nxt == 'b'
+               || *nxt == 'B'
+               || *nxt == '.'
+               ) { 
+            //  printf ("dot - nxt is a b of some sort - exiting\n");
 	  }
 	  // n_measures++;
       }
