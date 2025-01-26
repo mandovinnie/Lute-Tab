@@ -2060,10 +2060,14 @@ int rev_bdot(struct list* l)
 // -c barCount means number every first bar on every line
 // -CC means number every bar
 //
+/* there is a count_dots argument that counts dots as barlines */
+/* also a $firstbar setting */
 
 void check_bar(print * p, int j, int *l_p, struct list* l) {
   char *ch=0, *nxt=0, *prev=0;
-
+	
+  if (!(bar_count || barCount || barCCount)) return;
+  
   if (bar_count || barCount || barCCount) {
     //      printf ("entering check_bar: ch %c\n", *ch);
 
@@ -2080,6 +2084,7 @@ void check_bar(print * p, int j, int *l_p, struct list* l) {
 	  j != *l_p            // not at end of line
 	  && j+1 != *l_p             // not at end of line
 	  && j+2 != *l_p             // not at end of line
+	  && j+3 != *l_p             // not at end of line
 	  // && bdot(l)              // check for b..b
 	  && (prev && *prev != 'b')         // check for double bar, print on first one
 	  && (prev && *prev != 'B')
@@ -2090,7 +2095,6 @@ void check_bar(print * p, int j, int *l_p, struct list* l) {
 	  ) {
 	
 	n_measures++;
-
 /*	printf ("dvi_f.cc: HERE 0.4 check bar 2094 ch %c measures %d j %d *l_p %d ", *ch,  n_measures, j, *l_p);
 	if (prev) printf(" prev %c", *prev);
 	if (nxt) printf(" nxt %c %c\n", *nxt, l->next->dat[1]);
@@ -2098,7 +2102,6 @@ void check_bar(print * p, int j, int *l_p, struct list* l) {
 */
 	goto PRINT;
       }
-
       else if (j==0) {
 	n_measures++;
 	goto PRINT;
@@ -2118,7 +2121,7 @@ void check_bar(print * p, int j, int *l_p, struct list* l) {
     }
     // the following doesn't do much
     else if ( *ch == '.' ) {
-                printf ("dvi_f: check_bar: dot: ch %c\n", *ch);
+      //      printf ("dvi_f: check_bar: dot: ch %c\n", *ch);
 	if ( prev ) {
 	  //	  	printf ("dvi_f: check_bar: dot: ch %c prev %c\n", *ch, *prev);
 	  if ( *prev == 'b'|| *prev == 'B'|| *prev == '.') {
@@ -2127,7 +2130,7 @@ void check_bar(print * p, int j, int *l_p, struct list* l) {
 	  }
 	}
 	if ( nxt ) {  // we get here, it does nothing
-	  printf ("dvi_f: check_bar: dot: ch %c nxt %c\n", *ch, *nxt);
+	  //  printf ("dvi_f: check_bar: dot: ch %c nxt %c\n", *ch, *nxt);
           if ( *nxt == 'b'
                || *nxt == 'B'
                || *nxt == '.'
@@ -2136,7 +2139,7 @@ void check_bar(print * p, int j, int *l_p, struct list* l) {
 	  }
 	  // n_measures++;
       }
-      printf ("dot measures %d\n", n_measures);
+	// printf ("dot measures %d\n", n_measures);
     }
   }
 
@@ -2145,85 +2148,92 @@ void check_bar(print * p, int j, int *l_p, struct list* l) {
   if (nxt) printf (" nxt %c ", *nxt);  printf ("\n");
  */
 
-
  PRINT:
   /* this is where we print the number */
   /* choose one of these below to put number under first or second bar */
   /* the first one gives wht wrong number */
   // printf ("here 1 ");
+
+  printf (" -> bar_count %d barCount %d barCCount %d n_measures %d %d j %d *l_p %d dat %c\n",
+	  bar_count, barCount, barCCount, n_measures, n_measures % 5, j, *l_p, l->dat[0]);
+ 
+  if (barCount && ((n_measures % 5))) return;
+  if (bar_count && (j > 0)) return;
   
-  if (j+1 == *l_p || j+2 == *l_p ) return;  // last bar on line
+  if (j+1 == *l_p) return;
+  if (j+2 == *l_p) return;  // last bar on line
+  if (j+3 == *l_p && ( l->next && l->next->dat[0] == '*' )) return;  // b*b end line
+  if (j+3 == *l_p && ( l->next && l->next->next && l->next->next->dat[0] == '*' )) return;  //  bb* end line
 
   if (prev && l->prev->dat[0] == 'b'  ) return;
   if (prev && l->prev->dat[0] == 'B'  ) return;
   if (prev && l->prev->dat[0] == '*'  ) return;
   if (prev && l->prev->dat[0] == '.'  ) return;
 
-  
   p->p_num(n_measures);
   return;
   
   if (!j && ! barCount && prev && (*prev == 'b' || *prev == 'B')) return;  // first on the line
     printf ("here 2 ");
     if (j+3 == *l_p && l->next && l->next->next && l->next->dat[0] == '*') return;  // last on line
-   printf ("here 3 \n");
-   
-   if (l->prev) {
-     printf ("here 3.2 %s\n", l->prev->dat);
-     if (l->prev->prev) {
-       printf ("here 3.3 %s\n", l->prev->prev->dat);
-       //if (l->prev->dat[0] == 'b') return;
-       //if (l->prev->dat[0] == '*') return;
-       //if (l->prev->dat[0] == '.') return;
-     }
-   }
-   printf ("here 3.5 \n");
-   // printf("here in dvi_f.cc line 2154 j %d dat %c prev %c prev-prev %c\n", j, l->dat[0], l->prev->dat[0], l->prev->prev->dat[0]  );
-   if (0 && j) {
-    if (l->prev && l->prev->dat[0] == '*') {
-      if (l->prev->prev && (l->prev->prev->dat[0] == 'b' || l->prev->prev->dat[0] == 'B')) {
-	// printf("here in dvi_f.cc line 2158 dat %c prev %c prev-prev %c\n", l->dat[0], l->prev->dat[0], l->prev->prev->dat[0]  );
-	return;
-      }}}
-  
-  if (nxt && ( *nxt == 'b' || *nxt == 'B' ||*nxt == '*')) {
-    if  (bar_count && ! (n_measures % 5)) {
-      if (n_measures != 0) {  /* also added */
-         p->p_num(n_measures);
+    printf ("here 3 \n");
+    
+    if (l->prev) {
+      printf ("here 3.2 %s\n", l->prev->dat);
+      if (l->prev->prev) {
+	printf ("here 3.3 %s\n", l->prev->prev->dat);
+	//if (l->prev->dat[0] == 'b') return;
+	//if (l->prev->dat[0] == '*') return;
+	//if (l->prev->dat[0] == '.') return;
       }
     }
-    else if (j == 0 && barCount) {
-      if (n_measures != 0) {   /* wbc jan 2025 to fix double bars on first measure */
-         p->p_num(n_measures);
+    printf ("here 3.5 \n");
+    // printf("here in dvi_f.cc line 2154 j %d dat %c prev %c prev-prev %c\n", j, l->dat[0], l->prev->dat[0], l->prev->prev->dat[0]  );
+    if (0 && j) {
+      if (l->prev && l->prev->dat[0] == '*') {
+	if (l->prev->prev && (l->prev->prev->dat[0] == 'b' || l->prev->prev->dat[0] == 'B')) {
+	  // printf("here in dvi_f.cc line 2158 dat %c prev %c prev-prev %c\n", l->dat[0], l->prev->dat[0], l->prev->prev->dat[0]  );
+	  return;
+	}}}
+    
+    if (nxt && ( *nxt == 'b' || *nxt == 'B' ||*nxt == '*')) {
+      if  (bar_count && ! (n_measures % 5)) {
+	if (n_measures != 0) {  /* also added */
+	  p->p_num(n_measures);
+	}
       }
+      else if (j == 0 && barCount) {
+	if (n_measures != 0) {   /* wbc jan 2025 to fix double bars on first measure */
+	  p->p_num(n_measures);
+	}
+      }
+      else if (j == 0 && barCCount) {
+	if ((n_measures != 0)) {  /* also added but it doesn't quite work */ 
+	  p->p_num(n_measures);
+	}
+      }
+      return;
     }
-    else if (j == 0 && barCCount) {
-      if ((n_measures != 0)) {  /* also added but it doesn't quite work */ 
+    printf ("here 4\n");
+    if (bar_count && ! (n_measures % 5)) {
+      p->p_num(n_measures);
+    }
+    else if (barCCount) {
+      printf ("here 5\n");
+      if (j > 4 )
 	p->p_num(n_measures);
+      else if ( rev_bdot(l) )
+	p->p_num(n_measures);
+    }
+    else if ((barCount) && j==0) {
+      printf ("here 6\n");
+      if (n_measures != 1 ) {
+	if (bdot(l)) p->p_num(n_measures);
+	else p->p_num(n_measures+1);
       }
     }
+    printf ("here END\n");
     return;
-  }
-  printf ("here 4\n");
-  if (bar_count && ! (n_measures % 5)) {
-    p->p_num(n_measures);
-  }
-  else if (barCCount) {
-    printf ("here 5\n");
-    if (j > 4 )
-      p->p_num(n_measures);
-    else if ( rev_bdot(l) )
-      p->p_num(n_measures);
-  }
-  else if ((barCount) && j==0) {
-    printf ("here 6\n");
-    if (n_measures != 1 ) {
-      if (bdot(l)) p->p_num(n_measures);
-      else p->p_num(n_measures+1);
-    }
-  }
-  printf ("here END\n");
-  return;
 }
 /* enc check_bar */
 
