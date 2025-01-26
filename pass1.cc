@@ -445,7 +445,6 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       else if ((j == *l_p - 2) && l->next && (l->next->dat[0] == '*')) {   /* wbc jan 2025 for a letter * at the very end */
 	weight = W_NONE;
       }
-
       else if (l->next->dat[0] == 'F') {
 	weight = W_NONE;
 	l->padding +=0.11;
@@ -462,12 +461,6 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	weight = W_NONE;		/* no expansion */
 	if (c == '.') l->padding = str_to_inch(min_d_w);
       }
-      else if (l->next->dat[0] == '*' && l->next->next && l->next->next->dat[0] == 'b') {   /* wbc jan 2025 for posiiton letters * */
-	//  this overrides what was set above
-        // printf (" here 464\n");
-	l->padding = str_to_inch(min_d_w); /* wbc was += */
-	weight = W_NONE;		/* no expansion */
-      }
       else if (strchr("bB.Ai", l->next->dat[0])) { 
 	//  this overrides what was set above
 	l->padding = str_to_inch(min_d_w); /* wbc was += */
@@ -478,22 +471,55 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	weight = W_ONE;
 	if (f->flags & BIGNOTES)
 	  weight = .7;
+/*
+ *  padding for bar lines barlines measures counting only here !!! 
+ */
+/*	if (l->next->dat[0] == '*' && l->next->next && l->next->next->dat[0] == 'b') { */  /* wbc jan 2025 for posiiton letters * */
+	if (!(l->prev && l->prev->dat[0] == '*' && l->prev->prev && (l->prev->prev->dat[0] ==  'b' ))) { /* wbc jan 2025  line 2087*/
+	  //  this overrides what was set above
+	  //	  printf (" here 480\n");
+	  l->padding = str_to_inch(min_d_w); /* wbc was += */
+	  weight = W_NONE;		/* no expansion */
+	}
 
-	if (bar_count || barCount) {
+	/* all the folowing code does is to count bar lines barline measures */
+	/* to compensate when a bourdon is next to a bar number */
+	
+	if (bar_count || barCount ||barCCount) {
 	  char *ch  = l->dat;
 	  char *nxt = l->next->dat;
+	  char *prev = 0;
+	  if (l->prev) prev = l->prev->dat;
+	  
+	printf(" pass1.cc  488 here l->dat[0] %c l->dat %s l->next->dat[0] %c next->next->dat[0] %c\n",
+	       l->dat[0], l->dat, l->next->dat[0], l->next->next->dat[0]);
+	printf ("j %d l_p %d  \n", j, *l_p );
+	if (*ch == 'b') {
+	    printf(" pass1.cc  488 here ch %c l->dat[1] %s nxt %c next->next %c\n", *ch, l->dat, *nxt, l->next->next->dat[0]);
+	      if (*nxt == '*') {
+	      if ( l->next->next && (l->next->next->dat[0] ==  'b')) {
+		//printf(" pass1.cc  491 here nxt %c next->next %c\n", *nxt, l->next->next->dat[0]);
+	      }
+	    }
+	  }
+	  else
+	    printf(" pass1.cc  496 here ch %c nxt %c next->next %c\n", *ch,  *nxt, l->next->next->dat[0]);
 
 	  if (( *ch == 'b' || *ch == 'B' || *ch == 'A')
 	      && j+1 != *l_p
 	      && j != *l_p
 	      && *nxt != 'b'
 	      && *nxt != 'B'
-	      && *nxt != '*' /* wbc jan 2025 */
 	      && bdot(l)
 	      && *nxt != 'Q'
 	      && ch[1] != 'X'
-	      ) {
+	      /*   && (!(*nxt == '*' && l->next->next && (l->next->next->dat[0] ==  'b' ))) */  /* wbc jan 2025  line 494*/
+	      &&  (!(prev && *prev == '*' && l->prev->prev && (l->prev->prev->dat[0] ==  'b' ))))  /* wbc jan 2025  line 2087*/
+	    {
 	    measures++;
+	    if ( j+4 == *l_p && l->next && l->next->next && l->next->dat[0] == '*') {
+	      measures --;
+	    }
 	    //	    fprintf (stderr, "pass 1: next is %s  measures %d\n", nxt, measures);
 	    if ((bar_count && ! (measures % 5)) ||
 		(j == 0 && barCount)) {
@@ -1025,8 +1051,9 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 #ifndef MAC
       if (f->flags & VERBOSE)
 	fprintf(stderr,
-		"tab: pass1: j %2d c %c width (padding) %f total width %f weight %f\n",
+		"tab: pass1: j %2d *l_p %d c %c width (padding) %f total width %f weight %f\n",
 		j,
+		*l_p,
 		l->dat[0],
 		l->padding,
 		total_width,
