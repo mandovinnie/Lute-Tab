@@ -79,9 +79,9 @@ Options:
     -B uses flags and f,h, and i like those used by
        M. Board and other english writers.
     -count_dots	- count dots as barline for measure numbering
-    -C prints every fifth measure number below the staff.
-    -CC prints every measure number below the staff.
     -c prints measure numbers only at the start of a line
+    -CC prints every measure number below the staff.
+    -C prints every fifth measure number below the staff.
     -compressStaff sets interspace to 9.0 pt and m_space to 0.068 which makes things tighter
     -dvi output in dvi format to out.dvi
          this depensd on you installing the GNU gs postscript processing command in the right place.

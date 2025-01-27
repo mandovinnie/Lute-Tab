@@ -41,7 +41,7 @@ void p_num(int n,struct file_info *f);
 int  get_font();
 int online(char c);
 int dot_ch(struct list * l);
-void check_bar(print *p, int j, int *l_p, struct list* l);
+void check_bar(print *p, int j, int *l_p, struct list* l, struct file_info *f);
 void do_key_s( char ch[], print *p, font_list *f_a[], struct file_info *f);
 void do_time_sig( char ch[], int j, int font,
 		  print *p, font_list *f_a[], struct file_info *f);
@@ -165,7 +165,7 @@ struct list *l)			/* data */
     }
     if (ch[1] == 'X' || ch[1] == 'L')  // L is no count, light bar
       ;
-    else check_bar(p, j, l_p, l);
+    else check_bar(p, j, l_p, l, f);
 
     //	printf ("dvi_f: measures %d ch %s\n", n_measures, ch);
 
@@ -303,7 +303,7 @@ struct list *l)			/* data */
     }
     if (ch[1] == 'X' )
       ;
-    else check_bar(p, j, l_p, l);
+    else check_bar(p, j, l_p, l, f);
     p->pop();
     if (f->flags & NOTES) {
       p->push();
@@ -381,7 +381,7 @@ struct list *l)			/* data */
       // printf ("check a dot %s\n", ch);
       if (ch[1] == 'X' )
          ;
-      else check_bar(p, j, l_p, l);
+      else check_bar(p, j, l_p, l, f);
     }
     p->pop();
 
@@ -712,7 +712,7 @@ struct list *l)			/* data */
 		     (val + 4) * d_i_space + staff_h);
       }
       if (ch[1] == '1')
-	check_bar(p, j, l_p, l);
+	check_bar(p, j, l_p, l, f);
       if (f->flags & NOTES){
 	p->movev(-0.940);
 	p->movev(-text_sp * f->n_text);
@@ -2063,7 +2063,7 @@ int rev_bdot(struct list* l)
 /* there is a count_dots argument that counts dots as barlines */
 /* also a $firstbar setting */
 
-void check_bar(print * p, int j, int *l_p, struct list* l) {
+void check_bar(print * p, int j, int *l_p, struct list* l, struct file_info *f) {
   char *ch=0, *nxt=0, *prev=0;
 	
   if (!(bar_count || barCount || barCCount)) return;
@@ -2078,7 +2078,8 @@ void check_bar(print * p, int j, int *l_p, struct list* l) {
     printf ("dvi_f.cc: -->> check bar 2078 entrance ch %c%c measures %d j %d *l_p %d ", *ch, l->dat[1],  n_measures, j, *l_p);
     if (nxt) printf ("%c ", *nxt);  printf ("\n");
     */
-    if ( *ch == 'b' || *ch == 'B' || *ch == 'A') {
+    if ( *ch == 'b' || *ch == 'B' || *ch == 'A' ||*ch == '.' ) {
+      if ((*ch == '.' ) && !(f->m_flags & COUNT_DOTS )) return;
       // if these following conditions are all met count a bar.
       if (
 	  j != *l_p            // not at end of line
@@ -2140,12 +2141,13 @@ void check_bar(print * p, int j, int *l_p, struct list* l) {
   /* this is where we print the number */
   /* choose one of these below to put number under first or second bar */
   /* the first one gives wht wrong number */
-  // printf ("here 1 ");
-  
+  /*  
   printf (" -> bar_count %d barCount %d barCCount %d n_measures %d %d j %d *l_p %d dat %c\n",
 	  bar_count, barCount, barCCount, n_measures, n_measures % 5, j, *l_p, l->dat[0]);
+  */
   
   if (barCount && ((n_measures % 5))) return;
+  if (bar_count && (n_measures == 1)) return;
   if (bar_count && (j > 0)) return;
   
   if (j+1 == *l_p) return;

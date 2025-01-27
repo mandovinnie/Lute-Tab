@@ -244,17 +244,17 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       break;
     case '+':		/* ornaments */
       l->padding = str_to_inch(min_O_w);  /* 0.09 */
-      // printf("pass1.cc: +ornament padding %f  d %s\n", l->padding, d);
-      // printf("pass1.cc: width +  %f \n", f_a[0]->fnt->get_width('+'));
-      // printf("pass1.cc: width -  %f \n", f_a[0]->fnt->get_width('-'));
-      // printf("pass1.cc: width _  %f \n", f_a[0]->fnt->get_width('_'));
-      // printf("pass1.cc: width %f \n", f_a[0]->fnt->get_width('+'));
+      //printf("pass1.cc: +ornament padding %f  d %s\n", l->padding, d);
+      //printf("pass1.cc: width +  %f \n", f_a[0]->fnt->get_width('+'));
+      //printf("pass1.cc: width -  %f \n", f_a[0]->fnt->get_width('-'));
+      //printf("pass1.cc: width _  %f \n", f_a[0]->fnt->get_width('_'));
+      //printf("pass1.cc: width %f \n", f_a[0]->fnt->get_width('+'));
       if (strchr("Yy", l->next->dat[0]))
 	l->padding = 0.01 /* str_to_inch(min_d_w) */;
       else if (strchr("{}[]()UX", c))
 	l->padding = 0.01;
       else if (strchr("x", l->dat[2])||strchr("x", l->dat[3])
-          ||strchr("x", l->dat[4])||strchr("x", l->dat[5]))
+	       ||strchr("x", l->dat[4])||strchr("x", l->dat[5]))
 	l->padding += 0.04;
       else {
 	if ( l->prev && l->prev->padding > 0.04 ) {
@@ -279,14 +279,22 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	int orn_found=0;
 	int found_wide_letter = 0;
 	int underscore_found = 0;
-	for (i = 2; i < STAFF; i++ ) {  // was for i=2;
+	for (i = 2; i < 8 /* STAFF*/; i++ ) {  // was for i=2  STAFF = 11;
 	  if (d[i] == 'Q')
 	    Q_found=1;
 	  if (d[i] != ' ')
 	    orn_found++;
-	  if ( l->next->dat[i] == 'D' || l->next->dat[i] == 'E') {
-	    found_wide_letter = l->next->dat[i];
+	  if ( ! f->char_flag && ROB_CHAR ) {
+	    if ( 0 && l->next->dat[i] == 'D') {
+	      found_wide_letter = l->next->dat[i];
+	    }
 	  }
+	  if ( ! f->char_flag && ROB_CHAR ) {
+	    if ( l->next->dat[i] == 'E') {
+	      found_wide_letter = l->next->dat[i];
+	    }
+	  }
+	  //found_wide_letter = 0;
 	  if (d[i] != ' ' && d[i] != 'Q') {
 	    if ( d[i] == 'x' ) {
 	      if (found_wide_letter) {
@@ -312,6 +320,13 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	    // printf("found_wide_letter %d  b_d_pad:  %f\n", found_wide_letter, b_d_pad);
 	    // found_wide_letter = 1;
 	    // break;
+	  }
+	}  // end for loop
+	if (d[8] == '/' || d[8] == 's'|| d[8] == 't') {
+	  //XSprintf ("pass1.cc: ornament loop %s num orn %d\n", d, orn_found);
+	  if (orn_found == 0) {
+	    if (l->prev) l->prev->padding -= 0.05;
+	    total_width -= 0.05;
 	  }
 	}
 
