@@ -1147,9 +1147,9 @@ struct list *l)			/* data */
 	}
       }
     }
-    if (c == '+') {
+    if (c == '+') {  // ornaments
       int ii;
-      for (ii=2; ii< 10; ii++) {
+	for (ii=2; ii< 10; ii++) {
 	if ((baroque && l->next && l->next->dat[ii] == 'E')
 	    || (baroque && l->next && l->next->dat[ii] == 'D')){
 	  wide_note = ii;
@@ -1352,6 +1352,20 @@ struct list *l)			/* data */
 	if (ch[0] != '+' && ch[0] != '&')
 	  p->moveh(-0.097);
 	p->put_a_char (cc);
+	p->pop();
+	break;
+      case 222: /* wbc jan 2025 special dot above cross */
+	if (skip_spaces) {
+	  p->p_movev(skip_spaces * i_space);
+	  skip_spaces = 0;
+	}
+	p->push();
+	p->moveh(-0.035);
+	p->movev(0.029);
+	p->put_a_char ('+');
+	p->movev(-0.057);
+	// printf ("HERE\n");
+	p->put_a_char ('.');
 	p->pop();
 	break;
       case 241: /* wbc aug 2019 new <! special characters  here */

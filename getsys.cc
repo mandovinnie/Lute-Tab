@@ -306,7 +306,7 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    else {
 		staff[0] = 'J';
 		staff[1] = '-';
-		if (buf[1] == '-')i++;
+		if (buf[1] == '-') i++;
 		else skip--;
 		goto rest;
 	    }
@@ -646,7 +646,6 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		  break;
 		case 'Q':
 		case '#':
-		case '+':
 		case '$':
 		case ',':	/* comma on line */
 		case '=':
@@ -654,10 +653,24 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 		case '^':	/* hat */
 		case '@':	/* asterix - star */
 		case '_':	/* semicircle underbar - smile */
+		  ornament[i] = buf[i+skip];
+		  skip++;
+		  i--;
+		  break;
+		case '+':
+		  if (buf[i+skip+1] == '*' ) {
+		    // printf("getsys.cc: 661 HERE\n") ;
+		    ornament[i] = 222;
+		    skip++;
+		    skip++;
+                    i--;
+		  }
+		  else {
 		    ornament[i] = buf[i+skip];
 		    skip++;
 		    i--;
-		    break;
+		  }
+		  break;
 		case 's':	/* two slashes */
 		case 't':	/* three slashes */
 		    if (i > 7 ) {

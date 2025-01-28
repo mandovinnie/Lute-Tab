@@ -205,6 +205,8 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  dbg0 ( Inter, "  r");
 	else if (dd == 's')
 	  dbg0 ( Inter, " //");
+	else if (dd == 222)
+	  dbg0 ( Inter, " +*");
 	else if (dd == 254)
 	  dbg0 ( Inter, "254");
 	else if (dd == 255)
@@ -279,18 +281,16 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	int orn_found=0;
 	int found_wide_letter = 0;
 	int underscore_found = 0;
-	for (i = 2; i < 8 /* STAFF*/; i++ ) {  // was for i=2  STAFF = 11;
+	for (i = 2; i < 8 /* STAFF*/; i++ ) {  // wbc jan 2025 was for i=2  STAFF = 11;
 	  if (d[i] == 'Q')
 	    Q_found=1;
 	  if (d[i] != ' ')
 	    orn_found++;
-	  if ( ! f->char_flag && ROB_CHAR ) {
-	    if ( 0 && l->next->dat[i] == 'D') {
-	      found_wide_letter = l->next->dat[i];
-	    }
+	  if ( 0 && l->next->dat[i] == 'D') {
+	    found_wide_letter = l->next->dat[i];
 	  }
-	  if ( ! f->char_flag && ROB_CHAR ) {
-	    if ( l->next->dat[i] == 'E') {
+	  if ( l->next->dat[i] == 'E') { 
+	    if ( ! f->char_flag && ROB_CHAR ) {  // wbc jan 2025 
 	      found_wide_letter = l->next->dat[i];
 	    }
 	  }
@@ -298,8 +298,14 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  if (d[i] != ' ' && d[i] != 'Q') {
 	    if ( d[i] == 'x' ) {
 	      if (found_wide_letter) {
-		// printf("pass1.c: adding to padding 1 \n");
-		l->padding += 0.019;
+		if ( f->char_flag & ROB_CHAR ) {  // wbc jan 2025
+		  printf("pass1.c: adding to Robinson padding 1 \n");
+		  l->padding += 0.01;;
+		}
+		else {
+		  printf("pass1.c: adding to padding 2 \n");
+		  l->padding += 0.019;
+		}
 		break;
 	      }
 	    }
@@ -307,8 +313,8 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	      if (found_wide_letter) {
 		l->padding += b_d_pad /* b_d_pad is 0.1 */; /* 0.18 see above */
 		// printf("adding to padding 2 padding %f  b_d_pad %f\n", l->padding, b_d_pad);
-		break;
 	      }
+	      break;
 	    }
 	    if (d[i] == '_') {
 	      underscore_found = 1;
@@ -322,9 +328,9 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	    // break;
 	  }
 	}  // end for loop
-	if (d[8] == '/' || d[8] == 's'|| d[8] == 't') {
+	if (d[8] == '/' || d[8] == 's'|| d[8] == 't') {  // wbc jan 2025 bass bourdons closer together
 	  //XSprintf ("pass1.cc: ornament loop %s num orn %d\n", d, orn_found);
-	  if (orn_found == 0) {
+	  if (orn_found == 0 && l->prev && ((l->prev->dat[0] != 'b')&&(l->prev->dat[0] != 'B')&&(l->prev->dat[0] != '.'))) {
 	    if (l->prev) l->prev->padding -= 0.05;
 	    total_width -= 0.05;
 	  }
@@ -424,7 +430,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       weight = W_NONE;
       l->padding = 0.2 * str_to_inch(min_d_w);
       goto rest;
-    case 'B':
+    case 'B':  // I think this gets overridden below
       weight = W_NONE;
       l->padding = str_to_inch(thick_bar);
       goto rest;
@@ -442,19 +448,15 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       }
       //	    if ( j == *l_p - 1)
       //			printf("dot at end\n");
-    case 'b':
+    case 'b':  // I think this gets overridden below
       l->padding = 0.0;
-//  /*
-//      if (l->next &&              // wbc jan 2025 inserted *  
-//        (l->next->dat[0] == '*') &&
-//        (l->next->next) && (l->next->next->dat[0] == 'b')) {
-//           printf ("here line 434\n ");
-//      	   l->padding = str_to_inch(min_d_w);
-//           weight = W_NONE;
-//   */
-//        }
+      l->padding = str_to_inch(thick_bar);
+      l->padding = str_to_inch(min_d_w);  // wbc jan 2025
+      // l->padding = str_to_inch("1 in" /*min_d_w*/);  // wbc jan 2025
+
     rest:
       if ( j == *l_p - 1) {
+	l->padding = 0.0;  // wbc jan 2025  
 	weight = W_NONE;
       }
       else if ((j == *l_p - 2) && l->next && (l->next->dat[0] == '*')) {   /* wbc jan 2025 for a letter * at the very end */
@@ -477,10 +479,13 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	if (c == '.') l->padding = str_to_inch(min_d_w);
       }
       else if (strchr("bB.Ai", l->next->dat[0])) { 
-	//  this overrides what was set above
+	//  this overrides what was set above when followed by a barline
 	l->padding = str_to_inch(min_d_w); /* wbc was += */
 	weight = W_NONE;		/* no expansion */
       }
+      else if (strchr("bB.Ai", l->dat[0]))  /// wbc jan 2025
+	l->padding += 0.7 * str_to_inch(min_d_w);
+	
       else {		        /* expansion - presumably notes here*/
 	l->padding += str_to_inch(min_d_w);
 	weight = W_ONE;
@@ -489,15 +494,15 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 /*
  *  padding for bar lines barlines measures counting only here !!! 
  */
-/*	if (l->next->dat[0] == '*' && l->next->next && l->next->next->dat[0] == 'b') { */  /* wbc jan 2025 for posiiton letters * */
-	if (!(l->prev && l->prev->dat[0] == '*' && l->prev->prev && (l->prev->prev->dat[0] ==  'b' ))) { /* wbc jan 2025  line 2087*/
+//	if (!(l->prev && l->prev->dat[0] == '*'
+//	      && l->prev->prev && (l->prev->prev->dat[0] ==  'b' ))) { /* wbc jan 2025  line 495*/
 	  //  this overrides what was set above
-	  //	  printf (" here 480\n");
-	  l->padding = str_to_inch(min_d_w); /* wbc was += */
-	  weight = W_NONE;		/* no expansion */
-	}
+	  //	  printf (" here pass1.cc: 494\n");
+	//	  l->padding = str_to_inch(min_d_w); /* wbc was += */
+	//	  weight = W_NONE;		/* no expansion */
+	//	}
 
-	/* all the folowing code does is to count bar lines barline measures */
+	/* all the following code does is to count bar lines barline measures */
 	/* to compensate when a bourdon is next to a bar number */
 	
 	if (bar_count || barCount ||barCCount) {

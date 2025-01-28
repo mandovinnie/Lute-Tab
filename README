@@ -458,6 +458,7 @@ of tablature, as the second to tenth character.
 	-		- vertical bar - play similtaneously
 	+ * # x $ < 	- an ornament before the next note
 	                  + makes a cross
+			  +* makes a cross with a dot above it
 			  * makes a dot
 			  # makes a hash sign
 			  x makes an x
