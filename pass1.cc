@@ -460,6 +460,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	weight = W_NONE;
       }
       else if ((j == *l_p - 2) && l->next && (l->next->dat[0] == '*')) {   /* wbc jan 2025 for a letter * at the very end */
+	l->padding = 0.0;  // wbc jan 2025  
 	weight = W_NONE;
       }
       else if (l->next->dat[0] == 'F') {
@@ -483,9 +484,11 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	l->padding = str_to_inch(min_d_w); /* wbc was += */
 	weight = W_NONE;		/* no expansion */
       }
-      else if (strchr("bB.Ai", l->dat[0]))  /// wbc jan 2025
-	l->padding += 0.7 * str_to_inch(min_d_w);
-	
+      else if (strchr("bB.Ai", l->dat[0])) {  /// wbc jan 2025
+	if (j == *l_p - 2)
+	  l->padding = 0;
+	else 
+	  l->padding += 0.7 * str_to_inch(min_d_w);}
       else {		        /* expansion - presumably notes here*/
 	l->padding += str_to_inch(min_d_w);
 	weight = W_ONE;
