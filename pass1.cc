@@ -488,7 +488,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	if (j == *l_p - 2)
 	  l->padding = 0;
 	else 
-	  l->padding += 0.7 * str_to_inch(min_d_w);}
+	  l->padding += 0.6 * str_to_inch(min_d_w);}
       else {		        /* expansion - presumably notes here*/
 	l->padding += str_to_inch(min_d_w);
 	weight = W_ONE;
