@@ -44,9 +44,18 @@ void set_font_flag(const char *value, struct file_info *f)
   // vals 1 2 3 4
   // this used to swap between italic and text
 }
-void set_C(const char *value, struct file_info *f)  {  barCount++; }
-void set_c(const char *value, struct file_info *f)  {  bar_count++; }
-void set_CC(const char *value, struct file_info *f) {  barCCount++;}
+void set_C(const char *value, struct file_info *f)  { // every 5
+  bar_count = 0;
+  barCCount = 0;
+  barCount  = 1; }
+void set_c(const char *value, struct file_info *f)  { //start of line
+  barCount  = 0;
+  barCCount = 0;
+  bar_count = 1; }
+void set_CC(const char *value, struct file_info *f) { every bar
+  bar_count = 0;
+  barCCount = 1;
+  barCount  = 0;}
 void set_b(const char *value, struct file_info *f) {
   if (thin_renaissance)
     dbg0(Error, "Args.cc: You can't use both -thin and -b at the same time \n");

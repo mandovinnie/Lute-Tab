@@ -1,4 +1,4 @@
-/*
+ /*
    This program is copyright 1991 by Wayne Cripps,
    P.O. Box 677 Hanover N.H. 03755.
    All rights reserved.  It is supplied "as is"
@@ -48,1023 +48,1054 @@ char read_special_ornament (char *str, int * i, int * skip);
 
 int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 {
-    int *l_p;
-    char N[3];
-    int barline=0,BARline=0,barnum=0;
-    unsigned char staff[STAFF], ornament[STAFF];
-    unsigned char finger[STAFF], a_ornament[STAFF], t_ornament[STAFF];
-    signed char c;
-    char cc, *p, *pp;
-    int i, j=0;
-/*    signed char get(); */
-    int gridflag=0;
-    int hushbar=0, tie=0, dimline=0;/* for non print bars, and ties */
-    int nocountbar=0;		// for non counting bar
-    int nocountdimbar=0;	// for non counting dim bar
-    int Key=0;                  //for auto key signature
-    int orig=0,Orig=0;
-    int skip;
-    int cur_chord=0;
-    int cur_line=0;
+  int *l_p;
+  char N[3];
+  int barline=0,BARline=0,barnum=0;
+  unsigned char staff[STAFF], ornament[STAFF];
+  unsigned char finger[STAFF], a_ornament[STAFF], t_ornament[STAFF];
+  signed char c;
+  char cc, *p, *pp;
+  int i, j=0;
+  /*    signed char get(); */
+  int gridflag=0;
+  int hushbar=0, tie=0, dimline=0;/* for non print bars, and ties */
+  int nocountbar=0;		// for non counting bar
+  int nocountdimbar=0;	// for non counting dim bar
+  int Key=0;                  //for auto key signature
+  int orig=0,Orig=0;
+  int skip;
+  int cur_chord=0;
+  int cur_line=0;
+  char b_tmp[25];  // used in the barline calculations
 
-    l_p = (int *)malloc(sizeof (int));
-    *l_p = 0;
+  l_p = (int *)malloc(sizeof (int));
+  *l_p = 0;
 
 
-    music[0] = music[4] = 0;
-    memset(music, 0, sizeof(music));
+  music[0] = music[4] = 0;
+  memset(music, 0, sizeof(music));
 
-    do {
-    start:			/* a return point for multible b */
-	c = buf[0];
-	//  	printf(" ->%sXXX", buf);
-	//      printf("cur_chord %d\n", cur_chord);
-	cur_chord++;
+  do {
+  start:			/* a return point for multible b */
+    c = buf[0];
+    //  	printf(" ->%sXXX", buf);
+    //      printf("cur_chord %d\n", cur_chord);
+    cur_chord++;
 
-	staff[0] = 0; skip = 0;
-	for (i = 0; i < STAFF ; i++) a_ornament[i] = ' ';
-	a_ornament[1] = '-';
+    staff[0] = 0; skip = 0;
+    for (i = 0; i < STAFF ; i++) a_ornament[i] = ' ';
+    a_ornament[1] = '-';
 
-	switch (c) {
-	case '?':
-	    staff[0] = c;
-	    for (i=1;i<STAFF;i++) staff[i] = ' ';
-	    Mstore( ib ,l_p, staff, f);
+    switch (c) {
+    case '?':
+      staff[0] = c;
+      for (i=1;i<STAFF;i++) staff[i] = ' ';
+      Mstore( ib ,l_p, staff, f);
+      break;
+    case '%':
+      break;
+    case '-':		// flags set in middle of system
+      p = buf;
+      pp = p+1;
+      //	    dbg1(Warning, "getsystem: flag %c\n", (void *)*pp );
+      switch (*pp) {
+	/*
+	  case 'a':
+	  if (!strncmp(&buf[1], "autoKey", 7)) {
+	  goto end;
+	  }
+	  break;
+	*/
+      case 't':
+	if (!strncmp(&buf[1], "twostaff", 8)) {
+	  goto end;
+	}
+	dbg1(Warning, "getsystem: flag -%c in middle of a system\n",
+	     (void *) *pp );
+	break;
+      case 'e':
+      case 'b':
+      case 'E':
+      case 'h':
+      case 'H':
+      case 'j':
+      case '6':
+      case 'R':
+      case 'p':
+      case 'w':
+      case 'W':
+      case 'D':
+      end:
+	dbg2(Inter, "getsystem: buffer %s f %c\n", buf, f);
+	args_from_string(buf, f);
+	break;
+      default:
+	do {		/* write args to  */
+	  ib->PutByte(*p);	/* intermediate file */
+	  p++;
+	} while (*p != NEWLINE);
+	ib->PutByte(NEWLINE);
+	break;
+      }
+      break;
+    case ' ':
+      incr(buf);
+      goto start;
+      /* new line */
+    case NEWLINE:
+      /* memory leak here */
+      free (l_p);
+      return(1);
+    case 'R':
+      staff[0] = buf[1];
+      if (staff[0] == '\n') {
+	staff[0] = '1'; 	// do something
+	if ( ! (f->m_flags & QUIET) )
+	  dbg2(Warning, "Getsystem: R with no number after it sys %d chord %d\n",
+	       (void*) f->cur_system,
+	       (void *)cur_chord);
+
+      }
+      staff[1] = c;
+      for (i=2;i<STAFF;i++) staff[i] = ' ';
+      j = 2;
+      if (buf[j] == '.') {
+	staff[2] = '.';
+	j++;
+      }
+      if (buf[j] == '\t') {
+	skip = j;
+	do_music(ib, staff, buf, l_p, &skip, 0, f);
+      }
+      else
+	Mstore( ib ,l_p, staff, f);
+      break;
+    case 'd':
+      staff[0] = c;
+      staff[1] = buf[1];
+      if (staff[1] != 'b'){
+	for (i=1;i<STAFF;i++) staff[i] = ' ';
+      }
+      else
+	for (i=2;i<STAFF;i++) staff[i] = ' ';
+      Mstore( ib,l_p, staff, f);
+      break;
+    case 'S':		/* a time signature */
+      staff[0] = 'G';
+      if (strchr(buf, '-')) { /* 10/8, etc */
+	for (i=1; i<STAFF; i++) {
+	  if (buf[i] == NEWLINE) break;
+	  staff[i] = buf[i];
+	}
+	for (;i<STAFF; i++) {
+	  staff[i] = ' ';
+	}
+      }
+      else {
+
+	staff[1] = buf[1];
+	if (staff[1] == 'C')
+	  if (baroque)
+	    staff[1] = 19; /* a C signature */
+	  else
+	    staff[1] = 'U'; /* a C signature */
+	else if (staff[1] == 'c') {
+	  if (baroque)
+	    staff[1] = 20;
+	  else
+	    staff[1] = 'u';
+	}
+	staff[2] = buf[2];
+	if (staff[2] == NEWLINE || staff[2] == '\0') {
+	  staff[2] = ' ';
+	}
+	for (i=3;i<STAFF;i++) staff[i] = ' ';
+      }
+      Mstore( ib,l_p, staff, f);
+      break;
+    case 'A':		/* again - repeat */
+      staff[0] = c;
+      staff[1] = buf[1];	/* one or two */
+
+      //	    if ((cur_chord < 2) && cur_key && (f->m_flags & AUTOKEY)) {
+      //	      Key=1;
+      //	    }
+
+      for (i=2;i<STAFF;i++) staff[i] = ' ';
+      Mstore( ib,l_p, staff, f);
+      break;
+    case 'T':
+      if (buf[1] != '-') {
+	if ( ! (f->m_flags & QUIET) )
+	  dbg0(Warning, "T in system - use S3 \n");
+      }
+      else {
+	text_s++;
+	strncpy(i_text, &buf[2], sizeof(i_text));
+      }
+      staff[0] = c;
+      staff[1] = '-';
+      for (i=2;i<STAFF;i++) staff[i] = ' ';
+      Mstore( ib,l_p, staff, f);
+      break;
+    case 'P':
+      staff[0] = c;
+      {
+	int i;
+	for (i=1; i< STAFF; i++) {
+	  staff[i] = buf[i];
+	  if (staff[i] == NEWLINE ) {
+	    staff[i] = ' ';
 	    break;
-	case '%':
-	    break;
-	case '-':		// flags set in middle of system
-	    p = buf;
-	    pp = p+1;
-	    //	    dbg1(Warning, "getsystem: flag %c\n", (void *)*pp );
-	    switch (*pp) {
-/*
-	    case 'a':
-	      if (!strncmp(&buf[1], "autoKey", 7)) {
-		goto end;
-	      }
-	      break;
- */
-	    case 't':
-	      if (!strncmp(&buf[1], "twostaff", 8)) {
-		goto end;
-	      }
-	      dbg1(Warning, "getsystem: flag -%c in middle of a system\n",
-		   (void *) *pp );
-	      break;
-	    case 'e':
-	    case 'b':
-	    case 'E':
-	    case 'h':
-	    case 'H':
-	    case 'j':
-	    case '6':
-	    case 'R':
-	    case 'p':
-	    case 'w':
-	    case 'W':
-	    case 'D':
-	    end:
- 	        dbg2(Inter, "getsystem: buffer %s f %c\n", buf, f);
-		args_from_string(buf, f);
-		break;
-	    default:
-		do {		/* write args to  */
-		    ib->PutByte(*p);	/* intermediate file */
-		    p++;
-		} while (*p != NEWLINE);
-		ib->PutByte(NEWLINE);
-		break;
-	    }
-	    break;
-	case ' ':
-	    incr(buf);
-	    goto start;
-	    /* new line */
-	case NEWLINE:
-	  /* memory leak here */
-	    free (l_p);
-	    return(1);
-	case 'R':
-	    staff[0] = buf[1];
-	    if (staff[0] == '\n') {
-	      staff[0] = '1'; 	// do something
-	      if ( ! (f->m_flags & QUIET) )
-		dbg2(Warning, "Getsystem: R with no number after it sys %d chord %d\n",
-		 (void*) f->cur_system,
-		 (void *)cur_chord);
-
-	    }
-	    staff[1] = c;
-	    for (i=2;i<STAFF;i++) staff[i] = ' ';
-	    j = 2;
-	    if (buf[j] == '.') {
-		staff[2] = '.';
-		j++;
-	    }
-	    if (buf[j] == '\t') {
-		skip = j;
-		do_music(ib, staff, buf, l_p, &skip, 0, f);
-	    }
-	    else
-		Mstore( ib ,l_p, staff, f);
-	    break;
-	case 'd':
-	    staff[0] = c;
-	    staff[1] = buf[1];
-	    if (staff[1] != 'b'){
-		for (i=1;i<STAFF;i++) staff[i] = ' ';
-	    }
-	    else
-		for (i=2;i<STAFF;i++) staff[i] = ' ';
-	    Mstore( ib,l_p, staff, f);
-	    break;
-	case 'S':		/* a time signature */
-	    staff[0] = 'G';
-	    if (strchr(buf, '-')) { /* 10/8, etc */
-		for (i=1; i<STAFF; i++) {
-		    if (buf[i] == NEWLINE) break;
-		    staff[i] = buf[i];
-		}
-		for (;i<STAFF; i++) {
-		    staff[i] = ' ';
-		}
-	    }
-	    else {
-
-		staff[1] = buf[1];
-		if (staff[1] == 'C')
-		  if (baroque)
-		    staff[1] = 19; /* a C signature */
-		  else
-		    staff[1] = 'U'; /* a C signature */
-		else if (staff[1] == 'c') {
-		  if (baroque)
-		    staff[1] = 20;
-		  else
-		    staff[1] = 'u';
-		}
-		staff[2] = buf[2];
-		if (staff[2] == NEWLINE || staff[2] == '\0') {
-		    staff[2] = ' ';
-		}
-		for (i=3;i<STAFF;i++) staff[i] = ' ';
-	    }
-	    Mstore( ib,l_p, staff, f);
-	    break;
-	case 'A':		/* again - repeat */
-	    staff[0] = c;
-	    staff[1] = buf[1];	/* one or two */
-
-	    //	    if ((cur_chord < 2) && cur_key && (f->m_flags & AUTOKEY)) {
-	    //	      Key=1;
-	    //	    }
-
-	    for (i=2;i<STAFF;i++) staff[i] = ' ';
-	    Mstore( ib,l_p, staff, f);
-	    break;
-	case 'T':
-	    if (buf[1] != '-') {
-		if ( ! (f->m_flags & QUIET) )
-			dbg0(Warning, "T in system - use S3 \n");
-	    }
-	    else {
-	      text_s++;
-	      strncpy(i_text, &buf[2], sizeof(i_text));
-	    }
-	    staff[0] = c;
-	    staff[1] = '-';
-	    for (i=2;i<STAFF;i++) staff[i] = ' ';
-	    Mstore( ib,l_p, staff, f);
-	    break;
-	case 'P':
-	    staff[0] = c;
-	    {
-		int i;
-		for (i=1; i< STAFF; i++) {
-		    staff[i] = buf[i];
-		    if (staff[i] == NEWLINE ) {
-			staff[i] = ' ';
-			break;
-		    }
-		}
-		for (;i<STAFF;i++) staff[i] = ' ';
-	    }
-	    Mstore( ib,l_p, staff, f);
-	    return(2);
+	  }
+	}
+	for (;i<STAFF;i++) staff[i] = ' ';
+      }
+      Mstore( ib,l_p, staff, f);
+      return(2);
+    case 'b':
+      /* barline */
+      /* Jan 2021 wbc added code for QX and XQ for uncounted gray barline */
+      i = strlen(buf);
+      // printf("getsys.cc:   ->%s", buf);
+      for (i=1;i<5;i++) {
+	c = buf[i];
+	if (c == '\n' || c=='\r'|| c == 0) break;  // wbc jan 2025 mostly 0x0d
+	// else printf("getsys.cc: %c\n", c);
+	if (c == '!')  hushbar++;
+	else if (c == 'X' && buf[2] == 'Q') nocountdimbar=1;
+	else if (c == 'Q' && buf[2] == 'X') nocountdimbar=1;
+	else if (c == 'T') tie++;
+	else if (c == 'Q') dimline++;
+	else if (c == 'v') orig=1;
+	else if (c == 'V') Orig=1;
+	else if (c == 'X') nocountbar=1;
+	else if (c == 'L') nocountdimbar=1;
+	else if (c == 'b' || c == '.') {
+	  Mstore( ib,l_p, (unsigned char *)"b-         ", f);
+	  incr(buf);
+	  goto start;
+	}
+	else if (c > '0' && c <= '9') barnum = c;
+	else if (c != NEWLINE && c != 0 && c != 0x0a && c != 0x0d)  // wbc jan 2025 mostly 0x0d
+	  if (! (f->m_flags & QUIET))dbg4(Warning,
+					  "Text %c %d after a barline (b), system %d chord %d\n",
+					  (void *)((int)c) , (void *)((int)c) ,
+					  (void *)f->cur_system, (void *)cur_chord);
+	    
+	if ((cur_chord < 2) && cur_key && (f->m_flags & AUTOKEY)) {
+	  Key=1;
+	}
+	if (c == NEWLINE || c == 0 || c == 0x0a || c == 0x0d) break; // wbc jan 2025 mostly 0x0d
+      }
+      barline++;
+      break;
+    case 'B':
+      if (buf[1] == NEWLINE || buf[1] == '!') {
+	BARline++;
+	if ((c = buf[1]) == '!') hushbar++;
+	break;
+      }
+      else if ( buf[1] == 'X' ) {
+	BARline++;
+	nocountbar=1;
+	break;
+      }
+      else if ( buf[1] == 'L' ) {
+	nocountdimbar=1;
+	break;
+      }
+      else {
+	staff[0] = 'J';
+	staff[1] = '-';
+	if (buf[1] == '-') i++;
+	else skip--;
+	goto rest;
+      }
+    case 't':
+    case '#':
+      staff[0] = buf[1];
+      staff[1] = c;
+      goto rest;
+    case 'x':
+      if (gridflag) break;
+    case 'Y':
+    case 'y':
+    case 'L':
+    case 'W':
+    case 'w':
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case 'O':
+      /*
+	case '$': this is only used in Straloch MS
+      */
+    case '@':  // a dot after a bar line after a flag from Cosens
+    case '~':
+      /* new staff */
+      staff[0] = c;
+      staff[1] = buf[1];
+      if (c == 'Y' || c == 'y') {
+	switch (staff[1]) {
+	case '.':
+	  staff[1] = '.';
+	  staff[2] = staff[8] = ' ';
+	  for (i=3;i<8;i++)  staff[i] = 'Z';
+	  Mstore( ib, l_p, staff, f);
+	  goto done;
 	case 'b':
-	    /* barline */
-	    /* Jan 2021 wbc added code for QX and XQ for uncounted gray barline */
-	    if ((c = buf[1]) == '!') {
-		hushbar++;
-//		dbg1(Warning, "hushbar, barline not printed\n", (void *)c);
-	    }
-	    else if (c == 'X' && buf[2] == 'Q') nocountdimbar=1;
-	    else if (c == 'Q' && buf[2] == 'X') nocountdimbar=1;
-	    else if (c == 'T') tie++;
-	    else if (c == 'Q') dimline++;
-	    else if (c == 'v') orig=1;
-	    else if (c == 'V') Orig=1;
-	    else if (c == 'X') nocountbar=1;
-	    else if (c == 'L') {
-                nocountdimbar=1;
-	    }
-	    else if (c == 'b' || c == '.') {
-		Mstore( ib,l_p, (unsigned char *)"b-         ", f);
-		incr(buf);
-		goto start;
-	    }
-	    else if (c > '0' && c <= '9') {
-		barnum = c;
-	    }
-	    else if ( c != NEWLINE)
-		if (! (f->m_flags & QUIET))dbg3(Warning,
-		     "Text %c after a barline (b), system %d chord %d\n",
-		     (void *)((int)c) , (void *)f->cur_system, (void *)cur_chord);
-	    barline++;
-
-	    if ((cur_chord < 2) && cur_key && (f->m_flags & AUTOKEY)) {
-	      Key=1;
-	    }
-
-	    break;
-	case 'B':
-	    if (buf[1] == NEWLINE || buf[1] == '!') {
-		BARline++;
-		if ((c = buf[1]) == '!') hushbar++;
-		break;
-	    }
-	    else if ( buf[1] == 'X' ) {
-	      BARline++;
-	      nocountbar=1;
-	      break;
-	    }
-	    else if ( buf[1] == 'L' ) {
-	      nocountdimbar=1;
-	      break;
-	    }
-	    else {
-		staff[0] = 'J';
-		staff[1] = '-';
-		if (buf[1] == '-') i++;
-		else skip--;
-		goto rest;
-	    }
-	case 't':
-	case '#':
-	    staff[0] = buf[1];
-	    staff[1] = c;
-	    goto rest;
-	case 'x':
-	    if (gridflag) break;
-	case 'Y':
-	case 'y':
+	  for (i=2;i < STAFF;i++)  staff[i] = ' ';
+	  Mstore( ib, l_p, staff, f);
+	  goto done;
+	case '0':
+	case '-':
 	case 'L':
+	case 'B':
 	case 'W':
 	case 'w':
-	case '0':
 	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case 'O':
-	  /*
-	case '$': this is only used in Straloch MS
-	*/
-	case '@':  // a dot after a bar line after a flag from Cosens
-	case '~':
-	    /* new staff */
-	    staff[0] = c;
-	    staff[1] = buf[1];
-	    if (c == 'Y' || c == 'y') {
-		switch (staff[1]) {
-		case '.':
-		    staff[1] = '.';
-		    staff[2] = staff[8] = ' ';
-		    for (i=3;i<8;i++)  staff[i] = 'Z';
-		    Mstore( ib, l_p, staff, f);
-		    goto done;
-		case 'b':
-		    for (i=2;i < STAFF;i++)  staff[i] = ' ';
-		    Mstore( ib, l_p, staff, f);
-		    goto done;
-		case '0':
-		case '-':
-		case 'L':
-		case 'B':
-		case 'W':
-		case 'w':
-		case '1':
-		    break;
-		default:
-		    staff[1] = '-';
-		    skip--;
-		    break;
-		}
-	    }
-	    else if (staff[1] == '!') {
-		staff[1] = '!';
-	    }
-	    else if (staff[1] == '-') {
-		staff[1] = '-';
-	    }
-	    else if (staff[1] == '#') {
-		staff[1] = '#';
-	    }
-	    else if (staff[1] == '*') {	/* dot in grid */
-		staff[1] = '*';
-	    }
-	    else if (staff[1] == '|') {	/* extra line in grid */
-		staff[1] = '|';
-	    }
-	    else if (staff[1] == '.') {
-		staff[1] = '.';
-	    }
-	    else if (staff[1] == 't') {
-		staff[1] = 'w';
-	    }
-	    else if (staff[1] == 'W') {
-		staff[1] = 'W';
-	    }
-	    else if (staff[1] == 'Q') {	/* highlight */
-		staff[1] = 'Q';
-	    }
-	    else if (staff[1] == '@') {	/* dotted highlight */
-		staff[1] = '@';
-	    }
-	    else if (staff[1] == 'B') {	/* dot before flag */
-		staff[1] = 'B';
-	    }
-	    else if (staff[1] == '&') { /* flag ornament new Sept 2015 wbc*/
-	      a_ornament[0] = '&';
-              a_ornament[1] = buf[2];
-
-	      //printf("Flag Ornament: %c\n", buf[2] ); // wbc Sept 2015
-              //printf("buf before: %s", buf);
-	      buf[1] = '-';
-              for (i=3;i<STAFF;i++) buf[i-1] = buf[i];
-	      //  printf("buf after: %s", buf);
-	      //printf ("a_ornament at 393: %s\n", a_ornament);
-              staff[1] = buf[1];
-	    }
-	    else {
-		skip--;
-		staff[1] = '-';
-	    }
-
-	rest:
-
-	    //	    printf("a_ornament at 403: %s\n", a_ornament);
-
-	    for (i = 0; i < STAFF ; i++) {
-		ornament[i] = ' ';
-		//	a_ornament[i] = ' ';
-		t_ornament[i] = ' ';
-		finger[i] = ' ';
-	    }
-	    ornament[1] = '-';
-	    // a_ornament[1] = '-';
-	    t_ornament[1] = '-';
-	    finger[1] = '-';
-
-	    // get the notes here  NOTES HERE
-
-	    for (i = 2; i < STAFF; i++) {
-		staff[i] = buf[i+skip];
-		switch (staff[i]) {
-		case 'd':
-		  if ( f->m_flags & DSDOWN ) {
-		    staff[i] = 'D';
-		  }
-		  else if ( ! (f->m_flags & DSUP )) {
-		    if ( i == 2 ) { /* top line */
-		      if (staff[0] != 'x') {
-			staff[i] = 'D';
-		      }
-		    }
-		    else if (staff[i-1] != ' ' && staff[i-1] != '-' ) {
-		      staff[i] = 'D';
-		    }
-		  }
-
-		  if (baroque && buf[i+1+skip] == 'E') {
-		    staff[i] = 'z';
-		    if (baroque && staff[i-1] == 'D')
-		      staff[i-1] = 'z';
-		  }
-		  if (baroque && staff[i-1] == 'E' && staff[i-2] == 'z') {
-		    staff[i] = 'z';
-		  }
-		  break;
-		case 'g':
-		  if (baroque
-		      && buf[i+1+skip] != '\n'
-		      && buf[i+1+skip] != ' '
-		      && buf[i+1+skip] != '.') {
-		    staff[i] = 'G';
-		  }
-		  break;
-		case '0':	/* reversed 0 and space for internal lang */
-		    break;
-		case 'N':	/* number 10 -> 19 */
-		  // seems to work from 00 to 30 plus 32 33
-		  // but should only work from 10 to 30
-		    skip++;
-		    N[0] = buf[i+skip];
-		    skip++;
-		    N[1] = buf[i+skip];
-		    N[2] = 0;
-		    {
-		      unsigned int fff, rrr;
-		      fff = atoi(N);
-		      rrr = fff;
-		    }
-		    staff[i] = atoi(N);
-		    if ( ! isdigit (N[0]))
-			dbg1(Warning, "bad fret number", (void *)((int)N[0]));
-		    if ( ! isdigit (N[1]))
-			dbg1(Warning, "bad fret number", (void *)((int)N[1]));
-		    if (staff[i] > 30) {
-			dbg1(Warning, "fret number %d higher than max 34\n",
-			     (void *)((int)staff[i]));
-			staff[i]=0;
-		    }
-		    if (staff[i] < 10) {
-			dbg1(Warning, "fret number %d lower than min 10\n",
-			     (void *)((int)staff[i]));
-			staff[i]=0;
-		    }
-		    staff[i] += 220;
-		    break;
-		case 'z':
-		    staff[i] = '0';
-		    break;
-		case ']':
-		  staff[i] = ']';
-		  if (buf[i+skip+1] == 'v') {
-		    staff[i] = 133;
-		    skip++;
-		  }
-		  if (buf[i+skip+1] == 'w') {
-		    staff[i] = 134;
-		    skip++;
-		  }
-		  break;
-		case NEWLINE:
-		    line++;
-		    for ( ; i < STAFF; i++)
-			staff[i] = ' ';
-		    break;
-		case '/':    /* slash slashes bourdons */
-		  // printf("getsys: slash: 1 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
-		  if ((cc = buf[i + (++skip)]) == '/') {
-		    ornament[i] = 's';     /* two slashes */
-		    // printf("getsys: slash: 2 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
-		    if ((cc = buf[i + (++skip)]) == '/') {
-		      ornament[i] = 't'; /* three slashes */
-		      skip++;
-		      // printf("getsys: slash: 3 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
-		      if ((cc = buf[i + (skip)]) == '/') {
-			ornament[i] = 0xb0; /* four slashes 0xb0 is 176 */
-			skip++;
-			// printf("getsys: slash: 4 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
-			if ((cc = buf[i + (skip)]) == '/') {
-			  ornament[i] = 0xb1; /* five slashes 0xb1 is 177 */
-			  skip++;
-			  // printf("getsys: slash: 5 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
-			}
-			
-		      }
-		    }
-		    else {	/* only one slash */
-		    }
-		    i--;
-		  }
-		  else if ( cc == ' ' ) {
-		    /* leave staff[i] as '/' */
-			skip--;
-		  }
-		  else {
-		    ornament[i] = '/';
-		    i--;
-		  }
-		  break;
-		case '!':	/* infix */
-		    staff[i] = buf[i + (++skip)];
-		    if (staff[i] == '0') { // a octal number after !0
-		      // which must also be fixed in map.cc
-		      staff[i] = buf[i + skip + 3] - '0';
-		      staff[i] += (buf[i + skip + 2] - '0') * 8;
-		      staff[i] += (buf[i + skip + 1] - '0') * 64;
-		      skip += 3;
-		    }
-		    else if (buf[i + skip] == '<' && buf[i + skip + 1] == '!') {
-		    //  printf("Here %s \n", &buf[i+skip+2]); /* add <! here */
-		      staff[i] = read_special_ornament (buf, &i, &skip);
-		    }
-		    break;
-		case 0xe2:	// this is a three character apple
-		  if (buf[i+1+skip] == (char)0x80) {              // double quote
-		    //	    printf ("HERE %x %x %x \n",
-		    //	    staff[i], (buf[i+1+skip]& 0xff), (buf[i+2+skip]&0xff));
-		    skip++;skip++;
-		  }
-		  else {
-		    dbg3(Warning, "uncaught special character %x %x %x \n",
-			 (void*)(buf[i+skip]&0xff), (void*)(buf[i+1+skip]&0xff),
-			 (void*)(buf[i+2+skip]&0xff));
-		    staff[i] = '"';
-		    skip++;skip++;
-		  }
-		case 0xd2:
-		case 0xd3:
-//		  DON'T BREAK break; Continue on as if we had a real quote
-		case '"':	/* prefix a non prefix char */
-		    ornament[i] = buf[i + (++skip)];
-		    if (ornament[i] == ']' ) {
-		      if ( buf[i+skip+1] == 'v') {
-			ornament[i] = 133;
-			skip++;
-		      }
-		      if ( buf[i+skip+1] == 'w') { //wavy
-			ornament[i] = 134;
-			skip++;
-		      }
-		    }
-		    else if (buf[i + skip] == '<' && buf[i + skip + 1] == '!') {
-		    //  printf("Here %s \n", &buf[i+skip+2]); /* add <! here */
-		      ornament[i] = read_special_ornament (buf, &i, &skip);
-		    }
-		    else if (ornament[i] == '\n') {
-		      dbg0 (Warning,
-			    "tab: getsys: double quote with no following character at end of line\n");
-		      skip--;
-//		      i = STAFF;
-		    }
-		    skip++;
-		    i--;
-		    break;
-		case 'x':	/* small x */
-		  // printf ("small x here\n");
-		  /*
-		  if ( f->num_flag == ITAL_NUM) {
-		    // printf ("ital num and x here\n");
-		    break;
-		  }
-		  */
-		   ornament[i] = buf[i+skip];
-		   skip++;
-		   i--;
-		   break;
-		case '<':
-		  // wbc april 2019 check for php header
-		  if (buf[i+skip+1] == '?' && buf[i+skip+2] == 'p'
-		      && buf[i+skip+3] == 'h' && buf[i+skip+4] == 'p'){
-		    printf("getsys: getsystem: php header\n");
-		    dbg0(Error,
-			 "php header detected, this may not be a valid tab file\n");
-		  }
-
-		  // wbc August 2019 allow <! for extra things >
-		  else if (buf[i+skip+1] == '!') {
-		    ornament[i] = read_special_ornament(buf, &i, &skip);
-		    skip++;
-		    i--;
-		    // printf("after read call line 607: %s  %d %d %s\n", &buf[i+skip], i, skip, buf );
-		  }
-		  else { ornament[i] = buf[i+skip];
-		    skip++;
-		    i--; //* Paul Overell Sept 1 2022 */
-		  }
-		  break;
-		case '`':	/* comma on line is now a no-op */
-		  dbg0(Warning, "the backtick ` is no longer used, please use the comma ,\n");
-		  skip++;
-		  i--;
-		  break;
-		case 'Q':
-		case '#':
-		case '$':
-		case ',':	/* comma on line */
-		case '=':
-		case '\'':	/* comma above line */
-		case '^':	/* hat */
-		case '@':	/* asterix - star */
-		case '_':	/* semicircle underbar - smile */
-		  ornament[i] = buf[i+skip];
-		  skip++;
-		  i--;
-		  break;
-		case '+':
-		  if (buf[i+skip+1] == '*' ) {
-		    // printf("getsys.cc: 661 HERE\n") ;
-		    ornament[i] = 222;
-		    skip++;
-		    skip++;
-                    i--;
-		  }
-		  else {
-		    ornament[i] = buf[i+skip];
-		    skip++;
-		    i--;
-		  }
-		  break;
-		case 's':	/* two slashes */
-		case 't':	/* three slashes */
-		    if (i > 7 ) {
-			ornament[i] = buf[i+skip];
-			skip++;
-			i--;
-		    }
-		    break;
-		case '*':
-		    ornament[i] = '.'; /* was 'Z' */
-		    skip++;
-		    i--;
-		    break;
-		case '%':
-		    ornament[i] = ':';
-		    skip++;
-		    i--;
-		    break;
-		case 'M':	/* music - time, note, sharp */
-		case '\t':
-		    do_music(ib, staff, buf, l_p, &skip, i, f);
-		    i=STAFF;
-		    break;
-		case 'T':	/* text */
-		    if (i != STAFF) j = i;
-		    text_f ++;
-		    while ( i < STAFF ) staff[i++] = ' ';
-		    strncpy(i_text, &buf[++j + skip], sizeof(i_text));
-		    break;
-		case 'R':	/* rest */
-		    staff[1] = 'R';
-		    if (buf[i+skip + 1] == '\t')
-			do_music(ib, staff, buf, l_p, &skip, i+1, f);
-		    if (buf[i + skip + 1] == '!') {
-			staff[2] = '!';
-			i=3;
-		    }
-		    else i=2;
-		    for(; i < STAFF; i++ ) staff[i] = ' ';
-		    break;
-		case '|':
-		  staff[i] = '|';
-		  //		  if (baroque) {
-		    if (buf[i+skip + 1] == '|') {
-		      skip++;
-		      staff[i] = 229;
-		    }
-		    //		  }
-		  break;
-		case '\\':	/* finger number */
-		    cc = buf[i + (++skip)]; /* we expect a number 1-4 */
-		    if (cc >='1' && cc <='4' ) {
-		        finger[i] = 140 + cc - '0';
-			skip++;
-			i--;
-		    }
-		    else {
-			switch (cc) {
-			case '.':
-			case ':': /* infix .. */
-			    t_ornament[i] = cc;
-			    skip++;
-			    i--;
-			    break;
-			case '*':
-			    finger[i] = '.';
-			    skip++;
-			    i--;
-			    break;
-			case '?':
-			    finger[i] = 250;
-			    skip++;
-			    i--;
-			    break;
-			case '+':
-			case 'x':
-			    finger[i] = cc;
-			    skip++;
-			    i--;
-			    break;
-			case '\\':
-			    staff[i] = cc;
-			    break;
-			default:
-			    dbg3(Warning,
-  "tab: getsystem: bad finger or \\ character %c at line %d of system %d\n",
-				 (void *)((int)cc),
-				 (void*)cur_line,
-				 (void*)f->cur_system);
-			    break;
-			}
-		    }
-		    break;
-		default:
-		    break;
-		}
-		/*  after ornaments */
-		if ((cc = buf[i + skip + 1]) == '&' ) {
-		  // printf("getsys.cc:line 757 got &\n");
-		  char ccc;
-		  cc = buf[i + (skip += 2)];
-		  if (cc == '*' ) cc = '.'; /* was Z */
-		  if (cc == '%' ) cc = ':'; /* was Z */
-		  
-		  // printf("HERE getsys.cc 764 i %d cc %c skip %d buf %s result %c\n", i, cc, skip, buf, buf[i+skip]);
-
-		  if (cc == ']') {
-		    ccc = buf[i + (skip += 1)];
-		    
-		    if ( ccc == 'v' )
-		      cc = (char)133;
-		    else if ( ccc == 'w' )
-		      cc = (char)134;
-		    else
-		      skip -= 1;
-		  }
-		  else if (cc == '<' && buf[i + skip + 1] == '!') {
-		    // printf("HERE getsys.cc 777 i %d skip %d buf %s\n", i, skip, buf);
-		    /* skip -= 3; Paul Overell Sept 1 2022 */
-		    cc = read_special_ornament (buf, &i, &skip);
-		  }
-		  else if (cc == '\n') {
-		    dbg2(Warning,
-       	 "tab: getsystem: & with no character after it line %d sys %d\n",
-			 (void*)cur_line,
-			 (void*)f->cur_system);
-		    buf[i + (skip += 2)]= ' ';
-		    buf[i + (skip += 3)]= '\n';
-		    cc = ' ';
-		  }
-		  a_ornament[i] = cc;
-		}
-	    }
-	    for ( i=2; i< STAFF; i++)
-		if (finger[i] != ' ') {
-		    finger[0] = '^';
-		    Mstore( ib, l_p, finger, f);
-		    break;
-		}
-	    for ( i=2; i< STAFF; i++)
-		if (ornament[i] != ' ') {
-		    ornament[0] = '+';
-		    Mstore( ib, l_p, ornament, f);
-		    break;
-		}
-	    for ( i=2; i< STAFF; i++)
-		if (t_ornament[i] != ' ') {
-		    t_ornament[0] = ':';
-		    Mstore( ib, l_p, t_ornament, f);
-		    break;
-		}
-	    Mstore( ib,l_p, staff, f);
-
-	    for ( i=1; i< STAFF; i++) // was i=2 wbc sept 2015
-	      //printf ("a_ornament at 740: %2d %c %s\n", i, a_ornament[i], a_ornament);
-	      if ((i == 1 && a_ornament[i] != '-' )
-		  || a_ornament[i] != ' ') {
-
-		    a_ornament[0] = '&';
-		    //printf ("a_ornament at 744: %d %c %s\n", i, a_ornament[i], a_ornament);
-		    Mstore( ib, l_p, a_ornament, f);
-		    break;
-		}
- 	    break;
-	    /* repeat */
-	    /* the next case is a duplicate of above, more of less */
-	case 'M':		/* music - time, note, sharp */
-	    /* here is where we skip a tab */
-	    if (buf[1] == '\t') {
-		skip++;
-
-	    }
-	    (void)do_music(ib, staff, buf, l_p, &skip, 0, f);
-	    /* store here ? */
-	    break;
-
-	case '.':		/* this does not acutally determine */
-	    staff[0] = '.';	/* the number of dots printed */
-	    if (buf[1] == 'X') staff[1] = 'X';
-	    else if (buf[1] >= '1' && buf[1] <= '9') staff[1] = buf[1];
-	    else staff[1] = '-';
-	    staff[2] = staff[8] = ' ';
-	    for (i=3; i < 8; i++)
-	      staff[i] = 'Z';
-	    for (;i < STAFF; i++)
-		staff[i] = ' ';
-	    Mstore( ib,l_p, staff, f);
-	    if ((c = buf[1]) == 'b' || c == '.') {
-		incr(buf);
-		goto start;
-	    }
-	    break;
-	case 'e':		/* don't do this on included files! */
-	    if (!(f->flags & INCLUDE))
-		ib->PutByte('e'); ib->PutByte(NEWLINE);
-	    free (l_p); /* memory leak */
-	    return(END_OK);
-	case 'p':
-	    ib->PutByte('p'); ib->PutByte(NEWLINE);
-	    return(END_MORE);
-	case 'C':		/* a big C */
-	    staff[0] = 'U';
-	    staff[1] = '-';
-	    for (i = 2 ;i < STAFF; i++) staff[i] = ' ';
-	    Mstore( ib,l_p, staff, f);
-	    break;
-	case 'c':		/* a big C with a line */
-	    staff[0] = 'u';
-	    for (i = 1 ;i < STAFF; i++) staff[i] = ' ';
-	    Mstore( ib,l_p, staff, f);
-	    break;
-	case '8':		/* 8va - octave */
-	case 'D':		/* da capo (D.C.)  */
-	    staff[0] = c;
-	    for (i = 1 ;i < STAFF; i++) staff[i] = ' ';
-	    Mstore( ib,l_p, staff, f);
-	    break;
-	case 'F':		/* a big 4 */
-	    i=0;
-	    while (buf[i] != '\0') {
-		ib->PutByte(buf[i++]);
-	    }
-	    break;
-/*	  case 'T':	*/	/* a big 3 */
-	case 'm':		/* Mesangeau's tail */
-	case 'Q':		/* a tail */
-	case 'q':		/* a tail */
-	case 'V':		/* a hold */
-	case 'i':		/* indent as for barline, no barline */
-	case 'v':
-	case 'j':		// small indent
-	case 'f':		/* fine */
-	    staff[0] = c;
-	    for (i = 1 ;i < STAFF; i++) staff[i] = ' ';
-	    Mstore( ib,l_p, staff, f);
-	    break;
-	case '=':		/* W. = W */
-	    staff[0] = c;
-	    for (i = 1 ; buf[i] != NEWLINE && i < STAFF; i++) {
-		staff[i] = buf[i];
-	    }
-	    for (;i< STAFF; i++) staff[i] = ' ';
-	    Mstore( ib,l_p, staff, f);
-	    break;
-	case 'k':		/* key signature */
-	    staff[0] = c;
-	    staff[1] = buf[1];	/* a, d, g, f, b, e (flat)  */
-	    cur_key = buf[1];
-	    //	    printf("cur_key %c\n", cur_key);
-	    for (i = 2 ;i < STAFF; i++) staff[i] = ' ';
-	    Mstore( ib, l_p, staff, f);
-	    break;
-	case '*':  // insert a letter here
-	    staff[0] = c;
-	    staff[1] = buf[1];
-	    if ( buf[2] > 33) {   /* wbc jan 2025  */
-              staff[2] = buf[2];
-              for (i = 3 ;i < STAFF; i++) staff[i] = ' ';
-            }
-	    else 
-              for (i = 2 ;i < STAFF; i++) staff[i] = ' ';
-	    Mstore( ib, l_p, staff, f);
-	    break;
-	case EOF:
-	    return(0);
-	case '$':
-	  {
-	    int i, j=0;
-	    char buffer[80];
-	    char *bp;
-	    bp = &buffer[0];
-	    for (i=1; (c = buf[i]) != NEWLINE; i++) {
-	      *bp=c;
-	      bp++;
-	    }
-
-	    buffer[--i] = 0;
-	    if (setflag(f, buffer, first))
-	      break;		// return if we set the flag
-	    ib->PutByte('$');
-	    while (j < i && buffer[j] != '\0') {
-	      ib->PutByte(buffer[j++]);
-	    }
-	    ib->PutByte(NEWLINE);
-	  }
-	  break;
-	case '[':
-	  staff[0] = c;
-	  //	  if ( ! (f->m_flags & QUIET) )
-	  //	    dbg0(Warning, "text in system not implemented\n");
-	  for (i = 1 ;i < STAFF; i++) {
-	    if (buf[i] == '\n' ) {
-	      staff[i] = ' ';
-	    }
-	    else if (buf[i] == '\0' ) {
-	      staff[i] = ' ';
-	    }
-	    else staff[i] = buf[i];
-	  }
-	  //	  staff[STAFF-1] = '\n';
-	  Mstore( ib, l_p, staff, f);
 	  break;
 	default:
-	  if ( ! (f->m_flags & QUIET) )
-	    dbg3(Warning,
-		 "getsystem: bad flag character %c in system %d chord %d\n",
-		 (void *)((int)c),
-		 (void*) f->cur_system,
-		 (void *)cur_chord);
+	  staff[1] = '-';
+	  skip--;
 	  break;
 	}
-    done:
-	if (barline) {
-	    barline = 0;
-	    if (hushbar)
-	        Mstore( ib, l_p, (unsigned char *)"b!         ", f);
-	    else if (tie) {
-		Mstore( ib, l_p, (unsigned char *)"bT         ", f);
-		tie = 0;
-	    }
-	    else if (dimline) {
-		Mstore( ib, l_p, (unsigned char *)"bQ         ", f);
-		dimline = 0;
-	    }
-	    else if (nocountbar) {
-		Mstore( ib, l_p, (unsigned char *)"bX         ", f);
-		nocountbar = 0;
-	    }
-	    else if (nocountdimbar) {
-		Mstore( ib, l_p, (unsigned char *)"bL         ", f);
-		nocountdimbar = 0;
-	    }
-	    else if (orig) {
-		Mstore( ib, l_p, (unsigned char *)"bvabc      ", f);
-		orig = 0;
-	    }
-	    else if (Orig) {
-		Mstore( ib, l_p, (unsigned char *)"bV         ", f);
-		Orig = 0;
-	    }
+      }
+      else if (staff[1] == '!') {
+	staff[1] = '!';
+      }
+      else if (staff[1] == '-') {
+	staff[1] = '-';
+      }
+      else if (staff[1] == '#') {
+	staff[1] = '#';
+      }
+      else if (staff[1] == '*') {	/* dot in grid */
+	staff[1] = '*';
+      }
+      else if (staff[1] == '|') {	/* extra line in grid */
+	staff[1] = '|';
+      }
+      else if (staff[1] == '.') {
+	staff[1] = '.';
+      }
+      else if (staff[1] == 't') {
+	staff[1] = 'w';
+      }
+      else if (staff[1] == 'W') {
+	staff[1] = 'W';
+      }
+      else if (staff[1] == 'Q') {	/* highlight */
+	staff[1] = 'Q';
+      }
+      else if (staff[1] == '@') {	/* dotted highlight */
+	staff[1] = '@';
+      }
+      else if (staff[1] == 'B') {	/* dot before flag */
+	staff[1] = 'B';
+      }
+      else if (staff[1] == '&') { /* flag ornament new Sept 2015 wbc*/
+	a_ornament[0] = '&';
+	a_ornament[1] = buf[2];
 
-	    else if (barnum) {
-		char line[13];
-		strcpy (line, "b");
-		line[1] = barnum;
-		line[2] = '\0';
-		strcat (line, "         ");
-		Mstore ( ib, l_p, (unsigned char *)line, f);
-		barnum = 0;
+	//printf("Flag Ornament: %c\n", buf[2] ); // wbc Sept 2015
+	//printf("buf before: %s", buf);
+	buf[1] = '-';
+	for (i=3;i<STAFF;i++) buf[i-1] = buf[i];
+	//  printf("buf after: %s", buf);
+	//printf ("a_ornament at 393: %s\n", a_ornament);
+	staff[1] = buf[1];
+      }
+      else {
+	skip--;
+	staff[1] = '-';
+      }
+
+    rest:
+
+      //	    printf("a_ornament at 403: %s\n", a_ornament);
+
+      for (i = 0; i < STAFF ; i++) {
+	ornament[i] = ' ';
+	//	a_ornament[i] = ' ';
+	t_ornament[i] = ' ';
+	finger[i] = ' ';
+      }
+      ornament[1] = '-';
+      // a_ornament[1] = '-';
+      t_ornament[1] = '-';
+      finger[1] = '-';
+
+      // get the notes here  NOTES HERE
+
+      for (i = 2; i < STAFF; i++) {
+	staff[i] = buf[i+skip];
+	switch (staff[i]) {
+	case 'd':
+	  if ( f->m_flags & DSDOWN ) {
+	    staff[i] = 'D';
+	  }
+	  else if ( ! (f->m_flags & DSUP )) {
+	    if ( i == 2 ) { /* top line */
+	      if (staff[0] != 'x') {
+		staff[i] = 'D';
+	      }
 	    }
-	    else Mstore( ib,l_p, (unsigned char *)"b-         ", f);
-	    hushbar =0;
+	    else if (staff[i-1] != ' ' && staff[i-1] != '-' ) {
+	      staff[i] = 'D';
+	    }
+	  }
+
+	  if (baroque && buf[i+1+skip] == 'E') {
+	    staff[i] = 'z';
+	    if (baroque && staff[i-1] == 'D')
+	      staff[i-1] = 'z';
+	  }
+	  if (baroque && staff[i-1] == 'E' && staff[i-2] == 'z') {
+	    staff[i] = 'z';
+	  }
+	  break;
+	case 'g':
+	  if (baroque
+	      && buf[i+1+skip] != '\n'
+	      && buf[i+1+skip] != ' '
+	      && buf[i+1+skip] != '.') {
+	    staff[i] = 'G';
+	  }
+	  break;
+	case '0':	/* reversed 0 and space for internal lang */
+	  break;
+	case 'N':	/* number 10 -> 19 */
+	  // seems to work from 00 to 30 plus 32 33
+	  // but should only work from 10 to 30
+	  skip++;
+	  N[0] = buf[i+skip];
+	  skip++;
+	  N[1] = buf[i+skip];
+	  N[2] = 0;
+	  {
+	    unsigned int fff, rrr;
+	    fff = atoi(N);
+	    rrr = fff;
+	  }
+	  staff[i] = atoi(N);
+	  if ( ! isdigit (N[0]))
+	    dbg1(Warning, "bad fret number", (void *)((int)N[0]));
+	  if ( ! isdigit (N[1]))
+	    dbg1(Warning, "bad fret number", (void *)((int)N[1]));
+	  if (staff[i] > 30) {
+	    dbg1(Warning, "fret number %d higher than max 34\n",
+		 (void *)((int)staff[i]));
+	    staff[i]=0;
+	  }
+	  if (staff[i] < 10) {
+	    dbg1(Warning, "fret number %d lower than min 10\n",
+		 (void *)((int)staff[i]));
+	    staff[i]=0;
+	  }
+	  staff[i] += 220;
+	  break;
+	case 'z':
+	  staff[i] = '0';
+	  break;
+	case ']':
+	  staff[i] = ']';
+	  if (buf[i+skip+1] == 'v') {
+	    staff[i] = 133;
+	    skip++;
+	  }
+	  if (buf[i+skip+1] == 'w') {
+	    staff[i] = 134;
+	    skip++;
+	  }
+	  break;
+	case NEWLINE:
+	  line++;
+	  for ( ; i < STAFF; i++)
+	    staff[i] = ' ';
+	  break;
+	case '/':    /* slash slashes bourdons */
+	  // printf("getsys: slash: 1 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
+	  if ((cc = buf[i + (++skip)]) == '/') {
+	    ornament[i] = 's';     /* two slashes */
+	    // printf("getsys: slash: 2 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
+	    if ((cc = buf[i + (++skip)]) == '/') {
+	      ornament[i] = 't'; /* three slashes */
+	      skip++;
+	      // printf("getsys: slash: 3 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
+	      if ((cc = buf[i + (skip)]) == '/') {
+		ornament[i] = 0xb0; /* four slashes 0xb0 is 176 */
+		skip++;
+		// printf("getsys: slash: 4 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
+		if ((cc = buf[i + (skip)]) == '/') {
+		  ornament[i] = 0xb1; /* five slashes 0xb1 is 177 */
+		  skip++;
+		  // printf("getsys: slash: 5 i %d skip %2d buf %s",i, skip, &buf[i+skip]);
+		}			
+	      }
+	    }
+	    else {	/* only one slash */
+	    }
+	    i--;
+	  }
+	  else if ( cc == ' ' ) {
+	    /* leave staff[i] as '/' */
+	    skip--;
+	  }
+	  else {
+	    ornament[i] = '/';
+	    i--;
+	  }
+	  break;
+	case '!':	/* infix */
+	  staff[i] = buf[i + (++skip)];
+	  if (staff[i] == '0') { // a octal number after !0
+	    // which must also be fixed in map.cc
+	    staff[i] = buf[i + skip + 3] - '0';
+	    staff[i] += (buf[i + skip + 2] - '0') * 8;
+	    staff[i] += (buf[i + skip + 1] - '0') * 64;
+	    skip += 3;
+	  }
+	  else if (buf[i + skip] == '<' && buf[i + skip + 1] == '!') {
+	    //  printf("Here %s \n", &buf[i+skip+2]); /* add <! here */
+	    staff[i] = read_special_ornament (buf, &i, &skip);
+	  }
+	  break;
+	case 0xe2:	// this is a three character apple
+	  if (buf[i+1+skip] == (char)0x80) {              // double quote
+	    //	    printf ("HERE %x %x %x \n",
+	    //	    staff[i], (buf[i+1+skip]& 0xff), (buf[i+2+skip]&0xff));
+	    skip++;skip++;
+	  }
+	  else {
+	    dbg3(Warning, "uncaught special character %x %x %x \n",
+		 (void*)(buf[i+skip]&0xff), (void*)(buf[i+1+skip]&0xff),
+		 (void*)(buf[i+2+skip]&0xff));
+	    staff[i] = '"';
+	    skip++;skip++;
+	  }
+	case 0xd2:
+	case 0xd3:
+	  //		  DON'T BREAK break; Continue on as if we had a real quote
+	case '"':	/* prefix a non prefix char */
+	  ornament[i] = buf[i + (++skip)];
+	  if (ornament[i] == ']' ) {
+	    if ( buf[i+skip+1] == 'v') {
+	      ornament[i] = 133;
+	      skip++;
+	    }
+	    if ( buf[i+skip+1] == 'w') { //wavy
+	      ornament[i] = 134;
+	      skip++;
+	    }
+	  }
+	  else if (buf[i + skip] == '<' && buf[i + skip + 1] == '!') {
+	    //  printf("Here %s \n", &buf[i+skip+2]); /* add <! here */
+	    ornament[i] = read_special_ornament (buf, &i, &skip);
+	  }
+	  else if (ornament[i] == '\n') {
+	    dbg0 (Warning,
+		  "tab: getsys: double quote with no following character at end of line\n");
+	    skip--;
+	    //		      i = STAFF;
+	  }
+	  skip++;
+	  i--;
+	  break;
+	case 'x':	/* small x */
+	  // printf ("small x here\n");
+	  /*
+	    if ( f->num_flag == ITAL_NUM) {
+	    // printf ("ital num and x here\n");
+	    break;
+	    }
+	  */
+	  ornament[i] = buf[i+skip];
+	  skip++;
+	  i--;
+	  break;
+	case '<':
+	  // wbc april 2019 check for php header
+	  if (buf[i+skip+1] == '?' && buf[i+skip+2] == 'p'
+	      && buf[i+skip+3] == 'h' && buf[i+skip+4] == 'p'){
+	    printf("getsys: getsystem: php header\n");
+	    dbg0(Error,
+		 "php header detected, this may not be a valid tab file\n");
+	  }
+
+	  // wbc August 2019 allow <! for extra things >
+	  else if (buf[i+skip+1] == '!') {
+	    ornament[i] = read_special_ornament(buf, &i, &skip);
+	    skip++;
+	    i--;
+	    // printf("after read call line 607: %s  %d %d %s\n", &buf[i+skip], i, skip, buf );
+	  }
+	  else { ornament[i] = buf[i+skip];
+	    skip++;
+	    i--; //* Paul Overell Sept 1 2022 */
+	  }
+	  break;
+	case '`':	/* comma on line is now a no-op */
+	  dbg0(Warning, "the backtick ` is no longer used, please use the comma ,\n");
+	  skip++;
+	  i--;
+	  break;
+	case 'Q':
+	case '#':
+	case '$':
+	case ',':	/* comma on line */
+	case '=':
+	case '\'':	/* comma above line */
+	case '^':	/* hat */
+	case '@':	/* asterix - star */
+	case '_':	/* semicircle underbar - smile */
+	  ornament[i] = buf[i+skip];
+	  skip++;
+	  i--;
+	  break;
+	case '+':
+	  if (buf[i+skip+1] == '*' ) {
+	    // printf("getsys.cc: 661 HERE\n") ;
+	    ornament[i] = 222;
+	    skip++;
+	    skip++;
+	    i--;
+	  }
+	  else {
+	    ornament[i] = buf[i+skip];
+	    skip++;
+	    i--;
+	  }
+	  break;
+	case 's':	/* two slashes */
+	case 't':	/* three slashes */
+	  if (i > 7 ) {
+	    ornament[i] = buf[i+skip];
+	    skip++;
+	    i--;
+	  }
+	  break;
+	case '*':
+	  ornament[i] = '.'; /* was 'Z' */
+	  skip++;
+	  i--;
+	  break;
+	case '%':
+	  ornament[i] = ':';
+	  skip++;
+	  i--;
+	  break;
+	case 'M':	/* music - time, note, sharp */
+	case '\t':
+	  do_music(ib, staff, buf, l_p, &skip, i, f);
+	  i=STAFF;
+	  break;
+	case 'T':	/* text */
+	  if (i != STAFF) j = i;
+	  text_f ++;
+	  while ( i < STAFF ) staff[i++] = ' ';
+	  strncpy(i_text, &buf[++j + skip], sizeof(i_text));
+	  break;
+	case 'R':	/* rest */
+	  staff[1] = 'R';
+	  if (buf[i+skip + 1] == '\t')
+	    do_music(ib, staff, buf, l_p, &skip, i+1, f);
+	  if (buf[i + skip + 1] == '!') {
+	    staff[2] = '!';
+	    i=3;
+	  }
+	  else i=2;
+	  for(; i < STAFF; i++ ) staff[i] = ' ';
+	  break;
+	case '|':
+	  staff[i] = '|';
+	  //		  if (baroque) {
+	  if (buf[i+skip + 1] == '|') {
+	    skip++;
+	    staff[i] = 229;
+	  }
+	  //		  }
+	  break;
+	case '\\':	/* finger number */
+	  cc = buf[i + (++skip)]; /* we expect a number 1-4 */
+	  if (cc >='1' && cc <='4' ) {
+	    finger[i] = 140 + cc - '0';
+	    skip++;
+	    i--;
+	  }
+	  else {
+	    switch (cc) {
+	    case '.':
+	    case ':': /* infix .. */
+	      t_ornament[i] = cc;
+	      skip++;
+	      i--;
+	      break;
+	    case '*':
+	      finger[i] = '.';
+	      skip++;
+	      i--;
+	      break;
+	    case '?':
+	      finger[i] = 250;
+	      skip++;
+	      i--;
+	      break;
+	    case '+':
+	    case 'x':
+	      finger[i] = cc;
+	      skip++;
+	      i--;
+	      break;
+	    case '\\':
+	      staff[i] = cc;
+	      break;
+	    default:
+	      dbg3(Warning,
+		   "tab: getsystem: bad finger or \\ character %c at line %d of system %d\n",
+		   (void *)((int)cc),
+		   (void*)cur_line,
+		   (void*)f->cur_system);
+	      break;
+	    }
+	  }
+	  break;
+	default:
+	  break;
 	}
-	if (BARline) {
-	    BARline = 0;
-	    if (hushbar)
-	        Mstore( ib, l_p, (unsigned char *)"B!         ", f);
-	    else if (nocountbar)
-	      Mstore( ib, l_p, (unsigned char *)"BX         ", f);
+	/*  after ornaments */
+	if ((cc = buf[i + skip + 1]) == '&' ) {
+	  // printf("getsys.cc:line 757 got &\n");
+	  char ccc;
+	  cc = buf[i + (skip += 2)];
+	  if (cc == '*' ) cc = '.'; /* was Z */
+	  if (cc == '%' ) cc = ':'; /* was Z */
+		  
+	  // printf("HERE getsys.cc 764 i %d cc %c skip %d buf %s result %c\n", i, cc, skip, buf, buf[i+skip]);
+
+	  if (cc == ']') {
+	    ccc = buf[i + (skip += 1)];
+		    
+	    if ( ccc == 'v' )
+	      cc = (char)133;
+	    else if ( ccc == 'w' )
+	      cc = (char)134;
 	    else
-	        Mstore( ib ,l_p, (unsigned char *)"B-         ", f);
-	    hushbar =0;
-	    nocountbar=0;
+	      skip -= 1;
+	  }
+	  else if (cc == '<' && buf[i + skip + 1] == '!') {
+	    // printf("HERE getsys.cc 777 i %d skip %d buf %s\n", i, skip, buf);
+	    /* skip -= 3; Paul Overell Sept 1 2022 */
+	    cc = read_special_ornament (buf, &i, &skip);
+	  }
+	  else if (cc == '\n') {
+	    dbg2(Warning,
+		 "tab: getsystem: & with no character after it line %d sys %d\n",
+		 (void*)cur_line,
+		 (void*)f->cur_system);
+	    buf[i + (skip += 2)]= ' ';
+	    buf[i + (skip += 3)]= '\n';
+	    cc = ' ';
+	  }
+	  a_ornament[i] = cc;
+	}
+      }
+      for ( i=2; i< STAFF; i++)
+	if (finger[i] != ' ') {
+	  finger[0] = '^';
+	  Mstore( ib, l_p, finger, f);
+	  break;
+	}
+      for ( i=2; i< STAFF; i++)
+	if (ornament[i] != ' ') {
+	  ornament[0] = '+';
+	  Mstore( ib, l_p, ornament, f);
+	  break;
+	}
+      for ( i=2; i< STAFF; i++)
+	if (t_ornament[i] != ' ') {
+	  t_ornament[0] = ':';
+	  Mstore( ib, l_p, t_ornament, f);
+	  break;
+	}
+      Mstore( ib,l_p, staff, f);
 
+      for ( i=1; i< STAFF; i++) // was i=2 wbc sept 2015
+	//printf ("a_ornament at 740: %2d %c %s\n", i, a_ornament[i], a_ornament);
+	if ((i == 1 && a_ornament[i] != '-' )
+	    || a_ornament[i] != ' ') {
+
+	  a_ornament[0] = '&';
+	  //printf ("a_ornament at 744: %d %c %s\n", i, a_ornament[i], a_ornament);
+	  Mstore( ib, l_p, a_ornament, f);
+	  break;
 	}
-	if (Key) {
-	  //	  printf("getsys: cur_key is %c\n", cur_key);
-	        char b[13];
-		music[0] = 'G';
-		music[1] = ' ';
-		music[2] = ' ';
-		if (f->m_flags & TWOSTAFF ) {
-		  music[3] = '\0';
-		  music[4] = 'G';
-		  music[5] = ' ';
-		  music[6] = ' ';
-		}
-	        Mstore( ib ,l_p, (unsigned char *)"GM         ", f);
-		strcpy (b, "k");
-		strcat (b, &cur_key);
-		strcat (b, "         ");
-	        Mstore( ib ,l_p, (unsigned char *)b, f);
-		Key=0;
+      break;
+      /* repeat */
+      /* the next case is a duplicate of above, more of less */
+    case 'M':		/* music - time, note, sharp */
+      /* here is where we skip a tab */
+      if (buf[1] == '\t') {
+	skip++;
+
+      }
+      (void)do_music(ib, staff, buf, l_p, &skip, 0, f);
+      /* store here ? */
+      break;
+
+    case '.':		/* this does not acutally determine */
+      staff[0] = '.';	/* the number of dots printed */
+      if (buf[1] == 'X') staff[1] = 'X';
+      else if (buf[1] >= '1' && buf[1] <= '9') staff[1] = buf[1];
+      else staff[1] = '-';
+      staff[2] = staff[8] = ' ';
+      for (i=3; i < 8; i++)
+	staff[i] = 'Z';
+      for (;i < STAFF; i++)
+	staff[i] = ' ';
+      Mstore( ib,l_p, staff, f);
+      if ((c = buf[1]) == 'b' || c == '.') {
+	incr(buf);
+	goto start;
+      }
+      break;
+    case 'e':		/* don't do this on included files! */
+      if (!(f->flags & INCLUDE))
+	ib->PutByte('e'); ib->PutByte(NEWLINE);
+      free (l_p); /* memory leak */
+      return(END_OK);
+    case 'p':
+      ib->PutByte('p'); ib->PutByte(NEWLINE);
+      return(END_MORE);
+    case 'C':		/* a big C */
+      staff[0] = 'U';
+      staff[1] = '-';
+      for (i = 2 ;i < STAFF; i++) staff[i] = ' ';
+      Mstore( ib,l_p, staff, f);
+      break;
+    case 'c':		/* a big C with a line */
+      staff[0] = 'u';
+      for (i = 1 ;i < STAFF; i++) staff[i] = ' ';
+      Mstore( ib,l_p, staff, f);
+      break;
+    case '8':		/* 8va - octave */
+    case 'D':		/* da capo (D.C.)  */
+      staff[0] = c;
+      for (i = 1 ;i < STAFF; i++) staff[i] = ' ';
+      Mstore( ib,l_p, staff, f);
+      break;
+    case 'F':		/* a big 4 */
+      i=0;
+      while (buf[i] != '\0') {
+	ib->PutByte(buf[i++]);
+      }
+      break;
+      /*	  case 'T':	*/	/* a big 3 */
+    case 'm':		/* Mesangeau's tail */
+    case 'Q':		/* a tail */
+    case 'q':		/* a tail */
+    case 'V':		/* a hold */
+    case 'i':		/* indent as for barline, no barline */
+    case 'v':
+    case 'j':		// small indent
+    case 'f':		/* fine */
+      staff[0] = c;
+      for (i = 1 ;i < STAFF; i++) staff[i] = ' ';
+      Mstore( ib,l_p, staff, f);
+      break;
+    case '=':		/* W. = W */
+      staff[0] = c;
+      for (i = 1 ; buf[i] != NEWLINE && i < STAFF; i++) {
+	staff[i] = buf[i];
+      }
+      for (;i< STAFF; i++) staff[i] = ' ';
+      Mstore( ib,l_p, staff, f);
+      break;
+    case 'k':		/* key signature */
+      staff[0] = c;
+      staff[1] = buf[1];	/* a, d, g, f, b, e (flat)  */
+      cur_key = buf[1];
+      //	    printf("cur_key %c\n", cur_key);
+      for (i = 2 ;i < STAFF; i++) staff[i] = ' ';
+      Mstore( ib, l_p, staff, f);
+      break;
+    case '*':  // insert a letter here
+      staff[0] = c;
+      staff[1] = buf[1];
+      if ( buf[2] > 33) {   /* wbc jan 2025  */
+	staff[2] = buf[2];
+	for (i = 3 ;i < STAFF; i++) staff[i] = ' ';
+      }
+      else 
+	for (i = 2 ;i < STAFF; i++) staff[i] = ' ';
+      Mstore( ib, l_p, staff, f);
+      break;
+    case EOF:
+      return(0);
+    case '$':
+      {
+	int i, j=0;
+	char buffer[80];
+	char *bp;
+	bp = &buffer[0];
+	for (i=1; (c = buf[i]) != NEWLINE; i++) {
+	  *bp=c;
+	  bp++;
 	}
-	*fi->GetLine(buf, 100);
-	cur_line++;
-    } while (buf[0]);
+
+	buffer[--i] = 0;
+	if (setflag(f, buffer, first))
+	  break;		// return if we set the flag
+	ib->PutByte('$');
+	while (j < i && buffer[j] != '\0') {
+	  ib->PutByte(buffer[j++]);
+	}
+	ib->PutByte(NEWLINE);
+      }
+      break;
+    case '[':
+      staff[0] = c;
+      //	  if ( ! (f->m_flags & QUIET) )
+      //	    dbg0(Warning, "text in system not implemented\n");
+      for (i = 1 ;i < STAFF; i++) {
+	if (buf[i] == '\n' ) {
+	  staff[i] = ' ';
+	}
+	else if (buf[i] == '\0' ) {
+	  staff[i] = ' ';
+	}
+	else staff[i] = buf[i];
+      }
+      //	  staff[STAFF-1] = '\n';
+      Mstore( ib, l_p, staff, f);
+      break;
+    default:
+      if ( ! (f->m_flags & QUIET) )
+	dbg3(Warning,
+	     "getsystem: bad flag character %c in system %d chord %d\n",
+	     (void *)((int)c),
+	     (void*) f->cur_system,
+	     (void *)cur_chord);
+      break;
+    }
+  done:
+
+    if (barline) {
+      strcpy(b_tmp, "b");
+      barline = 0;
+	  
+      if (hushbar) {
+	// Mstore( ib, l_p, (unsigned char *)"b!         ", f);
+	strcat(b_tmp, "!");
+	hushbar =0;
+      }
+      if (tie) {
+	// Mstore( ib, l_p, (unsigned char *)"bT         ", f);
+	strcat(b_tmp, "T");
+	tie = 0;
+      }
+      if (dimline) {
+	// Mstore( ib, l_p, (unsigned char *)"bQ         ", f);
+	strcat(b_tmp, "Q");
+	dimline = 0;
+      }
+      if (nocountbar) {
+	// Mstore( ib, l_p, (unsigned char *)"bX         ", f);
+	strcat(b_tmp, "X");
+	nocountbar = 0;
+      }
+      if (nocountdimbar) {
+	// Mstore( ib, l_p, (unsigned char *)"bL         ", f);
+	strcat(b_tmp, "L");
+	nocountdimbar = 0;
+      }
+      if (orig) {
+	// Mstore( ib, l_p, (unsigned char *)  "bv         ", f);  // why the abc ??? wbc jan 2025
+	strcat(b_tmp, "v");
+	orig = 0;
+      }
+      if (Orig) {
+	// Mstore( ib, l_p, (unsigned char *)"bV         ", f);
+	strcat(b_tmp, "V");
+	Orig = 0;
+      }
+      if (barnum) {
+	char line[13];
+	strcpy (line, "b");
+	line[1] = barnum;
+	line[2] = '\0';
+	strcat (line, "         ");
+	Mstore ( ib, l_p, (unsigned char *)line, f);
+	barnum = 0;
+      }
+      if ((i = strlen(b_tmp)) == 1 )  {
+	strcat (b_tmp, "-");
+	// printf("i = %d\n", i);
+	// Mstore( ib,l_p, (unsigned char *)"b-         ", f);
+      }
+      i = strlen (b_tmp);
+      j = STAFF - i;
+      while (j--)
+	strcat (b_tmp, " ");
+      
+      // printf("getsys.cc: about to Mstore %sXX\n", b_tmp);
+      Mstore( ib,l_p, (unsigned char *) b_tmp, f);
+    }  // if barline
+    // }  // do at about line 50
+    
+    //	printf("getsys.cc: barline: %s\n", tmp);
+    
+    if (BARline) {
+      BARline = 0;
+      if (hushbar)
+	Mstore( ib, l_p, (unsigned char *)"B!         ", f);
+      else if (nocountbar)
+	Mstore( ib, l_p, (unsigned char *)"BX         ", f);
+      else
+	Mstore( ib ,l_p, (unsigned char *)"B-         ", f);
+      hushbar =0;
+      nocountbar=0;
+    }
+    
+    if (Key) {
+      //	  printf("getsys: cur_key is %c\n", cur_key);
+      char b[13];
+      music[0] = 'G';
+      music[1] = ' ';
+      music[2] = ' ';
+      if (f->m_flags & TWOSTAFF ) {
+	music[3] = '\0';
+	music[4] = 'G';
+	music[5] = ' ';
+	music[6] = ' ';
+      }
+      Mstore( ib ,l_p, (unsigned char *)"GM         ", f);
+      strcpy (b, "k");
+      strcat (b, &cur_key);
+      strcat (b, "         ");
+      Mstore( ib ,l_p, (unsigned char *)b, f);
+      Key=0;
+    }
+    *fi->GetLine(buf, 100);
+    cur_line++;
+  } while (buf[0]);
 
     return(4);
 }
 
+// This is Mstore - 
 void
 Mstore(i_buf *ib, int *l_p, unsigned char *staff, struct file_info *f)
 {
+  //
+  // Convert is here, regular non convert is below
+  //
+  //staff[13] = 0;
   int i;
 
   if ( f->flags & CONVERT
@@ -1086,11 +1117,11 @@ Mstore(i_buf *ib, int *l_p, unsigned char *staff, struct file_info *f)
     i = 2;
     if (f->flags & CONV_COR) i = 1;
     // if (f->m_flags & SPANISH) printf ("SPANISH\n");
-
+    
     for (; i < n_lines; i++) {
       int j = n_lines + 1 - i;
       unsigned char c = staff[j];
-
+      
       if ( tolower(c) >= 'a' && tolower(c) <= 'i') c = '0' + tolower(c) - 'a';
       else if ( c == '.' && staff[j-1] != ' ' && staff[j-1] != '-') {
 	staff[j-2] = c;
@@ -1150,7 +1181,9 @@ Mstore(i_buf *ib, int *l_p, unsigned char *staff, struct file_info *f)
       ib->PutByte (staff[i]);
   }
 
+
   else   /* not CONVERT */
+    // printf ("Mstore staff %s\n", staff );
     for  (i = 0 ; i < STAFF ; i++) {
       if ( staff[i] == 209 ) { // mac special double dash
 	staff[i]  = '-';

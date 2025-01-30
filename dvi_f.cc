@@ -70,7 +70,7 @@ struct file_info *f,		/* general flags, etc */
 struct list *l)			/* data */
 {
   unsigned int c;
-  int i=0, cc, ccc;
+  int i=0, jj, cc, ccc;
   int skip_spaces;		/* spaces to skip */
   static double last_move;	/* last interchar space, for post orn. */
   double staff_h = str_to_inch(staff_height);
@@ -87,7 +87,7 @@ struct list *l)			/* data */
   int font=0;
   double cap_dot_offset;
   int wide_note = 0;
-
+  char bar_args[14];
   if (l) ch = l->dat;
   else return;
 
@@ -100,6 +100,9 @@ struct list *l)			/* data */
   if (f->flags & MARKS ) p->put_rule(.1, .01);
 
   dbg1 (Inter, "dvi_f: ch %s\n", (void *)ch);
+
+  strcpy(bar_args, ch);
+  jj = strlen(bar_args);
 
   switch (c = (unsigned int)*ch) {
   case 'b':			/* barline */
@@ -122,8 +125,8 @@ struct list *l)			/* data */
     if (f->line_flag == ON_LINE)
       p->p_movev((int)(5.5 * i_space));
     else p->p_movev(6 * i_space);
-    if (ch[1] != '!') {
-      if (ch[1] == 'Q'  || ch[1] == 'L') {
+    if ( !strchr(bar_args, '!')) {
+      if (strchr(bar_args, 'Q')  || strchr(bar_args, 'L')) {
 	p->set_highlight();
 	if (f->m_flags & RED )
 	  p->red_highlight();
@@ -163,27 +166,42 @@ struct list *l)			/* data */
 		     + staff_h);
       }
     }
-    if (ch[1] == 'X' || ch[1] == 'L')  // L is no count, light bar
-      ;
-    else check_bar(p, j, l_p, l, f);
+    if (strchr(bar_args, 'X') || strchr(bar_args, 'L'))  // L is no count, light bar  X is no count
+      ;                                // check_bar counts the bar lines and 
+    else check_bar(p, j, l_p, l, f);   // prints the count if necassary
 
     //	printf ("dvi_f: measures %d ch %s\n", n_measures, ch);
 
-    if (ch[1] == 'T') {
+    // printf("dvi_f.cc: bar_args %s %d\n", bar_args, jj);
+    
+    // valid arguments to b are 
+    // T(tie)
+    // v a v above the staff for line breaks in original
+    // V a double v above the staff and below for line breaks in original
+    // Q(pale)
+    // !(don't print)
+    // X(doesn't count barline) with C or c)
+    // L(pale doesn't count with CC C or c)
+    // <number> print with number above barline
+
+    //    if (ch[1] == 'T') {
+    if (strchr (bar_args, 'T')) {
       p->push();
       p->moveh(-0.5 * f_a[0]->fnt->get_width(128));
       p->movev(-6.7 * d_i_space);
       p->put_a_char(128);
       p->pop();
     }
-    else if (ch[1] == 'v' || ch[1] == 'V') {
+    //    else if (ch[1] == 'v' || ch[1] == 'V') {
+    else if (strchr(bar_args, 'v') || strchr(bar_args, 'V')) {
       p->push();
       p->moveh(-0.5 * f_a[0]->fnt->get_width(9));
       p->movev(f_a[0]->fnt->get_height(9));
       p->put_a_char (9);
       p->movev(-5.5 * d_i_space);
       p->put_a_char (8);
-      if (ch[1] == 'V') {
+      //      if (ch[1] == 'V') {
+      if (strchr(bar_args, 'V')) {
 	p->movev(-0.4* d_i_space);
 	p->put_a_char (8);
       }
@@ -1360,11 +1378,14 @@ struct list *l)			/* data */
 	  skip_spaces = 0;
 	}
 	p->push();
-	p->moveh(-0.035);
+	if ( f->char_flag & ROB_CHAR )
+	  p->moveh(-0.011);
+	else
+	  p->moveh(-0.035);
 	p->movev(0.029);
 	p->put_a_char ('+');
-	p->movev(-0.057);
-	// printf ("HERE\n");
+	p->movev(-0.049);
+	p->moveh(-0.02);
 	p->put_a_char ('.');
 	p->pop();
 	break;
@@ -1934,7 +1955,6 @@ struct list *l)			/* data */
   else {
      p->moveh(l->space + l->padding);
   }    
-
 }
 
 #if defined WIN32
@@ -2241,7 +2261,7 @@ void check_bar(print * p, int j, int *l_p, struct list* l, struct file_info *f) 
     printf ("here END\n");
     return;
 }
-/* enc check_bar */
+/* end check_bar */
 
 void do_key_s( char ch[], print *p, font_list *f_a[], struct file_info *f)
 {

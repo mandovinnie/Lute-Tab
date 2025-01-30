@@ -127,29 +127,39 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
     base_sp = 0.02;
     rt = 1.28;
     b_init = 1;
-    
-    { /* this overrides the defaults assigned in the global inititalization above */
+
+    /* for Baroque tab */
+    /* this overrides the defaults assigned in the global inititalization above */
+    /* for one or more flages the width is based on the width of the flag character */
+    /* for no flage, half note, or whole note it is a guess */
+    {
       char * foo;
       int bf_num[8] = {int('B'),(int)'W',(int)'w',194,195,196,197,198};
       int i;
 
-      foo = (char *) malloc(45);
-      chart[2].width = foo;					/* w */
-      wp[2].width = (char *)malloc(45);
-      snprintf(wp[2].width, 1+sizeof(wp[2].width), "%.3f in", 1.2 * rt * rt * rt * base_sp);
-      wp[3].width = (char *)malloc(45);
-      snprintf(wp[3].width, 1+sizeof(wp[3].width), "%.3f in", (f_a[0]->fnt->get_width(bf_num[3])));/* 0 flags */
-      wp[4].width = (char *)malloc(45);
+      //  foo = (char *) malloc(45);
+      // chart[2].width = foo;
+      //
+      // wbc jan 2025 made corrections to half and quarter note
+      //
+      //      wp[1].width = (char *)malloc(45);    // wp1 is whole note
+      // snprintf(wp[1].width, 1+sizeof(wp[1].width), "%.3f in", /*1.2*/ 5.1 * rt * rt * rt * base_sp);
+      wp[2].width = (char *)malloc(45);    // wp2 is half note
+      snprintf(wp[2].width, 1+sizeof(wp[2].width), "%.3f in", /*1.2*/ 7.9 * rt * rt * rt * base_sp);
+      wp[3].width = (char *)malloc(45);    // wp3 is quarter note no flags
+      snprintf(wp[3].width, 1+sizeof(wp[3].width), "%.3f in", 3 * (f_a[0]->fnt->get_width(bf_num[3])));/* 0 flags */
+      wp[4].width = (char *)malloc(45);    // wp4 is one flag
       snprintf(wp[4].width, 1+sizeof(wp[4].width), "%.3f in", (f_a[0]->fnt->get_width(bf_num[4])));/* 1 flags */
-      wp[5].width = (char *)malloc(45);
+      wp[5].width = (char *)malloc(45);    // wp5 is two flags
       snprintf(wp[5].width, 1+sizeof(wp[5].width), "%.3f in", f_a[0]->fnt->get_width(bf_num[5]));  /* 2 flags */
-      wp[6].width = (char *)malloc(45);
+      wp[6].width = (char *)malloc(45);    // wp6 is three flags
       snprintf(wp[6].width, 1+sizeof(wp[6].width), "%.3f in", f_a[0]->fnt->get_width(bf_num[6]));  /* 3 flags */
     
       if (0) {
 	printf("pass1: init font widths \n");
 	for (i=0; i< 8; i++) {
-	  printf("%d %s  %f %f\n", i, chart[i].width,  chart[i].weight,
+	  printf("i %d width %9s weight %f  font 0 width %f\n",
+		 i, chart[i].width,  chart[i].weight,
 		 f_a[0]->fnt->get_width(bf_num[i]));
 	}
 	printf("\n");
@@ -205,6 +215,12 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  dbg0 ( Inter, "  r");
 	else if (dd == 's')
 	  dbg0 ( Inter, " //");
+	else if (dd == 'T')
+	  dbg0 ( Inter, "  T");
+	else if (dd == 'V')
+	  dbg0 ( Inter, "  V");
+	else if (dd == 'v')
+	  dbg0 ( Inter, "  v");
 	else if (dd == 222)
 	  dbg0 ( Inter, " +*");
 	else if (dd == 254)
@@ -449,17 +465,34 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       //	    if ( j == *l_p - 1)
       //			printf("dot at end\n");
     case 'b':  // I think this gets overridden below
-      l->padding = 0.0;
-      l->padding = str_to_inch(thick_bar);
       l->padding = str_to_inch(min_d_w);  // wbc jan 2025
-      // l->padding = str_to_inch("1 in" /*min_d_w*/);  // wbc jan 2025
+      // for measure numbers conflicting with bourdons
+      // only works for measure numbers at start of line
+      if (((bar_count && j == 0) || barCCount ) && l->next) {
+	if (l->next->dat[8] == 'a') {
+	  // printf("pass1.cc: next dat 8 %c\n", l->next->dat[8] );
+	  l->padding = 1.3 * str_to_inch(min_d_w);}
+	else if (l->next->dat[8] == 'r') {
+	  // printf("pass1.cc: next dat 8 %c\n", l->next->dat[8] );
+	  l->padding = 2.3 * str_to_inch(min_d_w);}
+	else if (l->next->dat[8] == 's') {
+	  // printf("pass1.cc: next dat 8 %c\n", l->next->dat[8] );
+	  l->padding = 2.3 * str_to_inch(min_d_w);}
+	else if (l->next->dat[8] == 't') {
+	  // printf("pass1.cc: next dat 8 %c\n", l->next->dat[8] );
+	  l->padding = 2.8 * str_to_inch(min_d_w);}
+      }
 
+
+      //      printf("pass1.cc: next dat 8 %c\n", l->next->dat[8] );
+      
     rest:
       if ( j == *l_p - 1) {
 	l->padding = 0.0;  // wbc jan 2025  
 	weight = W_NONE;
       }
-      else if ((j == *l_p - 2) && l->next && (l->next->dat[0] == '*')) {   /* wbc jan 2025 for a letter * at the very end */
+      else if ((j == *l_p - 2) && l->next && (l->next->dat[0] == '*')) {
+	/* wbc jan 2025 for a letter * at the very end */
 	l->padding = 0.0;  // wbc jan 2025  
 	weight = W_NONE;
       }
@@ -481,12 +514,15 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       }
       else if (strchr("bB.Ai", l->next->dat[0])) { 
 	//  this overrides what was set above when followed by a barline
-	l->padding = str_to_inch(min_d_w); /* wbc was += */
+	if (l->dat[0] != '*')
+	  l->padding = str_to_inch(min_d_w); /* wbc was += */ //wbc jan 2025
 	weight = W_NONE;		/* no expansion */
       }
       else if (strchr("bB.Ai", l->dat[0])) {  /// wbc jan 2025
-	if (j == *l_p - 2)
+	if (j == *l_p - 2 && (l->next->dat[0] == '*'))
 	  l->padding = 0;
+	else if (l->next->dat[0] == '*')
+	  l->padding = str_to_inch(min_d_w);
 	else 
 	  l->padding += 0.6 * str_to_inch(min_d_w);}
       else {		        /* expansion - presumably notes here*/
@@ -497,13 +533,6 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 /*
  *  padding for bar lines barlines measures counting only here !!! 
  */
-//	if (!(l->prev && l->prev->dat[0] == '*'
-//	      && l->prev->prev && (l->prev->prev->dat[0] ==  'b' ))) { /* wbc jan 2025  line 495*/
-	  //  this overrides what was set above
-	  //	  printf (" here pass1.cc: 494\n");
-	//	  l->padding = str_to_inch(min_d_w); /* wbc was += */
-	//	  weight = W_NONE;		/* no expansion */
-	//	}
 
 	/* all the following code does is to count bar lines barline measures */
 	/* to compensate when a bourdon is next to a bar number */
@@ -519,7 +548,7 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	printf ("j %d l_p %d  \n", j, *l_p );
 	  */
 	if (*ch == 'b') {
-	  // printf(" pass1.cc  488 here ch %c l->dat[1] %s nxt %c next->next %c\n", *ch, l->dat, *nxt, l->next->next->dat[0]);
+  // printf(" pass1.cc  488 here ch %c l->dat[1] %s nxt %c next->next %c\n", *ch, l->dat, *nxt, l->next->next->dat[0]);
 	      if (*nxt == '*') {
 	      if ( l->next->next && (l->next->next->dat[0] ==  'b')) {
 		//printf(" pass1.cc  491 here nxt %c next->next %c\n", *nxt, l->next->next->dat[0]);
@@ -881,6 +910,8 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       weight = W_ONE;
       break;
     case '*':
+      if (d[1] == 32)
+	printf ("pass1: you need a value afer a star\n");
       l->padding = f_a[2]->fnt->get_width(d[1]);
       l->padding = 0.0;
       weight = /* W_TWO */ /* 0.01 */ 0.0;
@@ -1061,17 +1092,16 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
   l = ll;
 
   if ( 1 ||  !(f->flags & NO_WORD)){
+    double t_total=0.0;
     for ( j=0; j < (*l_p) && l; j++ ) {
-
       if (l->text)
 	total_width += text_check(l, (*l_p) - j - 1, &total_weight,
 				  l->text->words->in_sys, 1);
-
       if (l->text2)
 	total_width += text_check(l, (*l_p) - j - 1, &total_weight,
 				  l->text2->words->in_sys, 2);
-
-#ifndef MAC
+      t_total += l->padding;
+      
       if (f->flags & VERBOSE)
 	fprintf(stderr,
 		"tab: pass1: j %2d *l_p %d c %c width (padding) %f total width %f weight %f\n",
@@ -1081,7 +1111,6 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 		l->padding,
 		total_width,
 		l->weight);
-#endif /* MAC */
       l = l->next;
     }
   }
