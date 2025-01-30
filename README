@@ -80,8 +80,8 @@ Options:
        M. Board and other english writers.
     -count_dots	- count dots as barline for measure numbering
     -c prints measure numbers only at the start of a line
-    -CC prints every measure number below the staff.
     -C prints every fifth measure number below the staff.
+    -CC prints every measure number below the staff.
     -compressStaff sets interspace to 9.0 pt and m_space to 0.068 which makes things tighter
     -dvi output in dvi format to out.dvi
          this depensd on you installing the GNU gs postscript processing command in the right place.
@@ -254,6 +254,8 @@ start of line:
 A		- first, second repeats in modern style (Another)
 		  number is second char on line.
 b		- barline
+           in most cases you can add several letters after a b to do more
+           than one thing.
 bT		- a barline with a tie
 b!		- don't print this barline
 bv		- a v above the staff, indicating page breaks in orig
@@ -261,7 +263,7 @@ bV		- two v's
 b2, b3	- a barline with a number, 1 - 9, above it
 bQ              - a pale bar
 bX		- a bar line that does not count with -C or -c
-bL	 	- a pale bar that does not count witn -C -c or -CC
+bL	 	- a pale bar that does not count with -C -c or -CC
 B		- a very thick barline (when followed by newline or !)
 B		- a breve (when followed by notes)
 bb 		- two barlines
