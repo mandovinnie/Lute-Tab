@@ -48,11 +48,11 @@ void set_C(const char *value, struct file_info *f)  { // every 5
   bar_count = 0;
   barCCount = 0;
   barCount  = 1; }
-void set_c(const char *value, struct file_info *f)  { //start of line
+void set_c(const char *value, struct file_info *f)  { // start of line
   barCount  = 0;
   barCCount = 0;
   bar_count = 1; }
-void set_CC(const char *value, struct file_info *f) { every bar
+void set_CC(const char *value, struct file_info *f) { // every bar
   bar_count = 0;
   barCCount = 1;
   barCount  = 0;}
