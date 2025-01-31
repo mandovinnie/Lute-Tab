@@ -85,6 +85,7 @@ public:
   void comment(const char *string);
   void set_slur_depth(double depth);
   double get_slur_depth();
+  void perfect();
 };
 #endif /* _PS_PRINT_ */
 

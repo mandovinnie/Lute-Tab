@@ -925,14 +925,18 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
       Mstore( ib, l_p, staff, f);
       break;
     case '*':  // insert a letter here
-      staff[0] = c;
-      staff[1] = buf[1];
-      if ( buf[2] > 33) {   /* wbc jan 2025  */
-	staff[2] = buf[2];
-	for (i = 3 ;i < STAFF; i++) staff[i] = ' ';
+      {
+	int i;
+	staff[0] = c;
+	staff[1] = buf[1];
+	//      if ( buf[2] > 33) {   /* wbc jan 2025  */
+	for (i = 2; i < 6 && buf[i] > 33; i++) {
+	  staff[i] = buf[i];
+	}
+	for (i ;i < STAFF; i++) staff[i] = ' ';
+	//	else 
+	// for (i = 2 ;i < STAFF; i++) staff[i] = ' ';
       }
-      else 
-	for (i = 2 ;i < STAFF; i++) staff[i] = ' ';
       Mstore( ib, l_p, staff, f);
       break;
     case EOF:

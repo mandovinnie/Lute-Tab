@@ -625,6 +625,17 @@ void ps_print::make_ps_font(i_buf *ps_header)
     ps_header->PutString("/y2 y1 def /x3 x3 delta 3 mul add def\n");
     ps_header->PutString("x1 y1 x2 y2 x3 y3 curveto stroke grestore } def\n");
     ps_header->PutString("\n");
+    /* do tempus perfectum perfect */  /* wbc jam 2025 */
+    ps_header->PutString("/dotempusperfectum { 3.0 /diameter exch def\n");
+    ps_header->PutString("gsave\n");
+    ps_header->PutString("currentpoint   9 0 360 arc stroke\n");
+    ps_header->PutString("grestore } def\n");
+    /* do tempus imperfectum */
+    ps_header->PutString("/dotempusimperfectum { \n");
+    ps_header->PutString("gsave\n");
+    ps_header->PutString("currentpoint   9 0 360 arc stroke\n");
+    ps_header->PutString("grestore } def\n");
+    
 //    ps_header->PutString("%%%%end of header\n");
 }
 void ps_print::p_movev(const int ver)
@@ -950,6 +961,11 @@ dbg0(Error, "Undefined Proceedure Define font\n");}
 void ps_print::vert_curve(int len)
 {
     ps_command(PVCURVE, len, 0, 0, 0);
+}
+
+void ps_print::perfect()
+{
+  ps_command(PERFECT, 0, 0, 0, 0);
 }
 
 void ps_print::push()
@@ -1294,6 +1310,9 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     printf("\n");
     pr_out->PutF(d_to_p(hh), places);  // depth of the curve 0 is a straight line
     pr_out->PutString("uslur\n");
+    break;
+  case PERFECT:
+    pr_out->PutString("dotempusperfectum\n");
     break;
   case PDRAFT:
     pr_out->PutString("gsave\n");

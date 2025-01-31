@@ -170,7 +170,7 @@ struct list *l)			/* data */
       ;                                // check_bar counts the bar lines and 
     else check_bar(p, j, l_p, l, f);   // prints the count if necassary
 
-    //	printf ("dvi_f: measures %d ch %s\n", n_measures, ch);
+    // printf ("dvi_f: measures %d ch %s\n", n_measures, ch);
 
     // printf("dvi_f.cc: bar_args %s %d\n", bar_args, jj);
     
@@ -350,7 +350,15 @@ struct list *l)			/* data */
      * and has numbers, so it doesn't work for baroque
      */
   case 'v':
-    //      printf("v here\n");
+    /*
+    printf("v here\n");
+    p->set_a_char ('U');
+    p->set_a_char (19);
+    p->set_a_char (015);
+    p->set_a_char ('u');
+    p->set_a_char (20);
+    p->set_a_char (020);
+    */
     if (! baroque ) {
       p->push();
       p->moveh(-0.5 * f_a[0]->fnt->get_width(9));
@@ -406,7 +414,7 @@ struct list *l)			/* data */
     if (f->flags & NOTES ) {
 
 //      if (f->line_flag == ON_LINE) p->movev( -5.5 * d_i_space);
-	if (f->line_flag == ON_LINE) p->movev( -.5 * d_i_space);
+      if (f->line_flag == ON_LINE) p->movev( -.5 * d_i_space);
 // 2019      else p->movev ( -6.0 * d_i_space);     /* to top of staff */
 
       if (f->flags & FIVE) {
@@ -449,12 +457,12 @@ struct list *l)			/* data */
 		   + staff_h);
     }
     break;
-  case 'U':
-  case 'u':
-  case 'R':
-  case 'S':
+  case 'U':  // doesn't get past virus check
+  case 'u':  // doesn't get past virus check
+  case 'R':  // A rest 
+  case 'S':  // not sure what this does
     /*      case 'T':  this is now for text */
-  case 'V':
+  case 'V':  // not sure
     if (f->flags & NOTES) {
       p->push();
 
@@ -744,18 +752,24 @@ struct list *l)			/* data */
 // printf ("height of %c is %f\n", ch[1], f_a[2]->fnt->get_height(ch[1]));
     p->push();
     p->use_font(2);
-    p->movev(-f_a[0]->fnt->get_height(f->flag_flag == ITAL_FLAGS ? 217 : 195));
-    // p->movev(-0.223);
-    p->movev(-1.0 * str_to_inch(flag_to_staff));
-    p->movev(1 * f_a[2]->fnt->get_height(ch[1])); // wbc jan 2025
-    p->movev(str_to_inch("0.5 mm"));
-    p->moveh(-1 * str_to_inch(min_d_w)); 
-    if (l->prev) 
-       p->moveh  ( -1.0 * (l->prev->space + l->prev->padding));
-    p->put_a_char(ch[1]);
-    if (ch[2] > ' ') 
-       p->moveh (f_a[2]->fnt->get_height(ch[1]));
-       p->put_a_char(ch[2]);
+    {
+      int ii;
+      p->movev(-f_a[0]->fnt->get_height(f->flag_flag == ITAL_FLAGS ? 217 : 195));
+      // p->movev(-0.223);
+      p->movev(-1.0 * str_to_inch(flag_to_staff));
+      p->movev(1 * f_a[2]->fnt->get_height(ch[1])); // wbc jan 2025
+      p->movev(str_to_inch("0.5 mm"));
+      p->moveh(-1 * str_to_inch(min_d_w)); 
+      if (l->prev) 
+	p->moveh  ( -1.0 * (l->prev->space + l->prev->padding));
+      p->put_a_char(ch[1]);
+      for (ii = 2; ii < 6; ii++) {
+	if (ch[ii] > ' ') {
+	  p->moveh (f_a[2]->fnt->get_width(ch[ii-1]));
+	  p->put_a_char(ch[ii]);
+	}
+      }
+    }
     p->use_font(0);
     p->pop();
     break;
@@ -1631,7 +1645,7 @@ struct list *l)			/* data */
 	  if (f->line_flag == ON_LINE)
 	    p->movev (italian_offset);
 	  if (cc == 'u') p->put_a_char(248);
-	  else p->put_a_char (249);
+	  else p->put_a_char(249);
 	  p->pop();
 	}
 	else if (cc == '.') {
@@ -2340,9 +2354,20 @@ fin:
     return;
 }
 
+/* we come here after a leading G on the processed tab line */
+// 'U' a C time signature
+// 'u':  // a C with a bar through it
+// 'R':  // a big number 2
+// 'S':  // a big number 4
+// 'T':  // a big number 3
+// 'V':  // a big number 5
+// 'P':  // a big number 6
+// O - a circle with a line like Narvaez
+// o - a 3/4 circle with a line like Narvaez
+// 161 (decimal) tempus perfectus O
+// 162 (dec)     tempus imperfectus
 void do_time_sig( char ch[], int j, int font,
 		  print *p, font_list *f_a[], struct file_info *f)
-
 {
     int i;
     double d_i_space = str_to_inch(interspace);
@@ -2586,7 +2611,18 @@ void do_time_sig( char ch[], int j, int font,
 	  else if (ch[1] == 'o' ) p->put_a_char(17); // special o cut time signature
 	  p->pop();
 	}
-	else {
+	if (ch[1] == 'I' || ch[1] == 'i' ) { /* wbc jan 2025 */
+	  p->push();
+	  p->movev(-1.13 * d_i_space);
+	    if (ch[1] == 'I' )
+	      p->perfect();
+	    else p->perfect();
+	  p->pop();
+	}
+	//if ((unsigned char)ch[1] == 161) {
+	//p->perfect();
+	//}
+	else {  // print whatever character we are given
 	  p->push();
 	  if (f->line_flag == ON_LINE)
 	    p->movev( -.012  - 0.50  * d_i_space );
