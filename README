@@ -331,6 +331,7 @@ S		- a time signature - ie S3-4 or SC
 		  a single digit followed by Q is highlighted
 		  SO and So do Narvaez style time sig
 		  S0  (that is a zero) gives  the O for perfect time
+		  SI and Si gives a circle for perfect and imperfect time
 T		- text to go on system lines  (a tab gives a second line)
 t 		- first note of a triplet, followed by the
 		  followed by the number of lines there would be

@@ -625,15 +625,64 @@ void ps_print::make_ps_font(i_buf *ps_header)
     ps_header->PutString("/y2 y1 def /x3 x3 delta 3 mul add def\n");
     ps_header->PutString("x1 y1 x2 y2 x3 y3 curveto stroke grestore } def\n");
     ps_header->PutString("\n");
-    /* do tempus perfectum perfect */  /* wbc jam 2025 */
-    ps_header->PutString("/dotempusperfectum { 3.0 /diameter exch def\n");
+    /*
+      /radius 50 def
+      /radius2 radius 3 sub def
+      /delta 57 def
+      currentpoint /y0 exch def /x0 exch def
+      /y1 y0 radius2 add def
+      /y2 y0 radius2 sub def
+      /x1 x0 delta add def
+      /x2 x0 delta sub def
+      
+      newpath
+      x0 y0 radius 90 270 arc 
+      x0 y2 moveto
+      x2 y2 x2 y1 x0 y1 curveto fill
+      
+      x0 y0 moveto
+      newpath
+      x0 y0 radius 270 90 arc       
+      x0 y1 moveto 
+      x1 y1 x1 y2 x0 y2 curveto fill
+
+      newpath
+      x0 y0 radius 8 div 0 360 arc fill
+    */
+    /* x y angle 1 angle2 radius arc */
+    /* do tempus perfectum perfect */  /* wbc jam 2026 */
+    ps_header->PutString("/dotempusperfectum { \n");
     ps_header->PutString("gsave\n");
-    ps_header->PutString("currentpoint   9 0 360 arc stroke\n");
+    ps_header->PutString("1.2 setlinewidth \n");
+    ps_header->PutString("/radius 10 def /radius2 radius 0.9 sub def /delta 10 def \n");
+    ps_header->PutString("currentpoint /y0 exch def /x0 exch def \n");
+    ps_header->PutString("/y1 y0 radius2 add def /y2 y0 radius2 sub def /x1 x0 delta add def /x2 x0 delta sub def \n");
+    ps_header->PutString("/x1 x0 delta add def /x2 x0 delta sub def \n");
+    ps_header->PutString("newpath x0 y0 radius 90 270 arc x0 y2 moveto x2 y2 x2 y1 x0 y1 curveto fill\n");
+    ps_header->PutString("x0 y0 moveto newpath x0 y0 radius 270 90 arc x0 y1 moveto x1 y1 x1 y2 x0 y2 curveto fill\n");
+    ps_header->PutString("x0 y0 2 0 365 arc fill\n");    
+    //    ps_header->PutString("currentpoint newpath 2 copy  9 0 360 arc stroke 2 0 365 arc fill\n");
     ps_header->PutString("grestore } def\n");
-    /* do tempus imperfectum */
+
+    /* do tempus imperfectum needs a dot in the middle */
     ps_header->PutString("/dotempusimperfectum { \n");
     ps_header->PutString("gsave\n");
-    ps_header->PutString("currentpoint   9 0 360 arc stroke\n");
+    ps_header->PutString("1.0 setlinewidth \n");
+    ps_header->PutString("/radius 10 def /radius2 radius 0.9 sub def /delta 10 def \n");
+    ps_header->PutString("currentpoint /y0 exch def /x0 exch def \n");
+    ps_header->PutString("/y1 y0 radius2 add def /y2 y0 radius2 sub def /x1 x0 delta add def /x2 x0 delta sub def \n");
+    ps_header->PutString("/x1 x0 delta add def /x2 x0 delta sub def \n");
+    ps_header->PutString("newpath x0 y0 radius 90 270 arc x0 y2 moveto x2 y2 x2 y1 x0 y1 curveto fill\n");
+    //ps_header->PutString("x0 y0 moveto newpath x0 y0 radius 270 90 arc x0 y1 moveto x1 y1 x1 y2 x0 y2 curveto fill\n");
+    /* ps_header->PutString("currentpoint newpath \n"); */ // we need to make x y  into x y x y
+    /* ps_header->PutString("2 copy 2 copy \n"); */
+    ps_header->PutString("x0 y0 radius 0.6 sub 55 90 arc stroke\n"); 
+    ps_header->PutString("x0 y0 2 add radius 2.5 sub 50 90 arc stroke\n");
+    ps_header->PutString("x0 y0 radius 0.6 sub 270 305 arc stroke\n");
+    ps_header->PutString("x0 y0 2 sub radius 2.5 sub 270 310 arc stroke\n");
+    //ps_header->PutString("2 0 365 arc fill\n");
+    
+    ps_header->PutString("x0 y0 2 0 365 arc fill\n");    
     ps_header->PutString("grestore } def\n");
     
 //    ps_header->PutString("%%%%end of header\n");
@@ -966,6 +1015,10 @@ void ps_print::vert_curve(int len)
 void ps_print::perfect()
 {
   ps_command(PERFECT, 0, 0, 0, 0);
+}
+void ps_print::imperfect()
+{
+  ps_command(IMPERFECT, 0, 0, 0, 0);
 }
 
 void ps_print::push()
@@ -1313,6 +1366,9 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     break;
   case PERFECT:
     pr_out->PutString("dotempusperfectum\n");
+    break;
+  case IMPERFECT:
+    pr_out->PutString("dotempusimperfectum\n");
     break;
   case PDRAFT:
     pr_out->PutString("gsave\n");

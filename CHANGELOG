@@ -2,6 +2,9 @@ VERSION "4.3.107"
 updated the date
 a few corrections to comments
 modified the barCount function to not number bar 1 when the piece starts with double barlines
+Added perfectum time signatures SI Si
+the * bar numbering system now takes  up to 5 characters
+Changed spacing between ornaments and characters, especially d, with Robinson fonts
 
 VERSION "4.3.106"
 changed the -pdf option to exec the gs command with options, including one to specify 

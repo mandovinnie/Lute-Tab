@@ -2616,12 +2616,10 @@ void do_time_sig( char ch[], int j, int font,
 	  p->movev(-1.13 * d_i_space);
 	    if (ch[1] == 'I' )
 	      p->perfect();
-	    else p->perfect();
+	    else
+	      p->imperfect();
 	  p->pop();
 	}
-	//if ((unsigned char)ch[1] == 161) {
-	//p->perfect();
-	//}
 	else {  // print whatever character we are given
 	  p->push();
 	  if (f->line_flag == ON_LINE)
