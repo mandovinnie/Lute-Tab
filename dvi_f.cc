@@ -2364,8 +2364,8 @@ fin:
 // 'P':  // a big number 6
 // O - a circle with a line like Narvaez
 // o - a 3/4 circle with a line like Narvaez
-// 161 (decimal) tempus perfectus O
-// 162 (dec)     tempus imperfectus
+// I (decimal) tempus perfectus O
+// i (dec)     tempus imperfectus
 void do_time_sig( char ch[], int j, int font,
 		  print *p, font_list *f_a[], struct file_info *f)
 {

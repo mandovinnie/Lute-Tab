@@ -222,7 +222,8 @@ struct list {
 
  #define MOD_NOTES              0X4000
  #define ITAL_NOTES             0X8000
-
+ 
+ #define PERFECTUM             0x10000
  /* more flags f->m_flags */
  #define NO_AUTO_END            0x0001
  #define DPI1200                0x0002

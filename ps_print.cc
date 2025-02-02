@@ -654,35 +654,67 @@ void ps_print::make_ps_font(i_buf *ps_header)
     ps_header->PutString("/dotempusperfectum { \n");
     ps_header->PutString("gsave\n");
     ps_header->PutString("1.2 setlinewidth \n");
-    ps_header->PutString("/radius 10 def /radius2 radius 0.9 sub def /delta 10 def \n");
     ps_header->PutString("currentpoint /y0 exch def /x0 exch def \n");
-    ps_header->PutString("/y1 y0 radius2 add def /y2 y0 radius2 sub def /x1 x0 delta add def /x2 x0 delta sub def \n");
-    ps_header->PutString("/x1 x0 delta add def /x2 x0 delta sub def \n");
-    ps_header->PutString("newpath x0 y0 radius 90 270 arc x0 y2 moveto x2 y2 x2 y1 x0 y1 curveto fill\n");
-    ps_header->PutString("x0 y0 moveto newpath x0 y0 radius 270 90 arc x0 y1 moveto x1 y1 x1 y2 x0 y2 curveto fill\n");
-    ps_header->PutString("x0 y0 2 0 365 arc fill\n");    
-    //    ps_header->PutString("currentpoint newpath 2 copy  9 0 360 arc stroke 2 0 365 arc fill\n");
+    if (f_i->flag_flag & PERFECTUM) {
+        ps_header->PutString("/radius 7.5 def /radius2 radius 0.9 sub def /delta 7.5 def \n");
+	ps_header->PutString("/y1 y0 radius2 add def /y2 y0 radius2 sub def /x1 x0 delta add def /x2 x0 delta sub def \n");
+	ps_header->PutString("/x1 x0 delta add def /x2 x0 delta sub def\n");
+	ps_header->PutString("% left side\n");
+	ps_header->PutString("newpath x0 y2 moveto x2 y2 x2 y1 x0 y1 curveto x0 y0 radius 90 270 arc closepath fill\n");
+	ps_header->PutString("% right side\n");
+	ps_header->PutString("newpath x0 y1 moveto x1 y1 x1 y2 x0 y2 curveto x0 y0 radius 270 90 arc fill \n");
+	ps_header->PutString("newpath x0 y0 1.5 0 365 arc fill\n");
+      /*
+	ps_header->PutString("/radius 10 def /radius2 radius 0.9 sub def /delta 10 def \n");
+	ps_header->PutString("/y1 y0 radius2 add def /y2 y0 radius2 sub def /x1 x0 delta add def /x2 x0 delta sub def \n");
+	ps_header->PutString("/x1 x0 delta add def /x2 x0 delta sub def \n");
+	ps_header->PutString("newpath x0 y0 radius 90 270 arc x0 y2 moveto x2 y2 x2 y1 x0 y1 curveto fill\n");
+	ps_header->PutString("x0 y0 moveto newpath x0 y0 radius 270 90 arc x0 y1 moveto x1 y1 x1 y2 x0 y2 curveto fill\n");
+      */
+    }
+    else {
+      ps_header->PutString("currentpoint newpath 2 copy  7 0 360 arc stroke 1.5 0 365 arc fill\n");
+    }
     ps_header->PutString("grestore } def\n");
 
     /* do tempus imperfectum needs a dot in the middle */
     ps_header->PutString("/dotempusimperfectum { \n");
     ps_header->PutString("gsave\n");
-    ps_header->PutString("1.0 setlinewidth \n");
-    ps_header->PutString("/radius 10 def /radius2 radius 0.9 sub def /delta 10 def \n");
     ps_header->PutString("currentpoint /y0 exch def /x0 exch def \n");
-    ps_header->PutString("/y1 y0 radius2 add def /y2 y0 radius2 sub def /x1 x0 delta add def /x2 x0 delta sub def \n");
-    ps_header->PutString("/x1 x0 delta add def /x2 x0 delta sub def \n");
-    ps_header->PutString("newpath x0 y0 radius 90 270 arc x0 y2 moveto x2 y2 x2 y1 x0 y1 curveto fill\n");
-    //ps_header->PutString("x0 y0 moveto newpath x0 y0 radius 270 90 arc x0 y1 moveto x1 y1 x1 y2 x0 y2 curveto fill\n");
-    /* ps_header->PutString("currentpoint newpath \n"); */ // we need to make x y  into x y x y
-    /* ps_header->PutString("2 copy 2 copy \n"); */
-    ps_header->PutString("x0 y0 radius 0.6 sub 55 90 arc stroke\n"); 
-    ps_header->PutString("x0 y0 2 add radius 2.5 sub 50 90 arc stroke\n");
-    ps_header->PutString("x0 y0 radius 0.6 sub 270 305 arc stroke\n");
-    ps_header->PutString("x0 y0 2 sub radius 2.5 sub 270 310 arc stroke\n");
-    //ps_header->PutString("2 0 365 arc fill\n");
-    
-    ps_header->PutString("x0 y0 2 0 365 arc fill\n");    
+    if (f_i->flag_flag & PERFECTUM) {
+      ps_header->PutString("/radius 7.5 def /radius2 radius 0.9 sub def /delta 7.5 def \n");
+      ps_header->PutString("/y1 y0 radius2 add def /y2 y0 radius2 sub def /x1 x0 delta add def /x2 x0 delta sub def \n");
+      ps_header->PutString("/x1 x0 delta add def /x2 x0 delta sub def \n");
+      ps_header->PutString("% left side \n");
+      ps_header->PutString("newpath x0 y2 moveto x2 y2 x2 y1 x0 y1 curveto x0 y0 radius 90 270 arc closepath fill\n");
+      ps_header->PutString("% right side \n");
+      ps_header->PutString("x0 y0 radius 0.6 sub 55 90 arc stroke\n");
+      ps_header->PutString("x0 y0 2 add radius 2.5 sub 50 90 arc stroke\n");
+      ps_header->PutString("x0 y0 radius 0.6 sub 270 305 arc stroke\n");
+      ps_header->PutString("x0 y0 2 sub radius 2.5 sub 270 310 arc stroke\n");
+      ps_header->PutString("newpath x0 y0 1.5 0 365 arc fill\n");
+      /*      
+	      currentpoint /y0 exch def /x0 exch def 
+	      ps_header->PutString("1.0 setlinewidth \n");
+	      ps_header->PutString("/radius 10 def /radius2 radius 0.9 sub def /delta 10 def \n");
+	      ps_header->PutString("/y1 y0 radius2 add def /y2 y0 radius2 sub def /x1 x0 delta add def /x2 x0 delta sub def \n");
+	      ps_header->PutString("/x1 x0 delta add def /x2 x0 delta sub def \n");
+	      ps_header->PutString("newpath x0 y0 radius 90 270 arc x0 y2 moveto x2 y2 x2 y1 x0 y1 curveto fill\n");
+	      ps_header->PutString("x0 y0 radius 0.6 sub 55 90 arc stroke\n"); 
+	      ps_header->PutString("x0 y0 2 add radius 2.5 sub 50 90 arc stroke\n");
+	      ps_header->PutString("x0 y0 radius 0.6 sub 270 305 arc stroke\n");
+	      ps_header->PutString("x0 y0 2 sub radius 2.5 sub 270 310 arc stroke\n");
+	      //ps_header->PutString("x0 y0 moveto newpath x0 y0 radius 270 90 arc x0 y1 moveto x1 y1 x1 y2 x0 y2 curveto fill\n");
+	      */
+    }
+    else {
+      ps_header->PutString("1.2 setlinewidth \n");
+      ps_header->PutString("currentpoint newpath \n"); // we need to make x y  into x y x y
+      ps_header->PutString("2 copy 2 copy \n"); 
+      ps_header->PutString("7 55 305 arc stroke 1.5 0 360 arc fill\n");
+      // ps_header->PutString("1 0 365 arc fill\n");
+      //ps_header->PutString("newpath x0 y0 1.5 0 365 arc fill\n");    
+    }
     ps_header->PutString("grestore } def\n");
     
 //    ps_header->PutString("%%%%end of header\n");

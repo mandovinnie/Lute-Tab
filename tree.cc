@@ -553,6 +553,12 @@ void set_slur_depth(const char *value, struct file_info *f)
   f->slur_depth =  atof(value);
 }
 
+void set_perfectum(const char *value, struct file_info *f)
+{
+  f->flag_flag  |= PERFECTUM;
+  printf("HERE\n");
+}
+
 /*
 void setit(void *r, const char *flag, struct file_info *f)
 {
@@ -606,6 +612,7 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {(char*)"barnumberfont", (void *)set_bar_number_font},
     {(char*)"first_bar", (void*) set_first_bar},
     {(char*)"slur_depth", (void*) set_slur_depth},
+    {(char*)"perfectum", (void*) set_perfectum},    
     {0,0}
   };
 
@@ -643,6 +650,7 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {(char*)"barnumberfont", (void *)first},
     {(char*)"first_bar", (void*)first},
     {(char*)"slur_depth", (void*)first},
+    {(char*)"perfectum", (void*)second},
     {0,0}
   };
 
