@@ -101,6 +101,8 @@ class pdf_print : public print {
     int pdf_top() { return (pdf_top_of_page);}
     int get_page_number() {return (npages);}
     void comment(const char *string);
+    void perfect();
+    void imperfect();
 };
 
 struct xref_entry {

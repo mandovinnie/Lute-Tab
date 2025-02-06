@@ -71,6 +71,8 @@ private:
     void push()  { slp(sp, stack_h, stack_v); sp++; }
     void pop()   { sp--; glp(sp, stack_h, stack_v); }
     void comment(const char *string);
+    void perfect();
+    void imperfect();
 };
 #endif /* _DVI_PRINT_ */
 

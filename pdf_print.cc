@@ -1390,4 +1390,6 @@ unsigned int pdf_print::do_text_stream(i_buf *i_b,  struct font_list *f_a[],
 // we don't need this anymore, I hope
 void pdf_print::print_stream() {
 }
+void pdf_print::perfect() {}
+void pdf_print::imperfect() {}
 

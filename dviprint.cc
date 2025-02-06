@@ -568,3 +568,11 @@ void dvi_print::comment(const char *string)
 {
   //    char c = string[0];
 }
+void dvi_print::perfect()
+{
+  //    char c = string[0];
+}
+void dvi_print::imperfect()
+{
+  //    char c = string[0];
+}
