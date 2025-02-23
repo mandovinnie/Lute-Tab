@@ -105,6 +105,8 @@ class print {
     virtual int ps_top() { return( 0);}
     virtual int get_page_number()= 0;
     virtual void comment(const char *string) = 0;
+    virtual void perfect() = 0;
+    virtual void imperfect() = 0;
     void set_highlight() { highlight = On;}
     void clear_highlight() { highlight = Off;}
     void gray_highlight() { highlight_type = Gray;}

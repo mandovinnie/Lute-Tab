@@ -43,5 +43,11 @@
 #define PHRTIE  0x0034
 #define P_S_RED 0x0035
 #define P_U_RED 0x0036
+#define PWTIE   0x0037
+#define NTIE    0x0038
+#define P_S_BLUE 0x0039
+#define P_U_BLUE 0x0040
+#define PERFECT 0x0041
+#define IMPERFECT 0x0042
 #define OTHER   0x0200
 
