@@ -86,6 +86,7 @@ public:
   void set_slur_depth(double depth);
   double get_slur_depth();
   void perfect();
+  void imperfect();
 };
 #endif /* _PS_PRINT_ */
 
