@@ -53,7 +53,7 @@ void init(file_info *f)
     n_system = 0;
     strncat(staff_height, "0.0057 in", 80);
 
-    /*    int barCount = 0; */
+    int barCount = 0; /* why was the commented out ? wbc jan 2025  */
     /*    int pagenum = 0; */
     bar_count = 0;
     red = 1.0;

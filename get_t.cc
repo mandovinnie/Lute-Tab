@@ -60,7 +60,7 @@ void get_tab_file(file_in *fi, i_buf *ib, struct file_info *f)
 
     // test to see if this is valid tab file stuff
 
-    // printf("buf %s", buf );
+    // printf(" get_tab_file: buf %s", buf );
 
     if ( badchar((unsigned char)*p) ) {
       dbg2(Error, "Bad character-%c-%x, this may not be a valid tab file\n",
