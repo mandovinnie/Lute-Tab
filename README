@@ -420,7 +420,11 @@ $		- used to set these values. This flag must be
 		  $slur_depth=-10.0		for the {} slur, underline, baroque,
 						you can set the curvature distance
 						should be negative, 0 to 10
-		  $perfectum	  		use a fancier perfectum time signature that may cause problems printing
+		  $perfectum	  		use a fancier perfectum time signature that 
+						may cause problems printing
+		  $low_tie_position		if you use a t or W as your second character 
+						for a tie, this positions the tie at the 
+						bottom of the flag
 
 the following characters have special significance as the
 second letter on a line - in most cases, if not needed

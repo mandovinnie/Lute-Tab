@@ -556,7 +556,11 @@ void set_slur_depth(const char *value, struct file_info *f)
 void set_perfectum(const char *value, struct file_info *f)
 {
   f->flag_flag  |= PERFECTUM;
-  printf("HERE\n");
+}
+ 
+void set_low_tie_position(const char *value, struct file_info *f)
+{
+  f->flag_flag  |= LOWTIE;
 }
 
 /*
@@ -613,6 +617,7 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {(char*)"first_bar", (void*) set_first_bar},
     {(char*)"slur_depth", (void*) set_slur_depth},
     {(char*)"perfectum", (void*) set_perfectum},    
+    {(char*)"low_tie_position", (void*)set_low_tie_position},
     {0,0}
   };
 
@@ -651,6 +656,7 @@ set_string(const char *arg, const char *val, struct file_info *f, pass pass)
     {(char*)"first_bar", (void*)first},
     {(char*)"slur_depth", (void*)first},
     {(char*)"perfectum", (void*)second},
+    {(char*)"low_tie_position", (void*)second},
     {0,0}
   };
 

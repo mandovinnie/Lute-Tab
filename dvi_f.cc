@@ -1207,15 +1207,19 @@ struct list *l)			/* data */
       }
       p->push();
       p->moveh(t_note = f_a[0]->fnt->get_width('w'));
-      p->movev(-1 * f_a[0]->fnt->get_height(0302));
-      p->do_tie(t_width - (1.46 * t_note));	/* length of tie in inches */
-      if (f->flags & NOTES ) {
-	if ( ! (f->flags & TXT )) p->movev(f_a[0]->fnt->get_height(0302) );
 
-	p->movev ( -st_text -text_sp * f->n_text -m_space );
+      if (f->flag_flag & LOWTIE )   /* wbc jan 2025 */
+	p->movev(-0.04);
+      else 
+	p->movev(-1 * f_a[0]->fnt->get_height(0302));
+      p->do_tie(t_width - (1.46 * t_note));	/* length of tie in inches */
+
+      if (f->flags & NOTES ) {
+	if ( ! (f->flags & TXT ))
+	  p->movev(f_a[0]->fnt->get_height(0302) );
+	p->movev ( -st_text -text_sp * f->n_text - m_space );
 	p->movev ( - f->c_space);
 	p->movev (-2.0 * m_space);
-
 	p->do_tie (t_width - t_note);
       }
       p->pop();
