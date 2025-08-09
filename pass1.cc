@@ -223,6 +223,10 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	  dbg0 ( Inter, "  v");
 	else if (dd == 222)
 	  dbg0 ( Inter, " +*");
+	else if (dd == 238)
+	  dbg0 ( Inter, "238");
+	else if (dd == 239)
+	  dbg0 ( Inter, "239");
 	else if (dd == 254)
 	  dbg0 ( Inter, "254");
 	else if (dd == 255)
@@ -271,6 +275,14 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	l->padding = 0.01 /* str_to_inch(min_d_w) */;
       else if (strchr("{}[]()UX", c))
 	l->padding = 0.01;
+      else if ((unsigned char)d[2] == 239    /* stroke strokex */
+           || (unsigned char)d[3] == 239
+           || (unsigned char)d[4] == 239
+           || (unsigned char)d[2] == 243 
+           || (unsigned char)d[3] == 243 
+           || (unsigned char)d[4] == 243 
+           || (unsigned char)d[5] == 243) 
+	l->padding = 0.05;
       else if (strchr("x", l->dat[2])||strchr("x", l->dat[3])
 	       ||strchr("x", l->dat[4])||strchr("x", l->dat[5]))
 	l->padding += 0.04;
@@ -379,7 +391,8 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
       {
 	for (i = 2; i < STAFF; i++ ) {
 	  if (d[i] != ' ' && d[i] != '{' && d[i] != '}'
-	      && d[i] != '(' && d[i] != ')' && (!(f->m_flags & NOSPACE )) ) {
+	      && d[i] != '(' && d[i] != ')' 
+              && (!(f->m_flags & NOSPACE )) ) {
 	    l->padding = str_to_inch(min_O_w);
 
 	    //	if ( 1 && l->prev && l->prev->dat[i] == 'e') {

@@ -1392,4 +1392,7 @@ void pdf_print::print_stream() {
 }
 void pdf_print::perfect() {}
 void pdf_print::imperfect() {}
+void pdf_print::half_cross() { }
+void pdf_print::stroke() { }
+void pdf_print::strokex() { }
 

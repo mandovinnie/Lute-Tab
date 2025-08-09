@@ -87,6 +87,9 @@ public:
   double get_slur_depth();
   void perfect();
   void imperfect();
+  void half_cross();
+  void stroke();
+  void strokex();
 };
 #endif /* _PS_PRINT_ */
 

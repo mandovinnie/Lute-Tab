@@ -107,6 +107,9 @@ class print {
     virtual void comment(const char *string) = 0;
     virtual void perfect() = 0;
     virtual void imperfect() = 0;
+    virtual void half_cross() = 0;
+    virtual void stroke() = 0;
+    virtual void strokex() = 0;
     void set_highlight() { highlight = On;}
     void clear_highlight() { highlight = Off;}
     void gray_highlight() { highlight_type = Gray;}

@@ -1377,6 +1377,31 @@ struct list *l)			/* data */
 	}
 	do_uline(p, &skip_spaces, 7, 8, i);
 	break;
+		/*  new <! special characters  here */
+      case 238:  //  <!half-cross>
+	// printf("dvi_f: case 238  %d  %s\n", i, ch);
+	p->push();
+	if (skip_spaces) {
+	  p->p_movev(skip_spaces * i_space);
+	  skip_spaces = 0;
+	}
+	if (ch[0] != '+' && ch[0] != '&')
+	  p->moveh(-0.097);
+	p->half_cross ();
+	p->pop();
+	break;
+      case 239:	 // <!stroke>
+	// printf("dvi_f: case 239  %d  %s\n", i, ch);
+	p->push();
+	if (skip_spaces) {
+	  p->p_movev(skip_spaces * i_space);
+	  skip_spaces = 0;
+	}
+	if (ch[0] != '+' && ch[0] != '&')
+	  p->moveh(-0.097);
+	p->stroke();
+	p->pop();
+	break;
       case 240: /* wbc aug 2019 new <! special characters  here */
 	/* 2mordent twomordent */
 	// printf("dvi_f: case 240  %d  %s\n", i, ch);
@@ -1420,6 +1445,23 @@ struct list *l)			/* data */
 	p->put_a_char (cc);
 	p->pop();
 	break;
+      case 243: /* <! special characters  here */
+        /* stroke# */
+        // printf("dvi_f: case 243  %d  %s\n", i, ch);
+        if (skip_spaces) {
+          p->p_movev(skip_spaces * i_space);
+          skip_spaces = 0;
+        }
+        p->push();
+        if (ch[0] != '+' && ch[0] != '&')
+          p->moveh(-0.1);
+        p->moveh(0.01);
+        p->strokex ();
+        p->movev(-0.4 *  d_i_space);
+        p->moveh(-0.8 * f_a[0]->fnt->get_width('#'));
+	p->put_a_char('#');
+        p->pop();
+        break;
       case 229:
 	// baroque, two parallel vertical strokes under
 	p->push();

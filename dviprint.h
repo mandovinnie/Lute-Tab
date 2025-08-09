@@ -73,6 +73,10 @@ private:
     void comment(const char *string);
     void perfect();
     void imperfect();
+    void half_cross();
+    void stroke();
+    void strokex();
+
 };
 #endif /* _DVI_PRINT_ */
 

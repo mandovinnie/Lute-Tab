@@ -576,3 +576,6 @@ void dvi_print::imperfect()
 {
   //    char c = string[0];
 }
+void dvi_print::half_cross() { }
+void dvi_print::stroke() { }
+void dvi_print::strokex() { }

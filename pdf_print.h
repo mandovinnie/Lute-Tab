@@ -103,6 +103,9 @@ class pdf_print : public print {
     void comment(const char *string);
     void perfect();
     void imperfect();
+    void half_cross();
+    void stroke();
+    void strokex();
 };
 
 struct xref_entry {

@@ -1,19 +1,22 @@
+-R8
+-300
+-N
+
+-c
+-count_dots
+-no_space_after_note
+$barnumberfont=5
+-compressStaff
+$first_bar=1
+$flagstyle=thin
+$perfectum
+$low_tie_position
+
 
 {This is the Title}
 
-%-600
-% -R7
-% -R95
-% -300
 -b
-% $line=o
-% a / is 47 
-% $slur_depth=-6.0
-% -CC
 
-%b
-%1 1
-%bXQ
 b
 1 <a
 x a&<
@@ -27,7 +30,7 @@ x <!tilde>a
 x <!tilde>
 x a&<!tilde>+bc&+'<a&<
 x <!2mordent>
-x <!3mordent>
+x d <!3mordent>
 x  %aa&%:bb&:
 x ":aa&:
 b
@@ -47,7 +50,7 @@ bL
 b
 1 9
 b
-
+e
 b
 1 c
 b

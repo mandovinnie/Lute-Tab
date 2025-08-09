@@ -579,8 +579,8 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	    staff[i] = '"';
 	    skip++;skip++;
 	  }
-	case 0xd2:
-	case 0xd3:
+	case 0xd2:  // apple textedit quote
+	case 0xd3:  // apple textedit quote
 	  //		  DON'T BREAK break; Continue on as if we had a real quote
 	case '"':	/* prefix a non prefix char */
 	  ornament[i] = buf[i + (++skip)];
@@ -1392,6 +1392,12 @@ char get_special_ornament(char * str) { //  <!tilde
     return ((char)240);
   if (!strcmp (str, "3mordent"))
     return ((char)241);
+  if (!strcmp (str, "stroke#"))
+    return ((char)243);
+  if (!strcmp (str, "stroke"))
+    return ((char)239);
+  if (!strcmp (str, "half-cross"))
+    return ((char)238);
   else
     return ('*');
 }
@@ -1419,7 +1425,7 @@ char read_special_ornament (char *buf, int *i, int *skip) {
   result = get_special_ornament(e);
   free (ebuf);
   // (*i)--;
-  // printf("get special: result: %c\n", result);
+  // printf("get special: result: %c  %u\n", result & 0xFF, result & 0xFF);
   return (result);
 
 }

@@ -1052,7 +1052,18 @@ void ps_print::imperfect()
 {
   ps_command(IMPERFECT, 0, 0, 0, 0);
 }
-
+void ps_print::stroke()
+{   
+  ps_command(STROKE, 0, 0, 0, 0);
+} 
+void ps_print::strokex()
+{   
+  ps_command(STROKEX, 0, 0, 0, 0);
+} 
+void ps_print::half_cross()
+{   
+  ps_command(HALF_CROSS, 0, 0, 0, 0);
+} 
 void ps_print::push()
 {
 //    ps_command(PPUSH, 0, 0, 0, 0);
@@ -1468,6 +1479,25 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
   case RAW:
     pr_out->PutString((char *)&h);
     break;
+  case STROKE:
+    pr_out->PutString("gsave\n");
+    pr_out->PutString("0 0 rmoveto 0 6 rlineto stroke\n");
+    pr_out->PutString("grestore\n");
+    break;
+  case STROKEX:
+    pr_out->PutString("gsave\n");
+    pr_out->PutString("currentpoint 0 -1 rmoveto 0 6 rlineto stroke\n");
+    pr_out->PutString("/LuteFont findfont 14 scalefont  setfont\n");
+    pr_out->PutString("gsave 0 0 moveto \(Here)  show grestore\n");
+    pr_out->PutString("grestore\n");
+    break;
+  case HALF_CROSS:
+    pr_out->PutString("gsave\n");
+    pr_out->PutString("/xorig 3  def /yorig 0 def ");
+    pr_out->PutString("currentpoint xorig yorig rmoveto 0 6 rlineto stroke\n");
+    pr_out->PutString("moveto -1  yorig 3 add rmoveto xorig 1 add  0 rlineto stroke\n");
+    pr_out->PutString("grestore\n");
+    break;
   case OTHER:
     break;
   default:
@@ -1586,7 +1616,7 @@ void ps_print::comment(const char *string)
     //    strncpy(cc, string, 80);
     //    c = cc;
     //    while ( *c ) {
-    //	ps_command(RAW, (int)*c, 0, 0, 0);
-    //	c++;
-    //    }
+	    //	ps_command(RAW, (int)*c, 0, 0, 0);
+	    //	c++;
+	    //    }
 }
