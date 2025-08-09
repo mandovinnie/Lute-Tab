@@ -1487,8 +1487,8 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
   case STROKEX:
     pr_out->PutString("gsave\n");
     pr_out->PutString("currentpoint 0 -1 rmoveto 0 6 rlineto stroke\n");
-    pr_out->PutString("/LuteFont findfont 14 scalefont  setfont\n");
-    pr_out->PutString("gsave 0 0 moveto \(Here)  show grestore\n");
+//    pr_out->PutString("/LuteFont findfont 4 scalefont  setfont\n");
+//    pr_out->PutString("moveto \(#)  show\n");
     pr_out->PutString("grestore\n");
     break;
   case HALF_CROSS:
