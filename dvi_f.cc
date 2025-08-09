@@ -1384,7 +1384,10 @@ struct list *l)			/* data */
 	if (skip_spaces) {
 	  p->p_movev(skip_spaces * i_space);
 	  skip_spaces = 0;
-	}
+	} 
+        if (f->line_flag == ON_LINE)
+           p->p_movev (i_space/2);
+
 	if (ch[0] != '+' && ch[0] != '&')
 	  p->moveh(-0.097);
 	p->half_cross ();
@@ -1397,6 +1400,8 @@ struct list *l)			/* data */
 	  p->p_movev(skip_spaces * i_space);
 	  skip_spaces = 0;
 	}
+        if (f->line_flag == ON_LINE)
+           p->p_movev (i_space/2);
 	if (ch[0] != '+' && ch[0] != '&')
 	  p->moveh(-0.097);
 	p->stroke();
@@ -1420,6 +1425,8 @@ struct list *l)			/* data */
 	  p->p_movev(skip_spaces * i_space);
 	  skip_spaces = 0;
 	}
+        if (f->line_flag == ON_LINE)
+           p->p_movev (i_space/2);
 	p->push();
 	if ( f->char_flag & ROB_CHAR )
 	  p->moveh(-0.011);
@@ -1452,6 +1459,8 @@ struct list *l)			/* data */
           p->p_movev(skip_spaces * i_space);
           skip_spaces = 0;
         }
+        if (f->line_flag == ON_LINE)
+           p->p_movev (i_space/2);
         p->push();
         if (ch[0] != '+' && ch[0] != '&')
           p->moveh(-0.1);
