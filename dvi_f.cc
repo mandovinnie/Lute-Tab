@@ -1417,7 +1417,8 @@ struct list *l)			/* data */
 	p->push();
 	if (ch[0] != '+' && ch[0] != '&')
 	  p->moveh(-0.097);
-	p->put_a_char (cc);
+	if (baroque)
+	  p->put_a_char (cc);
 	p->pop();
 	break;
       case 222: /* wbc jan 2025 special dot above cross */
@@ -1439,7 +1440,7 @@ struct list *l)			/* data */
 	p->put_a_char ('.');
 	p->pop();
 	break;
-      case 241: /* wbc aug 2019 new <! special characters  here */
+      case 241: /* wbc aug 2019 new special characters  here */
 	/* 3mordent threemordent */
 	// printf("dvi_f: case 241  %d  %s\n", i, ch);
 	if (skip_spaces) {
@@ -1449,7 +1450,8 @@ struct list *l)			/* data */
 	p->push();
 	if (ch[0] != '+' && ch[0] != '&')
 	  p->moveh(-0.1);
-	p->put_a_char (cc);
+	if (baroque)
+	  p->put_a_char (cc);
 	p->pop();
 	break;
       case 243: /* <! special characters  here */
@@ -1467,7 +1469,7 @@ struct list *l)			/* data */
         p->moveh(0.01);
         p->strokex ();
         p->movev(-0.4 *  d_i_space);
-        p->moveh(-0.8 * f_a[0]->fnt->get_width('#'));
+        p->moveh(-0.99 * f_a[0]->fnt->get_width('#'));
 	p->put_a_char('#');
         p->pop();
         break;

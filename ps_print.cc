@@ -1487,6 +1487,7 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
   case STROKEX:
     pr_out->PutString("gsave\n");
     pr_out->PutString("currentpoint 0 -1 rmoveto 0 6 rlineto stroke\n");
+//    pr_out->PutString("moveto 0 -1 rmoveto 0 -1 0 3 0 6 2  arct stroke\n"); /* a test currentpoint works */
 //    pr_out->PutString("/LuteFont findfont 4 scalefont  setfont\n");
 //    pr_out->PutString("moveto \(#)  show\n");
     pr_out->PutString("grestore\n");
