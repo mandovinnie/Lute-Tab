@@ -653,6 +653,7 @@ void ps_print::make_ps_font(i_buf *ps_header)
     /* do tempus perfectum perfect */  /* wbc jam 2026 */
     ps_header->PutString("/dotempusperfectum { \n");
     ps_header->PutString("gsave\n");
+    pr_out->PutF( red, 4); pr_out->PutF( red, 4); pr_out->PutString(" scale ");
     ps_header->PutString("1.2 setlinewidth \n");
     ps_header->PutString("currentpoint /y0 exch def /x0 exch def \n");
     if (f_i->flag_flag & PERFECTUM) {
@@ -680,6 +681,7 @@ void ps_print::make_ps_font(i_buf *ps_header)
     /* do tempus imperfectum needs a dot in the middle */
     ps_header->PutString("/dotempusimperfectum { \n");
     ps_header->PutString("gsave\n");
+    pr_out->PutF( red, 4); pr_out->PutF( red, 4); pr_out->PutString(" scale ");
     ps_header->PutString("currentpoint /y0 exch def /x0 exch def \n");
     if (f_i->flag_flag & PERFECTUM) {
       ps_header->PutString("/radius 7.5 def /radius2 radius 0.9 sub def /delta 7.5 def \n");
@@ -1481,11 +1483,19 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     break;
   case STROKE:
     pr_out->PutString("gsave\n");
+    pr_out->PutF( red, places);
+    pr_out->PutF( red, places);
+    pr_out->PutString(" scale ");
+    pr_out->PutString("1 setlinecap 0.87 setlinewidth ");
     pr_out->PutString("0 0 rmoveto 0 6 rlineto stroke\n");
     pr_out->PutString("grestore\n");
     break;
   case STROKEX:
     pr_out->PutString("gsave\n");
+    pr_out->PutF( red, places);
+    pr_out->PutF( red, places);
+    pr_out->PutString(" scale ");
+    pr_out->PutString("1 setlinecap 0.87 setlinewidth ");
     pr_out->PutString("currentpoint 0 -1 rmoveto 0 6 rlineto stroke\n");
 //    pr_out->PutString("moveto 0 -1 rmoveto 0 -1 0 3 0 6 2  arct stroke\n"); /* a test currentpoint works */
 //    pr_out->PutString("/LuteFont findfont 4 scalefont  setfont\n");
@@ -1494,6 +1504,8 @@ void ps_print::ps_command(int com, int h_n, int v_n, int hh_n, int vv_n)
     break;
   case HALF_CROSS:
     pr_out->PutString("gsave\n");
+    pr_out->PutF( red, places); pr_out->PutF( red, places); pr_out->PutString(" scale ");
+    pr_out->PutString("1 setlinecap 0.87 setlinewidth ");
     pr_out->PutString("/xorig 3  def /yorig 0 def ");
     pr_out->PutString("currentpoint xorig yorig rmoveto 0 6 rlineto stroke\n");
     pr_out->PutString("moveto -1  yorig 3 add rmoveto xorig 1 add  0 rlineto stroke\n");
