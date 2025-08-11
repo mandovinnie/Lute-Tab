@@ -38,7 +38,7 @@ TLOC='"."'
 # TLOC = '"/net/wbc/src/old-nnt"'
 # TLOC = '"/net/tahoe4/wbc/src/nnt"'
 # TLOC = '"/usr/aeolus1/wbc/src/nnt"'
-# TLOC = '"/Users/j.w.j.burgers/Documents/TAB"'
+TLOC = '"/Users/j.w.j.burgers/Documents/TAB"'
 # TLOC = '"/home/wbc/nnt"'
 # TLOC = '"/home/wbc/src/nnt"'
 #
@@ -86,7 +86,7 @@ clean:
 pk_font.o:	pk_input.h pkfile.h
 
 depend:
-	mkdep ${SOURCES}
+	./mkdep ${SOURCES}
 
 #depend:
 #	./makedepend ${SOURCES}
@@ -122,7 +122,7 @@ MISC = README blute.mf blute9.mf blute8.mf blute85.mf \
 	simple.tab \
 	update.pl .gitignore ps2pdf.pl
 
-DISTFILE = lute_tab4.3.106.tar.gz
+DISTFILE = lute_tab4.3.108.tar.gz
 
 distrib:	 ${DISTFILE}
 

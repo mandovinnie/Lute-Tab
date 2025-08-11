@@ -654,15 +654,16 @@ as of 2015 TeXLive doesn't do a good job with MetaFont .. here are some tips.
 
 
 this runs on 
+	Linux 
+	Mac OSX in text windows
+	Windows 10 and 11 using Visual C++
+this used to run on 
 	sun-3 running 4.1.0 and 3.5
 	sparcstation running 4.1.1
 	decstation running ultrix 4.1, 4.2
 	dec alphas running OSF
         silicon graphics iris IRIX 3.3.2 -> 5.2
 	HP 700 running HP-UX 8.05 and 9.01
-	Linux, though certain versions of the c compiler
-		have troubles.
-	Mac OSX in text windows
 
 
 If you like it ...
