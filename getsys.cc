@@ -256,11 +256,12 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
     case 'b':
       /* barline */
       /* Jan 2021 wbc added code for QX and XQ for uncounted gray barline */
+      if ((cur_chord < 2) && cur_key && (f->m_flags & AUTOKEY))  Key=1; 
       i = strlen(buf);
       // printf("getsys.cc:   ->%s", buf);
       for (i=1;i<5;i++) {
 	c = buf[i];
-	if (c == '\n' || c=='\r'|| c == 0) break;  // wbc jan 2025 mostly 0x0d
+	// if (c == '\n' || c=='\r'|| c == 0) break;  // wbc jan 2025 mostly 0x0d
 	// else printf("getsys.cc: %c\n", c);
 	if (c == '!')  hushbar++;
 	else if (c == 'X' && buf[2] == 'Q') nocountdimbar=1;
@@ -283,14 +284,13 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 					  (void *)((int)c) , (void *)((int)c) ,
 					  (void *)f->cur_system, (void *)cur_chord);
 	    
-	if ((cur_chord < 2) && cur_key && (f->m_flags & AUTOKEY)) {
-	  Key=1;
-	}
+	// if ((cur_chord < 2) && cur_key && (f->m_flags & AUTOKEY))  Key=1; 
 	if (c == NEWLINE || c == 0 || c == 0x0a || c == 0x0d) break; // wbc jan 2025 mostly 0x0d
       }
       barline++;
       break;
     case 'B':
+      if ((cur_chord < 2) && cur_key && (f->m_flags & AUTOKEY))  Key=1; 
       if (buf[1] == NEWLINE || buf[1] == '!') {
 	BARline++;
 	if ((c = buf[1]) == '!') hushbar++;

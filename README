@@ -525,6 +525,9 @@ of tablature, as the second to tenth character.
 	<!tilde>	- the same as the ~ - looks like a sine wave
 	<!2mordent>     - a 2 lobed squiggle, baroque tab only
 	<!3mordent>     - a 3 lobed squiggle, baroque tab only
+	<!stroke>       - an prepended ornament that looks like a vertical pen stroke
+	<!stroke#>      - the same as above with a 3 above the stroke
+	<!half-cross>   - an ornament that looks like the right side of a cross
         1 3 4 5 6 7	- the number for bass string when you 
 			  run out of slashes
 	\1 \2 \3 \4	- left hand fingerings placed
