@@ -260,8 +260,6 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
       // printf("getsys.cc:   ->%s", buf);
       for (i=1;i<5;i++) {
 	c = buf[i];
-	if (c == '\n' || c=='\r'|| c == 0) break;  // wbc jan 2025 mostly 0x0d
-	// else printf("getsys.cc: %c\n", c);
 	if (c == '!')  hushbar++;
 	else if (c == 'X' && buf[2] == 'Q') nocountdimbar=1;
 	else if (c == 'Q' && buf[2] == 'X') nocountdimbar=1;
