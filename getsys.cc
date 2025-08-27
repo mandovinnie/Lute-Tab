@@ -262,8 +262,8 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
       for (i=1;i<5;i++) {
 	c = buf[i];
 	// if (c == '\n' || c=='\r'|| c == 0) break;  // wbc jan 2025 mostly 0x0d
-	// else printf("getsys.cc: %c\n", c);
-	if (c == '!')  hushbar++;
+	if (c == NEWLINE || c == 0 || c == 0x0a || c == 0x0d) break; // wbc jan 2025 mostly 0x0d
+	else if (c == '!')  hushbar++;
 	else if (c == 'X' && buf[2] == 'Q') nocountdimbar=1;
 	else if (c == 'Q' && buf[2] == 'X') nocountdimbar=1;
 	else if (c == 'T') tie++;
@@ -278,14 +278,14 @@ int getsystem(file_in *fi, i_buf *ib, struct file_info *f,char buf[])
 	  goto start;
 	}
 	else if (c > '0' && c <= '9') barnum = c;
-	else if (c != NEWLINE && c != 0 && c != 0x0a && c != 0x0d)  // wbc jan 2025 mostly 0x0d
-	  if (! (f->m_flags & QUIET))dbg4(Warning,
+	// else if (c != NEWLINE && c != 0 && c != 0x0a && c != 0x0d)  // wbc jan 2025 mostly 0x0d
+	else if (! (f->m_flags & QUIET))dbg4(Warning,
 					  "Text %c %d after a barline (b), system %d chord %d\n",
 					  (void *)((int)c) , (void *)((int)c) ,
 					  (void *)f->cur_system, (void *)cur_chord);
 	    
-	// if ((cur_chord < 2) && cur_key && (f->m_flags & AUTOKEY))  Key=1; 
-	if (c == NEWLINE || c == 0 || c == 0x0a || c == 0x0d) break; // wbc jan 2025 mostly 0x0d
+	// if ((cur_chord < 2) && cur_key && (f->m_flags & AUTOKEY))  Key=1;  this should be out of this loop
+	// if (c == NEWLINE || c == 0 || c == 0x0a || c == 0x0d) break; // wbc jan 2025 mostly 0x0d
       }
       barline++;
       break;
