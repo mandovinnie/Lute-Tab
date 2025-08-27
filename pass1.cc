@@ -893,7 +893,10 @@ void pass1(font_list *f_a[], int *l_p, struct file_info *f, double *extra)
 	    weight = W_ONE;
 	    l->padding = 1.27 * f_a[0]->fnt->get_width(cc);
 	  }
-
+          else if (cc == 'I') { 
+            l->padding = 0.153; weight = W_ONE;}
+          else if (cc == 'i') { 
+            l->padding = 0.133; weight = W_ONE;}
 	  else {
 	    l->padding = 1.17 * f_a[0]->fnt->get_width(cc);
 	    //	    l->padding += 0.17;
