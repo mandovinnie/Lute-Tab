@@ -63,6 +63,7 @@ void init(file_info *f)
     f->out_file[0] = '\0';
     f->line_flag = BETWEEN_LINE;
     f->flag_flag = STAND_FLAGS;
+    f->flag_flag |= PERFECTUM;
     f->char_flag = STAND_CHAR;
     f->num_flag = STAND_NUM;
     f->note_conv = 0 /*3*/;

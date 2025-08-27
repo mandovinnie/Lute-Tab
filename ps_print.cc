@@ -656,7 +656,7 @@ void ps_print::make_ps_font(i_buf *ps_header)
     pr_out->PutF( red, 4); pr_out->PutF( red, 4); pr_out->PutString(" scale ");
     ps_header->PutString("1.2 setlinewidth \n");
     ps_header->PutString("currentpoint /y0 exch def /x0 exch def \n");
-    if (f_i->flag_flag & PERFECTUM) {
+    if ( 1  /* f_i->flag_flag & PERFECTUM */) {  // make this the default
         ps_header->PutString("/radius 7.5 def /radius2 radius 0.9 sub def /delta 7.5 def \n");
 	ps_header->PutString("/y1 y0 radius2 add def /y2 y0 radius2 sub def /x1 x0 delta add def /x2 x0 delta sub def \n");
 	ps_header->PutString("/x1 x0 delta add def /x2 x0 delta sub def\n");
@@ -683,7 +683,7 @@ void ps_print::make_ps_font(i_buf *ps_header)
     ps_header->PutString("gsave\n");
     pr_out->PutF( red, 4); pr_out->PutF( red, 4); pr_out->PutString(" scale ");
     ps_header->PutString("currentpoint /y0 exch def /x0 exch def \n");
-    if (f_i->flag_flag & PERFECTUM) {
+    if ( 1 /* f_i->flag_flag & PERFECTUM */ ) { /* make the fancy glyph the default */
       ps_header->PutString("/radius 7.5 def /radius2 radius 0.9 sub def /delta 7.5 def \n");
       ps_header->PutString("/y1 y0 radius2 add def /y2 y0 radius2 sub def /x1 x0 delta add def /x2 x0 delta sub def \n");
       ps_header->PutString("/x1 x0 delta add def /x2 x0 delta sub def \n");

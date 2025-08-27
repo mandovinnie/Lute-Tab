@@ -292,7 +292,7 @@ void set_flagname(const char *value, struct file_info *f)
     if (value[1] == 'a')
       f->flag_flag = CAP_FLAGS;
     //  "contemp"
-    if (value[1] == 'o')
+    else if (value[1] == 'o')
       f->flag_flag = CONTEMP_FLAGS;
     break;
   case 'i':
@@ -304,7 +304,7 @@ void set_flagname(const char *value, struct file_info *f)
     if (value[1] == 'm')
       f->flag_flag = S_ITAL_FLAGS;
     //  "standard"
-    if (value[1] == 't')
+    else if (value[1] == 't')
       f->flag_flag = STAND_FLAGS;
     break;
   case 't':
@@ -554,7 +554,7 @@ void set_slur_depth(const char *value, struct file_info *f)
 }
 
 void set_perfectum(const char *value, struct file_info *f)
-{
+{  // this is now the default set in main.cc and not used for decision making
   f->flag_flag  |= PERFECTUM;
 }
  
