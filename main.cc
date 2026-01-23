@@ -397,10 +397,9 @@ int main(int argc, char **argv)
     if (f.scribe)
       free (f.scribe);
     free (f.file);
-    free (f.out_file);
 
     if (f.m_flags & GS ) {
-       char command[120];
+       char *command = new char[120 + 2*strlen(f.out_file)]; // allow for two filepaths 
        struct stat statbuf;
        int ret=0;
 
@@ -416,9 +415,31 @@ int main(int argc, char **argv)
        }
        if ( ret == -1 ) { printf ("main: stat failed, can\'t find a copy of gs \n"); exit (-1);}
 
-       strcat (command, " -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sPAPERSIZE=letter -sOutputFile=out.pdf out.ps");
+       // For pdf filename use the filename specified with option -o, with
+       // extension .ps replaced by .pdf. Otherwise use out.pdf.
+       // Filenames are quoted.
+       strcat (command, " -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sPAPERSIZE=letter -sOutputFile=");
+       if (f.out_file[0]) {
+          char *ptr;
+         
+          strcat (command, "\"");
+          strcat (command, f.out_file); // pdf filename
+          // remove extension .ps
+          if (ptr = strstr (command + strlen(command) - 3, ".ps")) {
+             *ptr = '\0';
+          }
+          strcat (command, ".pdf\" \"");
+          strcat (command, f.out_file); // postscript filename
+          strcat (command, "\"");
+       }
+       else {
+          strcat (command, "out.pdf out.ps"); // no -o filename specified
+       }
+       
        system (command);
+       delete[] command;
     }
+    free (f.out_file);
 
     return(0);
 }
