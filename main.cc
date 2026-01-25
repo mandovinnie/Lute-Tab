@@ -397,29 +397,58 @@ int main(int argc, char **argv)
     if (f.scribe)
       free (f.scribe);
     free (f.file);
-    free (f.out_file);
 
     if (f.m_flags & GS ) {
-       char command[120];
-       struct stat statbuf;
-       int ret=0;
+      //  char command[120];
+      char *command = new char[120 + 2*strlen(f.out_file)]; // allow for two filepaths 
+      struct stat statbuf;
+      int ret=0;
+      
+      strcpy ( command, "/opt/homebrew/bin/gs");
+      ret = stat ( command, &statbuf );
+      if ( ret == -1 ) {
+	strcpy ( command, "/usr/bin/gs");
+	ret = stat ( command, &statbuf );
+	if ( ret == -1 ) {
+	  strcpy ( command, "/usr/local/bin/gs");
+	  ret = stat ( command, &statbuf );
+	}
+      }
+      if ( ret == -1 ) {
+	printf ("main: stat failed, can\'t find a copy of gs \n");
+	exit (-1);
+      }
+      // For pdf filename use the filename specified with option -o, with
+      // extension .ps replaced by .pdf. Otherwise use out.pdf.
+      // Filenames are quoted.
+      // Paul Overell Jan 2026
+      //
+      strcat (command,
+	      " -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sPAPERSIZE=letter -sOutputFile=");
+      if (f.out_file[0]) {
+	char *ptr;
 
-       strcpy ( command, "/opt/homebrew/bin/gs");
-       ret = stat ( command, &statbuf );
-       if ( ret == -1 ) {
-          strcpy ( command, "/usr/bin/gs");
-          ret = stat ( command, &statbuf );
-          if ( ret == -1 ) {
-             strcpy ( command, "/usr/local/bin/gs");
-             ret = stat ( command, &statbuf );
-          }
-       }
-       if ( ret == -1 ) { printf ("main: stat failed, can\'t find a copy of gs \n"); exit (-1);}
-
-       strcat (command, " -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sPAPERSIZE=letter -sOutputFile=out.pdf out.ps");
-       system (command);
+	strcat (command, "\"");
+	strcat (command, f.out_file); // pdf filename
+	// remove extension .ps or .pdf
+	if (
+	    (ptr = strstr (command + strlen(command) - 3, ".ps")) ||
+	    (ptr = strstr (command + strlen(command) - 4, ".pdf"))
+	    ) {
+	  *ptr = '\0';
+	}
+	strcat (command, ".pdf\" \"");
+	strcat (command, f.out_file); // postscript filename
+	strcat (command, "\"");
+      }
+      else {
+	strcat (command, "out.pdf out.ps"); // no -o filename specified
+      }
+      system (command);
+      delete[] command;
     }
-
+    free (f.out_file);
+    
     return(0);
 }
 

@@ -346,6 +346,9 @@ void set_o(const char *value, struct file_info *f)  {
   if ((ptr = strstr (f->out_file, ".ps"))) {
     *ptr = '\0';
   }
+  if ((ptr = strstr (f->out_file, ".pdf"))) {
+    *ptr = '\0';
+  }
   if ((ptr = strstr (f->out_file, ".mid"))) {
     *ptr = '\0';
   }
